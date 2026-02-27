@@ -1,0 +1,33 @@
+[submodule "verus-geometry"]
+	path = verus-geometry
+	url = https://github.com/Phylliida/verus-geometry.git
+[submodule "verus-linalg"]
+	path = verus-linalg
+	url = https://github.com/Phylliida/verus-linalg.git
+[submodule "verus-bigint"]
+	path = verus-bigint
+	url = https://github.com/Phylliida/verus-bigint.git
+[submodule "verus-rational"]
+	path = verus-rational
+	url = https://github.com/Phylliida/verus-rational.git
+[submodule "verus-interval-arithmetic"]
+	path = verus-interval-arithmetic
+	url = https://github.com/Phylliida/verus-interval-arithmetic.git
+[submodule "old/VerusCAD"]
+	path = old/VerusCAD
+	url = https://github.com/Phylliida/VerusCAD
+[submodule "verus"]
+	path = verus
+	url = https://github.com/verus-lang/verus.git
+[submodule "verus-docgenerator"]
+	path = verus-docgenerator
+	url = https://github.com/Phylliida/verus-docgenerator
+[submodule "tree-sitter-verus"]
+	path = tree-sitter-verus
+	url = https://github.com/Phylliida/tree-sitter-verus
+[submodule "verus-topology"]
+	path = verus-topology
+	url = https://github.com/Phylliida/verus-topology.git
+[submodule "verus-algebra"]
+	path = verus-algebra
+	url = https://github.com/Phylliida/verus-algebra.git
