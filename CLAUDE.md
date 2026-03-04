@@ -25,7 +25,7 @@ This project has a Verus MCP server (`verus-mcp`) that indexes all spec/proof/ex
 ### Utilities
 - `list_modules()` — See all indexed modules grouped by crate.
 - `stats()` — Show index statistics: counts by kind (spec/proof/exec), by crate, and assume(false) proof debt.
-- `reindex()` — Rebuild index after editing Verus source files.
+- `reindex()` — Force rebuild index. **Not normally needed** — the server auto-reindexes when `.rs` files change (500ms debounce).
 
 **Workflow:** Use `search` / `search_ensures` / `search_requires` to browse, then `lookup` or `batch_lookup` to drill into specific functions. Use `search(query, details=true)` when you want full details inline without a separate lookup call.
 
