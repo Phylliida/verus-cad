@@ -31,3 +31,15 @@
 [submodule "verus-algebra"]
 	path = verus-algebra
 	url = https://github.com/Phylliida/verus-algebra.git
+[submodule "z3"]
+	path = z3
+	url = https://github.com/Z3Prover/z3
+[submodule "verus2"]
+	path = verus2
+	url = https://github.com/Phylliida/verus
+[submodule "bootstrapped-llm-sim"]
+	path = bootstrapped-llm-sim
+	url = https://github.com/Phylliida/bootstrapped-llm-sim
+[submodule "verus-gui"]
+	path = verus-gui
+	url = https://github.com/Phylliida/verus-gui
