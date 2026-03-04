@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "verus": {
+      "type": "stdio",
+      "command": "/Users/yams/Prog/verus-cad/verus-mcp/target/release/verus-mcp",
+      "args": []
+    }
+  }
+}

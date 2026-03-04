@@ -1,5 +1,9 @@
 # verus-cad
 
+## General rules:
+- Never rederive something just because it's private, just make it public, you have permission to edit any verus-* repo
+- Feel free to add a proof/lemma to any verus-* repo if it doesn't exist and you need it
+
 ## MCP: Verus Proof Index
 
 This project has a Verus MCP server (`verus-mcp`) that indexes all spec/proof/exec functions, types, traits, and impls across the codebase. Prefer these tools when searching for Verus items:
