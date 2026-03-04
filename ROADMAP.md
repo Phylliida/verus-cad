@@ -21,6 +21,21 @@ into clean, independently-verified crates:
 The old monolith also contains a substantial **half-edge topology** layer
 (~38K lines) and **quaternion rotation** support that can be mined.
 
+### Per-crate planning docs
+
+Every crate has detailed TODO documentation with phased implementation plans,
+proof difficulty estimates, and milestones:
+
+| Crate | Planning docs |
+|---|---|
+| **verus-algebra** | `docs/TODO.md` — IntegralDomain, GCD, polynomials, Module/VectorSpace traits |
+| **verus-bigint** | `docs/` (12 files) — zero-trust roadmap, per-module proof tasks, trust assumptions |
+| **verus-rational** | `docs/` (3 files) — downstream proof reuse, runtime rational tasks |
+| **verus-linalg** | `docs/TODO.md` — Mat2x2/Mat4x4, matrix inverse, quaternions, affine transforms |
+| **verus-geometry** | `docs/TODO.md` — sign extraction, collinearity, sidedness, intersection predicates |
+| **verus-interval-arithmetic** | `TODO.md` + `CORRECTNESS_PROOFS_PLAN.md` — Phases 0-8 complete, 15 correctness lemmas in progress |
+| **verus-topology** | `docs/TODO.md` — half-edge mesh, structural invariants, Euler operators, genus tracking |
+
 ---
 
 ## The layers we need
