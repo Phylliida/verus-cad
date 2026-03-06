@@ -43,3 +43,6 @@
 [submodule "verus-gui"]
 	path = verus-gui
 	url = https://github.com/Phylliida/verus-gui
+[submodule "verus-canvas"]
+	path = verus-canvas
+	url = https://github.com/Phylliida/verus-canvas.git
