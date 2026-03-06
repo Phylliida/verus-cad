@@ -4,6 +4,7 @@
 - Never rederive something just because it's private, just make it public, you have permission to edit any verus-* repo
 - Feel free to add a proof/lemma to any verus-* repo if it doesn't exist and you need it
 - Remember if resource limit esceeded it's best to expand stuff out until it's not (just help z3 along)
+- Always call context_list first, then resume context with replay=True when starting fresh/after a compaction, this helps you get up to speed quicker and avoids redoing search work.
 
 ## MCP: Verus Proof Index
 
@@ -31,6 +32,16 @@ This project has a Verus MCP server (`verus-mcp`) that indexes all spec/proof/ex
 ### Verification
 - `check(crate_name, module?)` — Run Verus verification. Without `module`: verifies entire crate. With `module`: verifies only that module (much faster for iteration). Accepts file paths (`src/runtime/polygon.rs`) or module paths (`runtime::polygon`). Returns clean summary on success, extracted error diagnostics on failure. 10-minute timeout.
 - `profile(crate_name, module?, top_n?)` — Per-function SMT time and rlimit breakdown. Sorted table of hottest functions + per-module summary. Use rlimit (deterministic) not SMT time (2x variance) to measure optimization impact. Default top 25.
+
+### Context Management
+- `context_list()` — **Must be called first** before `context_activate`. Lists recent contexts with item counts and last-used times. This ensures you see existing contexts before creating a new one.
+- `context_activate(name)` — Activate a context. Requires `context_list` to have been called first.
+  - **Existing name**: Loads context and replays all captured signatures.
+  - **New name**: Creates empty context and activates it (pick a name that 4-5 words and fairly descriptive and specific).
+- Items are auto-captured on `lookup`, `lookup_source`, and `batch_lookup`.
+- Persisted to `~/.verus-mcp/contexts/<name>.json`. Signatures resolved live from index on replay.
+- Name contexts after the task (e.g., `triangle-intersection`, `orient3d-proofs`, `construction-phases`).
+- **After context compaction**: Call `context_list()` then `context_activate(name)` to restore all previously looked-up signatures into the new context window. It's recommended to resume an existing context instead of creating a new one.
 
 ### Utilities
 - `list_modules()` — See all indexed modules grouped by crate.

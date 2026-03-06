@@ -46,3 +46,6 @@
 [submodule "verus-canvas"]
 	path = verus-canvas
 	url = https://github.com/Phylliida/verus-canvas.git
+[submodule "verus-vulkan"]
+	path = verus-vulkan
+	url = https://github.com/Phylliida/verus-vulkan.git
