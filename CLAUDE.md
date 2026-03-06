@@ -3,28 +3,34 @@
 ## General rules:
 - Never rederive something just because it's private, just make it public, you have permission to edit any verus-* repo
 - Feel free to add a proof/lemma to any verus-* repo if it doesn't exist and you need it
+- Remember if resource limit esceeded it's best to expand stuff out until it's not (just help z3 along)
 
 ## MCP: Verus Proof Index
 
 This project has a Verus MCP server (`verus-mcp`) that indexes all spec/proof/exec functions, types, traits, and impls across the codebase. Prefer these tools when searching for Verus items:
 
 ### Function Search
-- `search(query, details?)` — Browse functions by name substring. Ranked: exact > prefix > substring. Includes fuzzy fallback when few results found. Set `details=true` for full signatures with requires/ensures (default limit drops to 10).
+- `search(query, details?)` — Browse functions by name substring. Ranked: exact > prefix > substring. Includes fuzzy fallback when few results found (capped at 4 with results, 10 without). Set `details=true` for full signatures with requires/ensures.
 - `search_ensures(query)` — Find lemmas that prove a specific property. Clause snippets centered around match.
 - `search_requires(query)` — Find what preconditions a lemma needs.
 - `search_signature(param_type, return_type, type_bound)` — Find functions by type signature.
 - `search_body(query)` — Find functions that call a specific lemma or use a pattern in their body.
 - `search_doc(query)` — Search within doc comments of functions and types.
-- `lookup(name)` — Get full details (signature, requires/ensures, file, module) for a single function or type.
+- `lookup(name)` — Get full details (signature, requires/ensures, file:line-endline, module) for a single function or type.
+- `lookup_source(name)` — Get full source code of a function (reads from disk using indexed line range).
 - `batch_lookup(names)` — Look up multiple functions/types by exact name in one call (max 10). Returns full signatures.
 
 ### Type & Trait Search
 - `search_types(query)` — Browse structs, enums, and type aliases by name substring.
 - `search_trait(name)` — Show trait definition + all implementors.
-- `browse_module(path)` — List all functions and types in a module (exact or prefix match).
+- `browse_module(path)` — List all functions and types in a module or crate. Supports crate-qualified paths (e.g., `verus_topology`, `crate::verus_topology`, `verus_topology::mesh`).
 
 ### Dependency Tracking
 - `find_dependencies(name, direction?)` — Call graph: "callers" (default) or "callees".
+
+### Verification
+- `check(crate_name, module?)` — Run Verus verification. Without `module`: verifies entire crate. With `module`: verifies only that module (much faster for iteration). Accepts file paths (`src/runtime/polygon.rs`) or module paths (`runtime::polygon`). Returns clean summary on success, extracted error diagnostics on failure. 10-minute timeout.
+- `profile(crate_name, module?, top_n?)` — Per-function SMT time and rlimit breakdown. Sorted table of hottest functions + per-module summary. Use rlimit (deterministic) not SMT time (2x variance) to measure optimization impact. Default top 25.
 
 ### Utilities
 - `list_modules()` — See all indexed modules grouped by crate.
@@ -32,6 +38,8 @@ This project has a Verus MCP server (`verus-mcp`) that indexes all spec/proof/ex
 - `reindex()` — Force rebuild index. **Not normally needed** — the server auto-reindexes when `.rs` files change (500ms debounce).
 
 **Workflow:** Use `search` / `search_ensures` / `search_requires` to browse, then `lookup` or `batch_lookup` to drill into specific functions. Use `search(query, details=true)` when you want full details inline without a separate lookup call.
+
+Crate roots are auto-discovered — any `verus-*/src` directory in the workspace is indexed automatically.
 
 All search tools accept optional `limit` (default 50) and `offset` (default 0) parameters for pagination.
 
