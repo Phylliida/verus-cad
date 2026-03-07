@@ -52,3 +52,6 @@
 [submodule "verus-quadratic-extension"]
 	path = verus-quadratic-extension
 	url = https://github.com/Phylliida/verus-quadratic-extension.git
+[submodule "verus-mandelbrot"]
+	path = verus-mandelbrot
+	url = https://github.com/Phylliida/verus-mandelbrot.git
