@@ -18,7 +18,7 @@ This project has a Verus MCP server (`verus-mcp`) that indexes all spec/proof/ex
 - `search_body(query)` — Find functions that call a specific lemma or use a pattern in their body.
 - `search_doc(query)` — Search within doc comments of functions and types.
 - `lookup(name)` — Get full details (signature, requires/ensures, file:line-endline, module) for a single function or type.
-- `lookup_source(name)` — Get full source code of a function (reads from disk using indexed line range).
+- `lookup_source(name)` — Get full source code of a function (reads from disk using indexed line range). **Functions only** — does not work for types/structs/enums. Use `lookup(name)` to get the file:line for types, then read the file directly.
 - `batch_lookup(names)` — Look up multiple functions/types by exact name in one call (max 10). Returns full signatures.
 
 ### Type & Trait Search
