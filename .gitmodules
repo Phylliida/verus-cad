@@ -49,3 +49,6 @@
 [submodule "verus-vulkan"]
 	path = verus-vulkan
 	url = https://github.com/Phylliida/verus-vulkan.git
+[submodule "verus-quadratic-extension"]
+	path = verus-quadratic-extension
+	url = https://github.com/Phylliida/verus-quadratic-extension.git
