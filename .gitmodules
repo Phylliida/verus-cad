@@ -55,3 +55,9 @@
 [submodule "verus-mandelbrot"]
 	path = verus-mandelbrot
 	url = https://github.com/Phylliida/verus-mandelbrot.git
+[submodule "verus-2d-constraint-satisfaction"]
+	path = verus-2d-constraint-satisfaction
+	url = https://github.com/Phylliida/verus-2d-constraint-satisfaction.git
+[submodule "verus-field-extension"]
+	path = verus-field-extension
+	url = https://github.com/Phylliida/verus-field-extension.git
