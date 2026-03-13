@@ -61,3 +61,6 @@
 [submodule "verus-field-extension"]
 	path = verus-field-extension
 	url = https://github.com/Phylliida/verus-field-extension.git
+[submodule "verus-group-theory"]
+	path = verus-group-theory
+	url = https://github.com/Phylliida/verus-group-theory.git
