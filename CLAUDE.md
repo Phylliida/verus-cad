@@ -30,7 +30,7 @@ This project has a Verus MCP server (`verus-mcp`) that indexes all spec/proof/ex
 - `find_dependencies(name, direction?)` — Call graph: "callers" (default) or "callees".
 
 ### Verification
-- `check(crate_name, module?)` — Run Verus verification. Without `module`: verifies entire crate. With `module`: verifies only that module (much faster for iteration). Accepts file paths (`src/runtime/polygon.rs`) or module paths (`runtime::polygon`). Returns clean summary on success, extracted error diagnostics on failure. 10-minute timeout.
+- `check(crate_name, module?, raw?)` — Run Verus verification. Without `module`: verifies entire crate. With `module`: verifies only that module (much faster for iteration). Accepts file paths (`src/runtime/polygon.rs`) or module paths (`runtime::polygon`). Returns clean summary on success, extracted error diagnostics on failure. Set `raw=true` to get unprocessed compiler output (useful when error parsing misses something). 10-minute timeout.
 - `profile(crate_name, module?, top_n?)` — Per-function SMT time and rlimit breakdown. Sorted table of hottest functions + per-module summary. Use rlimit (deterministic) not SMT time (2x variance) to measure optimization impact. Default top 25.
 
 ### Context Management
