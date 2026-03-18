@@ -64,3 +64,12 @@
 [submodule "verus-group-theory"]
 	path = verus-group-theory
 	url = https://github.com/Phylliida/verus-group-theory.git
+[submodule "verus-computability-theory"]
+	path = verus-computability-theory
+	url = https://github.com/Phylliida/verus-computability-theory.git
+[submodule "verus-ray-marching"]
+	path = verus-ray-marching
+	url = https://github.com/Phylliida/verus-ray-marching.git
+[submodule "verus-to-spir-v"]
+	path = verus-to-spir-v
+	url = https://github.com/Phylliida/verus-to-spir-v.git

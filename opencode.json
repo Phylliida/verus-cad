@@ -1,10 +1,53 @@
 {
   "$schema": "https://opencode.ai/config.json",
+  "model": "mistral/labs-leanstral-2603",
+  "provider": {
+    "openrouter": {
+      "models": {
+
+        "minimax/minimax-m2.7": {
+             "name": "Minimax M2.7",
+             "options": {
+                  "limit": {
+                       "context": 200000,
+                       "output": 150000
+                  }
+              }
+        }
+      }
+    },
+    "mistral": {
+      "models": {
+        "labs-leanstral-2603": {
+          "name": "Leanstral 2603"
+        }
+      }
+    },
+    "local-model": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Step-3.5-Flash-smol-IQ4_KSS-00001-of-00004.gguf",
+      "options": {
+        "baseURL": "http://172.22.146.1:5000/v1",
+        "apiKey": ""
+      },
+      "models": {
+        "fun": {
+          "id": "/home/bepis/Downloads/Step-3.5-Flash-smol-IQ4_KSS-00001-of-00004.gguf",
+          "name": "Step-3.5-Flash-smol-IQ4_KSS-00001-of-00004.gguf",
+          "limit": {
+            "context": 54000,
+            "output": 8000
+          }
+        }
+      }
+    }
+  },
   "mcp": {
     "verus": {
       "type": "local",
       "command": ["/Users/yams/Prog/verus-cad/verus-mcp/target/release/verus-mcp"],
-      "enabled": true
+      "enabled": true,
+      "timeout": 500000,
     }
   }
 }
