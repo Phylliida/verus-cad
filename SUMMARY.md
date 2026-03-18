@@ -1,1263 +1,627 @@
-# Verus Guide Summary
+# Verus Quick Reference & Guide
 
-## Overview
+## Table of Contents
 
-Verus is a tool for **static verification** of Rust code, using SMT (Z3) to prove full functional correctness. It extends Rust syntax with verification features but code compiles to normal Rust executables.
-
-**Key Principles:**
-- No runtime overhead - verification code is ghost code, erased at compile time
-- Modular verification via requires/ensures contracts
-- Three code modes: `spec` (mathematical), `proof` (verification), `exec` (executable)
+1. [Quick Reference Cheat Sheet](#1-quick-reference-cheat-sheet)
+2. [Core Concepts](#2-core-concepts)
+   - [spec vs proof vs exec](#spec-vs-proof-vs-exec)
+   - [Function Signatures](#function-signatures)
+3. [Types & Arithmetic](#3-types--arithmetic)
+4. [Control Flow](#4-control-flow)
+   - [Recursion & Termination](#recursion--termination)
+   - [Loops & Invariants](#loops--invariants)
+5. [Collections: Seq, Set, Map](#5-collections-seq-set-map)
+6. [Proof Techniques](#6-proof-techniques)
+7. [Advanced Topics](#7-advanced-topics)
+8. [Common Errors & Fixes](#8-common-errors--fixes)
+9. [Advanced Proof Patterns](#9-advanced-proof-patterns-from-real-projects)
+10. [Rlimit Optimization](#10-rlimit-optimization)
+11. [Common Pitfalls](#11-common-pitfalls)
 
 ---
 
-## Getting Started
+## 1. Quick Reference Cheat Sheet
 
-### Setup
-- Run via command line: `/path/to/verus file.rs`
-- Or use VSCode with `verus-analyzer` extension
-- Compile with `--compile` flag to generate binaries
-
-### Basic Structure
+### Function Modes
 ```rust
-use vstd::prelude::*;
-verus! {
-    // Verus code here
-}
+spec fn ...    // Mathematical, ghost, no side effects
+proof fn ...   // Verification proofs, ghost
+fn ...         // exec mode (default), compiled to Rust
 ```
 
----
-
-## Basic Specifications
-
-### Preconditions (`requires`)
+### Basic Specification
 ```rust
-fn octuple(x1: i8) -> i8
-    requires -16 <= x1 < 16
-{ ... }
+fn add_one(x: u32) -> (y: u32)
+    requires x < 0xFFFF_FFFF
+    ensures y == x + 1
+{ x + 1 }
 ```
-- Constraints on function inputs
-- Checked at call sites
-- Can chain: `-16 <= x1 < 16` means `-16 <= x1 && x1 < 16`
 
-### Postconditions (`ensures`)
-```rust
-fn f(x1: i8) -> (x8: i8)
-    ensures x8 == 8 * x1
-{ ... }
-```
-- Name return value with `-> (name: type)` syntax
-- Describes what function guarantees
-
-### Assertions
-- `assert(expr)` - asks SMT to prove, fails if not provable
-- `assume(expr)` - accepts without proof (**dangerous**, use sparingly)
-- Never use `assume` in final code; only for debugging
-
-### Ghost vs Executable Code
-- `requires`, `ensures`, `assert`, `assume` are ghost code
-- Mark unverified functions with `#[verifier::external_body]`
-
----
-
-## Integer Types
-
-| Type | Description | Used in |
-|------|-------------|---------|
-| `int` | Arbitrary-precision mathematical integer | Spec code |
-| `nat` | Non-negative integers (>= 0) | Spec code |
-| `u8/u16/.../u128`, `i8/...` | Fixed-width Rust integers | Exec code |
-
-**Rule:** Use `int` by default in specifications; it's most efficient for SMT. Use `nat` when you need non-negativity info.
-
-**In ghost code:** `+`, `-`, `*` never overflow (widened to `int`).  
-**In exec code:** Overflow checked and must be proven impossible.
-
----
-
-## Specification Operators
-
-### Chained Inequalities
-`0 <= i <= j < len` means `0 <= i && i <= j && j < len`
-
-### Implication
-`a ==> b` is `!a || b` (low precedence)
-
-### Triple operators (low precedence)
-- `&&&` - like `&&` but lower precedence
-- `|||` - like `||` but lower precedence
-
-### Equality
-- `==` in ghost code is always an equivalence relation (reflexive, symmetric, transitive)
-- Struct/enum equality compares field-by-field
-
----
-
-## Integer Constants & Coercions
-
-### Constants
-- Type suffixes: `7u8`, `7u32`, `7int`, `7nat`
-- `int`/`nat` constants can be arbitrarily large
-- Different integer types can be compared in ghost code
-
-### Type Coercion (`as`)
-```rust
-let i: int = u as int;   // always valid
-let n: nat = u as nat;    // only valid if u >= 0
-let u8_val = v as u8;     // truncates if out of range
-```
-**Warning:** Use `#[verifier::truncate]` to silence out-of-range warnings.
-
----
-
-## Integer Arithmetic
-
-### Ghost Code (spec/proof)
-- `+`, `-`, `*` **never overflow** - widened to `int`
-- `/` and `%` use **Euclidean division** (result always non-negative)
-- `add()`, `sub()`, `mul()` - truncating versions
-
-### Exec Code
-- Overflow **must be proven impossible**
-- Use `checked_add`, `wrapped_add` for runtime checks
-
----
-
-## Equality
-
-### Ghost Code
-- `==` is always an **equivalence relation** (reflexive, symmetric, transitive)
-- Struct/enum equality compares field-by-field
-
-### Exec Code
-- `==` calls `PartialEq::eq()` - may have side effects
-- For collections (Seq, Set, Map), use **extensional equality**: `=~=`
-
----
-
-## Three Code Modes
-
-### 1. `spec` Functions
-- Pure mathematical functions
-- Can use `int`/`nat` types
-- Body may be visible (`open`) or hidden (`closed`)
-- No `requires`/`ensures`, only `recommends` (soft preconditions)
-
-### 2. `proof` Functions
-- Prove properties about specs
-- Ghost code, not compiled
-- May have `requires`/`ensures`
-- Can call other proof/spec functions
-- **Non-deterministic** - same input might return different values
-
-### 3. `exec` Functions
-- Regular Rust code
-- Can call spec/proof only via `proof { ... }` blocks
-- Default mode (omitted annotation)
-
-| Feature | spec | proof | exec |
-|---------|------|-------|------|
-| Compiled | No | No | Yes |
-| Mutation | No | Yes | Yes |
-| Can call spec | Yes | Yes | Yes |
-| Can call proof | No | Yes | Yes |
-| Has requires/ensures | No (recommends) | Yes | Yes |
-
----
-
-## Proof Blocks & Lemma Calling
-
-### Proof Blocks
+### Proof Block
 ```rust
 fn exec_fn() {
     proof {
-        let ghost_val = some_spec_fn(x);
         lemma_min(10, 20);
     }
 }
 ```
 
-### `assert ... by { ... }` (Scoped Proof)
+### Assert By (scoped proof)
 ```rust
 assert(x == y) by {
     lemma_equal(x, y);
 }
+// Only x == y leaks out, not lemma internals
 ```
-- Information **contained** within the `by` block
-- Doesn't leak to surrounding context
 
-### Lemma Functions
+### Recursive Spec with Fuel
 ```rust
-proof fn lemma_min(x: int, y: int)
-    ensures min(x, y) <= x, min(x, y) <= y
-{ }
+spec fn triangle(n: nat) -> nat decreases n { ... }
+
+proof { reveal_with_fuel(triangle, 11); }  // unfold 11 times
+assert(triangle(10) == 55);
 ```
-- Used to prove properties about `closed spec fn`
-- Call inside `proof { }` or `assert ... by { }`
+
+### Loop with Invariant
+```rust
+while idx < n
+    invariant
+        idx <= n,
+        sum == triangle(idx as nat),
+    decreases n - idx
+{ ... }
+```
+
+### Quantifier with Trigger
+```rust
+forall|i: int| 0 <= i < s.len() ==> #[trigger] s[i] > 0
+```
+
+### View Operator (@)
+```rust
+v@                    // Seq view of Vec
+expr@                 // shorthand for expr.view()
+```
+
+### Key Attributes
+| Attribute | Use |
+|-----------|-----|
+| `#[verifier::external_body]` | Call unverified code |
+| `#[verifier::opaque]` | Hide spec function body |
+| `#[verifier::type_invariant]` | Auto-enforced type invariant |
+| `#[verifier::memoize]` | Cache compute results |
 
 ---
 
-## Key Takeaways
+## 2. Core Concepts
 
-1. **No `assume` in production** - always prove things fully
-2. **Write `requires`/`ensures`** for function contracts
-3. **Use `int` in specs**, not fixed-width types
-4. **Modular verification** - each function verified independently
-5. **Ghost code erased** - no runtime overhead
-6. **Proof blocks** for calling lemmas from exec code
-7. **`assert by { }`** to scope lemma information
+### spec vs proof vs exec
 
----
+| Feature | `spec fn` | `proof fn` | `fn` (exec) |
+|---------|-----------|------------|-------------|
+| Compiled | No | No | Yes |
+| Mutation | No | Yes | Yes |
+| Can call spec | Yes | Yes | Yes |
+| Can call proof | No | Yes | Yes |
+| Has requires/ensures | No (recommends) | Yes | Yes |
+| Types | `int`, `nat` | ghost/tracked | Rust types |
 
-## Ghost Code Properties
+**When to use:**
+- **`spec fn`**: Define mathematical specifications, invariants, abstract state
+- **`proof fn`**: Lemmas, inductive proofs, verification conditions
+- **`fn` (exec)**: Actual executable code
 
-**Ghost code abilities:**
-- Can create values of any type, even types with private constructors
-- Can copy/duplicate any value
-- Values cannot leak into exec code (compile-time error)
-- Example: `duplicate_S(s)` can duplicate a struct S even with private fields
+### Choosing Between Proof Block Forms
 
-### Const Declarations
+| Form | Use When |
+|------|----------|
+| `proof { lemma(); }` | Lemma result should be available after the block |
+| `assert P by { ... }` | Only `P` should be available after, not proof internals |
+| `assert forall \|x\| P implies Q by { ... }` | Proving forall with bound variable in scope |
 
-Consts are like 0-argument functions, can be marked spec/proof/exec or dual spec/exec:
+### Variable Modes
+
+| Code Mode | Default | Can Use |
+|-----------|---------|---------|
+| spec | ghost | ghost only |
+| proof | ghost | ghost + tracked |
+| exec | exec | ghost + tracked + exec |
 
 ```rust
-spec const SPEC_ONE: int = 1;
-
-exec const C: u64
-    ensures C == 7
-{ 7 }
-
-// Dual-use const (both exec and spec)
-const ONE: u8 = 1;
+let ghost x = ...;           // Create ghost variable
+let tracked t = ...;         // Create tracked variable
+let Ghost(val) = Ghost(expr); // Unwrap pattern
+let Tracked(val) = Tracked(expr);
 ```
 
-**Using exec const as spec:** Add `#[verifier::when_used_as_spec(SPEC_DEF)]` annotation.
+### Function Signatures
 
-**Overflow troubleshooting:** Use `#[verifier::nonlinear]` on const declarations.
+```rust
+// Exec function
+fn name(arg: u32) -> (ret: u64)
+    requires arg < 100
+    ensures ret == f(arg)
+    no_unwind when arg < 100
+{ ... }
+
+// Proof function
+proof fn lemma(x: int, y: int)
+    requires x < y
+    ensures x + 1 <= y
+{ ... }
+
+// Spec function
+spec fn abs(n: int) -> int
+    recommends n >= 0
+    decreases n.abs()
+{ if n < 0 { -n } else { n } }
+```
+
+**Key clauses:**
+- `requires` - precondition (checked at call site)
+- `ensures` - postcondition (guaranteed on return)
+- `decreases` - termination measure (recursive functions)
+- `recommends` - soft precondition (diagnostics only)
+- `no_unwind when` - unwind guarantee condition
+
+### Ghost Code Properties
+
+Ghost code can:
+- Create values of any type (even with private constructors)
+- Duplicate values freely
+- **Cannot** leak into exec code (compile-time error)
 
 ---
 
-## Triangle Example: Putting It All Together
+## 3. Types & Arithmetic
 
-Complete example combining spec, proof, and exec:
+### Integer Types
+
+| Type | Description | Use Case |
+|------|-------------|----------|
+| `int` | Arbitrary precision | Spec code (default) |
+| `nat` | Non-negative integers | Spec when non-neg needed |
+| `u8..u128`, `i8..i128` | Fixed-width | Exec code |
+| `usize`, `isize` | Architecture-dependent | Exec code |
+
+**Rule:** Use `int` in specs (SMT-optimized). Use `nat` when you need to assert non-negativity.
+
+### Arithmetic Differences
+
+**Ghost code:** `+`, `-`, `*` never overflow (widened to `int`)
+
+**Exec code:** Overflow must be proven impossible
+```rust
+// Use runtime checks
+x.checked_add(y)  // returns Option
+
+// Or prove bounds
+fn safe_add(x: u64, y: u64) -> (r: u64)
+    requires x <= u64::MAX - y
+    ensures r == x + y
+{ x + y }
+```
+
+### Euclidean Division
+
+In spec code, `/` and `%` use Euclidean division:
+- `a / b` and `a % b` produce unique q, r where `b*q + r == a` and `0 <= r < |b|`
+- Remainder is **always non-negative**
 
 ```rust
-spec fn triangle(n: nat) -> nat
-    decreases n,
-{
-    if n == 0 { 0 } else { n + triangle((n - 1) as nat) }
-}
+// Examples
+5 / 2  == 2      5 % 2  == 1
+(-5) / 2 == -2   (-5) % 2 == 1   // Note: remainder is positive!
+```
 
-proof fn triangle_is_monotonic(i: nat, j: nat)
-    ensures i <= j ==> triangle(i) <= triangle(j),
-    decreases j,
-{
-    if j == 0 { } // base case trivial
-    else {
-        triangle_is_monotonic(i, (j - 1) as nat);
-    }
-}
+### Coercion with `as`
 
-fn loop_triangle(n: u32) -> (sum: u32)
-    requires triangle(n as nat) < 0x1_0000_0000,
-    ensures sum == triangle(n as nat),
-{
-    let mut sum: u32 = 0;
-    let mut idx: u32 = 0;
-    while idx < n
-        invariant idx <= n, sum == triangle(idx as nat),
-        decreases n - idx,
-    {
-        idx = idx + 1;
-        assert(sum + idx < 0x1_0000_0000) by {
-            triangle_is_monotonic(idx as nat, n as nat);
-        }
-        sum = sum + idx;
-    }
-    sum
-}
+| Target | Behavior |
+|--------|----------|
+| `int` | Always valid, no truncation |
+| `nat` | Unspecified if negative |
+| `u8..usize` | Truncation (lower N bits) |
+| `char` | Unspecified if outside valid range |
+
+```rust
+let i: int = u as int;      // Always valid
+let n: nat = u as nat;       // Only if u >= 0
+#[verifier::truncate]        // Silence warns for intentional truncation
+let b: u8 = v as u8;
+```
+
+### Equality
+
+**Ghost code:** `==` is always an equivalence relation
+
+**Exec code:** `==` calls `PartialEq::eq()`
+
+**Collections:** Use extensional equality:
+```rust
+s1 =~= s2   // shallow: same elements, same structure
+s1 =~~= s2  // deep: recursively compares nested collections
+```
+
+### Spec Closures
+
+```rust
+let f = |x: int| x + 1;  // Type: spec_fn(int) -> int
+
+Seq::new(5, |i: int| 10 * i)  // Common use in Seq construction
 ```
 
 ---
 
-## Recursion and Termination
+## 4. Control Flow
 
-### Decreases Clause (Termination)
+### Recursion & Termination
 
-**Required for recursive spec functions** to prove termination:
+#### Decreases Clause (Required for recursive spec functions)
 
 ```rust
-spec fn triangle(n: nat) -> nat
-    decreases n,  // MUST be strictly decreasing
+spec fn factorial(n: nat) -> nat
+    decreases n
 {
-    if n == 0 { 0 } else { n + triangle((n - 1) as nat) }
+    if n == 0 { 1 } else { n * factorial((n - 1) as nat) }
 }
 ```
 
 Without `decreases`, nonterminating functions would allow proving `false`.
 
-### Fuel and Recursive Functions
+#### Fuel for Recursive Functions
 
-**Problem:** SMT can't automatically inline recursive functions deeply.
-
+SMT can't inline deeply. Use `reveal_with_fuel`:
 ```rust
 assert(triangle(10) == 55);  // FAILS - not enough fuel
+
+proof { reveal_with_fuel(triangle, 11); }
+assert(triangle(10) == 55);  // succeeds
 ```
 
-**Solution:** Use `reveal_with_fuel`:
+**Default fuel:** 1. Each recursive inlining consumes 1 unit.
 
+#### Lexicographic Decreases
+
+When one parameter doesn't always decrease:
 ```rust
-fn test() {
-    proof { reveal_with_fuel(triangle, 11); }
-    assert(triangle(10) == 55);  // succeeds
-}
-```
-
-Default fuel is 1. Each recursive inlining consumes 1 fuel unit.
-
-### Recursive Exec Functions
-
-Exec functions can also be recursive but don't need decreases clause (Verus checks termination differently).
-
-**Important:** Overflow must be proven impossible:
-
-```rust
-fn rec_triangle(n: u32) -> (sum: u32)
-    requires triangle(n as nat) < 0x1_0000_0000,
-    ensures sum == triangle(n as nat),
-    decreases n,  // needed for spec call
-{
-    if n == 0 { 0 } else { n + rec_triangle(n - 1) }
-}
-```
-
-### Old Values in Specifications
-
-Use `*old(val)` to refer to initial value of a variable:
-
-```rust
-fn tail_triangle(n: u32, idx: u32, sum: &mut u32)
-    requires
-        *old(sum) == triangle(idx as nat),  // initial value
-    ensures *sum == triangle(n as nat),
+spec fn ackermann(m: nat, n: nat) -> nat
+    decreases m, n  // m first, then n
 { ... }
 ```
 
-### Proofs by Induction
+#### Termination Proofs
 
-Write inductive proofs as recursive proof functions:
-
+**Inline proof:**
 ```rust
-proof fn triangle_is_monotonic(i: nat, j: nat)
-    ensures i <= j ==> triangle(i) <= triangle(j),
-    decreases j,
+spec fn floor_log2(n: u64) -> int
+    decreases n
 {
-    if j == 0 { }  // base case
+    if n <= 1 { 0 }
     else {
-        triangle_is_monotonic(i, (j - 1) as nat);  // induction step
+        proof { assert(n > 1 ==> (n >> 1) < n) by(bit_vector); }
+        floor_log2(n >> 1) + 1
     }
 }
 ```
 
----
+**Via clause (separate proof function):**
+```rust
+spec fn floor_log2_via(n: u64) -> int
+    decreases n
+    via floor_log2_decreases_proof
+{ ... }
 
-## Loops and Invariants
+#[via_fn]
+proof fn floor_log2_decreases_proof(n: u64) {
+    assert(n > 1 ==> (n >> 1) < n) by(bit_vector);
+}
+```
 
-**Loop invariants** describe what must be true before/after each iteration:
+### Loops & Invariants
+
+#### Loop Invariants
+
+Three requirements:
+1. Hold on initial entry
+2. Maintained at end of each iteration
+3. Strong enough to prove postcondition
 
 ```rust
 while idx < n
     invariant
-        idx <= n,           // holds at start and after each iteration
+        idx <= n,
         sum == triangle(idx as nat),
-        triangle(n as nat) < 0x1_0000_0000,
-    decreases n - idx,
+    decreases n - idx
 {
     idx = idx + 1;
     sum = sum + idx;
 }
 ```
 
-**Three requirements for invariants:**
-1. Hold upon initial entry to loop
-2. Maintained at end of loop body
-3. Strong enough to prove postcondition
+#### Loop Invariant Inheritance
 
-**Loop invariant inheritance:** Loops don't auto-inherit surrounding preconditions—must be repeated in invariant.
-
-**Opt out:** Use `#[verifier::loop_isolation(false)]` on function/module/crate.
-
-### Loops with Break/Return
-
-**Return inside loop:** Can exit early with `return`:
-
+Loops don't auto-inherit preconditions—repeat them in invariant:
 ```rust
-while idx < n {
-    if overflow_detected {
-        return 0xffff_ffff;
-    }
-    sum = sum + idx;
+fn loop_triangle(n: u32) -> (sum: u32)
+    requires triangle(n as nat) < 0x1_0000_0000  // NOT inherited
+{
+    while idx < n
+        invariant
+            triangle(n as nat) < 0x1_0000_0000,  // Must repeat!
+        ...
 }
 ```
 
-**Break inside loop:** Use `invariant_except_break` for invariants that don't hold after break:
+**Opt out:** `#[verifier::loop_isolation(false)]` on function/module/crate.
 
+#### Break and Return
+
+**Return in loop:** Exit early
 ```rust
-while idx < n
-    invariant_except_break
-        idx <= n,
-        sum == triangle(idx as nat),
-    ensures  // explicit postcondition required
-        sum == triangle(n as nat) || sum == 0xffff_ffff,
-{ ... }
+if overflow { return special_value; }
 ```
 
-### For Loops
+**Break with invariant_except_break:**
+```rust
+while idx < n
+    invariant_except_break idx <= n
+    ensures sum == triangle(n) || sum == sentinel
+{ ... if condition { sum = sentinel; break; } }
+```
 
-For loops auto-increment index; use `iter: 0..n` syntax:
+#### For Loops
 
 ```rust
 for idx in iter: 0..n
-    invariant sum == triangle(idx as nat),
+    invariant sum == triangle(idx as nat)
 {
     sum = sum + idx + 1;
 }
 ```
-
 - `iter.start`, `iter.cur`, `iter.end` - iterator state
-- `iter@` - elements iterated so far (e.g., `seq![0,1,2]`)
-
-### Lexicographic Decreases
-
-For functions with multiple recursive calls where one parameter doesn't always decrease:
-
-```rust
-spec fn ackermann(m: nat, n: nat) -> nat
-    decreases m, n,  // lexicographic: m first, then n
-{
-    if m == 0 { n + 1 }
-    else if n == 0 { ackermann((m - 1) as nat, 1) }
-    else { ackermann((m - 1) as nat, ackermann(m, (n - 1) as nat)) }
-}
-```
-
-### Mutual Recursion
-
-Functions can be mutually recursive:
-
-```rust
-spec fn is_even(i: int) -> bool
-    decreases abs(i),
-{
-    if i == 0 { true }
-    else if i > 0 { is_odd(i - 1) }
-    else { is_odd(i + 1) }
-}
-
-spec fn is_odd(i: int) -> bool
-    decreases abs(i),
-{
-    if i == 0 { false }
-    else if i > 0 { is_even(i - 1) }
-    else { is_even(i + 1) }
-}
-```
+- `iter@` - elements so far (e.g., `seq![0,1,2]`)
 
 ---
 
-## Structs and Enums
+## 5. Collections: Seq, Set, Map
 
-### Structs
+### Overview
 
-```rust
-struct Point { x: int, y: int }
+| Type | Description | Size |
+|------|-------------|------|
+| `Seq<T>` | Ordered sequence | Finite |
+| `Set<T>` | Unordered set | Finite or infinite |
+| `Map<K, V>` | Key-value mapping | Finite or infinite |
 
-impl Point {
-    spec fn len2(&self) -> int {
-        self.x * self.x + self.y * self.y
-    }
-}
-```
+**Key difference from Rust:** Size is `nat` (unbounded).
 
-### Enums
+### Construction
 
-```rust
-enum Beverage {
-    Coffee { creamers: nat, sugar: bool },
-    Soda { flavor: Syrup },
-    Water { ice: bool },
-}
-```
-
-**Enum operators in specs:**
-- `is` operator: `bev is Soda` (returns bool)
-- `!is` shorthand: `bev !is Coffee`
-- Arrow access: `bev->creamers`
-
-**matches syntax** for binding fields:
-
-```rust
-spec fn cuddly(l: Life) -> bool {
-    ||| l matches Mammal { legs, .. } && legs == 4
-    ||| l matches Arthropod { legs, wings } && legs == 8
-}
-```
-
----
-
-## Libraries: Seq, Set, Map
-
-Verus standard library (`vstd`) provides immutable collection types for specifications:
-
-### Seq\<T\> - Sequences
-
-```rust
-let s: Seq<int> = seq![0, 10, 20, 30, 40];
-assert(s.len() == 5);
-assert(s[2] == 20);
-```
-
-### Set\<T\> - Sets
-
-```rust
-let s: Set<int> = set![1, 2, 3, 4, 5];
-assert(s.contains(3));
-```
-
-### Map\<K, V\> - Maps
-
-```rust
-let m: Map<int, int> = map![1 => 10, 2 => 20];
-assert(m[1] == 10);
-```
-
-**Key difference from Rust collections:** Size is `nat` (unbounded), can represent infinite sets/maps.
-
-### Seq, Set, Map Construction
-
-**Macros for finite collections:**
 ```rust
 Seq::new(5, |i: int| 10 * i)     // Seq with 5 elements
-Set::new(|i: int| i % 10 == 0)   // Finite or infinite sets
-Map::new(pred, |i| 10 * i)        // Map with domain predicate
+set![1, 2, 3, 4, 5]              // Set literal
+map![1 => 10, 2 => 20]            // Map literal
 ```
 
-### Extensional Equality (=~=)
-
-Collections with same elements may not auto-equal via `==`. Use `=~=`:
+### Common Operations
 
 ```rust
-let s1 = seq![0, 10, 20, 30, 40];
-let s2 = seq![0, 10] + seq![20] + seq![30, 40];
-assert(s1 =~= s2);  // forces element-by-element comparison
+// Seq
+s.len()                  // nat
+s[i]                     // index (returns A)
+s.push(v)               // new Seq with v appended
+s.take(n)               // first n elements
+s.drop(n)               // elements after n
+s.subrange(i, j)        // elements [i, j)
+s =~= t                  // extensional equality
+
+// Set  
+s.contains(x)           // bool
+s.insert(x)             // new Set
+s.remove(x)             // new Set
+s.intersection(t)       // intersection
+s.union(t)              // union
+s.is_empty()            // bool
+
+// Map
+m.dom()                 // domain as Set
+m.contains_key(k)      // bool
+m[k]                    // get value
+m.insert(k, v)         // new Map
 ```
 
-**When needed:** After operations like `.remove()`, `.intersect()`, etc.
+### Vec and @ Operator
 
-### Vec Executable Library
-
-Executable Vec connected to Seq via `@` operator:
-
+Vec is exec-only; use `@` to get Seq view:
 ```rust
 let mut v: Vec<u32> = Vec::new();
-v.push(0);
-assert(v@ =~= seq![0, 10, 21, 30, 40]);  // Seq view of Vec
-assert(v@[2] == 21);                      // Index into Seq
-assert(v@.subrange(2, 4) =~= seq![21, 30]);  // Subsequence
+v.push(42);
+assert(v@ =~= seq![42]);
+assert(v@[0] == 42);
 ```
 
-**Best practice:** Write specs using Seq/Set/Map, not Vec directly.
-
-### Spec Closures
-
-Anonymous ghost functions in spec/proof code:
-
-```rust
-let s = Seq::new(5, |i: int| 10 * i);
-
-spec fn adder(x: int) -> spec_fn(int) -> int {
-    |y: int| x + y
-}
-```
-
-- Type is `spec_fn(args) -> ret`, not a trait
-- Can return closures directly from spec functions
-- Subject to same restrictions as named spec functions
+**Best practice:** Write specs using Seq/Set/Map, not Vec.
 
 ---
 
-## Developing Proofs
+## 6. Proof Techniques
 
-### Debugging Proofs with Assert/Assume
-
-**Technique:** Use `assume` to isolate where proof fails:
-
-```rust
-// Start with assumes to check structure
-assume(postcondition_holds);
-
-// Then narrow down
-if s1.is_empty() {
-    assert(s1.intersect(s2) =~= Set::empty());
-} else {
-    // ... 
-}
-```
+### Debugging Proofs
 
 **Process:**
-1. Add `assume(postcondition)` → if verifies, the issue is in the proof
-2. Move assume into branches to isolate failure
-3. Replace assume with assert to see what fails
+1. Add `assume(postcondition)` → if verifies, issue is in proof
+2. Move `assume` into branches to isolate
+3. Replace `assume` with `assert` to see failure
 4. Add needed lemmas/assertions
 
-### Proving Base Cases
-
-For empty sets, may need explicit extensionality:
 ```rust
-if s1.is_empty() {
-    assert(s1.intersect(s2) =~= Set::<A>::empty());
-    assert(s1.intersect(s2).len() == 0);
+// Start: assumes to check structure
+assume(final_result_is_correct);
+
+// Then narrow down
+if condition {
+    assert(goal1);
+} else {
+    assert(goal2);
 }
 ```
 
-### Induction Step Tips
+### Induction Proofs
 
-1. Use `.choose()` and `.remove(a)` to make set smaller
-2. After recursive call, explicitly state what it gives you
-3. May need `=~=` to relate operations on collections
-
-### Proving Induction Steps
-
-**Key technique:** Work backwards from what you need to prove:
-
+Write as recursive proof functions:
 ```rust
-// Given induction hypothesis:
-assert(s1.remove(a).intersect(s2).len() <= s1.remove(a).len());
-
-// Need to show:
-assume(s1.intersect(s2).len() <= s1.len());
-
-// Relate via cardinality:
-assert(s1.remove(a).len() == s1.len() - 1);  // removing decreases size
-assert(s1.remove(a).intersect(s2).len() <= s1.len() - 1);
-
-// Use extensionality to relate .remove() and .intersect():
-assert(s1.intersect(s2).remove(a) =~= s1.remove(a).intersect(s2));
-```
-
----
-
-## Fibonacci Example with Loop Invariants
-
-**Spec:**
-```rust
-spec fn fib(n: nat) -> nat
-    decreases n,
-{
-    if n == 0 { 0 } else if n == 1 { 1 } else { fib(n-2) + fib(n-1) }
-}
-```
-
-**Implementation with invariants:**
-```rust
-fn fib_impl(n: u64) -> (result: u64)
-    requires fib(n as nat) <= u64::MAX,
-    ensures result == fib(n as nat),
-{
-    if n == 0 { return 0; }
-    let mut prev: u64 = 0;
-    let mut cur: u64 = 1;
-    let mut i: u64 = 1;
-    while i < n
-        invariant
-            0 < i <= n,
-            fib(n as nat) <= u64::MAX,
-            cur == fib(i as nat),
-            prev == fib((i - 1) as nat),
-        decreases n - i,
-    {
-        i = i + 1;
-        proof { lemma_fib_is_monotonic(i as nat, n as nat); }
-        let new_cur = cur + prev;
-        prev = cur;
-        cur = new_cur;
-    }
-    cur
-}
-```
-
-**Key invariants needed:**
-- `cur == fib(i)` - current fib value
-- `prev == fib(i-1)` - previous fib value
-- `fib(n) <= u64::MAX` - to prevent overflow (inherited from requires)
-- Need monotonicity lemma to prove overflow won't happen
-
-**Monotonicity lemma:**
-```rust
-proof fn lemma_fib_is_monotonic(i: nat, j: nat)
-    requires i <= j,
-    ensures fib(i) <= fib(j),
-    decreases j - i,
+proof fn lemma_fib_monotonic(i: nat, j: nat)
+    requires i <= j
+    ensures fib(i) <= fib(j)
+    decreases j
 {
     if j < 2 { }  // base cases
-    else if i == j { }
-    else if i == j - 1 { }
     else {
-        lemma_fib_is_monotonic(i, (j - 1) as nat);
-        lemma_fib_is_monotonic(i, (j - 2) as nat);
+        lemma_fib_monotonic(i, (j - 1) as nat);
     }
 }
 ```
 
----
-
-## CheckedU64 for Overflow-Free Arithmetic
-
-Use `CheckedU64` to avoid overflow proofs:
-```rust
-fn fib_checked(n: u64) -> (result: u64)
-    requires fib(n as nat) <= u64::MAX,
-    ensures result == fib(n as nat),
-{
-    let mut cur = CheckedU64::new(1);
-    let mut prev = CheckedU64::new(0);
-    let mut i: u64 = 1;
-    while i < n {
-        invariant 0 < i <= n, cur@ == fib(i as nat), prev@ == fib((i-1) as nat),
-        decreases n - i,
-        {
-            i = i + 1;
-            let new_cur = cur.add_checked(&prev);
-            prev = cur;
-            cur = new_cur;
-        }
-    }
-    cur.unwrap()
-}
-```
-- `cur@` extracts the Seq view (ghost state)
-- No monotonicity lemma needed!
-
----
-
-## Quantifiers: forall and exists
-
-### forall (Universal Quantifier)
+### forall with assert-by
 
 ```rust
-forall|i: int| 0 <= i < s.len() ==> #[trigger] is_even(s[i])
-```
-- Means: for ALL i satisfying condition, property holds
-- Infinite conjunction: `f(-2) && f(-1) && f(0) && ...`
-
-### exists (Existential Quantifier)
-
-```rust
-exists|i: int| #[trigger] is_even(i)
-```
-- Means: there EXISTS at least one i with property
-- Needs a witness value
-
----
-
-## Triggers
-
-**Purpose:** Tell SMT which expressions to match for quantifier instantiation.
-
-### Basic Usage
-
-```rust
-forall|i: int| 0 <= i < s.len() ==> #[trigger] is_even(s[i])
-```
-
-When verifying `assert(is_even(s[3]))`, SMT matches `is_even(s[3])` against trigger `is_even(s[i])` → instantiates with i=3.
-
-### Trigger Rules
-
-1. **Must mention all quantified variables**
-2. **Cannot contain:** `==`, `!=`, `<=`, `+` (arithmetic/equality/bool ops)
-3. **Can be:** function calls, field access, bitwise ops
-
-### Good vs Bad Triggers
-
-**Bad:** `0 <= i` - too broad, matches anything non-negative
-
-**Good:** `s[i]` - precise, matches actual sequence elements
-
-```rust
-// Auto-selected trigger works
-forall|i: int| 0 <= i < s.len() ==> is_even(s[i])  // Verus picks s[i]
-
-// Explicit trigger
-forall|i: int| 0 <= i < s.len() ==> #[trigger] s[i] is_even
-```
-
-### Multiple Variables
-
-```rust
-forall|i: int, j: int| 0 <= i < j < s.len() ==> #[trigger] s[i] != #[trigger] s[j]
-```
-
-Each `#[trigger]` in a group must match simultaneously.
-
-### Multiple Triggers
-
-```rust
-forall|i: int, j: int|
-    #![trigger a[i], b[j]]
-    #![trigger a[i], c[j]]
-    0 <= i < j < a.len() ==> a[i] != b[j] && a[i] != c[j]
-```
-SMT uses ANY matching trigger.
-
-### Matching Loops (AVOID!)
-
-```rust
-// BAD: causes infinite matching
-forall|i: int| 0 <= i < s.len() - 1 ==> #[trigger] s[i] <= s[i + 1]
-```
-When SMT sees `s[2]`, it creates `s[3]`, which creates `s[4]`, etc. → potential infinite loop.
-
-**Fix:** Use two-variable quantification instead:
-```rust
-forall|i: int, j: int| 0 <= i <= j < s.len() ==> s[i] <= s[j]
-```
-
-### exists Triggers
-
-```rust
-assert(exists|i: int| #[trigger] is_even(i));  // succeeds with witness
-```
-
----
-
-## choose Expression
-
-Extract witness from proven `exists`:
-```rust
-proof fn test_choose(s: Seq<int>)
-    requires exists|i: int| f(i),
-{
-    let w = choose|i: int| f(i);  // get the witness
-    assert(f(w));  // must hold
+assert forall |i: int| P(i) implies Q(i) by {
+    // i is in scope here
+    reveal(spec_fn);
+    assert(Q(i));
 }
 ```
 
-If `exists` not proven, `choose` returns arbitrary value.
+### choose (Witness Extraction)
 
-### Proving forall with assert-by
-
-Bring quantifier variables into scope:
 ```rust
-proof fn test_even_f()
-    ensures forall|i: int| is_even(i) ==> f(i),
+proof fn demo(s: Seq<int>)
+    requires exists |i| s[i] > 10
 {
-    assert forall|i: int| is_even(i) implies f(i) by {
-        lemma_even_f(i);  // i is now in scope
-    }
+    let w = choose |i| s[i] > 10;
+    assert(s[w] > 10);
 }
 ```
 
-### Using exists with choose
+### Broadcast Lemmas (Ambient Facts)
 
+Make lemmas always available:
 ```rust
-proof fn test_g_proves_f(i: int)
-    requires exists|j: int| g(i, j),
-    ensures f(i),
-{
-    lemma_g_proves_f(i, choose|j: int| g(i, j));
-}
-```
-
----
-
-## Binary Search Example
-
-```rust
-fn binary_search(v: &Vec<u64>, k: u64) -> (r: usize)
-    requires
-        forall|i: int, j: int| 0 <= i <= j < v.len() ==> v[i] <= v[j],
-        exists|i: int| 0 <= i < v.len() && k == v[i],
-    ensures k == v[r as int],
-{
-    let mut i1: usize = 0;
-    let mut i2: usize = v.len() - 1;
-    while i1 != i2
-        invariant
-            exists|i: int| i1 <= i <= i2 && k == v[i],
-        decreases i2 - i1,
-    {
-        let ix = i1 + (i2 - i1) / 2;
-        if v[ix] < k { i1 = ix + 1; }
-        else { i2 = ix; }
-    }
-    i1
-}
-```
-
----
-
-## Broadcast Lemmas (Ambient Facts)
-
-`broadcast proof fn` makes lemmas always available without calling them:
-
-```rust
-pub broadcast proof fn seq_contains_after_push<A>(s: Seq<A>, v: A, x: A)
+broadcast proof fn seq_contains_after_push<A>(s: Seq<A>, v: A, x: A)
     requires s.contains(x)
-    ensures #[trigger] s.push(v).contains(x)
+    ensures s.push(v).contains(x)
 { }
 
-use broadcast seq_contains_after_push;  // bring into scope
+use broadcast seq_contains_after_push;  // auto-applies
 ```
 
-**Groups:** `broadcast use vstd::seq_lib::group_seq_properties;`
+### calc! Macro (Structured Proofs)
 
----
+```rust
+calc! {
+    (==)
+    x + y; {}
+    y + x; {}  // commutative
+    2 * x; {}
+}
+// Proves x + y == 2 * x
+```
 
-## SMT Limitations
+### Breaking Long Proofs
 
-- Proving with quantifiers relies on triggers
-- Opaque/closed functions hide bodies
-- Inductive invariants need manual proofs
-- Extensional equality needs explicit assertions
-- Standard library axioms may be incomplete
+**Extract to lemma:**
+```rust
+// Before
+P1; P2; P3;  // establishing s1, s2
 
----
+// After
+proof fn helper(x, y) requires f(x,y) ensures s1, s2 { P2; P3; }
+my_fn() { P1; helper(x, y); ... }
+```
 
-## Nonlinear Arithmetic
+**Pipeline:**
+```rust
+proof fn part1(x) requires r ensures mid1 { ... }
+proof fn part2(x, y) requires mid1 ensures mid2 { ... }
+proof fn part3(x, y) requires mid2 ensures e { ... }
+```
 
-**Default mode:** Linear arithmetic only (4*x + 3*y - z).
+### Specialized Solvers
 
-**For nonlinear (x*y):** Use specialized solvers.
-
-### nonlinear_arith
+| Solver | Use When |
+|--------|----------|
+| `by(bit_vector)` | Bitwise ops, truncation, concrete bitwidths |
+| `by(nonlinear_arith)` | Multiplication/division of symbolic values |
+| `by(integer_ring)` | Congruences, modular arithmetic |
+| `by(compute)` | Unroll recursive functions |
 
 ```rust
 assert(x * y <= 100) by(nonlinear_arith)
     requires x <= 10, y <= 10;
 
-// Or in proof function:
-proof fn bound_check(x: u32, y: u32) by(nonlinear_arith)
-    requires x <= 8, y <= 8,
-    ensures x * y <= 64,
+assert(b & 7 == b % 8) by(bit_vector);
+
+proof fn mod_congruence(a, b, c, n) by(integer_ring)
+    requires a % n == b % n
+    ensures (a * c) % n == (b * c) % n
 { }
 ```
 
-### integer_ring
+---
 
-For ring-based properties (congruences):
+## 7. Advanced Topics
+
+### Type Invariants
+
+Auto-enforced invariants for封装:
 ```rust
-proof fn lemma_congruence(a: int, b: int, c: int, n: int) by(integer_ring)
-    requires a % n == b % n,
-    ensures (a * c) % n == (b * c) % n,
+#[verifier::type_invariant]
+spec fn well_formed(self) -> bool {
+    self.min <= self.max
+}
+```
+
+Verus checks invariant at construction and modification. Client code can assume it:
+```rust
+proof { use_type_invariant(&x); }
+assert(x.min <= x.max);
+```
+
+### External Code Integration
+
+**Call unverified code:**
+```rust
+#[verifier::external_body]
+fn fast_fib(n: u64) -> (r: u64)
+    requires fib(n as nat) <= u64::MAX
+    ensures r == fib(n as nat)
+{ ... }  // Unverified impl
+```
+
+**Apply specs to existing functions:**
+```rust
+assume_specification<T>[core::mem::swap::<T>](a: &mut T, b: &mut T)
+    ensures *a == *old(b), *b == *old(a);
+```
+
+### Uninterpreted Spec Functions
+
+Functions with known signature but unknown behavior:
+```rust
+uninterp spec fn my_fun(x: int, y: int) -> int;
+
+// Axioms about it:
+broadcast proof fn my_fun_property()
+    ensures forall |x| my_fun(x, x) == x
 { }
 ```
 
-**Alternative:** Use library lemmas like `lemma_mul_is_commutative`, `lemma_mul_is_distributive_add`, etc.
+### Memory Safety
 
-### integer_ring Limitations
-
-- Only `int` parameters
-- No inequalities
-- No division
-- Functions treated as uninterpreted (use `reveal` to inline)
-- Divisor must not be zero
-
-**Modulus encoding:** `a % b == x` becomes `a - b*tmp == x` (no bounds)
-
-### Combining integer_ring + nonlinear_arith
-
-Use `integer_ring` for equalities, `nonlinear_arith` for inequalities:
-
+**Interior mutability:** Use `InvCell<T>` with invariant:
 ```rust
-pub proof fn lemma_mod_diff_helper(...) by(integer_ring)
-    requires small_x == x % d, ...
-    ensures (tmp1 - tmp2) % d == 0
-{}
-
-pub proof fn lemma_mod_diff(...) by(nonlinear_arith)
-    requires d > 0, x <= y, ...
-    ensures y % d - x % d == y - x
-{
-    lemma_mod_diff_helper(...);  // ring part
-    // nonlinear handles rest
-}
-```
-
----
-
-## Bit Vectors
-
-**Default:** Bitwise ops are uninterpreted.
-
-### bit_vector Solver
-
-```rust
-fn test(b: u32) {
-    assert(b & 7 == b % 8) by(bit_vector);
-    assert(b & 0xff < 0x100) by(bit_vector);
-}
-```
-
-**What it handles:** `&`, `|`, `^`, `<<`, `>>`, arithmetic on bounded ints
-
-**Cannot handle:** Symbolic `int` values (use concrete bitwidths)
-
-### Helper Functions
-
-```rust
-spec fn get_bit(val: u32, index: u32) -> bool {
-    0x1u32 & (val >> index) == 1
-}
-
-fn test() { assert(get_bit(128u32, 7)) by(bit_vector); }
-```
-
----
-
-## Extensional Equality
-
-**Operators:** `=~=` (shallow), `=~~=` (deep/nested)
-
-**For structs/enums:** Add `#[verifier::ext_equal]` attribute:
-```rust
-#[verifier::ext_equal]
-struct Foo { a: Seq<int>, b: Set<int> }
-
-assert(f1 =~= f2);  // now works directly
-```
-
----
-
-## Proof Performance
-
-### Measuring
-
-- `--time` - detailed breakdown
-- `--time-expanded` - even more detail
-- `--output-json` - machine-readable
-- `--profile` - quantifier profiler (use with `--rlimit 1`)
-
-### Quantifier Profiling
-
-Profile shows which quantifiers cause instantiation storms:
-```
-note: Cost * Instantiations: 2269911826 top quantifier
-note: Triggers selected: f(x + 1, 2 * y) && ... ==> #[trigger] f(x, y)
-```
-
-### Common Issues
-
-1. **Trigger loops** - quantifier triggers itself infinitely
-2. **Too many instantiations** - triggers too broad
-3. **Inductive lemmas not unfolding** - use `reveal_with_fuel`
-
----
-
-## Modules: opaque and reveal
-
-Hide function bodies to speed up verification:
-```rust
-#[verifier::opaque]
-spec fn tricky_spec(...) { ... }
-
-proof fn use_spec() {
-    // body hidden - uses axioms only
-    reveal(tricky_spec);  // unfold for this call
-}
-```
-
----
-
-## calc! Macro (Structured Proofs)
-
-Prove relations via intermediate steps:
-
-```rust
-let x: int = 2;
-calc! {
-    (<=)                    // relation to prove
-    x; {}                   // x
-    x + 3; {}               // x + 3
-    5;                      // 5
-}
-// proves x <= 5 via x <= x+3 <= 5
-```
-
-**Intermediate relations:**
-```rust
-calc! {
-    (<=)
-    x; (==) {}             // intermediate ==
-    5 - 3; (<) {}          // intermediate <
-    5int; {}
-    y;
-}
-```
-
----
-
-## Proof by Computation
-
-Force evaluation of recursive functions:
-
-```rust
-spec fn pow(base: nat, exp: nat) -> nat { ... }
-
-proof fn test() {
-    assert(pow(2, 8) == 256) by (compute);      // evaluates
-    assert(pow(2, 9) == 512);  // succeeds via assumption
-    
-    assert(pow(2, 8) == 256) by (compute_only); // fails if not fully reduced
-}
-```
-
-**No context inheritance** - variables treated symbolically.
-
----
-
-## Breaking Proofs into Pieces
-
-### 1. Extract subproofs to lemmas
-
-```rust
-// Before: long proof P in function
-P1; P2; P3;  // establishing s1, s2
-
-// After: extract to lemma
-proof fn helper(x, y) requires f(x,y) ensures s1(x), s2(x,y) { P2; P3; }
-my_long_function() { P1; helper(x,y); ... }
-```
-
-### 2. Sequential lemmas (pipeline)
-
-```rust
-proof fn part1(x) requires r(x) ensures mid1(x, y) { P1; }
-proof fn part2(x, y) requires mid1(x,y) ensures mid2(x,y) { P2; }
-proof fn part3(x, y) requires mid2(x,y) ensures e(x) { P3; }
-
-proof fn my_long_function(x) requires r(x) ensures e(x) {
-    let y = part1(x);
-    part2(x, y);
-    part3(x, y);
-}
-```
-
----
-
-## Debugging Proofs Checklist
-
-**Proof failing:**
-1. Run with `--expand-errors`
-2. Check recommends-failures
-3. Add assert statements
-4. Check quantifier triggers
-5. Try `nonlinear_arith` for nonlinear arithmetic
-6. Try `bit_vector` for bitwise ops
-7. Use extensional equality `=~=` for collections
-8. Understand fuel for recursive functions
-
-**Rlimit exceeded:**
-1. Run quantifier profiler (`--profile`)
-2. Break proof into pieces
-3. Increase rlimit
-
-**Flaky proofs:**
-1. Add `#[verifier::spinoff_prover]`
-2. Break proof into pieces
-
----
-
-## References and Borrowing
-
-### Immutable References (`&T`)
-
-Treated same as value - no pointer reasoning needed:
-```rust
-let x: u32 = 0;
-let r = &x;
-assert(*r == 0);
-```
-
-### Mutable References (`&mut T`)
-
-```rust
-fn modify(a: &mut u32)
-    requires *old(a) < u32::MAX,
-    ensures *a == *old(a) + 1
-{
-    *a = *a + 1;
-}
-```
-
-**Key:** `*old(x)` = pre-state, `*x` = post-state
-
----
-
-## Higher-Order Functions
-
-Reason about function preconditions via spec functions:
-
-```rust
-call_requires(f, args)   // f's precondition
-call_ensures(f, args, output)  // f's postcondition
-
-// Or via method syntax:
-f.requires(args)
-f.ensures(args, output)
-```
-
-**Note:** Calling `impl Fn` requires Verus to verify precondition satisfied.
-
-### Closures
-
-Closures can capture variables:
-```rust
-let x: u8 = 20;
-let f = || {
-    assert(x == 20);  // captures x
-    x
-};
-```
-
-**Note:** Verus doesn't support mutable borrows in closures yet.
-
----
-
-## Strings
-
-```rust
-let x = "hello world";
-proof { reveal_strlit("hello world"); }
-assert(x@.len() == 11);  // x@ is Seq<char>
-```
-
-**Important:** String literals are opaque by default - need `reveal_strlit`.
-
----
-
-## Interior Mutability
-
-**Problem:** `&T` values can't change, but `Cell<T>` contents can.
-
-**Solution:** Cell is just a unique identifier, not its contents.
-
-### InvCell (Data Invariants)
-
-Use `InvCell<T>` with invariant predicate:
-
-```rust
-spec fn cell_is_valid(cell: &InvCell<Option<u64>>) -> bool {
-    forall|v| cell.inv(v) <==> match v {
-        Option::Some(i) => i == result_of_computation(),
-        Option::None => true,
-    }
-}
-
 fn memoized(cell: &InvCell<Option<u64>>) -> (res: u64)
-    requires cell_is_valid(cell),
-    ensures res == result_of_computation(),
+    requires cell.inv(...)
 {
     match cell.get() {
         Some(i) => i,
@@ -1270,862 +634,399 @@ fn memoized(cell: &InvCell<Option<u64>>) -> (res: u64)
 }
 ```
 
----
-
-## Binary Search Tree (TreeMap)
-
-### Tree Definition
-
-```rust
-struct Node<V> {
-    key: u64,
-    value: V,
-    left: Option<Box<Node<V>>>,
-    right: Option<Box<Node<V>>>,
-}
-
-pub struct TreeMap<V> { root: Option<Box<Node<V>>> }
-```
-
-### Abstract View (Map interpretation)
-
-```rust
-impl<V> TreeMap<V> {
-    pub closed spec fn as_map(self) -> Map<u64, V> {
-        Node::optional_as_map(self.root)
-    }
-}
-
-impl<V> View for TreeMap<V> {
-    type V = Map<u64, V>;
-    open spec fn view(&self) -> Map<u64, V> { self.as_map() }
-}
-```
-
-### Well-formedness (BST Ordering)
-
-```rust
-spec fn well_formed(self) -> bool {
-    &&& (forall |elem| left.dom().contains(elem) ==> elem < self.key)
-    &&& (forall |elem| right.dom().contains(elem) ==> elem > self.key)
-    &&& (self.left.well_formed() && self.right.well_formed())
-}
-```
-
-### TreeMap Implementation
-
-**Constructor:**
-```rust
-pub fn new() -> (tree_map: Self)
-    ensures tree_map@ == Map::<u64, V>::empty()
-{ TreeMap { root: None } }
-```
-
-**Insert:**
-```rust
-pub fn insert(&mut self, key: u64, value: V)
-    ensures self@ == old(self)@.insert(key, value)
-{
-    Node::insert_into_optional(&mut self.root, key, value);
-}
-```
-
-**Get:**
-```rust
-pub fn get(&self, key: u64) -> Option<&V>
-    returns (if self@.dom().contains(key) { Some(&self@[key]) } else { None })
-{
-    Node::get_from_optional(&self.root, key)
-}
-```
-
-**Delete:** Uses `delete_rightmost` to find replacement node.
-
----
-
-## Type Invariants
-
-Remove `well_formed()` from client requires by using type_invariant:
-
-```rust
-#[verifier::type_invariant]
-spec fn well_formed(self) -> bool { ... }
-```
-
-**Effect:**
-1. Verus checks invariant at construction/modification
-2. Client can assume invariant without explicit requires
-
-**Usage:**
-```rust
-proof { use_type_invariant(&*self); }  // establish invariant
-```
-
----
-
-## Generic TreeMap: TotalOrdered Trait
-
-```rust
-pub trait TotalOrdered : Sized {
-    spec fn le(self, other: Self) -> bool;
-    
-    proof fn reflexive(x: Self) ensures Self::le(x, x);
-    proof fn transitive(x: Self, y: Self, z: Self)
-        requires Self::le(x, y), Self::le(y, z)
-        ensures Self::le(x, z);
-    proof fn antisymmetric(x: Self, y: Self)
-        requires Self::le(x, y), Self::le(y, x)
-        ensures x == y;
-}
-```
-
-### Generic TreeMap with TotalOrdered
-
-```rust
-struct Node<K: TotalOrdered, V> {
-    key: K,
-    value: V,
-    left: Option<Box<Node<K, V>>>,
-    right: Option<Box<Node<K, V>>>,
-}
-```
-
-**Using TotalOrdered in proofs:**
-```rust
-proof {
-    if right.dom().contains(key) {
-        TotalOrdered::antisymmetric(self.key, key);
-        assert(false);
-    }
-}
-```
-
-### Implementing Clone for TreeMap
-
-**Clone signature using `cloned<>`:**
-```rust
-impl<K: Copy + TotalOrdered, V: Clone> Clone for TreeMap<K, V> {
-    fn clone(&self) -> (res: Self)
-        ensures
-            self@.dom() =~= res@.dom(),
-            forall |key| #[trigger] res@.dom().contains(key) ==>
-                cloned::<V>(self@[key], res@[key]),
-    {
-        TreeMap { root: self.root.clone() }
-    }
-}
-```
-
-**`cloned<T>(a, b)`** = helper for `call_ensures(V::clone, (&a,), b)`
-
-### Key Patterns Summary
-
-1. **Spec functions** for abstract interpretation (`as_map`)
-2. **Recursive specs** with `decreases` for termination
-3. **Type invariants** `#[verifier::type_invariant]` auto-enforced
-4. **`use_type_invariant()`** to establish invariant
-5. **Quantifiers with triggers** for BST ordering proofs
-6. **Extensional equality** `=~=` for Map/Seq comparisons
-
----
-
-## Interacting with Unverified Code
-
-### #[verifier::external_body]
-
-Use to call unverified code from verified code:
-```rust
-#[verifier::external_body]
-fn fib_impl(n: u64) -> (result: u64)
-    requires fib(n as nat) <= u64::MAX,
-    ensures result == fib(n as nat),
-{
-    // Unverified implementation
-    ...
-}
-```
-
-**Warning:** Wrong specs here can subvert verification guarantees!
-
-### assume_specification
-
-Apply specs to existing functions:
-```rust
-assume_specification<T>[core::mem::swap::<T>](a: &mut T, b: &mut T)
-    ensures *a == *old(b), *b == *old(a);
-```
-
-### external_type_specification
-
-Make Verus aware of types:
-```rust
-#[verifier::external_type_specification]
-struct ExSomeStruct(SomeStruct);
-```
-
-### external_trait_specification
-
-Add specs to external traits.
-
-### Eliminating Preconditions
-
-Use wrapper with dynamic check + unsafe inner:
-```rust
-pub unsafe fn index_unchecked<T>(vec: &Vec<T>, i: usize)
-    requires i < vec.len() { ... }
-
-pub fn index<T>(vec: &Vec<T>, i: usize) -> Option<&T> {
-    if i < vec.len() { Some(index_unchecked(vec, i)) }
-    else { None }
-}
-```
-
-### Ghost Erasure
-
-`verus_only` flag guards code only needed during verification:
-```rust
-#[cfg(verus_only)]
-use crate::ghost_mod::ghost_fn;
-```
-
----
-
-## Supported Rust Features (Summary)
-
-| Feature | Status |
-|---------|--------|
-| Functions, methods | Supported |
-| Structs, enums | Supported |
-| Closures | Supported |
-| & and &mut | Partially supported |
-| Async/await | Not supported |
-| Traits | Supported |
-| impl types | Partially supported |
-| Unsafe blocks | Supported |
-| Raw pointers | Partially supported |
-| Multi-threading | Supported (vstd) |
-
----
-
-## Verus Syntax Reference
-
-### Recursive functions with decreases
-```rust
-fn test_rec(x: u64, y: u64)
-    decreases x,  // lexicographic if multiple
-{ ... }
-
-// with when clause
-spec fn dec0(a: int) -> int
-    decreases a when a > 0
-    via dec0_decreases
-{ ... }
-```
-
-### Variable modes: exec, tracked, ghost
-
-**exec code:** `let ghost x = ...` creates ghost variable  
-**proof code:** variables are ghost by default
-
-**Ghost/Tracked wrappers:**
-```rust
-let ghost u: int = my_spec_fun(x as int, y as int);
-let Ghost(u): Ghost<int> = Ghost(expr);  // unwrap pattern
-```
-
-### forall/exists syntax
-```rust
-forall|x: int, y: int| 0 <= x < 100 ==> #[trigger] my_spec_fun(x, y) >= x
-exists|x: int| #[trigger] my_spec_fun(x) == 10
-```
-
-### assert forall by
-```rust
-assert forall|x: int| x < 10 implies f1(x) < 11 by {
-    assert(x < 10);
-    reveal(f1);
-    assert(f1(x) < 11);
-}
-```
-
-### choose for exists witnesses
-```rust
-let x_witness = choose|x: int| f1(x) == 10;
-```
-
----
-
-## Uninterpreted Spec Functions
-
-```rust
-uninterp spec fn my_uninterpreted_fun1(i: int, j: int) -> int;
-```
-
 ### Traits with Specifications
 
 ```rust
-trait T {
-    proof fn my_function(&self, i: int) -> (r: int)
-        requires 0 <= i < 10,
-        ensures i <= r,
-    ;
-
-    fn with_default(&self, i: u32) -> (r: u32)
-        requires 0 <= i < 10,
-        ensures i <= r,
-        default_ensures i == r || j == r,  // additional default
-    { ... }
-}
-```
-
-### Variable Modes Summary
-
-| Code Mode | Default Var | ghost vars | tracked vars | exec vars |
-|-----------|-------------|------------|--------------|-----------|
-| spec | ghost | yes | no | no |
-| proof | ghost | yes | yes | no |
-| exec | exec | yes | yes | yes |
-
-### Tracked and Ghost in Exec
-
-```rust
-fn example(Tracked(x): Tracked<X>, Ghost(y): Ghost<Y>) { ... }
-
-fn test() {
-    let tracked x = ...;
-    let ghost y = ...;
-    example(Tracked(x), Ghost(y));
-}
-```
-
----
-
-## exec_spec_verified! / exec_spec_unverified!
-
-Auto-generate exec code from spec:
-
-```rust
-exec_spec_verified! {
-    struct Point { x: i64, y: i64 }
+trait TotalOrdered {
+    spec fn le(self, other: Self) -> bool;
     
-    spec fn on_line(points: Seq<Point>) -> bool {
-        forall |i: usize| #![auto] 0 <= i < points.len()
-            ==> points[i as int].y == points[i as int].x
-    }
-}
-// Generates: ExecPoint, exec_on_line with verified equivalence
-```
-
-**exec_spec_unverified!** - same but without proof (for testing).
-
-### Indexing rules
-- `Seq[i as int]` - cast index to int
-- Map keys must be primitive types; use `Map::get()` for complex keys
-
-### Arithmetic in exec_spec
-```rust
-// x + y in spec is type int, not u64
-pub open spec fn my_arith(x: u64, y: u64) -> u64 {
-    (x + y) as u64  // cast required
+    proof fn transitive(x, y, z: Self)
+        requires Self::le(x, y), Self::le(y, z)
+        ensures Self::le(x, z);
 }
 ```
 
----
-
-## #[verus_spec] Attribute
-
-Add specs to existing Rust code without rewriting APIs.
-
-**Basic usage:**
-```rust
-#[verus_spec(sum => 
-    requires x < 100, y < 100,
-    ensures sum < 200,
-)]
-fn my_exec_fun(x: u32, y: u32) -> u32 { x + y }
-```
-
-**Proof blocks:**
-```rust
-proof! { ... }  // simple proof block
-proof_decl! { let ghost mut i = 0int; ... }  // function-scoped ghost vars
-```
-
-**With tracked/ghost params:**
-```rust
-#[verus_spec(v => with Tracked(y): Tracked<&mut u32> -> z: Ghost<u32>
-    requires *old(y) < 100,
-    ensures *y == x, z@ == x,
-)]
-fn exec_tracked(x: u32) -> u32 {
-    proof! { *y = x; }
-    proof_with!(|= Ghost(x));
-    (x + 1)
-}
-```
-
-### dual_spec example
-```rust
-#[verus_verify(dual_spec(spec_f))]
-#[verus_spec(
-    requires x < 100, y < 100,
-    returns f(x, y)
-)]
-fn f(x: u32, y: u32) -> u32 { x + y }
-// Auto-generates spec_f with equivalence proof
-```
-
----
-
-## Box and References in Spec Mode
-
-**References and Box:**
-- Verus ignores `&` and `*` operations in spec mode (type-checking only)
-- `Box<T>` can be used in spec mode with `Box::new(x)` and `*box`
-- Useful for recursive types that need to satisfy Rust's sanity checks
-
----
-
-## Operator Precedence
-
-| Operators | Associativity |
-|-----------|--------------|
-| `. ->` | Binds tightest |
-| `is matches` | Left |
-| `* / %` | Left |
-| `+ -` | Left |
-| `<< >>` | Left |
-| `&` | Left |
-| `^` | Left |
-| `\|` | Left |
-| `!== == != <= < >= >` | Requires parens |
-| `&&` | Left |
-| `\|\|` | Left |
-| `==>` | Right |
-| `<==` | Left |
-| `<==>` | Requires parens |
-| `..` | Left |
-| `=` | Right |
-| `closures; forall, exists; choose` | Right |
-| `&&&` | Left |
-| `\|\|` | Left |
-
----
-
-## Arithmetic in Spec Code
-
-### Type Widening
-| Operation | LHS | RHS | Result |
-|-----------|-----|-----|--------|
-| `+` | t1 | t2 | `int` (except nat+nat) |
-| `+` | nat | nat | `nat` |
-| `-` | t1 | t2 | `int` |
-| `*` | t1 | t2 | `int` (except nat*nat) |
-| `*` | nat | nat | `nat` |
-| `/ %` | t | t | t |
-
-### Euclidean Division
-- `a / b` and `a % b` defined as unique q, r where `b*q + r == a` and `0 <= r < |b|`
-- Remainder always non-negative
-- Division-by-0 is "unspecified" (not hard error in spec code)
-
-### Advanced Arithmetic Functions (vstd)
-- `pow` - exponentiation
-- `pow2` - power of 2
-- `log` - integer logarithm
-
-### Bitwise Operators
-
-**Operators:** `&`, `|`, `^` (bitwise AND, OR, XOR)
-- Both operands must be same type
-- Defined over integers ℤ x ℤ → ℤ (independent of bitwidth)
-
-**Shift operators:** `>>` and `<<`
-- Left and right sides can differ in type
-- Result type matches left operand
-- Right shift undefined for negative RHS
-
-**Reasoning about bitwise ops:** Use `bit_vector` solver or `compute` solver
-
-### Coercion with `as`
-
-**Integer types:** i8, i16, i32, i64, i128, isize, u8, u16, u32, u64, u128, usize, int, nat, char
-
-**Casting rules:**
-- To `int`: always defined, no truncation
-- To `nat`: unspecified if negative
-- To `char`: unspecified if outside valid char values
-- To finite integers: **truncation** (lower N bits)
-
----
-
-## Trigger Annotations
-
-**Trigger groups:**
-- Each quantifier has trigger groups containing trigger expressions
-- SMT instantiates quantifier when **any** trigger group fires
-- A trigger group fires only when **all** expressions in it match
-
-**Selecting triggers:**
-1. `#[trigger]` annotations → trigger groups
-2. `#[trigger(n)]` for same n → trigger group
-3. `#![trigger EXPR1, ...]` at root → trigger group
-4. If none: heuristics apply (`#![auto]` = conservative, `#![all_triggers]` = aggressive)
-
-**Logging options:**
-- `--triggers-mode silent` - hide auto triggers
-- `--triggers-mode selective` - show when un-confident (default)
-- `--triggers-mode verbose` - show all
-
----
-
-## The `@` View Function
-
-`expr@` is shorthand for `expr.view()`
-
-### Spec Index Operator `[]`
-
-`expr[i]` in spec code is shorthand for `expr.spec_index(i)`
-
----
-
-## `decreases_to!`
-
-`decreases_to!(e1, e2, ... => f1, f2, ...)` - checks lexicographic decrease
-
-**Definition:** There exists k where:
-- `ek decreases-to fk`
-- For all i < k: `ei == fi`
-
-**Decreases-to axioms:**
-- Integers: `x > y >= 0` means `x decreases-to y`
-- Datatypes decrease-to their recursive fields
-- Seq decreases-to `s[i]` and `s.subrange(i, j)` if smaller
-
----
-
-## assert ... by Statements
-
-### Basic form
-```rust
-assert(P) by {
-    // proof here
-}
-// Only P enters context, not proof internals
-```
-
-### assert forall ... by
-```rust
-assert forall |idents| P by {
-    // prove P with idents in scope
-}
-// Only forall idents P enters context
-```
-
-### With implies
-```rust
-assert forall |idents| H implies P by {
-    // H available in scope, prove P
-}
-```
-
-### assert ... by(bit_vector)
-
-Use Z3's bitvector solver for bitwise operations
-
-**Requirements:**
-- Variables must be `bool` or finite-width integers
-- Symbolic `int`/`nat` NOT allowed (use concrete bitwidths)
-
-### assert ... by(nonlinear_arith)
-
-Use Z3's nonlinear solver for multiplication/division of symbolic values
-
-### assert ... by(compute) / by(compute_only)
-
-- `compute_only`: evaluate as far as possible, accept if evaluates to `true`
-- `compute`: try compute_only first, fall back to normal solver
-
-**No context inheritance** - treats local variables symbolically
-
----
-
-## #[verifier::memoize]
-
-Memoize function evaluation to avoid re-computation:
-```rust
-#[verifier::memoize]
-spec fn fibonacci(n: nat) -> nat { ... }
-```
-
----
-
-## reveal, reveal_with_fuel, hide
-
-- `reveal(f)` - unfold f's definition when encountered
-- `hide(f)` - treat f as uninterpreted
-- `reveal_with_fuel(f, n)` - unfold recursive f n times
-- Default fuel is 1 (use more for deeper recursion)
-
----
-
-## Function Signatures
-
-### Exec fn
-```
-fn name generics?(args...) -> return_type
-    where_clause?
-    requires_clause?
-    ensures_clause?
-    returns_clause?
-    invariants_clause?
-    unwind_clause?
-```
-
-### Proof fn
-```
-proof fn name generics?(args...) -> return_type
-    where_clause?
-    requires_clause?
-    ensures_clause?
-    returns_clause?
-    invariants_clause?
-```
-
-### Spec fn
-```
-spec fn name generics?(args...) -> return_type
-    where_clause?
-    recommends_clause?
-    decreases_clause?
-```
-
-### `returns` clause
-```rust
-fn example() -> return_type
-    returns $expr
-// equivalent to:
-fn example() -> (return_name: return_type)
-    ensures return_name == $expr
-```
-
-### `#![verifier::allow_in_spec]`
-
-Allow exec fn with returns clause in spec mode
-
----
-
-## opens_invariants Clause
-
-Control which tracked invariants a function can open:
+### Unwinding
 
 ```rust
-fn example() opens_invariants any { }    // Any invariant
-fn example() opens_invariants none { }   // No invariants
-fn example() opens_invariants [inv1, inv2] { }  // Specific ones
-```
-
-**Defaults:**
-- Exec functions: `opens_invariants any`
-- Proof functions: `opens_invariants none`
-
----
-
-## Unwinding Signature
-
-```rust
-fn get(&self, i: usize) -> T
-    no_unwind when i < self.len()
-```
-
-- `no_unwind` - function cannot unwind
-- `no_unwind when {condition}` - only guaranteed not to unwind if condition holds
-- **Cannot unwind when invariant is open** (restriction for soundness)
-
-### Drop and Unwinding
-
-If you implement `Drop` for a type, you must give it `no_unwind` signature.
-
----
-
-## Signature Inheritance
-
-In trait implementations:
-- `requires` clauses **inherited**, cannot add more
-- `ensures` clauses **inherited**, can add more
-- `opens_invariants` **inherited**, cannot modify
-- `unwinding` **inherited**, cannot modify
-
----
-
-## External Trait Specifications
-
-### #[verifier::external_trait_specification]
-
-Add specs to external traits:
-```rust
-#[verifier::external_trait_specification]
-trait ExEncoder {
-    type ExternalTraitSpecificationFor: Encoder;
-    fn encode_value(&self, x: u64) -> (result: u64)
-        ensures result >= x;
-}
-```
-
-### #[verifier::external_trait_extension]
-
-Add spec helper functions:
-```rust
-#[verifier::external_trait_extension(SummarizerSpec via SummarizerSpecImpl)]
-trait ExSummarizer {
-    spec fn spec_summary(&self) -> u64;
-    fn summary(&self) -> (result: u64)
-        ensures result == self.spec_summary();
-}
-```
-
-### obeys_* pattern (used by vstd)
-```rust
-spec fn obeys_eq_spec() -> bool;  // indicates if type follows spec
-ensures Self::obeys_eq_spec() ==> r == self.eq_spec(other);
-```
-
----
-
-## decreases ... when ... via ...
-
-### When clause
-```rust
-spec fn f(...) -> _
-    decreases measure
-    when condition
-{
-    // body only concretely specified when condition is true
-}
-```
-
-### Via clause
-```rust
-spec fn floor_log2_via(n: u64) -> int 
-    decreases n
-    via floor_log2_decreases_proof
+fn get_unchecked(s: &str, i: usize) -> (c: char)
+    ensures if i < s.len() { c == s[i] } else { true }
+    no_unwind when i < s.len()
 { ... }
+```
 
-#[via_fn]
-proof fn floor_log2_decreases_proof(n: u64) {
-    assert(n > 1 ==> (n >> 1) < n) by(bit_vector);
+**Cannot unwind when invariant is open.**
+
+### Ghost Erasure
+
+```rust
+#[cfg(verus_only)]
+use crate::ghost_module::ghost_fn;  // Erased at compile time
+```
+
+### Global Layout Directive
+
+```rust
+global layout usize is size == 8;  // On 64-bit platform
+global layout MyStruct is size == 16, align == 8;
+```
+
+---
+
+## 8. Common Errors & Fixes
+
+### "assertion failed"
+
+**Debugging steps:**
+1. Run with `--expand-errors`
+2. Check if preconditions are satisfied
+3. Add intermediate `assert` statements
+4. Verify quantifier triggers are correct
+5. Try specialized solvers (`by(bit_vector)`, `by(nonlinear_arith)`)
+
+### "possible arithmetic overflow"
+
+**Fixes (in order of preference):**
+1. Add precondition ensuring result fits
+2. Use `checked_*` functions
+3. Use `CheckedU64` type for overflow-free arithmetic
+4. Add explicit bounds check at runtime
+
+```rust
+// Instead of:
+x + y  // might overflow
+
+// Use:
+x.checked_add(y)  // returns Option
+
+// Or prove it can't overflow:
+fn safe_add(x: u64, y: u64) -> (r: u64)
+    requires x <= u64::MAX - y
+{ x + y }
+```
+
+### "rlimit exceeded"
+
+**Solutions:**
+1. Profile: `verus --profile ...`
+2. Check for quantifier instantiation storms
+3. Break proof into smaller lemmas
+4. Increase rlimit: `#[verifier::rlimit(100)]`
+5. Make triggers more selective
+
+### "cannot prove termination"
+
+**Fixes:**
+1. Add `decreases` clause
+2. Provide termination proof with `via` clause
+3. Use `proof { assert(decreases_condition); }` inside function
+
+### Quantifier instantiation issues
+
+**Problem:** "trigger loop" or infinite instantiation
+
+**Fix:** Avoid matching loops in triggers
+```rust
+// BAD: causes infinite matching
+forall |i| 0 <= i < n - 1 ==> #[trigger] s[i] <= s[i + 1]
+
+// GOOD: two-variable quantification
+forall |i, j| 0 <= i <= j < n ==> s[i] <= s[j]
+```
+
+### Struct/Enum equality not working
+
+**Use extensional equality:**
+```rust
+s1 =~= s2  // instead of s1 == s2
+```
+
+Or mark type:
+```rust
+#[verifier::ext_equal]
+struct Foo { ... }
+```
+
+### Recursive spec function not inlining enough
+
+**Use `reveal_with_fuel`:**
+```rust
+proof { reveal_with_fuel(my_recursive_fn, N); }
+assert(my_recursive_fn(k) == expected);
+```
+
+### When to use `reveal` vs `reveal_with_fuel` vs `hide`
+
+| Directive | Effect |
+|-----------|--------|
+| `reveal(f)` | Unfold f's definition once |
+| `reveal_with_fuel(f, n)` | Unfold recursive f n times |
+| `hide(f)` | Treat f as uninterpreted |
+| `#[verifier::opaque]` | Keep body hidden by default |
+
+---
+
+## 9. Advanced Proof Patterns (from Real Projects)
+
+### Post-Phase Check Loops
+
+Instead of maintaining complex invariants through a multi-phase construction algorithm, add a **verification loop AFTER** the construction to check properties element-by-element. Each iteration verifies one element, reducing Z3's workload.
+
+```rust
+// Instead of threading twin_involution through Phase C:
+// Add a check loop AFTER Phase C:
+let mut check: usize = 0;
+while check < hcnt
+    invariant
+        forall|k| 0 <= k < check ==> twin(twin(k)) == k,
+{
+    if half_edges[twin(check)].twin != check { return Err(...); }
+    check += 1;
 }
 ```
 
----
+**Why this works:** Z3 only proves one iteration at a time, not the entire algorithm.
 
-## Attributes Reference
+### Ghost Snapshot Chaining
 
-| Attribute | Purpose |
-|-----------|---------|
-| `#![all_triggers]` | Aggressively select trigger groups |
-| `#![auto]` | Use heuristics for triggers |
-| `#![verifier::allow_complex_invariants]` | Allow invariant_except_break with loop_isolation(false) |
-| `#![verifier::allow_in_spec]` | Allow exec fn with returns in spec mode |
-| `#![verifier::atomic]` | Mark function as atomic for open_atomic_invariant |
-| `#![verifier::external]` | Tell Verus to ignore item |
-| `#![verifier::external_body]` | Trust body of function, only use signature |
-| `#![verifier::ext_equal]` | Mark datatype for extensional equality |
-| `#![verifier::inline]` | Auto-expand spec function definition |
-| `#![verifier::loop_isolation]` | Control loop invariant inference |
-| `#![verifier::memoize]` | Memoize compute/compute_only results |
-| `#![verifier::opaque]` | Keep function body hidden by default |
-| `#![verifier::reject_recursive_types]` | Reject recursive type definitions |
-| `#![verifier::type_invariant]` | Declare type invariant |
-| `#![verifier::when_used_as_spec]` | Use exec const as spec |
-| `#![exec_allows_no_decreases_clause]` | Allow exec fn without decreases |
-| `#![via_fn]` | Mark proof function for `via` clause |
-| `#![verifier::rlimit(n)]` | Set solver rlimit for function (default 10 ≈ 2s) |
-| `#![verifier::rlimit(infinity)]` | Remove solver rlimit |
-| `#![verifier::truncate]` | Silence recommends-check for out-of-range casts |
-| `#![verifier::assume_termination]` | Assume exec function terminates |
-| `#[trigger]` | Manually specify trigger groups (no verifier:: prefix) |
-
----
-
-## The `global` Directive
-
-Provide layout information to Verus:
+Capture ghost state between phases, then chain through in the final proof:
 ```rust
-global layout T is size == n, align == m;
+let ghost post_phase_b = half_edges@;
+// ... Phase C modifies twin field ...
+let ghost pre_phase_d = half_edges@;
+// ... Phase D modifies edge field ...
+
+// In end proof:
+assert(mesh.half_edges@[h].next == pre_phase_d[h].next);  // Phase D frame
+assert(pre_phase_d[h].next == post_phase_b[h].next);       // Phase C frame
 ```
 
-- Exports axioms `size_of::<T>() == n` and `align_of::<T>() == m`
-- Creates static check that values are correct at compile time
-- For usize/isize: influences integer range encoding
+### Frame Invariant Pattern
 
-**Example:**
+When modifying one field, prove all other fields unchanged:
 ```rust
-global layout usize is size == 4;
+// Track that fields 0,1,2 are unchanged
+forall|k| 0 <= k < hcnt ==> {
+    half_edges@[k].next == post_phase_b[k].next
+    half_edges@[k].prev == post_phase_b[k].prev
+}
 
-fn test(x: usize) {
-    assert(x <= 0xffffffff);  // Passes - assumes 32-bit
-    assert(usize::BITS == 32);
+// After set(), prove frame:
+by { if k == h as int {} else { assert(half_edges@[k] == pre_set[k]); } }
+```
+
+---
+
+## 10. Rlimit Optimization
+
+**Core principle:** Help Z3, don't just increase rlimit.
+
+### Extract Branchy Computations
+
+Functions with many if-else branches cause path explosion. Extract into helpers:
+```
+7-way branch: 63 paths → 19 paths (-86% rlimit)
+```
+
+### Extract `assert forall` with Function Calls
+
+Calling proof fns inside `assert forall by { ... }` is expensive. Extract the lemma first:
+```rust
+// BAD: calls lemma inside forall
+assert forall |i| P(i) implies Q(i) by {
+    lemma_heavy(i);  // expensive per i
+}
+
+// GOOD: call extracted lemma
+proof fn helper(i: int) requires P(i) ensures Q(i) { ... }
+assert forall |i| P(i) implies helper(i) { }
+```
+
+### Opaque Specs for Recursive Functions
+
+When a recursive spec passes through requires, Z3 unfolds it at every step:
+```rust
+#[verifier::opaque]
+spec fn heavy_recursive_spec(...) { ... }  // hidden by default
+
+proof fn caller() {
+    reveal(heavy_recursive_spec);  // unfold only where needed
 }
 ```
 
+### Replace Loops with Recursion (for Heavy Invariants)
+
+**When loop invariants are expensive:** Loop invariants are re-verified every iteration. Recursive functions only verify `requires` once at the call site.
+
+**When it works:**
+- Loop runs 20+ iterations
+- Invariants have quadratic `forall|i, j|` quantifiers
+- Heavy per-step computation
+
+**Example:** 600M rlimit → 25M (-96%) by converting to recursion.
+
+**When it doesn't work:** GUI layout loops with 3-10 children and simple invariants—function-call overhead exceeds savings.
+
+### Roundtrip Contradiction for Injectivity
+
+Instead of manually unfolding complex functions, use a roundtrip lemma:
+```rust
+if linearize(coords1, shape) == linearize(coords2, shape) {
+    lemma_roundtrip(coords1, shape);  // proves coords1 =~= delinearize(...)
+    lemma_roundtrip(coords2, shape);
+    assert(false);  // contradiction!
+}
+```
+**Result:** 143 lines → 47 lines, 3.13M → 90K rlimit (-97%)
+
+### Trigger Shift Avoidance
+
+When extracting helpers with shifted indices:
+```rust
+// BAD: trigger stride[j+1] won't match stride[k]
+forall|j| 0 <= j < k-1 ==> ... #[trigger] stride[j + 1]
+
+// GOOD: use same shape
+forall|j| 1 <= j < k ==> ... #[trigger] rest_shape.take(j)
+```
+
 ---
 
-## Static Items
+## 11. Common Pitfalls
+
+### Ghost `let` Not Available in Loops
 
 ```rust
-exec static x: u64 = 0;
+// BAD: x is not available inside loop body
+let ghost x = Seq::new(n, f);
+while i < n {  // x not in scope here!
+    assert(x[i] == f(i));  // FAILS
+}
+
+// GOOD: use invariant
+while i < n
+    invariant forall|j| 0 <= j < n ==> x[j] == f(j)
+{ ... }
 ```
 
-- Similar to const but only exec mode (not spec)
-- Cannot currently be referenced from spec expressions
-- Must be explicitly marked `exec`
+### Or Patterns in Spec Match Break Z3
 
----
-
-## The `char` Primitive
-
-- Represents Unicode scalar values
-- Valid range: `[0, 0xD7ff] ∪ [0xE000, 0x10FFFF]`
-- In spec code: can cast to/from other integer types with `as`
-- May be undefined if target range doesn't fit
-
----
-
-## Unions
-
-**Spec-mode operators:**
 ```rust
-is_variant(u, "field_name")           // returns true if in variant
-get_union_field::<U, T>(u, "field_name")  // get field value
+// BAD: prevents Z3 from extracting results
+match mesh {
+    A { children, .. } | B { children, .. } => ...
+}
+
+// GOOD: separate arms
+match mesh {
+    A { children, .. } => { let x = children; ... }
+    B { children, .. } => { let x = children; ... }
+}
 ```
 
-**Example:**
+### nat vs usize in Fuel Arithmetic
+
+Z3 can't unify `(fuel as nat - 1) as nat` with `(fuel - 1) as nat`:
 ```rust
-union U { x: u8, y: bool }
+// Bridge with assertion inside assert forall:
+assert forall |i| ... by {
+    assert((fuel as nat - 1) as nat == (fuel - 1) as nat);
+    // now Z3 can proceed
+}
+```
 
-let u = U { x: 3 };
-assert(is_variant(u, "x"));
-assert(get_union_field::<U, u8>(u, "x") == 3);
+### Seq::new vs Seq::map
+
+```rust
+// Seq::new unfolds better (auto-trigger fires)
+Seq::new(len, |i| seq[i]@)
+
+// Seq::map may not unfold
+seq.map(|_i, p| p@)
+```
+
+### Don't Add Helpers to Pollute Module Triggers
+
+Adding a helper function to a module introduces its signature into Z3's background axioms for ALL functions. If the ensures mentions common terms, it creates trigger matches that **increase** rlimit for unrelated functions.
+
+**Solution:** Put proof helpers in a **separate module** (e.g., `proofs.rs` separate from `construction.rs`).
+
+---
+
+## Appendix: Common Patterns
+
+### Binary Search
+```rust
+fn binary_search(v: &Vec<u64>, k: u64) -> (r: usize)
+    requires
+        forall |i, j| 0 <= i <= j < v.len() ==> v[i] <= v[j],
+        exists |i| 0 <= i < v.len() && k == v[i],
+    ensures k == v[r as int]
+{
+    let mut lo = 0;
+    let mut hi = v.len() - 1;
+    while lo != hi
+        invariant
+            exists |i| lo <= i <= hi && k == v[i],
+        decreases hi - lo
+    {
+        let mid = lo + (hi - lo) / 2;
+        if v[mid] < k { lo = mid + 1; }
+        else { hi = mid; }
+    }
+    lo
+}
+```
+
+### Fibonacci with Invariants
+```rust
+spec fn fib(n: nat) -> nat decreases n {
+    if n == 0 { 0 } else if n == 1 { 1 } else { fib(n-2) + fib(n-1) }
+}
+
+fn fib_impl(n: u64) -> (r: u64)
+    requires fib(n as nat) <= u64::MAX
+    ensures r == fib(n as nat)
+{
+    if n == 0 { return 0; }
+    let mut prev = 0u64;
+    let mut cur = 1u64;
+    let mut i = 1u64;
+    while i < n
+        invariant
+            0 < i <= n,
+            cur == fib(i as nat),
+            prev == fib((i - 1) as nat),
+        decreases n - i
+    {
+        i = i + 1;
+        let next = cur + prev;
+        prev = cur;
+        cur = next;
+    }
+    cur
+}
+```
+
+### TreeMap Key Methods
+```rust
+// Abstract view
+spec fn as_map(self) -> Map<K, V> { ... }
+
+// Constructor
+pub fn new() -> Self
+    ensures tree_map@ == Map::empty()
+{ TreeMap { root: None } }
+
+// Insert  
+pub fn insert(&mut self, k: K, v: V)
+    ensures self@ == old(self)@.insert(k, v)
+
+// Get
+pub fn get(&self, k: K) -> Option<&V>
+    returns if self@.dom().contains(k) { Some(&self@[k]) } else { None }
 ```
 
 ---
 
-## Pointers and Cells (vstd)
-
-- **PCell** - for cells
-- **PPtr** - for pointers to fixed-size heap allocations
-- **vstd::raw_ptr** - for `*mut T` and `*const T`
-
----
-
-## Recording Executions
-
-`--record` flag packages verification run for sharing/reproduction:
-```bash
-verus foo.rs --record  # Creates yyyy-mm-dd-hh-mm-ss.zip
-```
-
----
-
-*Summary generated from the Verus Guide documentation*
+*Generated from Verus documentation*
