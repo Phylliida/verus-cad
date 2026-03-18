@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "mistral/labs-leanstral-2603",
+  "model": "minimax/minimax-m2.7",
   "provider": {
     "openrouter": {
       "models": {
