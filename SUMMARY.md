@@ -321,8 +321,9 @@ proof fn part3(x, y) requires mid2 ensures e { P3; }
 **NEVER just increase rlimit.** Instead:
 1. Profile: `verus --profile module`
 2. Look for quantifier instantiation storms
-3. Extract expensive blocks into helpers
-4. Simplify triggers
+3. Extract expensive blocks into helpers (Z3 context per function)
+4. Expand/inline proof steps to help Z3 along
+5. Simplify triggers
 
 ### "cannot prove termination"
 1. Add `decreases` clause
