@@ -73,3 +73,6 @@
 [submodule "verus-to-spir-v"]
 	path = verus-to-spir-v
 	url = https://github.com/Phylliida/verus-to-spir-v.git
+[submodule "verus-fractals"]
+	path = verus-fractals
+	url = https://github.com/Phylliida/verus-fractals
