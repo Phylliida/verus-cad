@@ -15,16 +15,32 @@
 
 ## 0. First Principles
 
-**`#[verifier::external_body]` and `assume` are FORBIDDEN** except where truly unavoidable (e.g., calling external C libraries).
+**`#[verifier::external_body]`, `assume`, and `admit` are FORBIDDEN** except where truly unavoidable (e.g., calling external C libraries). If you must use them, **always report it** to the user.
 
-The goal is **full end-to-end verification**—if something can't be verified, tell the user rather than papering over it with external_body or assume(false).
+The goal is **full end-to-end verification**—if something can't be verified, tell the user rather than papering over it with external_body, assume(false), or admit.
 
 **It's okay if something is hard.** Take your time, work through it incrementally:
 1. Build helper functions and lemmas
 2. Check your work along the way
 3. If stuck, break into smaller subtasks
 
+**Hard problems are solvable.** Don't reach for `assume(false)` or `admit` just because something is difficult. Take time to break it down, build helper lemmas, and work through it incrementally. Verification rewards persistence.
+
+**Take your time.** Verification is slow and methodical. Don't rush to use `assume(false)` or skip lemmas due to time pressure. Quality over speed.
+
 **When in doubt, ask the user.** Hard design questions, unclear requirements, or architectural choices belong in conversation. But respect their time—try to solve it yourself first.
+
+**Plan first, make a todo list.** Before writing any code:
+1. Read the existing code and understand the patterns
+2. Break the task into small, verifiable steps
+3. Write the todo list and verify each step before moving on
+4. Check your work incrementally with `verus_check` on individual modules
+
+**Build shared lemmas.** If a helper lemma would be useful across crates, add it to the appropriate library rather than working around it locally.
+
+**Report recommendations.** When done, include suggestions for polish, architectural improvements, remaining work, and preferred follow-up changes.
+
+**Flag suspicious code.** If code you write seems like a workaround, overly complex, or could be cleaner, report it as technical debt worth addressing.
 
 ---
 
@@ -344,6 +360,9 @@ forall |i, j| 0 <= i <= j < n ==> s[i] <= s[j]
 
 ## 6. Common Pitfalls
 
+### No f32/f64 Support
+Verus does not support `f32` or `f64` - using them causes Verus to panic. Use rational types (e.g., `Rational`, `BigInt`) or custom fixed-point implementations instead.
+
 ### Ghost `let` Not in Loop Body
 ```rust
 // BAD: x not available in loop
@@ -405,11 +424,14 @@ Reflexive axioms MUST come before congruence/transitive: `axiom_eqv_symmetric` b
 
 ## 7. MCP Tools
 
+**Prefer MCP lookup over reading files.** Use `verus_search`, `verus_lookup`, `verus_batch_lookup`, etc. instead of direct file reads when looking up functions or types. Lookups are recorded in context across compactions for future reference.
+
 ### Verification Workflow
 - **Check early and often** - verify after each logical unit
 - **Keep changes small** - incremental edits are easier to debug
 - **Build helpers up** - create smaller lemmas, check each one
 - **Don't use `raw=True`** on `verus_check` - it's very verbose and fills context; rarely needed
+- **No need to clean builds** - Verus is reproducible and builds are always up to date
 
 ### Session Start Workflow
 ```bash
@@ -424,6 +446,8 @@ verus_search("orient2d")
 verus_search_ensures("div.*mul")  # regex support
 verus_search_requires("三角")
 ```
+
+**Use specific context names.** E.g., `"verus-topology-delaunay"` rather than `"topology"`. Specific names help future sessions find relevant context.
 
 ### Function Lookup
 ```bash
@@ -441,6 +465,8 @@ verus_profile("verus-gui")            # performance profile
 
 ### Search Functions
 ```bash
+verus_search("orient2d")                   # name substring
+verus_search("orient*")                    # * wildcard supported
 verus_search_doc("computes orientation")  # doc comments
 verus_search_signature(param_type, return_type)  # by type
 verus_search_trait("TotalOrdered")          # trait + impls
@@ -455,25 +481,9 @@ verus_profile("crate", top_n=25)  # sorted by rlimit
 
 ---
 
-*End of Quick Reference*
-
----
-
 ## 8. Workspace Overview
 
-### Crate Architecture
-```
-verus-algebra    → Ring, OrderedRing, OrderedField traits + lemmas
-verus-bigint     → Arbitrary-precision integers
-verus-rational   → Exact rationals
-verus-linalg     → Vec2/3/4, Mat2/3/4, Quat (generic over Ring)
-verus-geometry   → Predicates, geometry types, intersection algorithms
-verus-topology   → Half-edge mesh, construction, Euler operators
-verus-gui        → Layout algorithms, widget system, draw commands
-verus-vulkan     → Vulkan API bindings (large)
-```
-
-### Key Crates
+### Core Foundation Crates
 
 **verus-algebra** (~420 fns)
 - Core traits: `Ring`, `OrderedRing`, `OrderedField`
@@ -490,9 +500,10 @@ verus-vulkan     → Vulkan API bindings (large)
 
 **verus-linalg** (~772 fns)
 - `Vec2<T>`, `Vec3<T>`, `Vec4<T>` - generic over Ring
-- `Mat2x2<T>`, `Mat3x3<T>`, `Mat4x4<T>`
-- `Quat<T>` - quaternions for rotation
+- `Mat2x2<T>`, `Mat3x3<T>`, `Mat4x4<T>`, `Quat<T>`
 - Runtime counterparts: `RuntimeVec2`, `RuntimeMat3x3`, etc.
+
+### Geometry & Topology
 
 **verus-geometry** (~761 fns)
 - **Predicates**: orient2d, orient3d, incircle, insphere, collinear, coplanar, sidedness
@@ -509,12 +520,11 @@ verus-vulkan     → Vulkan API bindings (large)
 - **Euler operators**: split_edge, split_face, flip_edge, collapse_edge
 - **Invariants**: twin_involution, prev_next_bidirectional, face_representative_cycles, vertex_manifold
 - **Queries**: face_degree, vertex_degree, euler_characteristic, genus
-- **Iteration**: vertex_ring_iter, next_iter
 - **Connectivity**: is_connected, check_connected
-- **Geometric**: geometric_embedding_2d/3d, consistently_oriented_2d/3d
-- **Checkers**: index_bounds, twin_involution, next_prev_inverse, face_cycles, structurally_valid
 - **Delaunay**: Lawson flip algorithm in 2D
 - **Point in solid**: ray crossing algorithm
+
+### Graphics & Rendering
 
 **verus-gui** (~981 fns)
 - **Layouts**: linear (stack), flex, grid, wrap, absolute, scroll
@@ -524,11 +534,91 @@ verus-vulkan     → Vulkan API bindings (large)
 - **Animation**: frame loop, event routing
 - **Cache**: RuntimeLayoutCache for incremental layout
 
+**verus-canvas** (~86 fns)
+- 2D canvas drawing inspired by Raph Levien's Vello pipeline
+- **Scene**: PathSegment, Shape, Paint, Graphic tree
+- **Flatten**: transform composition, bbox, z-order
+- **Bezier**: de Casteljau subdivision, path flattening
+- **Tile**: 16x16 tile binning with conservativeness proofs
+- **Blend**: Porter-Duff source-over compositing
+
+**verus-ray-marching** (~45 fns)
+- Ray-sphere, ray-plane, ray-box, ray-cylinder intersection
+- SDF fractals: menger, sierpinski, mandelbulb, torus, pyramid
+- CSG operations, scene composition
+- GPU workgroup dispatch for parallel rendering
+
+**verus-mandelbrot** (~52 fns)
+- Infinite zoom Mandelbrot with exact rational arithmetic
+- Perturbation theory, series approximation for acceleration
+- Depends on: verus-bigint, verus-rational, verus-interval-arithmetic
+
 **verus-vulkan** (~3673 fns)
 - Vulkan API bindings - not verified (external_body)
 - Used as runtime backend for GPU operations
 
-### Verification Stats
-- Total: ~11,250 functions, 678 types, 16 traits
-- By kind: 3583 spec, 5632 proof, 2035 exec
-- Proof debt: 20 assume(false) across all crates
+### Algebra & Number Theory
+
+**verus-quadratic-extension** (~83 fns)
+- Exact quadratic extension arithmetic F(root(d))
+- `SpecQuadExt<F, R>` representing `re + im*root(d)`
+- Field instances: sqrt2, sqrt3, sqrt5, etc.
+- Dynamic tower extensions, extensive proof lemmas
+
+**verus-field-extension** (~14 fns)
+- Algebraic field extensions F[x]/(P) where P is irreducible polynomial
+- `SpecExt<F, P>` - field extension element as coefficient vector
+- Example: `CubeRoot2` (Q(cuberoot(2)))
+
+**verus-interval-arithmetic** (~193 fns)
+- Precise interval arithmetic using BigInt rationals
+- Ghost spec functions: add_spec, mul_spec, div_spec, etc.
+- ~100+ proof lemmas for all operations
+- Runtime: `RuntimeInterval` with bisect, horner_eval, etc.
+
+**verus-group-theory** (~397 fns)
+- Extensive formal group theory library
+- Core: symbol, word, reduction, group, subgroup, presentation
+- Constructions: free_product, hnn, amalgamated_free_product, coset_group
+- Algorithms: todd_coxeter, tietze, schreier
+- Proofs: britton, britton_proof, schreier_proofs, completeness
+
+### CAD & Constraints
+
+**verus-2d-constraint-satisfaction** (~332 fns)
+- Formally verified 2D constraint satisfaction for CAD
+- **Entities**: EntityId, FreePoint, FixedPoint, ResolvedPoints
+- **Locus**: geometric locus computation
+- **Solver**: constraint solver with pipeline architecture
+
+### GPU Kernel Building
+
+**verus-cutedsl** (~840 fns)
+- NVIDIA CuTe layout algebra for verified GPU kernels
+- **Shape**: Shape as Seq<nat>, size, delinearize, linearize
+- **Layout**: LayoutSpec (shape + stride), offset, cosize
+- **Composition**: layout composition A(B(x))
+- **Operations**: complement, divide, product, swizzle, tiling
+- **Algorithms**: scan (blelloch, brent_kung, multiblock), radix_sort
+- **GEMM**: matrix multiplication layouts, tensor contraction
+
+### Computability & Logic
+
+**verus-computability-theory** (~84 fns)
+- CEERs (computably enumerable equivalence relations)
+- Register machine, computable functions
+- ZFC set theory foundations
+- Group theory connection: CEER to group embedding, Higman's theorem
+
+### Developer Tools
+
+**verus-mcp** (Rust binary, ~50 fns)
+- MCP server indexing all Verus spec/proof/exec functions
+- Provides: search, lookup, search_ensures, search_requires
+- Tree-sitter based Verus parser
+- Verification tools: verus_check, verus_profile, etc.
+
+**verus-docgenerator** (~39 fns)
+- Documentation generator for Verus code
+- Tree-sitter parsing, extracts spec functions and lemmas
+- Generates markdown documentation
