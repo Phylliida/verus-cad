@@ -3,10 +3,12 @@
 ## Table of Contents
 
 1. [Quick Reference Cheat Sheet](#1-quick-reference-cheat-sheet)
+1b. [Best Practices Quick List](#1b-best-practices-quick-list)
 2. [Core Concepts](#2-core-concepts)
    - [spec vs proof vs exec](#spec-vs-proof-vs-exec)
    - [Function Signatures](#function-signatures)
 3. [Types & Arithmetic](#3-types--arithmetic)
+3b. [Runtime Layer Pattern](#3b-runtime-layer-pattern)
 4. [Control Flow](#4-control-flow)
    - [Recursion & Termination](#recursion--termination)
    - [Loops & Invariants](#loops--invariants)
@@ -90,6 +92,32 @@ expr@                 // shorthand for expr.view()
 | `#[verifier::opaque]` | Hide spec function body |
 | `#[verifier::type_invariant]` | Auto-enforced type invariant |
 | `#[verifier::memoize]` | Cache compute results |
+
+---
+
+## 1b. Best Practices Quick List
+
+**Specification:**
+- Use `int` in specs, not `u64`/`i64` (SMT-optimized)
+- Use `.eqv()` not `==` for spec equality
+- Use `nat` when you need to assert non-negativity
+- Write specs using Seq/Set/Map, not Vec
+
+**Proofs:**
+- Name lemmas `lemma_<module>_<property>`
+- Use `assert by { }` to scope lemma information
+- Use `reveal_with_fuel` for recursive specs
+- Put proof helpers in **separate modules** to avoid trigger pollution
+
+**Control Flow:**
+- Always add `decreases` to recursive spec functions
+- Make loop invariants strong enough to prove postcondition
+- Use post-phase check loops instead of threading complex invariants
+
+**Debugging:**
+- "assertion failed" → use `assume` to isolate
+- "rlimit exceeded" → extract helpers, don't increase rlimit
+- "trigger loop" → avoid `s[i] <= s[i+1]`, use two-variable
 
 ---
 
@@ -249,6 +277,91 @@ let f = |x: int| x + 1;  // Type: spec_fn(int) -> int
 
 Seq::new(5, |i: int| 10 * i)  // Common use in Seq construction
 ```
+
+### Algebraic Trait Hierarchy
+
+This codebase uses generic traits for mathematical structures:
+
+```rust
+// Core ring operations
+trait Ring {
+    spec fn eqv(self, other: Self) -> bool;
+    spec fn add(self, other: Self) -> Self;
+    spec fn sub(self, other: Self) -> Self;
+    spec fn neg(self) -> Self;
+    spec fn mul(self, other: Self) -> Self;
+    spec fn zero() -> Self;
+    spec fn one() -> Self;
+}
+
+// Adds ordering
+trait OrderedRing : Ring {
+    spec fn le(self, other: Self) -> bool;
+    spec fn lt(self, other: Self) -> bool;
+    proof fn lemma_trichotomy(a: Self, b: Self)
+        ensures exactly_one(a < b, a === b, b < a);
+}
+
+// Adds division (for intersection parameter computation)
+trait OrderedField : OrderedRing {
+    spec fn div(self, other: Self) -> Self;
+    spec fn recip(self) -> Self
+        requires self != Self::zero();
+}
+```
+
+**Key lemma patterns:**
+```rust
+// Trichotomy: exactly one of a<b, a===b, b<a holds
+lemma_trichotomy(a, b)
+
+// For congruence chains
+axiom_eqv_symmetric(a, b)    // a === b implies b === a
+axiom_eqv_transitive(a, b, c)  // a === b, b === c implies a === c
+
+// Negation
+neg_involution(a)  // a.neg().neg() === a
+```
+
+---
+
+## 3b. Runtime Layer Pattern
+
+Verified runtime types follow a standard pattern connecting exec and spec:
+
+```rust
+struct RuntimeVec2<R> {
+    coords: (R, R),
+    #[spec(dynamic)]
+    model: Ghost<Vec2<R>>,
+}
+
+impl<R> RuntimeVec2<R> {
+    /// Well-formedness specification
+    spec fn wf_spec(&self) -> bool {
+        self.coords.0.wf() && self.coords.1.wf()
+    }
+
+    /// Exec operation with spec equivalence
+    fn add_exec(a: &RuntimeVec2<R>, b: &RuntimeVec2<R>) -> (r: RuntimeVec2<R>)
+        requires a.wf_spec(), b.wf_spec()
+        ensures r.wf_spec()
+        ensures r.model@ === a.model@.add(b.model@)
+    {
+        RuntimeVec2 {
+            coords: (a.coords.0.add(b.coords.0), a.coords.1.add(b.coords.1)),
+            model: Ghost::ghost(a.model@.add(b.model@)),
+        }
+    }
+}
+```
+
+**Key patterns:**
+- `Ghost<SpecType>` stores the spec-level abstraction
+- `wf_spec()` defines well-formedness
+- Exec ops `ensure r.model@ == spec_op(args@)`
+- Use `.eqv()` not `==` for spec equality
+- For Rational runtime: use `from_int(0)` not `zero()` in exec code
 
 ---
 
@@ -675,51 +788,68 @@ global layout MyStruct is size == 16, align == 8;
 
 ## 8. Common Errors & Fixes
 
-### "assertion failed"
+### Debugging "assertion failed"
 
-**Debugging steps:**
-1. Run with `--expand-errors`
-2. Check if preconditions are satisfied
-3. Add intermediate `assert` statements
-4. Verify quantifier triggers are correct
-5. Try specialized solvers (`by(bit_vector)`, `by(nonlinear_arith)`)
+**Step-by-step:**
+1. Run with `--expand-errors` to see failure context
+2. Check if `requires` preconditions are satisfied at call site
+3. Use `assume(postcondition)` to verify the proof structure is correct
+   - If this passes, the issue is in the proof itself
+4. Add `assert(midpoint_result)` at strategic points to narrow down
+5. Check quantifier triggers—are they matching the right terms?
 
-### "possible arithmetic overflow"
+**If using forall:**
+```rust
+// Add focusing assertions
+assert forall |i| P(i) implies Q(i) by {
+    // Is i in the right range?
+    assert(0 <= i && i < n);
+    // Does P(i) actually hold?
+    assert(P(i));
+    // Now can we prove Q(i)?
+}
+```
 
-**Fixes (in order of preference):**
-1. Add precondition ensuring result fits
-2. Use `checked_*` functions
+### Debugging "rlimit exceeded"
+
+**NEVER just increase rlimit.** Instead:
+1. Profile: `verus --profile your_module`
+2. Look for quantifiers with high instantiation counts
+3. Check for trigger loops (recursive trigger instantiation)
+4. Extract expensive proof blocks into helper functions
+5. Simplify quantifier triggers
+
+**Quick wins:**
+- Extract `assert forall` with function calls → separate lemma
+- Make triggers more selective (avoid broad triggers like `x + 1`)
+- Split complex invariants into simpler ones
+
+### Debugging "possible arithmetic overflow"
+
+**In order of preference:**
+1. Add precondition ensuring result fits: `requires x <= u64::MAX - y`
+2. Use runtime checks: `x.checked_add(y)` returns Option
 3. Use `CheckedU64` type for overflow-free arithmetic
-4. Add explicit bounds check at runtime
+4. Add explicit bounds check with runtime fallback
 
 ```rust
-// Instead of:
-x + y  // might overflow
-
-// Use:
-x.checked_add(y)  // returns Option
-
-// Or prove it can't overflow:
+// Proven safe at compile time
 fn safe_add(x: u64, y: u64) -> (r: u64)
     requires x <= u64::MAX - y
 { x + y }
+
+// Runtime fallback
+fn add_with_check(x: u64, y: u64) -> Option<u64> {
+    x.checked_add(y)  // None on overflow
+}
 ```
 
-### "rlimit exceeded"
+### Debugging "cannot prove termination"
 
-**Solutions:**
-1. Profile: `verus --profile ...`
-2. Check for quantifier instantiation storms
-3. Break proof into smaller lemmas
-4. Increase rlimit: `#[verifier::rlimit(100)]`
-5. Make triggers more selective
-
-### "cannot prove termination"
-
-**Fixes:**
-1. Add `decreases` clause
-2. Provide termination proof with `via` clause
-3. Use `proof { assert(decreases_condition); }` inside function
+1. Does the recursive call actually decrease the `decreases` measure?
+2. Try adding inline proof: `proof { assert(decreases_to!(x => x-1)); }`
+3. Use `via` clause with a separate termination lemma
+4. For mutual recursion, ensure lexicographic decreases covers all cases
 
 ### Quantifier instantiation issues
 
@@ -935,6 +1065,29 @@ assert forall |i| ... by {
 }
 ```
 
+### Cast Identity with Platform-Dependent Types
+
+Verus can't prove `(i64 as usize) as int == i64 as int` directly because `usize` width is platform-dependent:
+```rust
+// Capture length as usize first
+let len = vec.len();  // usize
+// Then prove bound via int
+assert((val as int) < (len as int));
+// Now Z3 knows val <= usize::MAX
+```
+
+### Equivalence Direction with `eqv()`
+
+Common proof pitfall: wrong direction with `.eqv()`:
+```rust
+// neg_involution gives: a.neg().neg() === a
+// NOT: a === a.neg().neg()
+
+// For wrong direction chains:
+axiom_eqv_symmetric(a, b)    // flip a === b to b === a
+axiom_eqv_transitive(a, b, c)  // then chain
+```
+
 ### Seq::new vs Seq::map
 
 ```rust
@@ -950,6 +1103,22 @@ seq.map(|_i, p| p@)
 Adding a helper function to a module introduces its signature into Z3's background axioms for ALL functions. If the ensures mentions common terms, it creates trigger matches that **increase** rlimit for unrelated functions.
 
 **Solution:** Put proof helpers in a **separate module** (e.g., `proofs.rs` separate from `construction.rs`).
+
+---
+
+## 12. Lemma Naming Conventions
+
+This codebase uses consistent naming:
+
+| Pattern | Example | Use |
+|---------|---------|-----|
+| `lemma_<module>_<property>` | `lemma_orient2d_sign` | Main lemmas |
+| `axiom_<op>_<property>` | `axiom_add_associative` | Axioms (assumed) |
+| `broadcast proof fn` | `broadcast proof fn seq_contains_after_push` | Ambient facts |
+
+**Lemma ordering matters:**
+- Reflexive axioms MUST come before congruence/transitive
+- `axiom_eqv_symmetric` before `axiom_eqv_transitive`
 
 ---
 
@@ -1029,4 +1198,4 @@ pub fn get(&self, k: K) -> Option<&V>
 
 ---
 
-*Generated from Verus documentation*
+*End of Verus Quick Reference Guide*
