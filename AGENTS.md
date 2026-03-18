@@ -9,6 +9,7 @@
 5. [Common Errors & Fixes](#5-common-errors--fixes)
 6. [Common Pitfalls](#6-common-pitfalls)
 7. [MCP Tools](#7-mcp-tools)
+8. [Workspace Overview](#8-workspace-overview)
 
 ---
 
@@ -455,3 +456,79 @@ verus_profile("crate", top_n=25)  # sorted by rlimit
 ---
 
 *End of Quick Reference*
+
+---
+
+## 8. Workspace Overview
+
+### Crate Architecture
+```
+verus-algebra    → Ring, OrderedRing, OrderedField traits + lemmas
+verus-bigint     → Arbitrary-precision integers
+verus-rational   → Exact rationals
+verus-linalg     → Vec2/3/4, Mat2/3/4, Quat (generic over Ring)
+verus-geometry   → Predicates, geometry types, intersection algorithms
+verus-topology   → Half-edge mesh, construction, Euler operators
+verus-gui        → Layout algorithms, widget system, draw commands
+verus-vulkan     → Vulkan API bindings (large)
+```
+
+### Key Crates
+
+**verus-algebra** (~420 fns)
+- Core traits: `Ring`, `OrderedRing`, `OrderedField`
+- Lemmas for add/mul associativity, distributivity, congruence
+- Summation, binomial coefficients, convex combination
+
+**verus-bigint** (~328 fns)
+- Arbitrary-precision integers, signed/unsigned
+- Zero-trust implementation with machine-checked proofs
+
+**verus-rational** (~328 fns)
+- Exact rational arithmetic
+- RationalModel type for specs
+
+**verus-linalg** (~772 fns)
+- `Vec2<T>`, `Vec3<T>`, `Vec4<T>` - generic over Ring
+- `Mat2x2<T>`, `Mat3x3<T>`, `Mat4x4<T>`
+- `Quat<T>` - quaternions for rotation
+- Runtime counterparts: `RuntimeVec2`, `RuntimeMat3x3`, etc.
+
+**verus-geometry** (~761 fns)
+- **Predicates**: orient2d, orient3d, incircle, insphere, collinear, coplanar, sidedness
+- **Geometry types**: Point2/3, Circle2, Line2, Polygon, Segment
+- **Intersection**: segment-segment, segment-triangle, triangle-triangle
+- **2D algorithms**: convexity, Delaunay triangulation, Voronoi
+- **Closest point**: point-to-segment, segment-to-segment distance
+- **Area/winding**: signed area, winding number, point-in-polygon
+- **Runtime**: verified runtime implementations with RationalModel
+
+**verus-topology** (~273 fns)
+- **Core**: HalfEdge, Mesh structs
+- **Construction**: from face cycles, tetrahedron, cube
+- **Euler operators**: split_edge, split_face, flip_edge, collapse_edge
+- **Invariants**: twin_involution, prev_next_bidirectional, face_representative_cycles, vertex_manifold
+- **Queries**: face_degree, vertex_degree, euler_characteristic, genus
+- **Iteration**: vertex_ring_iter, next_iter
+- **Connectivity**: is_connected, check_connected
+- **Geometric**: geometric_embedding_2d/3d, consistently_oriented_2d/3d
+- **Checkers**: index_bounds, twin_involution, next_prev_inverse, face_cycles, structurally_valid
+- **Delaunay**: Lawson flip algorithm in 2D
+- **Point in solid**: ray crossing algorithm
+
+**verus-gui** (~981 fns)
+- **Layouts**: linear (stack), flex, grid, wrap, absolute, scroll
+- **Text model**: cursor, selection, word wrap, undo/redo
+- **Draw commands**: flatten_node_to_draws, draw state
+- **Widget system**: RuntimeWidget hierarchy
+- **Animation**: frame loop, event routing
+- **Cache**: RuntimeLayoutCache for incremental layout
+
+**verus-vulkan** (~3673 fns)
+- Vulkan API bindings - not verified (external_body)
+- Used as runtime backend for GPU operations
+
+### Verification Stats
+- Total: ~11,250 functions, 678 types, 16 traits
+- By kind: 3583 spec, 5632 proof, 2035 exec
+- Proof debt: 20 assume(false) across all crates
