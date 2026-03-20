@@ -426,6 +426,16 @@ Reflexive axioms MUST come before congruence/transitive: `axiom_eqv_symmetric` b
 
 **Prefer MCP lookup over reading files.** Use `verus_search`, `verus_lookup`, `verus_batch_lookup`, etc. instead of direct file reads when looking up functions or types. Lookups are recorded in context across compactions for future reference.
 
+**Note on function counts.** The indexed counts (spec/proof/exec) exclude spec functions that are transparent and don't require verification - only functions that Verus actually checks are counted.
+
+The "N verified" count includes proof fn and exec fn (both require proof obligations). Spec fn bodies are treated as definitions/axioms, not proof obligations - they are NOT counted. Recommends clauses are not checked by default (enable with `#[verifier::recommends_check]` to include).
+
+| Function mode | Has proof obligation? | Counted? |
+|---------------|------------------------|----------|
+| spec (open/closed) | No (body is a definition) | No |
+| proof | Yes (requires/ensures) | Yes |
+| exec | Yes (requires/ensures) | Yes |
+
 ### Verification Workflow
 - **Check early and often** - verify after each logical unit
 - **Keep changes small** - incremental edits are easier to debug

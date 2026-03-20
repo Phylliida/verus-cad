@@ -75,7 +75,7 @@ if [[ -n "$MODULE" ]]; then
     MOD="$MODULE"
     MOD="${MOD#src/}"
     MOD="${MOD%.rs}"
-    MOD="${MOD//\//::\}"
+    MOD="${MOD//\//::}"
     MOD="${MOD/::mod/}"
   fi
   MODULE_FLAG="--verify-module $MOD "
