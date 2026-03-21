@@ -1,18 +1,23 @@
 [submodule "verus-geometry"]
 	path = verus-geometry
 	url = https://github.com/Phylliida/verus-geometry.git
+	branch = main
 [submodule "verus-linalg"]
 	path = verus-linalg
 	url = https://github.com/Phylliida/verus-linalg.git
+	branch = main
 [submodule "verus-bigint"]
 	path = verus-bigint
 	url = https://github.com/Phylliida/verus-bigint.git
+	branch = main
 [submodule "verus-rational"]
 	path = verus-rational
 	url = https://github.com/Phylliida/verus-rational.git
+	branch = main
 [submodule "verus-interval-arithmetic"]
 	path = verus-interval-arithmetic
 	url = https://github.com/Phylliida/verus-interval-arithmetic.git
+	branch = main
 [submodule "old/VerusCAD"]
 	path = old/VerusCAD
 	url = https://github.com/Phylliida/VerusCAD
@@ -22,15 +27,18 @@
 [submodule "verus-docgenerator"]
 	path = verus-docgenerator
 	url = https://github.com/Phylliida/verus-docgenerator
+	branch = main
 [submodule "tree-sitter-verus"]
 	path = tree-sitter-verus
 	url = https://github.com/Phylliida/tree-sitter-verus
 [submodule "verus-topology"]
 	path = verus-topology
 	url = https://github.com/Phylliida/verus-topology.git
+	branch = main
 [submodule "verus-algebra"]
 	path = verus-algebra
 	url = https://github.com/Phylliida/verus-algebra.git
+	branch = main
 [submodule "z3"]
 	path = z3
 	url = https://github.com/Z3Prover/z3
@@ -43,39 +51,60 @@
 [submodule "verus-gui"]
 	path = verus-gui
 	url = https://github.com/Phylliida/verus-gui
+	branch = main
 [submodule "verus-canvas"]
 	path = verus-canvas
 	url = https://github.com/Phylliida/verus-canvas.git
+	branch = main
 [submodule "verus-vulkan"]
 	path = verus-vulkan
 	url = https://github.com/Phylliida/verus-vulkan.git
+	branch = main
 [submodule "verus-quadratic-extension"]
 	path = verus-quadratic-extension
 	url = https://github.com/Phylliida/verus-quadratic-extension.git
+	branch = main
 [submodule "verus-mandelbrot"]
 	path = verus-mandelbrot
 	url = https://github.com/Phylliida/verus-mandelbrot.git
+	branch = main
 [submodule "verus-2d-constraint-satisfaction"]
 	path = verus-2d-constraint-satisfaction
 	url = https://github.com/Phylliida/verus-2d-constraint-satisfaction.git
+	branch = main
 [submodule "verus-field-extension"]
 	path = verus-field-extension
 	url = https://github.com/Phylliida/verus-field-extension.git
+	branch = main
 [submodule "verus-group-theory"]
 	path = verus-group-theory
 	url = https://github.com/Phylliida/verus-group-theory.git
+	branch = main
 [submodule "verus-computability-theory"]
 	path = verus-computability-theory
 	url = https://github.com/Phylliida/verus-computability-theory.git
+	branch = main
 [submodule "verus-ray-marching"]
 	path = verus-ray-marching
 	url = https://github.com/Phylliida/verus-ray-marching.git
+	branch = main
 [submodule "verus-to-spir-v"]
 	path = verus-to-spir-v
 	url = https://github.com/Phylliida/verus-to-spir-v.git
+	branch = main
 [submodule "verus-fractals"]
 	path = verus-fractals
 	url = https://github.com/Phylliida/verus-fractals
+	branch = main
 [submodule "verus-mcp"]
 	path = verus-mcp
 	url = https://github.com/Phylliida/verus-mcp
+	branch = main
+[submodule "verus-cutedsl"]
+	path = verus-cutedsl
+	url = https://github.com/Phylliida/verus-cutedsl.git
+	branch = main
+[submodule "verus-trigonometry"]
+	path = verus-trigonometry
+	url = https://github.com/Phylliida/verus-trigonometry.git
+	branch = main
