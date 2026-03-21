@@ -1,2 +1,0 @@
-new struct
-new 
