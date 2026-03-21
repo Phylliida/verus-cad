@@ -76,3 +76,6 @@
 [submodule "verus-fractals"]
 	path = verus-fractals
 	url = https://github.com/Phylliida/verus-fractals
+[submodule "verus-mcp"]
+	path = verus-mcp
+	url = https://github.com/Phylliida/verus-mcp
