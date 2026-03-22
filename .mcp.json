@@ -2,7 +2,7 @@
   "mcpServers": {
     "verus": {
       "type": "stdio",
-      "command": "/home/bepis/Documents/coding/verus-cad/verus-mcp/target/release/verus-mcp",
+      "command": "./verus-mcp/target/release/verus-mcp",
       "args": []
     }
   }
