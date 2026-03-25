@@ -108,3 +108,6 @@
 	path = verus-trigonometry
 	url = https://github.com/Phylliida/verus-trigonometry.git
 	branch = main
+[submodule "verus-fixed-point"]
+	path = verus-fixed-point
+	url = https://github.com/Phylliida/verus-fixed-point.git
