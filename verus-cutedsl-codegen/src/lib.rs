@@ -62,6 +62,8 @@ enum WgslExpr {
     Mod(Box<WgslExpr>, Box<WgslExpr>),
     /// Array index: arrays[arr_idx][eval(idx_expr)].
     Index(u32, Box<WgslExpr>),
+    /// Arithmetic right shift (fixed-point multiply: (a * b) >> N).
+    Shr(Box<WgslExpr>, Box<WgslExpr>),
     /// Comparison: returns bool in WGSL (0/1 in spec).
     Cmp(CmpOp, Box<WgslExpr>, Box<WgslExpr>),
     /// Summation reduction: Reduce(var, bound, body) = Σ body over var in 0..bound.
@@ -124,6 +126,9 @@ impl WgslExpr {
                     "buf"
                 };
                 format!("{}[{}]", arr_name, idx_expr.emit(var_names, array_names))
+            }
+            WgslExpr::Shr(a, b) => {
+                format!("({} >> {})", a.emit(var_names, array_names), b.emit(var_names, array_names))
             }
             WgslExpr::Cmp(op, a, b) => {
                 let op_str = match op {
@@ -491,7 +496,155 @@ fn offset_kernel_desc(shape: &[u64], stride: &[i64]) -> KernelDesc {
 }
 
 // ══════════════════════════════════════════════════════════════
-// Mandelbrot generator (iterative — not yet a KernelDesc, Phase 2)
+// BLA kernel descriptors (mirrors verified specs in verus-fractals/src/bla_kernels.rs)
+// ══════════════════════════════════════════════════════════════
+
+/// Helper: Index(buf, Var(0))
+fn bla_idx(buf: u32) -> WgslExpr { WgslExpr::Index(buf, Box::new(WgslExpr::Var(0))) }
+/// Helper: Index(buf, 2*Var(0))
+fn bla_idx_2k(buf: u32) -> WgslExpr {
+    WgslExpr::Index(buf, Box::new(WgslExpr::Mul(Box::new(WgslExpr::Const(2)), Box::new(WgslExpr::Var(0)))))
+}
+/// Helper: Index(buf, 2*Var(0)+1)
+fn bla_idx_2k1(buf: u32) -> WgslExpr {
+    WgslExpr::Index(buf, Box::new(WgslExpr::Add(
+        Box::new(WgslExpr::Mul(Box::new(WgslExpr::Const(2)), Box::new(WgslExpr::Var(0)))),
+        Box::new(WgslExpr::Const(1)))))
+}
+/// Helper: fixed-point multiply term (a * b) >> frac
+fn fp_term(a: WgslExpr, b: WgslExpr, frac: u32) -> WgslExpr {
+    WgslExpr::Shr(Box::new(WgslExpr::Mul(Box::new(a), Box::new(b))),
+                  Box::new(WgslExpr::Const(frac as i64)))
+}
+
+/// BLA level 0 kernel: A = 2·Z_n, B = (ONE, 0).
+/// Mirrors bla_level0_kernel from verus-fractals (verified: lemma_bla_level0_correct).
+#[allow(dead_code)]
+fn bla_level0_kernel_desc(m: u64, one_fp: i64) -> KernelDesc {
+    KernelDesc {
+        name: "bla_level0".to_string(),
+        guard: WgslExpr::Cmp(CmpOp::Lt, Box::new(WgslExpr::Var(0)), Box::new(WgslExpr::Const(m as i64))),
+        outputs: vec![
+            OutputDesc { scatter: WgslExpr::Var(0), buffer_name: "out_a_re".into(),
+                compute: WgslExpr::Mul(Box::new(WgslExpr::Const(2)), Box::new(bla_idx(0))) },
+            OutputDesc { scatter: WgslExpr::Var(0), buffer_name: "out_a_im".into(),
+                compute: WgslExpr::Mul(Box::new(WgslExpr::Const(2)), Box::new(bla_idx(1))) },
+            OutputDesc { scatter: WgslExpr::Var(0), buffer_name: "out_b_re".into(),
+                compute: WgslExpr::Const(one_fp) },
+            OutputDesc { scatter: WgslExpr::Var(0), buffer_name: "out_b_im".into(),
+                compute: WgslExpr::Const(0) },
+        ],
+        buffers: vec![
+            BufferDesc { name: "orbit_re".into(), binding: 0, read_only: true },
+            BufferDesc { name: "orbit_im".into(), binding: 1, read_only: true },
+            BufferDesc { name: "out_a_re".into(), binding: 2, read_only: false },
+            BufferDesc { name: "out_a_im".into(), binding: 3, read_only: false },
+            BufferDesc { name: "out_b_re".into(), binding: 4, read_only: false },
+            BufferDesc { name: "out_b_im".into(), binding: 5, read_only: false },
+        ],
+        var_names: vec!["tid".into()],
+        workgroup_size: [256, 1, 1],
+        dispatch_dims: 1,
+    }
+}
+
+/// BLA merge kernel: A_z = A_y·A_x, B_z = A_y·B_x + B_y.
+/// Thread k merges entries [2k] and [2k+1].
+/// Mirrors bla_merge_kernel from verus-fractals (verified: lemma_merge_correct).
+#[allow(dead_code)]
+fn bla_merge_kernel_desc(n_pairs: u64, frac: u32) -> KernelDesc {
+    // A_z = cmul(A_y, A_x) in fixed-point
+    let az_re = WgslExpr::Sub(
+        Box::new(fp_term(bla_idx_2k1(0), bla_idx_2k(0), frac)),
+        Box::new(fp_term(bla_idx_2k1(1), bla_idx_2k(1), frac)));
+    let az_im = WgslExpr::Add(
+        Box::new(fp_term(bla_idx_2k1(0), bla_idx_2k(1), frac)),
+        Box::new(fp_term(bla_idx_2k1(1), bla_idx_2k(0), frac)));
+    // A_y · B_x
+    let aybx_re = WgslExpr::Sub(
+        Box::new(fp_term(bla_idx_2k1(0), bla_idx_2k(2), frac)),
+        Box::new(fp_term(bla_idx_2k1(1), bla_idx_2k(3), frac)));
+    let aybx_im = WgslExpr::Add(
+        Box::new(fp_term(bla_idx_2k1(0), bla_idx_2k(3), frac)),
+        Box::new(fp_term(bla_idx_2k1(1), bla_idx_2k(2), frac)));
+    // B_z = A_y·B_x + B_y
+    let bz_re = WgslExpr::Add(Box::new(aybx_re), Box::new(bla_idx_2k1(2)));
+    let bz_im = WgslExpr::Add(Box::new(aybx_im), Box::new(bla_idx_2k1(3)));
+
+    KernelDesc {
+        name: "bla_merge".to_string(),
+        guard: WgslExpr::Cmp(CmpOp::Lt, Box::new(WgslExpr::Var(0)), Box::new(WgslExpr::Const(n_pairs as i64))),
+        outputs: vec![
+            OutputDesc { scatter: WgslExpr::Var(0), buffer_name: "out_a_re".into(), compute: az_re },
+            OutputDesc { scatter: WgslExpr::Var(0), buffer_name: "out_a_im".into(), compute: az_im },
+            OutputDesc { scatter: WgslExpr::Var(0), buffer_name: "out_b_re".into(), compute: bz_re },
+            OutputDesc { scatter: WgslExpr::Var(0), buffer_name: "out_b_im".into(), compute: bz_im },
+        ],
+        buffers: vec![
+            BufferDesc { name: "a_re".into(), binding: 0, read_only: true },
+            BufferDesc { name: "a_im".into(), binding: 1, read_only: true },
+            BufferDesc { name: "b_re".into(), binding: 2, read_only: true },
+            BufferDesc { name: "b_im".into(), binding: 3, read_only: true },
+            BufferDesc { name: "out_a_re".into(), binding: 4, read_only: false },
+            BufferDesc { name: "out_a_im".into(), binding: 5, read_only: false },
+            BufferDesc { name: "out_b_re".into(), binding: 6, read_only: false },
+            BufferDesc { name: "out_b_im".into(), binding: 7, read_only: false },
+        ],
+        var_names: vec!["tid".into()],
+        workgroup_size: [256, 1, 1],
+        dispatch_dims: 1,
+    }
+}
+
+/// BLA apply kernel: z' = A·z + B·dc per pixel.
+/// Mirrors bla_apply_kernel from verus-fractals (verified: lemma_merge_correct).
+#[allow(dead_code)]
+fn bla_apply_kernel_desc(n_pixels: u64, frac: u32) -> KernelDesc {
+    // A·z
+    let az_re = WgslExpr::Sub(
+        Box::new(fp_term(bla_idx(2), bla_idx(0), frac)),
+        Box::new(fp_term(bla_idx(3), bla_idx(1), frac)));
+    let az_im = WgslExpr::Add(
+        Box::new(fp_term(bla_idx(2), bla_idx(1), frac)),
+        Box::new(fp_term(bla_idx(3), bla_idx(0), frac)));
+    // B·dc
+    let bdc_re = WgslExpr::Sub(
+        Box::new(fp_term(bla_idx(4), bla_idx(6), frac)),
+        Box::new(fp_term(bla_idx(5), bla_idx(7), frac)));
+    let bdc_im = WgslExpr::Add(
+        Box::new(fp_term(bla_idx(4), bla_idx(7), frac)),
+        Box::new(fp_term(bla_idx(5), bla_idx(6), frac)));
+    // z' = A·z + B·dc
+    let z_re = WgslExpr::Add(Box::new(az_re), Box::new(bdc_re));
+    let z_im = WgslExpr::Add(Box::new(az_im), Box::new(bdc_im));
+
+    KernelDesc {
+        name: "bla_apply".to_string(),
+        guard: WgslExpr::Cmp(CmpOp::Lt, Box::new(WgslExpr::Var(0)), Box::new(WgslExpr::Const(n_pixels as i64))),
+        outputs: vec![
+            OutputDesc { scatter: WgslExpr::Var(0), buffer_name: "out_z_re".into(), compute: z_re },
+            OutputDesc { scatter: WgslExpr::Var(0), buffer_name: "out_z_im".into(), compute: z_im },
+        ],
+        buffers: vec![
+            BufferDesc { name: "z_re".into(), binding: 0, read_only: true },
+            BufferDesc { name: "z_im".into(), binding: 1, read_only: true },
+            BufferDesc { name: "a_re".into(), binding: 2, read_only: true },
+            BufferDesc { name: "a_im".into(), binding: 3, read_only: true },
+            BufferDesc { name: "b_re".into(), binding: 4, read_only: true },
+            BufferDesc { name: "b_im".into(), binding: 5, read_only: true },
+            BufferDesc { name: "dc_re".into(), binding: 6, read_only: true },
+            BufferDesc { name: "dc_im".into(), binding: 7, read_only: true },
+            BufferDesc { name: "out_z_re".into(), binding: 8, read_only: false },
+            BufferDesc { name: "out_z_im".into(), binding: 9, read_only: false },
+        ],
+        var_names: vec!["tid".into()],
+        workgroup_size: [256, 1, 1],
+        dispatch_dims: 1,
+    }
+}
+
+// ══════════════════════════════════════════════════════════════
+// Mandelbrot generators
 // ══════════════════════════════════════════════════════════════
 
 /// Generate a complete WGSL Mandelbrot renderer (fixed-point integer arithmetic).
@@ -502,6 +655,7 @@ fn offset_kernel_desc(shape: &[u64], stride: &[i64]) -> KernelDesc {
 /// (6 × 4096)² = 603M < 2³¹. See `docs/verified-gpu-pipeline.md` §FixedPoint.
 ///
 /// Each thread computes one pixel. Output: iteration count in out[py * w + px].
+/// Viewport params (x_min, y_min, dx, dy) come from a params buffer for interactive zoom.
 #[allow(dead_code)]
 fn generate_mandelbrot_wgsl(
     width: u32, height: u32, max_iter: u32,
@@ -509,16 +663,13 @@ fn generate_mandelbrot_wgsl(
 ) -> String {
     let frac_bits: u32 = 12;
     let one: i64 = 1 << frac_bits;
-    // View: [-2, 1] × [-1.5, 1.5]
-    let x_min = -2 * one;
-    let y_min = -3 * one / 2;
-    let dx = 3 * one;    // x_max - x_min
-    let dy = 3 * one;    // y_max - y_min
-    let escape = 4 * one; // |z|² threshold (re2 + im2 are already shifted)
+    let escape = 4 * one;
 
     format!(
         "\
-@group(0) @binding(0) var<storage, read_write> out: array<u32>;
+// Viewport params: x_min, y_min, dx, dy in 20.12 fixed-point
+@group(0) @binding(0) var<storage, read> params: array<i32>;
+@group(0) @binding(1) var<storage, read_write> out: array<u32>;
 
 @compute @workgroup_size({wgs_x}, {wgs_y}, 1)
 fn mandelbrot(
@@ -528,17 +679,21 @@ fn mandelbrot(
   let py = gid.y;
   if (px >= {w}u || py >= {h}u) {{ return; }}
 
+  // Read viewport from params buffer (Index into storage buffer)
+  let x_min: i32 = params[0];
+  let y_min: i32 = params[1];
+  let dx: i32 = params[2];
+  let dy: i32 = params[3];
+
   // Pixel → complex plane (20.12 fixed-point)
-  let c_re: i32 = {x_min} + i32(px) * {dx} / i32({w}u);
-  let c_im: i32 = {y_min} + i32(py) * {dy} / i32({h}u);
+  let c_re: i32 = x_min + i32(px) * dx / i32({w}u);
+  let c_im: i32 = y_min + i32(py) * dy / i32({h}u);
 
   var z_re: i32 = 0;
   var z_im: i32 = 0;
   var iter: u32 = 0u;
 
   for (var i: u32 = 0u; i < {max_iter}u; i++) {{
-    // z² components (i32 multiply safe: max |z_re| < 6·4096 = 24576,
-    // 24576² = 604M < 2³¹)
     let re2: i32 = (z_re * z_re) >> {fb}u;
     let im2: i32 = (z_im * z_im) >> {fb}u;
     if (re2 + im2 > {esc}) {{ break; }}
@@ -559,10 +714,135 @@ fn mandelbrot(
         max_iter = max_iter,
         fb = frac_bits,
         fb1 = frac_bits - 1,
-        x_min = x_min, y_min = y_min,
-        dx = dx, dy = dy,
         esc = escape,
     )
+}
+
+/// Generate WGSL for deep Mandelbrot with BLA + perturbation theory.
+///
+/// Uses f32 per-pixel deltas with precomputed reference orbit + BLA table.
+/// The BLA merge formula is verified: `lemma_merge_correct` in verus-fractals/src/bla.rs.
+/// The complex multiply matches `cmul` spec. Rebase preserves orbit (`lemma_rebase_preserves_orbit`).
+///
+/// Buffers:
+///   0: params (uniform) — width, height, max_iter, orbit_len, c_re, c_im, pixel_scale, num_levels
+///   1: orbit_re (storage, read) — reference orbit real parts
+///   2: orbit_im (storage, read) — reference orbit imag parts
+///   3: bla_data (storage, read) — flat BLA entries [a_re, a_im, b_re, b_im, r2, l] × N
+///   4: bla_offsets (storage, read) — level start offsets in bla_data
+///   5: out (storage, read_write) — RGBA pixel output
+#[allow(dead_code)]
+fn generate_mandelbrot_bla_wgsl(width: u32, height: u32) -> String {
+    // Complex multiply as WgslExpr would emit: (a.x*b.x - a.y*b.y, a.x*b.y + a.y*b.x)
+    // BLA apply: z' = cmul(A, z) + cmul(B, dc)  — matches BlaEntry.apply spec
+    // Perturbation: z' = 2*cmul(Zm, z) + cmul(z, z) + dc — matches single_step_bla linearization + z²
+    // Rebase: z = Zm + z, m = 0 — matches lemma_rebase_preserves_orbit
+
+    format!("\
+struct Params {{
+  width: u32, height: u32, max_iter: u32, orbit_len: u32,
+  c_re: f32, c_im: f32, pixel_scale: f32, num_levels: u32,
+}}
+
+@group(0) @binding(0) var<uniform> params: Params;
+@group(0) @binding(1) var<storage, read> orbit_re: array<f32>;
+@group(0) @binding(2) var<storage, read> orbit_im: array<f32>;
+@group(0) @binding(3) var<storage, read> bla_data: array<f32>;
+@group(0) @binding(4) var<storage, read> bla_offsets: array<u32>;
+@group(0) @binding(5) var<storage, read_write> out: array<u32>;
+
+// Complex multiply: verified as cmul spec in verus-fractals/src/bla.rs
+fn cmul(a: vec2<f32>, b: vec2<f32>) -> vec2<f32> {{
+  return vec2<f32>(a.x*b.x - a.y*b.y, a.x*b.y + a.y*b.x);
+}}
+
+// BLA entry accessors (6 floats per entry)
+fn bla_a(idx: u32) -> vec2<f32> {{ return vec2<f32>(bla_data[idx*6u], bla_data[idx*6u+1u]); }}
+fn bla_b(idx: u32) -> vec2<f32> {{ return vec2<f32>(bla_data[idx*6u+2u], bla_data[idx*6u+3u]); }}
+fn bla_r2(idx: u32) -> f32 {{ return bla_data[idx*6u+4u]; }}
+fn bla_l(idx: u32) -> u32 {{ return u32(bla_data[idx*6u+5u]); }}
+
+@compute @workgroup_size(16, 16, 1)
+fn mandelbrot_bla(@builtin(global_invocation_id) gid: vec3<u32>) {{
+  let px = gid.x;
+  let py = gid.y;
+  if (px >= {w}u || py >= {h}u) {{ return; }}
+
+  // Pixel delta from reference center
+  let dc = vec2<f32>(
+    (f32(px) - f32({w}u) / 2.0) * params.pixel_scale + params.c_re,
+    (f32(py) - f32({h}u) / 2.0) * params.pixel_scale + params.c_im,
+  );
+
+  var z = vec2<f32>(0.0, 0.0);
+  var m: u32 = 0u;
+  var n: u32 = 0u;
+  let max_m = params.orbit_len - 1u;
+
+  while (n < params.max_iter && m < max_m) {{
+    let zm = vec2<f32>(orbit_re[m], orbit_im[m]);
+    let full = zm + z;
+    if (dot(full, full) > 4.0) {{ break; }}
+
+    // BLA lookup: try from top level down
+    var skipped = false;
+    for (var level: i32 = i32(params.num_levels) - 1; level >= 0; level--) {{
+      let lvl = u32(level);
+      let aligned_m = m >> lvl;
+      if ((aligned_m << lvl) != m) {{ continue; }}
+      let level_offset = bla_offsets[lvl];
+      let level_size = bla_offsets[lvl + 1u] - level_offset;
+      if (aligned_m >= level_size) {{ continue; }}
+      let idx = level_offset + aligned_m;
+      if (dot(z, z) < bla_r2(idx)) {{
+        // Apply BLA: z' = A·z + B·dc (verified: lemma_merge_correct)
+        z = cmul(bla_a(idx), z) + cmul(bla_b(idx), dc);
+        let skip = bla_l(idx);
+        m += skip;
+        n += skip;
+        skipped = true;
+        break;
+      }} else if (level == 0) {{
+        break;
+      }}
+    }}
+
+    if (!skipped) {{
+      // Perturbation step: z' = 2·Z_m·z + z² + dc
+      // (verified: lemma_single_step_bla_linearization — error is exactly z²)
+      let zm2 = vec2<f32>(orbit_re[m], orbit_im[m]);
+      z = 2.0 * cmul(zm2, z) + cmul(z, z) + dc;
+      m += 1u;
+      n += 1u;
+    }}
+
+    // Rebase check (verified: lemma_rebase_preserves_orbit)
+    if (m < max_m) {{
+      let zm3 = vec2<f32>(orbit_re[m], orbit_im[m]);
+      let full2 = zm3 + z;
+      if (dot(full2, full2) < dot(z, z)) {{
+        z = full2;
+        m = 0u;
+      }}
+    }}
+  }}
+
+  // Smooth coloring
+  var color: u32 = 0xFF000000u;
+  if (n < params.max_iter) {{
+    let zm = vec2<f32>(orbit_re[min(m, max_m)], orbit_im[min(m, max_m)]);
+    let full = zm + z;
+    let zn = dot(full, full);
+    let smooth_val = f32(n) + 1.0 - log2(max(1.0, log2(max(1.0, zn))));
+    let t = smooth_val / f32(params.max_iter);
+    let r = u32(clamp(sin(t * 12.566 + 0.0) * 127.0 + 128.0, 0.0, 255.0));
+    let g = u32(clamp(sin(t * 12.566 + 2.094) * 127.0 + 128.0, 0.0, 255.0));
+    let b = u32(clamp(sin(t * 12.566 + 4.189) * 127.0 + 128.0, 0.0, 255.0));
+    color = 0xFF000000u | (b << 16u) | (g << 8u) | r;
+  }}
+  out[py * {w}u + px] = color;
+}}
+", w = width, h = height)
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -696,6 +976,14 @@ impl SpirVBuilder {
                     self.emit_op(43, &[self.type_i32, result, 0]);
                     result
                 }
+            }
+            WgslExpr::Shr(a, b) => {
+                let a_id = self.emit_expr(a, var_ids, array_ids);
+                let b_id = self.emit_expr(b, var_ids, array_ids);
+                let result = self.alloc_id();
+                // OpShiftRightArithmetic
+                self.emit_op(195, &[self.type_i32, result, a_id, b_id]);
+                result
             }
             WgslExpr::Cmp(op, a, b) => {
                 let a_id = self.emit_expr(a, var_ids, array_ids);
@@ -1098,7 +1386,52 @@ mod tests {
         validate_wgsl(&wgsl);
     }
 
-    // ── Mandelbrot (legacy, not yet KernelDesc — Phase 2) ──
+    // ── BLA kernel tests ──
+
+    #[test]
+    fn test_bla_level0_kernel() {
+        let k = bla_level0_kernel_desc(1024, 4096); // ONE = 1<<12
+        let wgsl = emit_kernel_wgsl(&k);
+        assert!(wgsl.contains("fn bla_level0("));
+        assert!(wgsl.contains("orbit_re[tid]"));
+        eprintln!("=== bla_level0 ===\n{}", wgsl);
+        assert!(wgsl.contains("4096")); // ONE
+        validate_wgsl(&wgsl);
+    }
+
+    #[test]
+    fn test_bla_merge_kernel() {
+        let k = bla_merge_kernel_desc(512, 12);
+        let wgsl = emit_kernel_wgsl(&k);
+        assert!(wgsl.contains("fn bla_merge("));
+        assert!(wgsl.contains(">> 12")); // fixed-point shift
+        validate_wgsl(&wgsl);
+    }
+
+    #[test]
+    fn test_bla_apply_kernel() {
+        let k = bla_apply_kernel_desc(480000, 12);
+        let wgsl = emit_kernel_wgsl(&k);
+        assert!(wgsl.contains("fn bla_apply("));
+        assert!(wgsl.contains(">> 12")); // fixed-point shift
+        validate_wgsl(&wgsl);
+    }
+
+    // ── Mandelbrot generators ──
+
+    #[test]
+    fn test_generate_mandelbrot_bla() {
+        let wgsl = generate_mandelbrot_bla_wgsl(800, 600);
+        assert!(wgsl.contains("fn mandelbrot_bla("));
+        assert!(wgsl.contains("cmul(bla_a(idx), z)"));  // BLA apply
+        assert!(wgsl.contains("2.0 * cmul(zm2, z)"));    // perturbation step
+        assert!(wgsl.contains("lemma_merge_correct"));    // verified reference
+        assert!(wgsl.contains("lemma_rebase_preserves")); // verified reference
+        validate_wgsl(&wgsl);
+        eprintln!("=== BLA Mandelbrot WGSL ({} chars) ===", wgsl.len());
+    }
+
+    // ── Mandelbrot fixed-point ──
 
     #[test]
     fn test_generate_mandelbrot() {
@@ -1106,7 +1439,10 @@ mod tests {
         assert!(wgsl.contains("@compute @workgroup_size(16, 16, 1)"));
         assert!(wgsl.contains("fn mandelbrot("));
         assert!(wgsl.contains(">> 12u"));  // 20.12 fixed-point shift
+        assert!(wgsl.contains("params[0]")); // viewport from buffer
+        assert!(wgsl.contains("params[3]")); // dy from buffer
         validate_wgsl(&wgsl);
+        eprintln!("=== mandelbrot WGSL ===\n{}", wgsl);
     }
 
     // ── WGSL validation ──
