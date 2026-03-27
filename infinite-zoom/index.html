@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Infinite Zoom Draw</title>
+<style>
+*{margin:0;padding:0}
+body{background:#111;overflow:hidden}
+canvas{display:block;cursor:crosshair;touch-action:none}
+#hud{position:fixed;top:10px;left:10px;color:#555;font:12px/1.5 monospace;pointer-events:none;user-select:none}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud"></div>
+<script>
+// ============================================================
+//  Arbitrary-precision rationals
+// ============================================================
+function gcd(a, b) {
+  if (a < 0n) a = -a;
+  if (b < 0n) b = -b;
+  while (b) { [a, b] = [b, a % b]; }
+  return a || 1n;
+}
+
+class Q {
+  constructor(n, d = 1n) {
+    this.n = BigInt(n); this.d = BigInt(d);
+    if (this.d < 0n) { this.n = -this.n; this.d = -this.d; }
+    const g = gcd(this.n < 0n ? -this.n : this.n, this.d);
+    if (g > 1n) { this.n /= g; this.d /= g; }
+  }
+  add(b) { return new Q(this.n * b.d + b.n * this.d, this.d * b.d); }
+  sub(b) { return new Q(this.n * b.d - b.n * this.d, this.d * b.d); }
+  mul(b) { return new Q(this.n * b.n, this.d * b.d); }
+  div(b) { return new Q(this.n * b.d, this.d * b.n); }
+  float() {
+    const s = this.n < 0n ? -1 : 1, a = this.n < 0n ? -this.n : this.n;
+    const i = a / this.d, r = a % this.d, S = 10n ** 15n;
+    return s * (Number(i) + Number(r * S / this.d) / Number(S));
+  }
+  json() { return [this.n.toString(), this.d.toString()]; }
+  static parse(a) { return new Q(BigInt(a[0]), BigInt(a[1])); }
+}
+
+function qLt(a, b) { return a.n * b.d < b.n * a.d; }
+
+function b2f(num, den) {
+  const s = num < 0n ? -1 : 1, a = num < 0n ? -num : num;
+  const i = a / den, r = a % den, S = 10n ** 15n;
+  return s * (Number(i) + Number(r * S / den) / Number(S));
+}
+
+let _zlCache = 0, _zlN = null, _zlD = null;
+function zoomLog() {
+  if (zoom.n !== _zlN || zoom.d !== _zlD) {
+    const ns = (zoom.n < 0n ? -zoom.n : zoom.n).toString(), ds = zoom.d.toString();
+    _zlCache = ns.length - 1 + Math.log10(+ns.slice(0, 15) / 10 ** (Math.min(ns.length, 15) - 1))
+             - (ds.length - 1 + Math.log10(+ds.slice(0, 15) / 10 ** (Math.min(ds.length, 15) - 1)));
+    _zlN = zoom.n; _zlD = zoom.d;
+  }
+  return _zlCache;
+}
+
+const ZERO = new Q(0n), ONE = new Q(1n);
+const ZI = new Q(11n, 10n), ZO = new Q(10n, 11n);
+
+// ============================================================
+//  State
+// ============================================================
+let cx = ZERO, cy = ZERO, zoom = ONE;
+let strokes = [];
+let cur = null;
+let drawing = false, panning = false, lastPan = null, lastDrawScreen = null;
+
+// ============================================================
+//  Canvas
+// ============================================================
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const hud = document.getElementById('hud');
+let W, H, DPR;
+
+// Offscreen canvas for zoom-animation snapshots
+let offCanvas, offCtx;
+
+function resize() {
+  DPR = devicePixelRatio || 1;
+  W = innerWidth; H = innerHeight;
+  canvas.width = W * DPR; canvas.height = H * DPR;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  if (!offCanvas) { offCanvas = document.createElement('canvas'); offCtx = offCanvas.getContext('2d'); }
+  offCanvas.width = W * DPR; offCanvas.height = H * DPR;
+  offCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  scDirty = true;
+  requestRender();
+}
+addEventListener('resize', resize);
+
+// ============================================================
+//  Bounding box (one-time per stroke)
+// ============================================================
+function computeBBox(pts) {
+  let minX = pts[0].x, maxX = pts[0].x, minY = pts[0].y, maxY = pts[0].y;
+  for (let i = 1; i < pts.length; i++) {
+    const p = pts[i];
+    if (qLt(p.x, minX)) minX = p.x; if (qLt(maxX, p.x)) maxX = p.x;
+    if (qLt(p.y, minY)) minY = p.y; if (qLt(maxY, p.y)) maxY = p.y;
+  }
+  return { minX, maxX, minY, maxY };
+}
+
+function finishStroke(s) {
+  s.bbox = computeBBox(s.pts);
+  s.zlog = zoomLog();
+  strokes.push(s);
+  addToScreenCache(s);
+}
+
+// ============================================================
+//  Coordinate transforms
+// ============================================================
+function s2w(sx, sy) {
+  const hw = new Q(BigInt(W), 2n), hh = new Q(BigInt(H), 2n);
+  return {
+    x: new Q(BigInt(Math.round(sx))).sub(hw).div(zoom).add(cx),
+    y: new Q(BigInt(Math.round(sy))).sub(hh).div(zoom).add(cy)
+  };
+}
+
+function anchorZoom(wp, sx, sy) {
+  const hw = new Q(BigInt(W), 2n), hh = new Q(BigInt(H), 2n);
+  cx = wp.x.sub(new Q(BigInt(Math.round(sx))).sub(hw).div(zoom));
+  cy = wp.y.sub(new Q(BigInt(Math.round(sy))).sub(hh).div(zoom));
+}
+
+// ============================================================
+//  Screen-coordinate cache
+//
+//  Float64Array of screen coords per visible stroke, rebuilt
+//  on zoom change. Pan just adds a float offset — no BigInt.
+// ============================================================
+let screenEntries = [];
+let scDirty = true;
+let panTotalX = 0, panTotalY = 0;
+
+function transformStrokePts(s, zn, zd, cxn, cxd, cyn, cyd, bw, bh) {
+  const pts = new Float64Array(s.pts.length * 2);
+  for (let i = 0; i < s.pts.length; i++) {
+    const pt = s.pts[i];
+    const dxn = pt.x.n * cxd - cxn * pt.x.d, dxd = pt.x.d * cxd;
+    pts[i * 2]     = b2f(dxn * zn * 2n + bw * dxd * zd, dxd * zd * 2n);
+    const dyn = pt.y.n * cyd - cyn * pt.y.d, dyd = pt.y.d * cyd;
+    pts[i * 2 + 1] = b2f(dyn * zn * 2n + bh * dyd * zd, dyd * zd * 2n);
+  }
+  return pts;
+}
+
+function floatBBox(pts) {
+  let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+  for (let i = 0; i < pts.length; i += 2) {
+    if (pts[i] < x0) x0 = pts[i]; if (pts[i] > x1) x1 = pts[i];
+    if (pts[i+1] < y0) y0 = pts[i+1]; if (pts[i+1] > y1) y1 = pts[i+1];
+  }
+  return { x0, x1, y0, y1 };
+}
+
+function bboxOverlap(bb, vpMinX, vpMaxX, vpMinY, vpMaxY) {
+  return !(qLt(bb.maxX, vpMinX) || qLt(vpMaxX, bb.minX) ||
+           qLt(bb.maxY, vpMinY) || qLt(vpMaxY, bb.minY));
+}
+
+function subpixelCull(bb, zn, zd) {
+  const ewn = bb.maxX.n * bb.minX.d - bb.minX.n * bb.maxX.d;
+  const ehn = bb.maxY.n * bb.minY.d - bb.minY.n * bb.maxY.d;
+  const ewPx = ewn * zn * 2n, ewRef = bb.maxX.d * bb.minX.d * zd;
+  const ehPx = ehn * zn * 2n, ehRef = bb.maxY.d * bb.minY.d * zd;
+  return (ewPx < 0n ? -ewPx : ewPx) < ewRef &&
+         (ehPx < 0n ? -ehPx : ehPx) < ehRef;
+}
+
+function buildScreenCache() {
+  screenEntries = [];
+  panTotalX = 0; panTotalY = 0;
+  const zn = zoom.n, zd = zoom.d, cxn = cx.n, cxd = cx.d, cyn = cy.n, cyd = cy.d;
+  const bw = BigInt(W), bh = BigInt(H);
+  // 5x viewport margin for pan tolerance
+  const hvw = new Q(bw * zd * 5n, 2n * zn), hvh = new Q(bh * zd * 5n, 2n * zn);
+  const vpMinX = cx.sub(hvw), vpMaxX = cx.add(hvw);
+  const vpMinY = cy.sub(hvh), vpMaxY = cy.add(hvh);
+  for (const s of strokes) {
+    if (s.pts.length < 2) continue;
+    if (s.bbox) {
+      if (!bboxOverlap(s.bbox, vpMinX, vpMaxX, vpMinY, vpMaxY)) continue;
+      if (subpixelCull(s.bbox, zn, zd)) continue;
+    }
+    const pts = transformStrokePts(s, zn, zd, cxn, cxd, cyn, cyd, bw, bh);
+    const fb = floatBBox(pts);
+    screenEntries.push({ pts, col: s.col, w: s.w, ...fb });
+  }
+  scDirty = false;
+}
+
+function addToScreenCache(s) {
+  if (scDirty) return;
+  const zn = zoom.n, zd = zoom.d, cxn = cx.n, cxd = cx.d, cyn = cy.n, cyd = cy.d;
+  const bw = BigInt(W), bh = BigInt(H);
+  const pts = transformStrokePts(s, zn, zd, cxn, cxd, cyn, cyd, bw, bh);
+  // Adjust to cache reference frame
+  for (let i = 0; i < pts.length; i += 2) { pts[i] -= panTotalX; pts[i+1] -= panTotalY; }
+  const fb = floatBBox(pts);
+  screenEntries.push({ pts, col: s.col, w: s.w, ...fb });
+}
+
+// ============================================================
+//  Drawing helpers
+// ============================================================
+function drawCachedStrokes(target, ox, oy) {
+  const cL = -500, cR = W + 500, cT = -500, cB = H + 500;
+  let vis = 0;
+  for (const e of screenEntries) {
+    if (e.pts.length < 4) continue;
+    if (e.x1 + ox < cL || e.x0 + ox > cR || e.y1 + oy < cT || e.y0 + oy > cB) continue;
+    if (e.x1 - e.x0 < 0.5 && e.y1 - e.y0 < 0.5) continue;
+    vis++;
+    target.beginPath(); target.strokeStyle = e.col; target.lineWidth = e.w;
+    target.lineCap = 'round'; target.lineJoin = 'round';
+    let pc = -1;
+    for (let i = 0; i < e.pts.length; i += 2) {
+      const sx = e.pts[i] + ox, sy = e.pts[i+1] + oy;
+      let c = 0;
+      if (sx < cL) c |= 1; else if (sx > cR) c |= 2;
+      if (sy < cT) c |= 4; else if (sy > cB) c |= 8;
+      if (pc < 0) target.moveTo(sx, sy);
+      else if (c === 0 || pc === 0 || !(c & pc)) target.lineTo(sx, sy);
+      else target.moveTo(sx, sy);
+      pc = c;
+    }
+    target.stroke();
+  }
+  return vis;
+}
+
+function drawLiveStroke(target) {
+  if (!cur || cur.pts.length < 2) return;
+  const zn = zoom.n, zd = zoom.d, cxn = cx.n, cxd = cx.d, cyn = cy.n, cyd = cy.d;
+  const bw = BigInt(W), bh = BigInt(H);
+  target.beginPath(); target.strokeStyle = cur.col; target.lineWidth = cur.w;
+  target.lineCap = 'round'; target.lineJoin = 'round';
+  let first = true;
+  for (const pt of cur.pts) {
+    const dxn = pt.x.n * cxd - cxn * pt.x.d, dxd = pt.x.d * cxd;
+    const sx = b2f(dxn * zn * 2n + bw * dxd * zd, dxd * zd * 2n);
+    const dyn = pt.y.n * cyd - cyn * pt.y.d, dyd = pt.y.d * cyd;
+    const sy = b2f(dyn * zn * 2n + bh * dyd * zd, dyd * zd * 2n);
+    if (first) { target.moveTo(sx, sy); first = false; } else target.lineTo(sx, sy);
+  }
+  target.stroke();
+}
+
+// ============================================================
+//  Zoom animation
+//
+//  Two-state design (learned from tldraw/Excalidraw/Fabric.js):
+//
+//  NORMAL: render from screen-coord cache + panTotal offset.
+//  ZOOM_ANIM: GPU-scale a snapshot of the canvas. Zero BigInt.
+//
+//  Transition zoom→normal: sync buildScreenCache() — one
+//  potential frame drop, but no complex async state machine.
+// ============================================================
+let zoomAnim = false;
+let zScale = 1, zTx = 0, zTy = 0;
+let zoomTimer = 0;
+
+// Render committed strokes to offscreen from float cache (never from a bitmap).
+// This prevents stacking: the offscreen is always a clean first-generation render.
+function renderOffscreen() {
+  offCtx.clearRect(0, 0, W, H);
+  drawCachedStrokes(offCtx, panTotalX, panTotalY);
+}
+
+// ============================================================
+//  Render — only two code paths, easy to reason about
+// ============================================================
+let renderRequested = false;
+function requestRender() {
+  if (!renderRequested) { renderRequested = true; requestAnimationFrame(render); }
+}
+
+function render() {
+  renderRequested = false;
+  ctx.clearRect(0, 0, W, H);
+  let visCount = 0;
+
+  if (zoomAnim) {
+    // Scale the offscreen canvas (always clean — rendered from float cache, never a bitmap copy)
+    ctx.save();
+    ctx.imageSmoothingEnabled = false;
+    ctx.transform(zScale, 0, 0, zScale, Math.round(zTx), Math.round(zTy));
+    ctx.drawImage(offCanvas, 0, 0, W, H);
+    ctx.restore();
+    ctx.imageSmoothingEnabled = true;
+    visCount = screenEntries.length;
+  } else {
+    // Accurate render: rebuild cache if needed, render to BOTH offscreen and main canvas.
+    // The offscreen always mirrors committed strokes so it's ready for the next zoom burst.
+    if (scDirty || Math.abs(panTotalX) > W * 2 || Math.abs(panTotalY) > H * 2) {
+      buildScreenCache();
+    }
+    renderOffscreen();
+    ctx.drawImage(offCanvas, 0, 0, W, H);
+    visCount = screenEntries.length;
+    // Reset zoom transform — clean slate for next burst
+    zScale = 1; zTx = 0; zTy = 0;
+  }
+
+  drawLiveStroke(ctx);
+
+  const z = zoomLog();
+  hud.textContent = `zoom: 10^${z.toFixed(1)} | ${visCount}/${strokes.length} vis | ${
+    zoomAnim ? 'zooming...' : 'ready'} | right-drag=pan  scroll=zoom  ctrl+z=undo`;
+}
+
+// Force a synchronous first render so offscreen + canvas have content
+function ensureRendered() {
+  if (scDirty) { buildScreenCache(); }
+  renderOffscreen();
+  ctx.clearRect(0, 0, W, H);
+  ctx.drawImage(offCanvas, 0, 0, W, H);
+  drawLiveStroke(ctx);
+  zScale = 1; zTx = 0; zTy = 0;
+}
+
+// ============================================================
+//  Mouse
+// ============================================================
+canvas.addEventListener('mousedown', e => {
+  e.preventDefault();
+  if (e.button === 2 || e.button === 1 || (e.button === 0 && (e.ctrlKey || e.metaKey))) {
+    panning = true; lastPan = { x: e.clientX, y: e.clientY };
+  } else if (e.button === 0) {
+    drawing = true; lastDrawScreen = { x: e.clientX, y: e.clientY };
+    cur = { pts: [s2w(e.clientX, e.clientY)], w: 2, col: '#fff' };
+  }
+});
+
+addEventListener('mousemove', e => {
+  if (drawing && cur) {
+    if (lastDrawScreen) {
+      const dx = e.clientX - lastDrawScreen.x, dy = e.clientY - lastDrawScreen.y;
+      if (dx * dx + dy * dy < 4) return;
+    }
+    lastDrawScreen = { x: e.clientX, y: e.clientY };
+    cur.pts.push(s2w(e.clientX, e.clientY));
+    requestRender();
+  } else if (panning && lastPan) {
+    const dxPx = Math.round(e.clientX - lastPan.x);
+    const dyPx = Math.round(e.clientY - lastPan.y);
+    panTotalX += dxPx; panTotalY += dyPx;
+    cx = cx.sub(new Q(BigInt(dxPx)).div(zoom));
+    cy = cy.sub(new Q(BigInt(dyPx)).div(zoom));
+    lastPan = { x: e.clientX, y: e.clientY };
+    requestRender();
+  }
+});
+
+addEventListener('mouseup', () => {
+  if (drawing && cur) {
+    if (cur.pts.length >= 2) { finishStroke(cur); saveStrokes(); }
+    cur = null; drawing = false; lastDrawScreen = null;
+  }
+  if (panning) saveViewport();
+  panning = false; lastPan = null;
+});
+
+canvas.addEventListener('contextmenu', e => e.preventDefault());
+
+// ============================================================
+//  Scroll zoom
+// ============================================================
+canvas.addEventListener('wheel', e => {
+  e.preventDefault();
+  if (!e.deltaY) return;
+
+  // Exact BigInt state update (always, so state is correct when anim ends)
+  const mw = s2w(e.clientX, e.clientY);
+  zoom = zoom.mul(e.deltaY < 0 ? ZI : ZO);
+  anchorZoom(mw, e.clientX, e.clientY);
+
+  const factor = e.deltaY < 0 ? 1.1 : 1 / 1.1;
+
+  if (!zoomAnim) {
+    // The offscreen already has a clean render of committed strokes from the
+    // last normal render (or init). zScale/zTx/zTy carry the accumulated
+    // transform from the last accurate render — they persist across bursts
+    // and are only reset when a normal render completes. This prevents
+    // stacking: we never snapshot a scaled bitmap.
+    zoomAnim = true;
+  }
+
+  // Compound float transform around mouse position
+  zTx = zTx * factor + e.clientX * (1 - factor);
+  zTy = zTy * factor + e.clientY * (1 - factor);
+  zScale *= factor;
+
+  requestRender();
+
+  // Debounce: when scrolling stops, exit animation and rebuild
+  clearTimeout(zoomTimer);
+  zoomTimer = setTimeout(() => {
+    zoomAnim = false;
+    scDirty = true;
+    requestRender();
+    saveViewport();
+  }, 150);
+}, { passive: false });
+
+// ============================================================
+//  Keyboard
+// ============================================================
+addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
+    e.preventDefault();
+    if (strokes.length) {
+      strokes.pop(); scDirty = true;
+      zoomAnim = false;
+      saveStrokes(); requestRender();
+    }
+  }
+});
+
+// ============================================================
+//  Touch
+// ============================================================
+let tch = {};
+
+canvas.addEventListener('touchstart', e => {
+  e.preventDefault();
+  for (const t of e.changedTouches) tch[t.identifier] = { x: t.clientX, y: t.clientY };
+  if (e.touches.length === 1 && !panning) {
+    drawing = true;
+    const t0 = e.touches[0];
+    lastDrawScreen = { x: t0.clientX, y: t0.clientY };
+    cur = { pts: [s2w(t0.clientX, t0.clientY)], w: 2, col: '#fff' };
+  } else if (e.touches.length >= 2) {
+    if (cur) { cur = null; drawing = false; lastDrawScreen = null; }
+    panning = true;
+  }
+}, { passive: false });
+
+canvas.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (e.touches.length === 1 && drawing && cur) {
+    const t0 = e.touches[0];
+    if (lastDrawScreen) {
+      const dx = t0.clientX - lastDrawScreen.x, dy = t0.clientY - lastDrawScreen.y;
+      if (dx * dx + dy * dy < 4) return;
+    }
+    lastDrawScreen = { x: t0.clientX, y: t0.clientY };
+    cur.pts.push(s2w(t0.clientX, t0.clientY));
+    requestRender();
+  } else if (e.touches.length === 2 && panning) {
+    const [a, b] = [e.touches[0], e.touches[1]];
+    const pa = tch[a.identifier], pb = tch[b.identifier];
+    if (!pa || !pb) return;
+    const omx = (pa.x + pb.x) / 2, omy = (pa.y + pb.y) / 2;
+    const mx = (a.clientX + b.clientX) / 2, my = (a.clientY + b.clientY) / 2;
+    const od = Math.hypot(pa.x - pb.x, pa.y - pb.y);
+    const nd = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    const mw = s2w(omx, omy);
+    if (od > 10 && nd > 10)
+      zoom = zoom.mul(new Q(BigInt(Math.round(nd * 100)), BigInt(Math.round(od * 100))));
+    anchorZoom(mw, mx, my);
+    scDirty = true;
+    for (const t of e.changedTouches) tch[t.identifier] = { x: t.clientX, y: t.clientY };
+    requestRender();
+  }
+}, { passive: false });
+
+canvas.addEventListener('touchend', e => {
+  for (const t of e.changedTouches) delete tch[t.identifier];
+  if (e.touches.length === 0) {
+    if (drawing && cur) {
+      if (cur.pts.length >= 2) { finishStroke(cur); saveStrokes(); }
+      cur = null; drawing = false; lastDrawScreen = null;
+    }
+    panning = false;
+    saveViewport();
+  }
+});
+
+// ============================================================
+//  Persistence
+//
+//  Strokes → localStorage (immediate, no debounce)
+//  Viewport (cx, cy, zoom) → URL hash (so you can share/bookmark a location)
+// ============================================================
+function saveStrokes() {
+  try {
+    localStorage.setItem('izd2', JSON.stringify(
+      strokes.map(s => ({
+        p: s.pts.map(p => ({ x: p.x.json(), y: p.y.json() })),
+        w: s.w, c: s.col, zl: s.zlog
+      }))
+    ));
+  } catch (e) { console.warn('Stroke save failed:', e); }
+}
+
+function saveViewport() {
+  const h = `${cx.n}/${cx.d},${cy.n}/${cy.d},${zoom.n}/${zoom.d}`;
+  history.replaceState(null, '', '#' + h);
+}
+
+function loadStrokes() {
+  try {
+    // Try new format first
+    let raw = localStorage.getItem('izd2');
+    if (raw) {
+      const arr = JSON.parse(raw);
+      strokes = arr.map(s => {
+        const pts = s.p.map(p => ({ x: Q.parse(p.x), y: Q.parse(p.y) }));
+        return { pts, w: s.w, col: s.c, zlog: s.zl || 0, bbox: computeBBox(pts) };
+      });
+      return;
+    }
+    // Migrate from old format
+    raw = localStorage.getItem('izd');
+    if (raw) {
+      const d = JSON.parse(raw);
+      strokes = d.s.map(s => {
+        const pts = s.p.map(p => ({ x: Q.parse(p.x), y: Q.parse(p.y) }));
+        return { pts, w: s.w, col: s.c, zlog: s.zl || 0, bbox: computeBBox(pts) };
+      });
+      // If no hash yet, migrate viewport from old format
+      if (!location.hash.slice(1)) {
+        cx = Q.parse(d.cx); cy = Q.parse(d.cy); zoom = Q.parse(d.z);
+        saveViewport();
+      }
+      // Save in new format and remove old key
+      saveStrokes();
+      localStorage.removeItem('izd');
+    }
+  } catch (e) { console.warn('Load failed:', e); }
+}
+
+function loadViewport() {
+  const h = location.hash.slice(1);
+  if (!h) return false;
+  try {
+    const parts = h.split(',');
+    if (parts.length !== 3) return false;
+    const [cxp, cyp, zp] = parts.map(p => {
+      const [n, d] = p.split('/');
+      return new Q(BigInt(n), BigInt(d));
+    });
+    cx = cxp; cy = cyp; zoom = zp;
+    return true;
+  } catch (e) { return false; }
+}
+
+// Navigate to a hash location (browser back/forward)
+addEventListener('hashchange', () => {
+  if (loadViewport()) {
+    scDirty = true;
+    zoomAnim = false;
+    requestRender();
+  }
+});
+
+// ============================================================
+//  Init
+// ============================================================
+loadStrokes();       // strokes from localStorage
+loadViewport();      // viewport from URL hash (overrides default cx/cy/zoom)
+resize();
+ensureRendered();    // force first render so canvas has content for zoom snapshots
+if (!location.hash.slice(1)) saveViewport(); // seed the hash if empty
+</script>
+</body>
+</html>
