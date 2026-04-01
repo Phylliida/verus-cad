@@ -1,6 +1,5 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "minimax/minimax-m2.7",
   "provider": {
     "openrouter": {
       "models": {
@@ -45,7 +44,7 @@
   "mcp": {
     "verus": {
       "type": "local",
-      "command": ["/Users/yams/Prog/verus-cad/verus-mcp/target/release/verus-mcp"],
+      "command": ["/home/bepis/prog/verus-cad/verus-mcp/target/release/verus-mcp"],
       "enabled": true,
       "timeout": 500000,
     }

@@ -5,7 +5,7 @@ use crate::presentation_lemmas::*;
 
 verus! {
 
-/// Add a single relator to a presentation.
+///  Add a single relator to a presentation.
 pub open spec fn add_relator(p: Presentation, r: Word) -> Presentation {
     Presentation {
         num_generators: p.num_generators,
@@ -13,7 +13,7 @@ pub open spec fn add_relator(p: Presentation, r: Word) -> Presentation {
     }
 }
 
-/// Add multiple relators to a presentation (recursive).
+///  Add multiple relators to a presentation (recursive).
 pub open spec fn add_relators(p: Presentation, rs: Seq<Word>) -> Presentation
     decreases rs.len(),
 {
@@ -24,9 +24,9 @@ pub open spec fn add_relators(p: Presentation, rs: Seq<Word>) -> Presentation
     }
 }
 
-// --- Lemmas ---
+//  --- Lemmas ---
 
-/// Adding a relator extends the presentation.
+///  Adding a relator extends the presentation.
 pub proof fn lemma_add_relator_extends(p: Presentation, r: Word)
     ensures
         extends_presentation(p, add_relator(p, r)),
@@ -37,7 +37,7 @@ pub proof fn lemma_add_relator_extends(p: Presentation, r: Word)
     assert(p2.relators.subrange(0, p.relators.len() as int) =~= p.relators);
 }
 
-/// Extension is transitive.
+///  Extension is transitive.
 pub proof fn lemma_extends_transitive(p1: Presentation, p2: Presentation, p3: Presentation)
     requires
         extends_presentation(p1, p2),
@@ -47,13 +47,13 @@ pub proof fn lemma_extends_transitive(p1: Presentation, p2: Presentation, p3: Pr
 {
     assert(p3.num_generators == p1.num_generators);
     assert(p1.relators.len() <= p2.relators.len() <= p3.relators.len());
-    // p3.relators[0..p2.len] == p2.relators
-    // p2.relators[0..p1.len] == p1.relators
-    // So p3.relators[0..p1.len] == p1.relators
+    //  p3.relators[0..p2.len] == p2.relators
+    //  p2.relators[0..p1.len] == p1.relators
+    //  So p3.relators[0..p1.len] == p1.relators
     assert(p3.relators.subrange(0, p1.relators.len() as int) =~= p1.relators);
 }
 
-/// Adding a relator preserves existing equivalences.
+///  Adding a relator preserves existing equivalences.
 pub proof fn lemma_add_relator_preserves_equiv(
     p: Presentation, r: Word, w1: Word, w2: Word,
 )
@@ -66,7 +66,7 @@ pub proof fn lemma_add_relator_preserves_equiv(
     lemma_quotient_preserves_equiv(p, add_relator(p, r), w1, w2);
 }
 
-/// The newly added relator is the identity in the extended presentation.
+///  The newly added relator is the identity in the extended presentation.
 pub proof fn lemma_added_relator_is_identity(p: Presentation, r: Word)
     ensures
         equiv_in_presentation(add_relator(p, r), r, empty_word()),
@@ -77,7 +77,7 @@ pub proof fn lemma_added_relator_is_identity(p: Presentation, r: Word)
     lemma_relator_is_identity(p2, idx as int);
 }
 
-/// Conjugates of the added relator are also identity.
+///  Conjugates of the added relator are also identity.
 pub proof fn lemma_normal_closure_contains_conjugates(
     p: Presentation, r: Word, w: Word,
 )
@@ -94,7 +94,7 @@ pub proof fn lemma_normal_closure_contains_conjugates(
     lemma_conjugate_relator_is_identity(p2, w, idx as int);
 }
 
-/// Adding multiple relators extends the original presentation.
+///  Adding multiple relators extends the original presentation.
 pub proof fn lemma_add_relators_extends(p: Presentation, rs: Seq<Word>)
     ensures
         extends_presentation(p, add_relators(p, rs)),
@@ -110,7 +110,7 @@ pub proof fn lemma_add_relators_extends(p: Presentation, rs: Seq<Word>)
     }
 }
 
-/// Adding multiple relators preserves existing equivalences.
+///  Adding multiple relators preserves existing equivalences.
 pub proof fn lemma_add_relators_preserves_equiv(
     p: Presentation, rs: Seq<Word>, w1: Word, w2: Word,
 )
@@ -123,7 +123,7 @@ pub proof fn lemma_add_relators_preserves_equiv(
     lemma_quotient_preserves_equiv(p, add_relators(p, rs), w1, w2);
 }
 
-/// Each added relator is the identity in the extended presentation.
+///  Each added relator is the identity in the extended presentation.
 pub proof fn lemma_each_added_relator_is_identity(
     p: Presentation, rs: Seq<Word>, i: int,
 )
@@ -134,13 +134,13 @@ pub proof fn lemma_each_added_relator_is_identity(
     decreases rs.len(),
 {
     if rs.len() == 0 {
-        // impossible
+        //  impossible
     } else {
         let p1 = add_relator(p, rs.first());
         if i == 0 {
-            // rs[0] = rs.first() is the identity in p1
+            //  rs[0] = rs.first() is the identity in p1
             lemma_added_relator_is_identity(p, rs.first());
-            // Lift to add_relators(p1, rs.drop_first())
+            //  Lift to add_relators(p1, rs.drop_first())
             lemma_add_relators_extends(p1, rs.drop_first());
             lemma_quotient_preserves_equiv(
                 p1,
@@ -150,14 +150,14 @@ pub proof fn lemma_each_added_relator_is_identity(
             );
             assert(rs[0] == rs.first());
         } else {
-            // rs[i] == rs.drop_first()[i-1]
+            //  rs[i] == rs.drop_first()[i-1]
             assert(rs[i] == rs.drop_first()[(i - 1) as int]);
             lemma_each_added_relator_is_identity(p1, rs.drop_first(), i - 1);
         }
     }
 }
 
-/// Adding relators preserves presentation_valid when all added words are word_valid.
+///  Adding relators preserves presentation_valid when all added words are word_valid.
 pub proof fn lemma_add_relators_valid(p: Presentation, rs: Seq<Word>)
     requires
         presentation_valid(p),
@@ -191,4 +191,4 @@ pub proof fn lemma_add_relators_valid(p: Presentation, rs: Seq<Word>)
     }
 }
 
-} // verus!
+} //  verus!

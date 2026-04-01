@@ -3,22 +3,22 @@ use crate::symbol::*;
 
 verus! {
 
-/// A word is a finite sequence of symbols.
-/// The empty word represents the group identity.
+///  A word is a finite sequence of symbols.
+///  The empty word represents the group identity.
 pub type Word = Seq<Symbol>;
 
-/// The empty word (identity element).
+///  The empty word (identity element).
 pub open spec fn empty_word() -> Word {
     Seq::empty()
 }
 
-/// Concatenation of two words.
+///  Concatenation of two words.
 pub open spec fn concat(w1: Word, w2: Word) -> Word {
     w1 + w2
 }
 
-/// The formal inverse of a word: reverse and invert each symbol.
-/// (s₁ s₂ ... sₙ)⁻¹ = sₙ⁻¹ ... s₂⁻¹ s₁⁻¹
+///  The formal inverse of a word: reverse and invert each symbol.
+///  (s₁ s₂ ... sₙ)⁻¹ = sₙ⁻¹ ... s₂⁻¹ s₁⁻¹
 pub open spec fn inverse_word(w: Word) -> Word
     decreases w.len(),
 {
@@ -29,7 +29,7 @@ pub open spec fn inverse_word(w: Word) -> Word
     }
 }
 
-/// Length of the inverse word equals the original.
+///  Length of the inverse word equals the original.
 pub proof fn lemma_inverse_word_len(w: Word)
     ensures
         inverse_word(w).len() == w.len(),
@@ -40,19 +40,19 @@ pub proof fn lemma_inverse_word_len(w: Word)
     }
 }
 
-/// All symbols in a word are valid for a group with `n` generators.
+///  All symbols in a word are valid for a group with `n` generators.
 pub open spec fn word_valid(w: Word, n: nat) -> bool {
     forall|i: int| 0 <= i < w.len() ==> symbol_valid(#[trigger] w[i], n)
 }
 
-/// The inverse of the empty word is empty.
+///  The inverse of the empty word is empty.
 pub proof fn lemma_inverse_empty()
     ensures
         inverse_word(empty_word()) == empty_word(),
 {
 }
 
-/// Inverse of a single-symbol word.
+///  Inverse of a single-symbol word.
 pub proof fn lemma_inverse_singleton(s: Symbol)
     ensures
         inverse_word(Seq::new(1, |_i: int| s)) =~= Seq::new(1, |_i: int| inverse_symbol(s)),
@@ -65,8 +65,8 @@ pub proof fn lemma_inverse_singleton(s: Symbol)
     assert(inverse_word(empty_word()) =~= empty_word());
 }
 
-/// Inverse distributes over concatenation (reversed).
-/// (w1 · w2)⁻¹ = w2⁻¹ · w1⁻¹
+///  Inverse distributes over concatenation (reversed).
+///  (w1 · w2)⁻¹ = w2⁻¹ · w1⁻¹
 pub proof fn lemma_inverse_concat(w1: Word, w2: Word)
     ensures
         inverse_word(concat(w1, w2)) =~= concat(inverse_word(w2), inverse_word(w1)),
@@ -77,31 +77,31 @@ pub proof fn lemma_inverse_concat(w1: Word, w2: Word)
         assert(inverse_word(w1) =~= empty_word());
         assert(concat(inverse_word(w2), empty_word()) =~= inverse_word(w2));
     } else {
-        // w1 = first · rest
+        //  w1 = first · rest
         let first = w1.first();
         let rest = w1.drop_first();
-        // concat(w1, w2) = first · concat(rest, w2)
+        //  concat(w1, w2) = first · concat(rest, w2)
         assert(concat(w1, w2).drop_first() =~= concat(rest, w2));
         assert(concat(w1, w2).first() == first);
 
-        // IH: inverse(concat(rest, w2)) =~= concat(inverse(w2), inverse(rest))
+        //  IH: inverse(concat(rest, w2)) =~= concat(inverse(w2), inverse(rest))
         lemma_inverse_concat(rest, w2);
 
-        // inverse(w1) = inverse(rest) · inv(first)
-        // inverse(concat(w1, w2)) = inverse(concat(rest, w2)) · inv(first)
-        //                         = concat(inverse(w2), inverse(rest)) · inv(first)
-        //                         = concat(inverse(w2), inverse(rest) · inv(first))
-        //                         = concat(inverse(w2), inverse(w1))
+        //  inverse(w1) = inverse(rest) · inv(first)
+        //  inverse(concat(w1, w2)) = inverse(concat(rest, w2)) · inv(first)
+        //                          = concat(inverse(w2), inverse(rest)) · inv(first)
+        //                          = concat(inverse(w2), inverse(rest) · inv(first))
+        //                          = concat(inverse(w2), inverse(w1))
         let inv_first = Seq::new(1, |_i: int| inverse_symbol(first));
         assert(inverse_word(w1) =~= inverse_word(rest) + inv_first);
         assert(inverse_word(concat(w1, w2)) =~= (inverse_word(w2) + inverse_word(rest)) + inv_first);
         assert(concat(inverse_word(w2), inverse_word(w1)) =~= inverse_word(w2) + (inverse_word(rest) + inv_first));
-        // Seq concat is associative
+        //  Seq concat is associative
         assert(((inverse_word(w2) + inverse_word(rest)) + inv_first) =~= (inverse_word(w2) + (inverse_word(rest) + inv_first)));
     }
 }
 
-/// Inverse is an involution: (w⁻¹)⁻¹ = w.
+///  Inverse is an involution: (w⁻¹)⁻¹ = w.
 pub proof fn lemma_inverse_involution(w: Word)
     ensures
         inverse_word(inverse_word(w)) =~= w,
@@ -113,15 +113,15 @@ pub proof fn lemma_inverse_involution(w: Word)
         let rest = w.drop_first();
         let inv_first = Seq::new(1, |_i: int| inverse_symbol(first));
 
-        // inverse(w) = inverse(rest) · inv(first)
+        //  inverse(w) = inverse(rest) · inv(first)
         lemma_inverse_involution(rest);
 
-        // inverse(inverse(w)) = inverse(inverse(rest) · inv(first))
-        //                     = inverse(inv(first)) · inverse(inverse(rest))    by lemma_inverse_concat
-        //                     = first · rest = w                                 by IH
+        //  inverse(inverse(w)) = inverse(inverse(rest) · inv(first))
+        //                      = inverse(inv(first)) · inverse(inverse(rest))    by lemma_inverse_concat
+        //                      = first · rest = w                                 by IH
         lemma_inverse_concat(inverse_word(rest), inv_first);
 
-        // inverse(inv(first)) = [first]
+        //  inverse(inv(first)) = [first]
         lemma_inverse_singleton(inverse_symbol(first));
         crate::symbol::lemma_inverse_involution(first);
         assert(inverse_word(inv_first) =~= Seq::new(1, |_i: int| first));
@@ -130,35 +130,35 @@ pub proof fn lemma_inverse_involution(w: Word)
     }
 }
 
-/// Concatenation with the empty word (right identity).
+///  Concatenation with the empty word (right identity).
 pub proof fn lemma_concat_empty_right(w: Word)
     ensures
         concat(w, empty_word()) =~= w,
 {
 }
 
-/// Concatenation with the empty word (left identity).
+///  Concatenation with the empty word (left identity).
 pub proof fn lemma_concat_empty_left(w: Word)
     ensures
         concat(empty_word(), w) =~= w,
 {
 }
 
-/// Concatenation is associative.
+///  Concatenation is associative.
 pub proof fn lemma_concat_assoc(w1: Word, w2: Word, w3: Word)
     ensures
         concat(concat(w1, w2), w3) =~= concat(w1, concat(w2, w3)),
 {
 }
 
-/// Length of concatenation is sum of lengths.
+///  Length of concatenation is sum of lengths.
 pub proof fn lemma_concat_len(w1: Word, w2: Word)
     ensures
         concat(w1, w2).len() == w1.len() + w2.len(),
 {
 }
 
-/// inverse_word preserves word_valid.
+///  inverse_word preserves word_valid.
 pub proof fn lemma_inverse_word_valid(w: Word, n: nat)
     requires word_valid(w, n),
     ensures word_valid(inverse_word(w), n),
@@ -189,7 +189,7 @@ pub proof fn lemma_inverse_word_valid(w: Word, n: nat)
     }
 }
 
-/// Concatenation preserves word_valid.
+///  Concatenation preserves word_valid.
 pub proof fn lemma_concat_word_valid(w1: Word, w2: Word, n: nat)
     requires word_valid(w1, n), word_valid(w2, n),
     ensures word_valid(concat(w1, w2), n),
@@ -205,4 +205,4 @@ pub proof fn lemma_concat_word_valid(w1: Word, w2: Word, n: nat)
     }
 }
 
-} // verus!
+} //  verus!

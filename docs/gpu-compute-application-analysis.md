@@ -362,13 +362,13 @@ y[i] = sum_{j in row(i)} A[row_ptr[i]..row_ptr[i+1]] * x[col_idx[j]]
 ```
 r = b - Ax; p = r; rsold = dot(r,r)
 repeat:
-  Ap = A*p                    // SpMV
-  alpha = rsold / dot(p, Ap)  // dot product (reduce)
-  x = x + alpha * p           // vector update (map)
-  r = r - alpha * Ap           // vector update (map)
-  rsnew = dot(r, r)           // dot product (reduce)
+  Ap = A*p                    //  SpMV
+  alpha = rsold / dot(p, Ap)  //  dot product (reduce)
+  x = x + alpha * p           //  vector update (map)
+  r = r - alpha * Ap           //  vector update (map)
+  rsnew = dot(r, r)           //  dot product (reduce)
   if sqrt(rsnew) < tol: break
-  p = r + (rsnew/rsold) * p   // vector update (map)
+  p = r + (rsnew/rsold) * p   //  vector update (map)
   rsold = rsnew
 ```
 

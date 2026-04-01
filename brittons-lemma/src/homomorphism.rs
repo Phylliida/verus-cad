@@ -7,14 +7,14 @@ use crate::reduction::*;
 
 verus! {
 
-/// Data defining a group homomorphism via generator images.
+///  Data defining a group homomorphism via generator images.
 pub struct HomomorphismData {
     pub source: Presentation,
     pub target: Presentation,
     pub generator_images: Seq<Word>,
 }
 
-/// Image of a single symbol under the homomorphism.
+///  Image of a single symbol under the homomorphism.
 pub open spec fn apply_hom_symbol(h: HomomorphismData, s: Symbol) -> Word {
     match s {
         Symbol::Gen(i) => h.generator_images[i as int],
@@ -22,7 +22,7 @@ pub open spec fn apply_hom_symbol(h: HomomorphismData, s: Symbol) -> Word {
     }
 }
 
-/// Image of a word under the homomorphism.
+///  Image of a word under the homomorphism.
 pub open spec fn apply_hom(h: HomomorphismData, w: Word) -> Word
     decreases w.len(),
 {
@@ -33,9 +33,9 @@ pub open spec fn apply_hom(h: HomomorphismData, w: Word) -> Word
     }
 }
 
-/// A homomorphism is valid if images.len() == num_generators,
-/// both presentations are valid, generator images are word_valid,
-/// and each relator image ≡ ε.
+///  A homomorphism is valid if images.len() == num_generators,
+///  both presentations are valid, generator images are word_valid,
+///  and each relator image ≡ ε.
 pub open spec fn is_valid_homomorphism(h: HomomorphismData) -> bool {
     h.generator_images.len() == h.source.num_generators
     && presentation_valid(h.source)
@@ -46,7 +46,7 @@ pub open spec fn is_valid_homomorphism(h: HomomorphismData) -> bool {
         equiv_in_presentation(h.target, apply_hom(h, h.source.relators[i]), empty_word()))
 }
 
-/// The identity homomorphism: Gen(i) → [Gen(i)].
+///  The identity homomorphism: Gen(i) → [Gen(i)].
 pub open spec fn identity_hom(p: Presentation) -> HomomorphismData {
     HomomorphismData {
         source: p,
@@ -57,7 +57,7 @@ pub open spec fn identity_hom(p: Presentation) -> HomomorphismData {
     }
 }
 
-/// Composition of homomorphisms.
+///  Composition of homomorphisms.
 pub open spec fn compose_hom(h1: HomomorphismData, h2: HomomorphismData) -> HomomorphismData {
     HomomorphismData {
         source: h1.source,
@@ -68,9 +68,9 @@ pub open spec fn compose_hom(h1: HomomorphismData, h2: HomomorphismData) -> Homo
     }
 }
 
-// --- Helpers ---
+//  --- Helpers ---
 
-/// apply_hom of a singleton word.
+///  apply_hom of a singleton word.
 pub proof fn lemma_hom_singleton(h: HomomorphismData, s: Symbol)
     ensures
         apply_hom(h, Seq::new(1, |_i: int| s)) =~= apply_hom_symbol(h, s),
@@ -80,14 +80,14 @@ pub proof fn lemma_hom_singleton(h: HomomorphismData, s: Symbol)
     assert(w.first() == s);
     let tail = w.drop_first();
     assert(tail.len() == 0);
-    // apply_hom(h, w) = concat(apply_hom_symbol(h, s), apply_hom(h, tail))
-    // apply_hom(h, tail) = empty_word() because tail.len() == 0
+    //  apply_hom(h, w) = concat(apply_hom_symbol(h, s), apply_hom(h, tail))
+    //  apply_hom(h, tail) = empty_word() because tail.len() == 0
     assert(apply_hom(h, tail) =~= empty_word());
-    // concat(x, empty) =~= x
+    //  concat(x, empty) =~= x
     assert(concat(apply_hom_symbol(h, s), empty_word()) =~= apply_hom_symbol(h, s));
 }
 
-/// Image of a single symbol is word_valid for target.
+///  Image of a single symbol is word_valid for target.
 proof fn lemma_apply_hom_symbol_word_valid(h: HomomorphismData, s: Symbol)
     requires
         is_valid_homomorphism(h),
@@ -104,7 +104,7 @@ proof fn lemma_apply_hom_symbol_word_valid(h: HomomorphismData, s: Symbol)
     }
 }
 
-/// Image of a word under a valid homomorphism is word_valid for target.
+///  Image of a word under a valid homomorphism is word_valid for target.
 pub proof fn lemma_apply_hom_word_valid(h: HomomorphismData, w: Word)
     requires
         is_valid_homomorphism(h),
@@ -128,7 +128,7 @@ pub proof fn lemma_apply_hom_word_valid(h: HomomorphismData, w: Word)
     }
 }
 
-/// concat(x, suffix) ≡ suffix when x ≡ ε.
+///  concat(x, suffix) ≡ suffix when x ≡ ε.
 pub proof fn lemma_identity_prefix_equiv(p: Presentation, x: Word, suffix: Word)
     requires
         equiv_in_presentation(p, x, empty_word()),
@@ -141,7 +141,7 @@ pub proof fn lemma_identity_prefix_equiv(p: Presentation, x: Word, suffix: Word)
     lemma_equiv_transitive(p, concat(x, suffix), concat(empty_word(), suffix), suffix);
 }
 
-/// hom(r) ≡ ε for an inverted relator.
+///  hom(r) ≡ ε for an inverted relator.
 proof fn lemma_inverted_relator_image_is_identity(h: HomomorphismData, relator_index: nat)
     requires
         is_valid_homomorphism(h),
@@ -157,7 +157,7 @@ proof fn lemma_inverted_relator_image_is_identity(h: HomomorphismData, relator_i
     let orig_r = h.source.relators[relator_index as int];
     let hom_orig = apply_hom(h, orig_r);
 
-    // word_valid facts for lemma_equiv_symmetric calls
+    //  word_valid facts for lemma_equiv_symmetric calls
     assert(word_valid(orig_r, h.source.num_generators));
     lemma_apply_hom_word_valid(h, orig_r);
     let n = h.target.num_generators;
@@ -185,7 +185,7 @@ proof fn lemma_inverted_relator_image_is_identity(h: HomomorphismData, relator_i
     assert(apply_hom(h, inverse_word(orig_r)) =~= inverse_word(hom_orig));
 }
 
-/// hom_r ≡ ε for either direct or inverted relator.
+///  hom_r ≡ ε for either direct or inverted relator.
 proof fn lemma_relator_image_is_identity(h: HomomorphismData, relator_index: nat, inverted: bool)
     requires
         is_valid_homomorphism(h),
@@ -202,16 +202,16 @@ proof fn lemma_relator_image_is_identity(h: HomomorphismData, relator_index: nat
     }
 }
 
-// --- Main Lemmas ---
+//  --- Main Lemmas ---
 
-/// Homomorphism of empty word is empty.
+///  Homomorphism of empty word is empty.
 pub proof fn lemma_hom_empty(h: HomomorphismData)
     ensures
         apply_hom(h, empty_word()) =~= empty_word(),
 {
 }
 
-/// Homomorphism respects concatenation.
+///  Homomorphism respects concatenation.
 pub proof fn lemma_hom_respects_concat(h: HomomorphismData, w1: Word, w2: Word)
     ensures
         apply_hom(h, concat(w1, w2)) =~= concat(apply_hom(h, w1), apply_hom(h, w2)),
@@ -230,7 +230,7 @@ pub proof fn lemma_hom_respects_concat(h: HomomorphismData, w1: Word, w2: Word)
     }
 }
 
-/// Homomorphism respects word inverse.
+///  Homomorphism respects word inverse.
 pub proof fn lemma_hom_respects_inverse(h: HomomorphismData, w: Word)
     ensures
         apply_hom(h, inverse_word(w)) =~= inverse_word(apply_hom(h, w)),
@@ -258,7 +258,7 @@ pub proof fn lemma_hom_respects_inverse(h: HomomorphismData, w: Word)
     }
 }
 
-/// Homomorphism preserves a single derivation step.
+///  Homomorphism preserves a single derivation step.
 pub proof fn lemma_hom_preserves_single_step(
     h: HomomorphismData,
     w: Word, step: DerivationStep, w_prime: Word,
@@ -285,7 +285,7 @@ pub proof fn lemma_hom_preserves_single_step(
     }
 }
 
-/// Helper: hom preserves FreeReduce step.
+///  Helper: hom preserves FreeReduce step.
 proof fn lemma_hom_preserves_free_reduce(
     h: HomomorphismData, w: Word, position: int,
 )
@@ -308,7 +308,7 @@ proof fn lemma_hom_preserves_free_reduce(
     let reduced = reduce_at(w, position);
     assert(reduced =~= prefix + suffix);
 
-    // Decompose w = (prefix + pair) + suffix
+    //  Decompose w = (prefix + pair) + suffix
     lemma_hom_respects_concat(h, prefix + pair, suffix);
     lemma_hom_respects_concat(h, prefix, pair);
     lemma_hom_respects_concat(h, s1_word, s2_word);
@@ -320,7 +320,7 @@ proof fn lemma_hom_preserves_free_reduce(
     let img_s1 = apply_hom_symbol(h, s1);
     let img_s2 = apply_hom_symbol(h, s2);
 
-    // img_s2 = inverse_word(img_s1)
+    //  img_s2 = inverse_word(img_s1)
     match s1 {
         Symbol::Gen(_idx) => {},
         Symbol::Inv(idx) => {
@@ -334,18 +334,18 @@ proof fn lemma_hom_preserves_free_reduce(
     let hom_suffix = apply_hom(h, suffix);
     let pair_img = concat(img_s1, img_s2);
 
-    // apply_hom(w) =~= concat(concat(hom_prefix, pair_img), hom_suffix)
-    // We need: concat(concat(hom_prefix, pair_img), hom_suffix)
-    //       =~= concat(hom_prefix, concat(pair_img, hom_suffix))
+    //  apply_hom(w) =~= concat(concat(hom_prefix, pair_img), hom_suffix)
+    //  We need: concat(concat(hom_prefix, pair_img), hom_suffix)
+    //        =~= concat(hom_prefix, concat(pair_img, hom_suffix))
     lemma_concat_assoc(hom_prefix, pair_img, hom_suffix);
 
-    // pair_img ≡ ε → concat(pair_img, hom_suffix) ≡ hom_suffix
+    //  pair_img ≡ ε → concat(pair_img, hom_suffix) ≡ hom_suffix
     lemma_identity_prefix_equiv(h.target, pair_img, hom_suffix);
-    // concat(hom_prefix, concat(pair_img, hom_suffix)) ≡ concat(hom_prefix, hom_suffix)
+    //  concat(hom_prefix, concat(pair_img, hom_suffix)) ≡ concat(hom_prefix, hom_suffix)
     lemma_equiv_concat_right(h.target, hom_prefix, concat(pair_img, hom_suffix), hom_suffix);
 }
 
-/// Helper: hom preserves FreeExpand step.
+///  Helper: hom preserves FreeExpand step.
 proof fn lemma_hom_preserves_free_expand(
     h: HomomorphismData, w: Word, position: int, symbol: Symbol,
 )
@@ -392,30 +392,30 @@ proof fn lemma_hom_preserves_free_expand(
     let hom_suffix = apply_hom(h, suffix);
     let pair_img = concat(img_s, img_inv_s);
 
-    // apply_hom(w_prime) =~= concat(concat(hom_prefix, pair_img), hom_suffix)
-    //                    =~= concat(hom_prefix, concat(pair_img, hom_suffix))
+    //  apply_hom(w_prime) =~= concat(concat(hom_prefix, pair_img), hom_suffix)
+    //                     =~= concat(hom_prefix, concat(pair_img, hom_suffix))
     lemma_concat_assoc(hom_prefix, pair_img, hom_suffix);
 
-    // pair_img ≡ ε
-    // symmetric: ε ≡ pair_img (need word_valid(pair_img) — provable from symbol_valid)
+    //  pair_img ≡ ε
+    //  symmetric: ε ≡ pair_img (need word_valid(pair_img) — provable from symbol_valid)
     lemma_apply_hom_symbol_word_valid(h, symbol);
     crate::symbol::lemma_inverse_preserves_valid(symbol, h.source.num_generators);
     lemma_apply_hom_symbol_word_valid(h, inverse_symbol(symbol));
     crate::word::lemma_concat_word_valid(img_s, img_inv_s, h.target.num_generators);
     lemma_equiv_symmetric(h.target, pair_img, empty_word());
 
-    // ε ≡ pair_img → concat(ε, hom_suffix) ≡ concat(pair_img, hom_suffix)
+    //  ε ≡ pair_img → concat(ε, hom_suffix) ≡ concat(pair_img, hom_suffix)
     lemma_equiv_concat_left(h.target, empty_word(), pair_img, hom_suffix);
-    // concat(ε, hom_suffix) =~= hom_suffix
-    // concat(hom_prefix, concat(ε, hom_suffix)) ≡ concat(hom_prefix, concat(pair_img, hom_suffix))
+    //  concat(ε, hom_suffix) =~= hom_suffix
+    //  concat(hom_prefix, concat(ε, hom_suffix)) ≡ concat(hom_prefix, concat(pair_img, hom_suffix))
     lemma_equiv_concat_right(h.target, hom_prefix,
         concat(empty_word(), hom_suffix), concat(pair_img, hom_suffix));
 
-    // apply_hom(w) =~= concat(hom_prefix, hom_suffix) =~= concat(hom_prefix, concat(ε, hom_suffix))
-    // apply_hom(w_prime) =~= concat(hom_prefix, concat(pair_img, hom_suffix))
+    //  apply_hom(w) =~= concat(hom_prefix, hom_suffix) =~= concat(hom_prefix, concat(ε, hom_suffix))
+    //  apply_hom(w_prime) =~= concat(hom_prefix, concat(pair_img, hom_suffix))
 }
 
-/// Helper: hom preserves RelatorInsert step.
+///  Helper: hom preserves RelatorInsert step.
 proof fn lemma_hom_preserves_relator_insert(
     h: HomomorphismData, w: Word,
     position: int, relator_index: nat, inverted: bool,
@@ -449,12 +449,12 @@ proof fn lemma_hom_preserves_relator_insert(
 
     lemma_relator_image_is_identity(h, relator_index, inverted);
 
-    // apply_hom(w_prime) =~= concat(concat(hom_prefix, hom_r), hom_suffix)
-    //                    =~= concat(hom_prefix, concat(hom_r, hom_suffix))
+    //  apply_hom(w_prime) =~= concat(concat(hom_prefix, hom_r), hom_suffix)
+    //                     =~= concat(hom_prefix, concat(hom_r, hom_suffix))
     lemma_concat_assoc(hom_prefix, hom_r, hom_suffix);
 
-    // hom_r ≡ ε → symmetric: ε ≡ hom_r
-    // Prove word_valid(hom_r) for symmetric call
+    //  hom_r ≡ ε → symmetric: ε ≡ hom_r
+    //  Prove word_valid(hom_r) for symmetric call
     let rel = get_relator(h.source, relator_index, inverted);
     assert(word_valid(h.source.relators[relator_index as int], h.source.num_generators));
     if inverted {
@@ -464,15 +464,15 @@ proof fn lemma_hom_preserves_relator_insert(
     lemma_apply_hom_word_valid(h, rel);
     lemma_equiv_symmetric(h.target, hom_r, empty_word());
 
-    // ε ≡ hom_r → concat(ε, hom_suffix) ≡ concat(hom_r, hom_suffix)
+    //  ε ≡ hom_r → concat(ε, hom_suffix) ≡ concat(hom_r, hom_suffix)
     lemma_equiv_concat_left(h.target, empty_word(), hom_r, hom_suffix);
-    // concat(hom_prefix, concat(ε, hom_suffix)) ≡ concat(hom_prefix, concat(hom_r, hom_suffix))
+    //  concat(hom_prefix, concat(ε, hom_suffix)) ≡ concat(hom_prefix, concat(hom_r, hom_suffix))
     lemma_equiv_concat_right(h.target, hom_prefix,
         concat(empty_word(), hom_suffix), concat(hom_r, hom_suffix));
-    // apply_hom(w) =~= concat(hom_prefix, hom_suffix) =~= concat(hom_prefix, concat(ε, hom_suffix))
+    //  apply_hom(w) =~= concat(hom_prefix, hom_suffix) =~= concat(hom_prefix, concat(ε, hom_suffix))
 }
 
-/// Helper: hom preserves RelatorDelete step.
+///  Helper: hom preserves RelatorDelete step.
 proof fn lemma_hom_preserves_relator_delete(
     h: HomomorphismData, w: Word,
     position: int, relator_index: nat, inverted: bool,
@@ -507,15 +507,15 @@ proof fn lemma_hom_preserves_relator_delete(
 
     lemma_relator_image_is_identity(h, relator_index, inverted);
 
-    // apply_hom(w) =~= concat(concat(hom_prefix, hom_r), hom_suffix)
-    //              =~= concat(hom_prefix, concat(hom_r, hom_suffix))
+    //  apply_hom(w) =~= concat(concat(hom_prefix, hom_r), hom_suffix)
+    //               =~= concat(hom_prefix, concat(hom_r, hom_suffix))
     lemma_concat_assoc(hom_prefix, hom_r, hom_suffix);
 
     lemma_identity_prefix_equiv(h.target, hom_r, hom_suffix);
     lemma_equiv_concat_right(h.target, hom_prefix, concat(hom_r, hom_suffix), hom_suffix);
 }
 
-/// Homomorphism preserves a derivation (sequence of steps).
+///  Homomorphism preserves a derivation (sequence of steps).
 pub proof fn lemma_hom_preserves_derivation(
     h: HomomorphismData,
     steps: Seq<DerivationStep>, w: Word, w_prime: Word,
@@ -541,7 +541,7 @@ pub proof fn lemma_hom_preserves_derivation(
     }
 }
 
-/// **Main theorem**: Homomorphisms preserve equivalence.
+///  **Main theorem**: Homomorphisms preserve equivalence.
 pub proof fn lemma_hom_preserves_equiv(
     h: HomomorphismData, w1: Word, w2: Word,
 )
@@ -555,7 +555,7 @@ pub proof fn lemma_hom_preserves_equiv(
     lemma_hom_preserves_derivation(h, d.steps, w1, w2);
 }
 
-/// The identity homomorphism is valid (for valid presentations).
+///  The identity homomorphism is valid (for valid presentations).
 pub proof fn lemma_identity_hom_valid(p: Presentation)
     requires
         presentation_valid(p),
@@ -577,7 +577,7 @@ pub proof fn lemma_identity_hom_valid(p: Presentation)
     }
 }
 
-/// Helper: identity homomorphism preserves valid words.
+///  Helper: identity homomorphism preserves valid words.
 proof fn lemma_identity_hom_apply(h: HomomorphismData, w: Word, n: nat)
     requires
         h.generator_images.len() == n,
@@ -617,4 +617,4 @@ proof fn lemma_identity_hom_apply(h: HomomorphismData, w: Word, n: nat)
     }
 }
 
-} // verus!
+} //  verus!

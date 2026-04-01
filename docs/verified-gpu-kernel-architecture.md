@@ -90,20 +90,20 @@ Each addition is: define spec → prove properties → extend emitter → test. 
 
 ```rust
 struct Kernel {
-    /// Guard: thread i executes only if eval(guard, [i]) != 0.
+    ///  Guard: thread i executes only if eval(guard, [i]) != 0.
     guard: ArithExpr,
 
-    /// Scatter: maps thread id → output buffer index.
-    /// Must be injective under guard (each thread writes unique location).
+    ///  Scatter: maps thread id → output buffer index.
+    ///  Must be injective under guard (each thread writes unique location).
     scatter: ArithExpr,
 
-    /// Compute: the value to store.
+    ///  Compute: the value to store.
     compute: ArithExpr,
 
-    /// Buffer bindings
+    ///  Buffer bindings
     buffers: Vec<BufferBinding>,
 
-    /// Workgroup size
+    ///  Workgroup size
     workgroup_size: (nat, nat, nat),
 }
 ```
@@ -112,9 +112,9 @@ struct Kernel {
 
 ```rust
 spec fn kernel_eval(k: &Kernel, inputs: Seq<Seq<int>>, n_threads: nat) -> Seq<int> {
-    // For each thread i in 0..n_threads where eval(guard, [i]) != 0:
-    //   output[eval(scatter, [i])] = eval(compute, [i])
-    // Scatter injective under guard → deterministic, order-independent.
+    //  For each thread i in 0..n_threads where eval(guard, [i]) != 0:
+    //    output[eval(scatter, [i])] = eval(compute, [i])
+    //  Scatter injective under guard → deterministic, order-independent.
 }
 ```
 
@@ -124,11 +124,11 @@ Scatter injectivity makes `kernel_eval` deterministic — the result doesn't dep
 
 ```rust
 spec fn well_formed(k: &Kernel, inputs, n_threads) -> bool {
-    // scatter injective under guard
-    // all Index reads in bounds under guard
-    // no division/mod by zero under guard
-    // scatter indices in bounds under guard
-    // all intermediate values fit in machine integers
+    //  scatter injective under guard
+    //  all Index reads in bounds under guard
+    //  no division/mod by zero under guard
+    //  scatter indices in bounds under guard
+    //  all intermediate values fit in machine integers
 }
 ```
 
@@ -139,15 +139,15 @@ All "float" computation uses verified fixed-point with integer backing. This kee
 ### Design
 
 ```rust
-/// Fixed-point number with N fractional bits.
-/// Real value = raw / 2^N. Backed by i32 on GPU.
+///  Fixed-point number with N fractional bits.
+///  Real value = raw / 2^N. Backed by i32 on GPU.
 ///
-/// Example: N=12 → range ±1048576, precision ~0.000244
+///  Example: N=12 → range ±1048576, precision ~0.000244
 struct FixedPoint<const N: u32> { raw: i32 }
 
-// In ArithExpr: fixed-point values are just integers.
-// fp_mul(a, b, N) = Shr(Mul(a, b), Const(N))     — 1 ULP error, proved
-// fp_div(a, b, N) = Div(Shl(a, Const(N)), b)      — 1 ULP error, proved
+//  In ArithExpr: fixed-point values are just integers.
+//  fp_mul(a, b, N) = Shr(Mul(a, b), Const(N))     — 1 ULP error, proved
+//  fp_div(a, b, N) = Div(Shl(a, Const(N)), b)      — 1 ULP error, proved
 ```
 
 ### Verified transcendentals (no axioms!)
@@ -155,8 +155,8 @@ struct FixedPoint<const N: u32> { raw: i32 }
 Instead of `Intrinsic("exp", [x])` (axiomatized, trusted), implement as verified fixed-point polynomial approximations:
 
 ```rust
-/// Fixed-point exp(x) via polynomial approximation.
-/// Proved: |fp_exp(x) - exact_exp(x)| < error_bound(N)
+///  Fixed-point exp(x) via polynomial approximation.
+///  Proved: |fp_exp(x) - exact_exp(x)| < error_bound(N)
 pub proof fn lemma_fp_exp_correct(x: int, n: nat)
     requires /* x in valid range for N fractional bits */
     ensures
@@ -185,12 +185,12 @@ For applications that genuinely need IEEE f32 precision (ML training, scientific
 ### Interval arithmetic for error propagation
 
 ```rust
-/// Interval: [lo, hi] bounds the true value.
+///  Interval: [lo, hi] bounds the true value.
 struct Interval { lo: int, hi: int }
 
-/// Every fixed-point operation returns an interval.
-/// fp_mul([a_lo, a_hi], [b_lo, b_hi], N) = [lo, hi] where
-///   lo <= true_product <= hi, and hi - lo <= rounding_error
+///  Every fixed-point operation returns an interval.
+///  fp_mul([a_lo, a_hi], [b_lo, b_hi], N) = [lo, hi] where
+///    lo <= true_product <= hi, and hi - lo <= rounding_error
 proof fn lemma_fp_mul_interval(a: Interval, b: Interval, n: nat)
     ensures /* output interval contains the true product */
 ```
@@ -227,7 +227,7 @@ Kernel {
 Kernel {
     guard:   Cmp(Lt, Var(0), Const(shape_size)),
     scatter: Var(0),
-    compute: offset_expr(0, shape, stride),  // from verified CuTe
+    compute: offset_expr(0, shape, stride),  //  from verified CuTe
 }
 ```
 
@@ -239,7 +239,7 @@ Kernel {
     scatter: Const(0),
     compute: Reduce(Sum, 1, Const(N), Index(0, Var(1))),
 }
-// Efficient tree reduction = schedule transformation.
+//  Efficient tree reduction = schedule transformation.
 ```
 
 ### Scan (prefix sum): `out[i] = Σ_{j≤i} input[j]`
@@ -250,7 +250,7 @@ Kernel {
     scatter: Var(0),
     compute: Reduce(Sum, 1, Add(Var(0), Const(1)), Index(0, Var(1))),
 }
-// Efficient Blelloch = algebraic refinement.
+//  Efficient Blelloch = algebraic refinement.
 ```
 
 ### Stencil (1D blur): `out[i] = Σ_d input[i+d-R] * weight[d]`
@@ -268,16 +268,16 @@ Kernel {
 ### Mandelbrot (one iteration step, fixed-point 20.12)
 
 ```rust
-// Buffers: 0=z_re, 1=z_im, 2=c_re, 3=c_im, 4=escaped
+//  Buffers: 0=z_re, 1=z_im, 2=c_re, 3=c_im, 4=escaped
 Kernel {
     guard:   Mul(Cmp(Lt, Var(0), Const(N_PIXELS)),
                  Cmp(Eq, Index(4, Var(0)), Const(0))),
     scatter: Var(0),
-    compute: Sub(Shr(Mul(Index(0, Var(0)), Index(0, Var(0))), Const(12)),  // re²
-                 Shr(Mul(Index(1, Var(0)), Index(1, Var(0))), Const(12)),  // im²
-                 Add(_, Index(2, Var(0)))),                                 // + c_re
+    compute: Sub(Shr(Mul(Index(0, Var(0)), Index(0, Var(0))), Const(12)),  //  re²
+                 Shr(Mul(Index(1, Var(0)), Index(1, Var(0))), Const(12)),  //  im²
+                 Add(_, Index(2, Var(0)))),                                 //  + c_re
 }
-// Host dispatches max_iter times. State lives in GPU buffers.
+//  Host dispatches max_iter times. State lives in GPU buffers.
 ```
 
 ## CuTe Primitive Coverage
@@ -317,10 +317,10 @@ For optimized kernels with shared memory and barriers, the spec Kernel is lowere
 ```rust
 enum ScheduledStmt {
     SeqLoop { var, bound, body },
-    ParLoop { var, bound, body, mapping },  // sequential semantics = SeqLoop
+    ParLoop { var, bound, body, mapping },  //  sequential semantics = SeqLoop
     Store { buffer, index, value },
-    Alloc { buffer, size, space },          // Global | Shared | Register
-    Barrier,                                 // seq_eval ignores; par_eval synchronizes
+    Alloc { buffer, size, space },          //  Global | Shared | Register
+    Barrier,                                 //  seq_eval ignores; par_eval synchronizes
 }
 ```
 

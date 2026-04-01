@@ -134,7 +134,7 @@ proof fn square_nonneg(x, fuel)
     le_total(x, fuel);
     if nonneg(x) { nonneg_mul_closed(x, x, fuel); }
     else {
-        // neg(x) nonneg → neg(x)*neg(x) nonneg → x*x nonneg by neg_mul_neg
+        //  neg(x) nonneg → neg(x)*neg(x) nonneg → x*x nonneg by neg_mul_neg
         nonneg_mul_closed(neg(x), neg(x), fuel);
         neg_mul_neg(x, x);
         nonneg_fuel_congruence(mul(neg(x), neg(x)), mul(x, x), fuel);

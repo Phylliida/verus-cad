@@ -8,23 +8,23 @@ use crate::homomorphism::*;
 
 verus! {
 
-// ============================================================
-// Free Product Injectivity via Retraction Homomorphism
-// ============================================================
+//  ============================================================
+//  Free Product Injectivity via Retraction Homomorphism
+//  ============================================================
 //
-// Theorem: If w is a G₁-word and w ≡ ε in free_product(p1, p2),
-// then w ≡ ε in p1.
+//  Theorem: If w is a G₁-word and w ≡ ε in free_product(p1, p2),
+//  then w ≡ ε in p1.
 //
-// Proof: Define a retraction ρ: FP → P₁ that collapses G₂ generators
-// to ε and maps G₁ generators to themselves. Then:
-//   w ≡ ε in FP  ⟹  ρ(w) ≡ ρ(ε) in P₁  ⟹  w ≡ ε in P₁.
+//  Proof: Define a retraction ρ: FP → P₁ that collapses G₂ generators
+//  to ε and maps G₁ generators to themselves. Then:
+//    w ≡ ε in FP  ⟹  ρ(w) ≡ ρ(ε) in P₁  ⟹  w ≡ ε in P₁.
 
-// ============================================================
-// Left retraction: FP(p1, p2) → p1
-// ============================================================
+//  ============================================================
+//  Left retraction: FP(p1, p2) → p1
+//  ============================================================
 
-/// The left retraction homomorphism.
-/// Gen(i) for i < n₁ → [Gen(i)]; Gen(j) for j ≥ n₁ → ε.
+///  The left retraction homomorphism.
+///  Gen(i) for i < n₁ → [Gen(i)]; Gen(j) for j ≥ n₁ → ε.
 pub open spec fn fp_left_retraction(p1: Presentation, p2: Presentation) -> HomomorphismData {
     let n1 = p1.num_generators;
     let n2 = p2.num_generators;
@@ -41,11 +41,11 @@ pub open spec fn fp_left_retraction(p1: Presentation, p2: Presentation) -> Homom
     }
 }
 
-// ============================================================
-// Helper: apply_hom collapses a word whose symbols all map to ε
-// ============================================================
+//  ============================================================
+//  Helper: apply_hom collapses a word whose symbols all map to ε
+//  ============================================================
 
-/// If every symbol of w maps to ε under h, then apply_hom(h, w) =~= ε.
+///  If every symbol of w maps to ε under h, then apply_hom(h, w) =~= ε.
 pub proof fn lemma_hom_collapses_word(h: HomomorphismData, w: Word)
     requires
         forall|k: int| 0 <= k < w.len() ==>
@@ -60,7 +60,7 @@ pub proof fn lemma_hom_collapses_word(h: HomomorphismData, w: Word)
         let rest = w.drop_first();
         assert(w[0] == s);
         assert(apply_hom_symbol(h, s) =~= empty_word());
-        // Recurse: rest also collapses
+        //  Recurse: rest also collapses
         assert forall|k: int| 0 <= k < rest.len() implies
             apply_hom_symbol(h, #[trigger] rest[k]) =~= empty_word()
         by {
@@ -73,12 +73,12 @@ pub proof fn lemma_hom_collapses_word(h: HomomorphismData, w: Word)
     }
 }
 
-// ============================================================
-// Helper: apply_hom is the identity on words with identity images
-// ============================================================
+//  ============================================================
+//  Helper: apply_hom is the identity on words with identity images
+//  ============================================================
 
-/// If images[i] =~= [Gen(i)] for all i < n, and word_valid(w, n),
-/// then apply_hom(h, w) =~= w.
+///  If images[i] =~= [Gen(i)] for all i < n, and word_valid(w, n),
+///  then apply_hom(h, w) =~= w.
 pub proof fn lemma_hom_identity_on_word(h: HomomorphismData, w: Word, n: nat)
     requires
         forall|i: int| 0 <= i < n ==>
@@ -97,7 +97,7 @@ pub proof fn lemma_hom_identity_on_word(h: HomomorphismData, w: Word, n: nat)
         let rest = w.drop_first();
         assert(symbol_valid(s, n));
 
-        // Recurse
+        //  Recurse
         assert(word_valid(rest, n)) by {
             assert forall|k: int| 0 <= k < rest.len()
                 implies symbol_valid(rest[k], n)
@@ -108,7 +108,7 @@ pub proof fn lemma_hom_identity_on_word(h: HomomorphismData, w: Word, n: nat)
         lemma_hom_identity_on_word(h, rest, n);
         assert(apply_hom(h, rest) =~= rest);
 
-        // Show apply_hom_symbol(h, s) =~= Seq::new(1, |_| s)
+        //  Show apply_hom_symbol(h, s) =~= Seq::new(1, |_| s)
         let idx = generator_index(s);
         assert(idx < n);
         match s {
@@ -122,8 +122,8 @@ pub proof fn lemma_hom_identity_on_word(h: HomomorphismData, w: Word, n: nat)
             Symbol::Inv(i) => {
                 let img = Seq::new(1, |_j: int| Symbol::Gen(i));
                 assert(h.generator_images[i as int] =~= img);
-                // inverse_word([Gen(i)]) = inverse_word([].drop_first()) + [Inv(Gen(i).first())]
-                // = inverse_word(empty) + [Inv(i)] = empty + [Inv(i)] = [Inv(i)]
+                //  inverse_word([Gen(i)]) = inverse_word([].drop_first()) + [Inv(Gen(i).first())]
+                //  = inverse_word(empty) + [Inv(i)] = empty + [Inv(i)] = [Inv(i)]
                 assert(img.drop_first() =~= Seq::<Symbol>::empty());
                 assert(inverse_word(img.drop_first()) =~= empty_word());
                 assert(inverse_symbol(img.first()) == Symbol::Inv(i));
@@ -134,8 +134,8 @@ pub proof fn lemma_hom_identity_on_word(h: HomomorphismData, w: Word, n: nat)
             },
         }
 
-        // apply_hom(h, w) = concat(apply_hom_symbol(h, s), apply_hom(h, rest))
-        //                 =~= concat([s], rest) =~= w
+        //  apply_hom(h, w) = concat(apply_hom_symbol(h, s), apply_hom(h, rest))
+        //                  =~= concat([s], rest) =~= w
         assert(apply_hom_symbol(h, s) =~= Seq::new(1, |_j: int| s));
         assert(apply_hom(h, w) =~= concat(Seq::new(1, |_j: int| s), rest));
         assert(concat(Seq::new(1, |_j: int| s), rest) =~= w) by {
@@ -155,11 +155,11 @@ pub proof fn lemma_hom_identity_on_word(h: HomomorphismData, w: Word, n: nat)
     }
 }
 
-// ============================================================
-// Left retraction is a valid homomorphism
-// ============================================================
+//  ============================================================
+//  Left retraction is a valid homomorphism
+//  ============================================================
 
-/// The left retraction is a valid homomorphism.
+///  The left retraction is a valid homomorphism.
 pub proof fn lemma_fp_left_retraction_valid(p1: Presentation, p2: Presentation)
     requires
         presentation_valid(p1),
@@ -173,11 +173,11 @@ pub proof fn lemma_fp_left_retraction_valid(p1: Presentation, p2: Presentation)
     let n1 = p1.num_generators;
     let n2 = p2.num_generators;
 
-    // generator_images.len() == n1 + n2 = fp.num_generators
+    //  generator_images.len() == n1 + n2 = fp.num_generators
     assert(rho.generator_images.len() == n1 + n2);
     assert(rho.source.num_generators == n1 + n2);
 
-    // source = free_product(p1, p2) is presentation_valid
+    //  source = free_product(p1, p2) is presentation_valid
     assert(presentation_valid(fp)) by {
         assert forall|k: int| 0 <= k < fp.relators.len()
             implies word_valid(fp.relators[k], fp.num_generators)
@@ -192,7 +192,7 @@ pub proof fn lemma_fp_left_retraction_valid(p1: Presentation, p2: Presentation)
             } else {
                 let j = k - p1.relators.len() as int;
                 assert(fp.relators[k] == shift_word(p2.relators[j], n1));
-                // shift_word_valid: shifted word is valid for combined generator count
+                //  shift_word_valid: shifted word is valid for combined generator count
                 let sw = shift_word(p2.relators[j], n1);
                 assert forall|m: int| 0 <= m < sw.len()
                     implies symbol_valid(sw[m], n1 + n2)
@@ -204,43 +204,43 @@ pub proof fn lemma_fp_left_retraction_valid(p1: Presentation, p2: Presentation)
         }
     }
 
-    // target = p1 is presentation_valid (given)
+    //  target = p1 is presentation_valid (given)
 
-    // Each image is word_valid for p1
+    //  Each image is word_valid for p1
     assert forall|i: int| 0 <= i < rho.generator_images.len()
         implies word_valid(rho.generator_images[i], n1)
     by {
         if i < n1 as int {
-            // Image is [Gen(i)], valid for n1
+            //  Image is [Gen(i)], valid for n1
             assert(rho.generator_images[i] =~=
                 Seq::new(1, |_j: int| Symbol::Gen(i as nat)));
             assert(symbol_valid(Symbol::Gen(i as nat), n1));
         } else {
-            // Image is empty_word(), trivially valid
+            //  Image is empty_word(), trivially valid
         }
     }
 
-    // Each source relator maps to ≡ ε in p1
+    //  Each source relator maps to ≡ ε in p1
     assert forall|i: int| 0 <= i < fp.relators.len()
         implies equiv_in_presentation(p1, apply_hom(rho, fp.relators[i]), empty_word())
     by {
         if i < p1.relators.len() as int {
-            // G₁-relator: rho maps it to itself
+            //  G₁-relator: rho maps it to itself
             let r = fp.relators[i];
             assert(r == p1.relators[i]);
             assert(word_valid(r, n1));
             lemma_hom_identity_on_word(rho, r, n1);
             assert(apply_hom(rho, r) =~= r);
-            // r ≡ ε in p1 since it's a relator
+            //  r ≡ ε in p1 since it's a relator
             lemma_relator_is_identity(p1, i);
-            // Need: apply_hom(rho, r) ≡ ε. Since apply_hom(rho, r) =~= r and r ≡ ε:
+            //  Need: apply_hom(rho, r) ≡ ε. Since apply_hom(rho, r) =~= r and r ≡ ε:
             lemma_equiv_refl(p1, apply_hom(rho, r));
         } else {
-            // Shifted G₂-relator: all symbols have index ≥ n1, so all map to ε
+            //  Shifted G₂-relator: all symbols have index ≥ n1, so all map to ε
             let j = i - p1.relators.len() as int;
             let r = fp.relators[i];
             assert(r == shift_word(p2.relators[j], n1));
-            // Every symbol in r has generator_index ≥ n1
+            //  Every symbol in r has generator_index ≥ n1
             assert forall|k: int| 0 <= k < r.len()
                 implies apply_hom_symbol(rho, #[trigger] r[k]) =~= empty_word()
             by {
@@ -270,11 +270,11 @@ pub proof fn lemma_fp_left_retraction_valid(p1: Presentation, p2: Presentation)
     }
 }
 
-// ============================================================
-// Left retraction is the identity on G₁-words
-// ============================================================
+//  ============================================================
+//  Left retraction is the identity on G₁-words
+//  ============================================================
 
-/// For G₁-words: apply_hom(ρ, w) =~= w.
+///  For G₁-words: apply_hom(ρ, w) =~= w.
 pub proof fn lemma_fp_left_retraction_identity(
     p1: Presentation, p2: Presentation, w: Word,
 )
@@ -288,11 +288,11 @@ pub proof fn lemma_fp_left_retraction_identity(
     lemma_hom_identity_on_word(rho, w, n1);
 }
 
-// ============================================================
-// Main theorem: free product injectivity (left)
-// ============================================================
+//  ============================================================
+//  Main theorem: free product injectivity (left)
+//  ============================================================
 
-/// If w is a G₁-word and w ≡ ε in free_product(p1, p2), then w ≡ ε in p1.
+///  If w is a G₁-word and w ≡ ε in free_product(p1, p2), then w ≡ ε in p1.
 pub proof fn lemma_free_product_injective_left(
     p1: Presentation, p2: Presentation, w: Word,
 )
@@ -306,27 +306,27 @@ pub proof fn lemma_free_product_injective_left(
 {
     let rho = fp_left_retraction(p1, p2);
 
-    // rho is a valid homomorphism
+    //  rho is a valid homomorphism
     lemma_fp_left_retraction_valid(p1, p2);
 
-    // rho preserves equivalence: w ≡ ε in FP ⟹ rho(w) ≡ rho(ε) in P₁
+    //  rho preserves equivalence: w ≡ ε in FP ⟹ rho(w) ≡ rho(ε) in P₁
     lemma_hom_preserves_equiv(rho, w, empty_word());
 
-    // rho(w) =~= w
+    //  rho(w) =~= w
     lemma_fp_left_retraction_identity(p1, p2, w);
 
-    // rho(ε) =~= ε
+    //  rho(ε) =~= ε
     lemma_hom_empty(rho);
 
-    // So w ≡ ε in P₁
+    //  So w ≡ ε in P₁
 }
 
-// ============================================================
-// Right retraction: FP(p1, p2) → p2
-// ============================================================
+//  ============================================================
+//  Right retraction: FP(p1, p2) → p2
+//  ============================================================
 
-/// The right retraction homomorphism.
-/// Gen(i) for i < n₁ → ε; Gen(n₁+j) for j < n₂ → [Gen(j)].
+///  The right retraction homomorphism.
+///  Gen(i) for i < n₁ → ε; Gen(n₁+j) for j < n₂ → [Gen(j)].
 pub open spec fn fp_right_retraction(p1: Presentation, p2: Presentation) -> HomomorphismData {
     let n1 = p1.num_generators;
     let n2 = p2.num_generators;
@@ -343,7 +343,7 @@ pub open spec fn fp_right_retraction(p1: Presentation, p2: Presentation) -> Homo
     }
 }
 
-/// The right retraction is a valid homomorphism.
+///  The right retraction is a valid homomorphism.
 pub proof fn lemma_fp_right_retraction_valid(p1: Presentation, p2: Presentation)
     requires
         presentation_valid(p1),
@@ -357,7 +357,7 @@ pub proof fn lemma_fp_right_retraction_valid(p1: Presentation, p2: Presentation)
     let n1 = p1.num_generators;
     let n2 = p2.num_generators;
 
-    // source = free_product(p1, p2) is presentation_valid
+    //  source = free_product(p1, p2) is presentation_valid
     assert(presentation_valid(fp)) by {
         assert forall|k: int| 0 <= k < fp.relators.len()
             implies word_valid(fp.relators[k], fp.num_generators)
@@ -372,7 +372,7 @@ pub proof fn lemma_fp_right_retraction_valid(p1: Presentation, p2: Presentation)
             } else {
                 let j = k - p1.relators.len() as int;
                 assert(fp.relators[k] == shift_word(p2.relators[j], n1));
-                // shift_word_valid: shifted word is valid for combined generator count
+                //  shift_word_valid: shifted word is valid for combined generator count
                 let sw = shift_word(p2.relators[j], n1);
                 assert forall|m: int| 0 <= m < sw.len()
                     implies symbol_valid(sw[m], n1 + n2)
@@ -384,12 +384,12 @@ pub proof fn lemma_fp_right_retraction_valid(p1: Presentation, p2: Presentation)
         }
     }
 
-    // Each image is word_valid for p2
+    //  Each image is word_valid for p2
     assert forall|i: int| 0 <= i < rho.generator_images.len()
         implies word_valid(rho.generator_images[i], n2)
     by {
         if i < n1 as int {
-            // empty_word() is trivially valid
+            //  empty_word() is trivially valid
         } else {
             let gi = (i - n1) as nat;
             assert(rho.generator_images[i] =~=
@@ -399,12 +399,12 @@ pub proof fn lemma_fp_right_retraction_valid(p1: Presentation, p2: Presentation)
         }
     }
 
-    // Each source relator maps to ≡ ε in p2
+    //  Each source relator maps to ≡ ε in p2
     assert forall|i: int| 0 <= i < fp.relators.len()
         implies equiv_in_presentation(p2, apply_hom(rho, fp.relators[i]), empty_word())
     by {
         if i < p1.relators.len() as int {
-            // G₁-relator: all symbols have index < n1, all map to ε
+            //  G₁-relator: all symbols have index < n1, all map to ε
             let r = fp.relators[i];
             assert(r == p1.relators[i]);
             assert(word_valid(r, n1));
@@ -427,26 +427,26 @@ pub proof fn lemma_fp_right_retraction_valid(p1: Presentation, p2: Presentation)
             lemma_hom_collapses_word(rho, r);
             lemma_equiv_refl(p2, empty_word());
         } else {
-            // Shifted G₂-relator: rho maps shift(Gen(j)) = Gen(n1+j) → [Gen(j)]
-            // So rho(shift(r_j)) =~= r_j (the original G₂ relator)
+            //  Shifted G₂-relator: rho maps shift(Gen(j)) = Gen(n1+j) → [Gen(j)]
+            //  So rho(shift(r_j)) =~= r_j (the original G₂ relator)
             let j = i - p1.relators.len() as int;
             let sr = fp.relators[i];
             assert(sr == shift_word(p2.relators[j], n1));
             let r = p2.relators[j];
 
-            // Show apply_hom(rho, sr) =~= r by showing it's the identity on shifted words
+            //  Show apply_hom(rho, sr) =~= r by showing it's the identity on shifted words
             lemma_right_retraction_unshifts(p1, p2, r);
             assert(apply_hom(rho, sr) =~= r);
 
-            // r ≡ ε in p2 since it's a relator
+            //  r ≡ ε in p2 since it's a relator
             lemma_relator_is_identity(p2, j);
             lemma_equiv_refl(p2, apply_hom(rho, sr));
         }
     }
 }
 
-/// Helper: The right retraction unshifts a shifted G₂-word back to the original.
-/// apply_hom(right_rho, shift_word(w, n1)) =~= w for G₂-words.
+///  Helper: The right retraction unshifts a shifted G₂-word back to the original.
+///  apply_hom(right_rho, shift_word(w, n1)) =~= w for G₂-words.
 proof fn lemma_right_retraction_unshifts(
     p1: Presentation, p2: Presentation, w: Word,
 )
@@ -472,7 +472,7 @@ proof fn lemma_right_retraction_unshifts(
         assert(sw.first() == ss);
         assert(sw.drop_first() =~= srest);
 
-        // Recurse
+        //  Recurse
         assert(word_valid(rest, p2.num_generators)) by {
             assert forall|k: int| 0 <= k < rest.len()
                 implies symbol_valid(rest[k], p2.num_generators)
@@ -483,7 +483,7 @@ proof fn lemma_right_retraction_unshifts(
         lemma_right_retraction_unshifts(p1, p2, rest);
         assert(apply_hom(rho, srest) =~= rest);
 
-        // Show apply_hom_symbol(rho, ss) =~= Seq::new(1, |_| s)
+        //  Show apply_hom_symbol(rho, ss) =~= Seq::new(1, |_| s)
         assert(symbol_valid(s, p2.num_generators));
         match s {
             Symbol::Gen(gi) => {
@@ -501,7 +501,7 @@ proof fn lemma_right_retraction_unshifts(
                 assert((gi + n1) >= n1);
                 let img = Seq::new(1, |_j: int| Symbol::Gen(gi));
                 assert(rho.generator_images[(gi + n1) as int] =~= img);
-                // Expand inverse_word on single-element seq
+                //  Expand inverse_word on single-element seq
                 assert(img.drop_first() =~= Seq::<Symbol>::empty());
                 assert(inverse_word(img.drop_first()) =~= empty_word());
                 assert(inverse_symbol(img.first()) == Symbol::Inv(gi));
@@ -514,8 +514,8 @@ proof fn lemma_right_retraction_unshifts(
             },
         }
 
-        // apply_hom(rho, sw) = concat(apply_hom_symbol(rho, ss), apply_hom(rho, srest))
-        //                    =~= concat([s], rest) =~= w
+        //  apply_hom(rho, sw) = concat(apply_hom_symbol(rho, ss), apply_hom(rho, srest))
+        //                     =~= concat([s], rest) =~= w
         assert(apply_hom_symbol(rho, ss) =~= Seq::new(1, |_j: int| s));
         assert(apply_hom(rho, sw) =~= concat(Seq::new(1, |_j: int| s), rest));
         assert(concat(Seq::new(1, |_j: int| s), rest) =~= w) by {
@@ -532,7 +532,7 @@ proof fn lemma_right_retraction_unshifts(
     }
 }
 
-/// For shifted G₂-words: apply_hom(right_rho, shift_word(w, n1)) =~= w.
+///  For shifted G₂-words: apply_hom(right_rho, shift_word(w, n1)) =~= w.
 pub proof fn lemma_fp_right_retraction_identity(
     p1: Presentation, p2: Presentation, w: Word,
 )
@@ -544,11 +544,11 @@ pub proof fn lemma_fp_right_retraction_identity(
     lemma_right_retraction_unshifts(p1, p2, w);
 }
 
-// ============================================================
-// Main theorem: free product injectivity (right)
-// ============================================================
+//  ============================================================
+//  Main theorem: free product injectivity (right)
+//  ============================================================
 
-/// If w is a G₂-word and shift(w) ≡ ε in free_product(p1, p2), then w ≡ ε in p2.
+///  If w is a G₂-word and shift(w) ≡ ε in free_product(p1, p2), then w ≡ ε in p2.
 pub proof fn lemma_free_product_injective_right(
     p1: Presentation, p2: Presentation, w: Word,
 )
@@ -566,24 +566,24 @@ pub proof fn lemma_free_product_injective_right(
 {
     let rho = fp_right_retraction(p1, p2);
 
-    // rho is a valid homomorphism
+    //  rho is a valid homomorphism
     lemma_fp_right_retraction_valid(p1, p2);
 
-    // rho preserves equivalence
+    //  rho preserves equivalence
     lemma_hom_preserves_equiv(rho, shift_word(w, p1.num_generators), empty_word());
 
-    // rho(shift(w)) =~= w
+    //  rho(shift(w)) =~= w
     lemma_fp_right_retraction_identity(p1, p2, w);
 
-    // rho(ε) =~= ε
+    //  rho(ε) =~= ε
     lemma_hom_empty(rho);
 }
 
-// ============================================================
-// General form: two G₁-words equivalent in FP are equivalent in P₁
-// ============================================================
+//  ============================================================
+//  General form: two G₁-words equivalent in FP are equivalent in P₁
+//  ============================================================
 
-/// If w₁, w₂ are G₁-words and w₁ ≡ w₂ in FP, then w₁ ≡ w₂ in P₁.
+///  If w₁, w₂ are G₁-words and w₁ ≡ w₂ in FP, then w₁ ≡ w₂ in P₁.
 pub proof fn lemma_free_product_reflects_left(
     p1: Presentation, p2: Presentation, w1: Word, w2: Word,
 )
@@ -603,4 +603,4 @@ pub proof fn lemma_free_product_reflects_left(
     lemma_fp_left_retraction_identity(p1, p2, w2);
 }
 
-} // verus!
+} //  verus!

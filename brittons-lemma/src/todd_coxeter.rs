@@ -4,16 +4,16 @@ use crate::word::*;
 use crate::presentation::*;
 verus! {
 
-/// Coset table for a finitely presented group.
-/// table[coset][column] where column = 2*gen for Gen(gen), 2*gen+1 for Inv(gen).
-/// None means undefined.
+///  Coset table for a finitely presented group.
+///  table[coset][column] where column = 2*gen for Gen(gen), 2*gen+1 for Inv(gen).
+///  None means undefined.
 pub struct CosetTable {
     pub num_cosets: nat,
     pub num_gens: nat,
     pub table: Seq<Seq<Option<nat>>>,
 }
 
-/// Map a symbol to a column index.
+///  Map a symbol to a column index.
 pub open spec fn symbol_to_column(s: Symbol) -> nat {
     match s {
         Symbol::Gen(i) => 2 * i,
@@ -21,7 +21,7 @@ pub open spec fn symbol_to_column(s: Symbol) -> nat {
     }
 }
 
-/// Map a column to its inverse column (Gen ↔ Inv for same generator).
+///  Map a column to its inverse column (Gen ↔ Inv for same generator).
 pub open spec fn inverse_column(col: nat) -> nat {
     if col % 2 == 0 {
         col + 1
@@ -30,7 +30,7 @@ pub open spec fn inverse_column(col: nat) -> nat {
     }
 }
 
-/// A coset table is well-formed: dimensions match and values in range.
+///  A coset table is well-formed: dimensions match and values in range.
 #[verifier::opaque]
 pub open spec fn coset_table_wf(t: CosetTable) -> bool {
     let num_cols = 2 * t.num_gens;
@@ -45,7 +45,7 @@ pub open spec fn coset_table_wf(t: CosetTable) -> bool {
             })
 }
 
-/// Inverse consistency: if table[c][col] = Some(d), then table[d][inv_col] = Some(c).
+///  Inverse consistency: if table[c][col] = Some(d), then table[d][inv_col] = Some(c).
 #[verifier::opaque]
 pub open spec fn coset_table_consistent(t: CosetTable) -> bool {
     let num_cols = 2 * t.num_gens;
@@ -58,8 +58,8 @@ pub open spec fn coset_table_consistent(t: CosetTable) -> bool {
             })
 }
 
-/// Trace a word through the coset table starting from a coset.
-/// Returns None if an undefined entry is hit.
+///  Trace a word through the coset table starting from a coset.
+///  Returns None if an undefined entry is hit.
 pub open spec fn trace_word(t: CosetTable, coset: nat, w: Word) -> Option<nat>
     decreases w.len(),
 {
@@ -74,7 +74,7 @@ pub open spec fn trace_word(t: CosetTable, coset: nat, w: Word) -> Option<nat>
     }
 }
 
-/// All relators trace back to the starting coset (closed table).
+///  All relators trace back to the starting coset (closed table).
 #[verifier::opaque]
 pub open spec fn relator_closed(t: CosetTable, p: Presentation) -> bool {
     forall|c: int, r: int| #![trigger t.table[c as int], p.relators[r]]
@@ -82,16 +82,16 @@ pub open spec fn relator_closed(t: CosetTable, p: Presentation) -> bool {
             trace_word(t, c as nat, p.relators[r]) == Some(c as nat)
 }
 
-// --- Lemmas ---
+//  --- Lemmas ---
 
-/// Tracing the empty word returns the starting coset.
+///  Tracing the empty word returns the starting coset.
 pub proof fn lemma_trace_empty(t: CosetTable, coset: nat)
     ensures
         trace_word(t, coset, empty_word()) == Some(coset),
 {
 }
 
-/// Tracing a concatenation is composition of traces.
+///  Tracing a concatenation is composition of traces.
 pub proof fn lemma_trace_word_concat(t: CosetTable, c: nat, w1: Word, w2: Word)
     requires
         coset_table_wf(t),
@@ -109,14 +109,14 @@ pub proof fn lemma_trace_word_concat(t: CosetTable, c: nat, w1: Word, w2: Word)
         let next = t.table[c as int][col as int].unwrap();
         assert(concat(w1, w2).first() == w1.first());
         assert(concat(w1, w2).drop_first() =~= concat(w1.drop_first(), w2));
-        // trace_word(t, c, concat(w1, w2))
-        //   = trace_word(t, next, concat(w1.drop_first(), w2))
-        // trace_word(t, c, w1)
-        //   = trace_word(t, next, w1.drop_first())
+        //  trace_word(t, c, concat(w1, w2))
+        //    = trace_word(t, next, concat(w1.drop_first(), w2))
+        //  trace_word(t, c, w1)
+        //    = trace_word(t, next, w1.drop_first())
         lemma_trace_word_concat(t, next, w1.drop_first(), w2);
     }
 }
 
-} // verus!
+} //  verus!
 
-// (Runtime coset enumeration code removed — not needed for the proof.)
+//  (Runtime coset enumeration code removed — not needed for the proof.)

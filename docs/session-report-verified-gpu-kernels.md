@@ -37,12 +37,12 @@ Extended the verified ArithExpr IR from 7 nodes to 11:
 
 ```rust
 struct KernelSpec {
-    guard: ArithExpr,           // thread active iff eval != 0
-    outputs: Seq<OutputSpec>,   // multiple (scatter, compute) pairs
+    guard: ArithExpr,           //  thread active iff eval != 0
+    outputs: Seq<OutputSpec>,   //  multiple (scatter, compute) pairs
 }
 struct OutputSpec {
-    scatter: ArithExpr,         // WHERE to write
-    compute: ArithExpr,         // WHAT to write
+    scatter: ArithExpr,         //  WHERE to write
+    compute: ArithExpr,         //  WHAT to write
 }
 ```
 

@@ -92,10 +92,10 @@ The canonical K-word choose (min-length -> min-lex -> unique word) is determinis
 
 **Pattern for proving choose equals a specific value:**
 ```
-// Step 1: Establish min-len equality (h.len() == choose_min_len)
-// Step 2: Transfer no_pred_below between A and B sides
-// Step 3: Establish min-lex equality (h.lex == choose_min_lex)
-// Step 4: Apply lex rank injectivity (same length + same lex -> same word)
+//  Step 1: Establish min-len equality (h.len() == choose_min_len)
+//  Step 2: Transfer no_pred_below between A and B sides
+//  Step 3: Establish min-lex equality (h.lex == choose_min_lex)
+//  Step 4: Apply lex rank injectivity (same length + same lex -> same word)
 ```
 
 ### 3. identifications_isomorphic is the Key to Everything

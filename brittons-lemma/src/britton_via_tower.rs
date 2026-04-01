@@ -1,12 +1,12 @@
-// Britton's Lemma via Tower Construction
+//  Britton's Lemma via Tower Construction
 //
-// Translates HNN extension derivations to tower derivations.
-// Faithful to Lyndon-Schupp Chapter IV: the tower unfolds the HNN extension
-// by replacing the stable letter with explicit copies of the base group.
+//  Translates HNN extension derivations to tower derivations.
+//  Faithful to Lyndon-Schupp Chapter IV: the tower unfolds the HNN extension
+//  by replacing the stable letter with explicit copies of the base group.
 //
-// Key insight: the HNN relator t⁻¹·a_i·t·inv(b_i) at level k corresponds
-// exactly to the AFP identification relator shift(a_i, (k-1)·ng)·inv(shift(b_i, k·ng))
-// at tower junction (k-1)↔k.
+//  Key insight: the HNN relator t⁻¹·a_i·t·inv(b_i) at level k corresponds
+//  exactly to the AFP identification relator shift(a_i, (k-1)·ng)·inv(shift(b_i, k·ng))
+//  at tower junction (k-1)↔k.
 
 use vstd::prelude::*;
 use crate::symbol::*;
@@ -22,8 +22,8 @@ use crate::tower::*;
 
 verus! {
 
-/// The HNN presentation is a valid presentation.
-/// (Inlined from britton_proof.rs to avoid pulling in the 14k-line file.)
+///  The HNN presentation is a valid presentation.
+///  (Inlined from britton_proof.rs to avoid pulling in the 14k-line file.)
 proof fn lemma_hnn_presentation_valid(data: HNNData)
     requires
         hnn_data_valid(data),
@@ -78,17 +78,17 @@ proof fn lemma_hnn_presentation_valid(data: HNNData)
     }
 }
 
-// ============================================================
-// Part A: Level tracking and word translation
-// ============================================================
+//  ============================================================
+//  Part A: Level tracking and word translation
+//  ============================================================
 
-/// Whether symbol s is the stable letter t or t⁻¹.
+///  Whether symbol s is the stable letter t or t⁻¹.
 pub open spec fn is_stable(data: HNNData, s: Symbol) -> bool {
     let ng = data.base.num_generators;
     s == Symbol::Gen(ng) || s == Symbol::Inv(ng)
 }
 
-/// Net level change of a word: count of t minus count of t⁻¹.
+///  Net level change of a word: count of t minus count of t⁻¹.
 pub open spec fn net_level(data: HNNData, w: Word) -> int
     decreases w.len(),
 {
@@ -108,10 +108,10 @@ pub open spec fn net_level(data: HNNData, w: Word) -> int
     }
 }
 
-/// Translate an HNN word to a tower word, starting at a given base level.
-/// - Stable letters are REMOVED (encode level changes)
-/// - Base symbol at current level k becomes shifted by k·ng
-/// - base_level tracks the accumulated level from earlier context
+///  Translate an HNN word to a tower word, starting at a given base level.
+///  - Stable letters are REMOVED (encode level changes)
+///  - Base symbol at current level k becomes shifted by k·ng
+///  - base_level tracks the accumulated level from earlier context
 pub open spec fn translate_word_at(data: HNNData, w: Word, base_level: int) -> Word
     decreases w.len(),
 {
@@ -122,13 +122,13 @@ pub open spec fn translate_word_at(data: HNNData, w: Word, base_level: int) -> W
         let s = w.first();
         let rest = w.drop_first();
         if s == Symbol::Gen(ng) {
-            // t: level +1, skip symbol
+            //  t: level +1, skip symbol
             translate_word_at(data, rest, base_level + 1)
         } else if s == Symbol::Inv(ng) {
-            // t⁻¹: level -1, skip symbol
+            //  t⁻¹: level -1, skip symbol
             translate_word_at(data, rest, base_level - 1)
         } else {
-            // Base symbol: shift by base_level · ng, include in output
+            //  Base symbol: shift by base_level · ng, include in output
             let shifted_s = match s {
                 Symbol::Gen(i) => Symbol::Gen((i + base_level * ng) as nat),
                 Symbol::Inv(i) => Symbol::Inv((i + base_level * ng) as nat),
@@ -139,16 +139,16 @@ pub open spec fn translate_word_at(data: HNNData, w: Word, base_level: int) -> W
     }
 }
 
-/// Top-level translation: start at level 0.
+///  Top-level translation: start at level 0.
 pub open spec fn translate_word(data: HNNData, w: Word) -> Word {
     translate_word_at(data, w, 0)
 }
 
-// ============================================================
-// Part B: Base word translation = identity
-// ============================================================
+//  ============================================================
+//  Part B: Base word translation = identity
+//  ============================================================
 
-/// A base word has net level 0.
+///  A base word has net level 0.
 proof fn lemma_base_word_net_level_zero(data: HNNData, w: Word)
     requires
         hnn_data_valid(data),
@@ -170,7 +170,7 @@ proof fn lemma_base_word_net_level_zero(data: HNNData, w: Word)
     }
 }
 
-/// A base word translates to itself at level 0.
+///  A base word translates to itself at level 0.
 pub proof fn lemma_translate_base_word(data: HNNData, w: Word)
     requires
         hnn_data_valid(data),
@@ -193,17 +193,17 @@ pub proof fn lemma_translate_base_word(data: HNNData, w: Word)
     }
 }
 
-/// The empty word translates to the empty word.
+///  The empty word translates to the empty word.
 pub proof fn lemma_translate_empty(data: HNNData)
     ensures translate_word(data, empty_word()) =~= empty_word(),
 {
 }
 
-// ============================================================
-// Part C: Concat decomposition for translate_word_at
-// ============================================================
+//  ============================================================
+//  Part C: Concat decomposition for translate_word_at
+//  ============================================================
 
-/// translate_word_at distributes over concat (with level offset).
+///  translate_word_at distributes over concat (with level offset).
 pub proof fn lemma_translate_concat(data: HNNData, w1: Word, w2: Word, base_level: int)
     ensures
         translate_word_at(data, concat(w1, w2), base_level)
@@ -232,11 +232,11 @@ pub proof fn lemma_translate_concat(data: HNNData, w1: Word, w2: Word, base_leve
     }
 }
 
-// ============================================================
-// Part D: Derivation lifting — equiv in p1 → equiv in free_product(p1, p2)
-// ============================================================
+//  ============================================================
+//  Part D: Derivation lifting — equiv in p1 → equiv in free_product(p1, p2)
+//  ============================================================
 
-/// A single derivation step valid in p1 is also valid in free_product(p1, p2).
+///  A single derivation step valid in p1 is also valid in free_product(p1, p2).
 proof fn lemma_step_valid_in_fp_left(
     p1: Presentation, p2: Presentation,
     w: Word, step: DerivationStep,
@@ -266,7 +266,7 @@ proof fn lemma_step_valid_in_fp_left(
     }
 }
 
-/// A full derivation valid in p1 is also valid in free_product(p1, p2).
+///  A full derivation valid in p1 is also valid in free_product(p1, p2).
 proof fn lemma_derivation_valid_in_fp_left(
     p1: Presentation, p2: Presentation,
     steps: Seq<DerivationStep>, w1: Word, w2: Word,
@@ -285,7 +285,7 @@ proof fn lemma_derivation_valid_in_fp_left(
     }
 }
 
-/// Equivalence in p1 implies equivalence in free_product(p1, p2).
+///  Equivalence in p1 implies equivalence in free_product(p1, p2).
 pub proof fn lemma_left_embeds_in_fp(
     p1: Presentation, p2: Presentation, w1: Word, w2: Word,
 )
@@ -300,7 +300,7 @@ pub proof fn lemma_left_embeds_in_fp(
     assert(derivation_valid(free_product(p1, p2), d_fp, w1, w2));
 }
 
-/// Equivalence in tower(k) implies equivalence in tower(m) for k ≤ m.
+///  Equivalence in tower(k) implies equivalence in tower(m) for k ≤ m.
 pub proof fn lemma_tower_monotone(
     data: HNNData, k: nat, m: nat, w1: Word, w2: Word,
 )
@@ -323,11 +323,11 @@ pub proof fn lemma_tower_monotone(
     }
 }
 
-// ============================================================
-// Part E: Tower relator correspondence
-// ============================================================
+//  ============================================================
+//  Part E: Tower relator correspondence
+//  ============================================================
 
-/// A base relator at copy k is equiv to ε in tower(m) when k ≤ m.
+///  A base relator at copy k is equiv to ε in tower(m) when k ≤ m.
 pub proof fn lemma_base_relator_in_tower(
     data: HNNData, m: nat, k: nat, r: int,
 )
@@ -356,7 +356,7 @@ pub proof fn lemma_base_relator_in_tower(
                 shift_word(data.base.relators[r], k * ng), empty_word());
         }
     } else {
-        // k == m > 0: relator in the new copy (right factor)
+        //  k == m > 0: relator in the new copy (right factor)
         let prev = (m - 1) as nat;
         let afp_data = tower_afp_data(data, prev);
         let fp = free_product(afp_data.p1, afp_data.p2);
@@ -371,7 +371,7 @@ pub proof fn lemma_base_relator_in_tower(
     }
 }
 
-/// An identification relator at junction k↔k+1 is equiv to ε in tower(m) when k+1 ≤ m.
+///  An identification relator at junction k↔k+1 is equiv to ε in tower(m) when k+1 ≤ m.
 pub proof fn lemma_ident_relator_in_tower(
     data: HNNData, m: nat, k: nat, i: int,
 )
@@ -399,11 +399,11 @@ pub proof fn lemma_ident_relator_in_tower(
     }
 }
 
-// ============================================================
-// Part F: Context insertion — if r ≡ ε, then prefix·suffix ≡ prefix·r·suffix
-// ============================================================
+//  ============================================================
+//  Part F: Context insertion — if r ≡ ε, then prefix·suffix ≡ prefix·r·suffix
+//  ============================================================
 
-/// If r ≡ ε, then prefix·r·suffix ≡ prefix·suffix (deletion direction).
+///  If r ≡ ε, then prefix·r·suffix ≡ prefix·suffix (deletion direction).
 pub proof fn lemma_delete_equiv_empty(
     p: Presentation, prefix: Word, r: Word, suffix: Word,
 )
@@ -413,14 +413,14 @@ pub proof fn lemma_delete_equiv_empty(
         equiv_in_presentation(p, concat(prefix, concat(r, suffix)),
             concat(prefix, suffix)),
 {
-    // r ≡ ε → concat(r, suffix) ≡ concat(ε, suffix) =~= suffix
+    //  r ≡ ε → concat(r, suffix) ≡ concat(ε, suffix) =~= suffix
     lemma_equiv_concat_left(p, r, empty_word(), suffix);
-    // concat(prefix, concat(r, suffix)) ≡ concat(prefix, suffix)
+    //  concat(prefix, concat(r, suffix)) ≡ concat(prefix, suffix)
     lemma_equiv_concat_right(p, prefix, concat(r, suffix), suffix);
 }
 
-/// If r ≡ ε, then prefix·suffix ≡ prefix·r·suffix (insertion direction).
-/// Requires symmetry infrastructure (word_valid + presentation_valid).
+///  If r ≡ ε, then prefix·suffix ≡ prefix·r·suffix (insertion direction).
+///  Requires symmetry infrastructure (word_valid + presentation_valid).
 pub proof fn lemma_insert_equiv_empty(
     p: Presentation, prefix: Word, r: Word, suffix: Word,
 )
@@ -432,19 +432,19 @@ pub proof fn lemma_insert_equiv_empty(
         equiv_in_presentation(p, concat(prefix, suffix),
             concat(prefix, concat(r, suffix))),
 {
-    // ε ≡ r (by symmetry)
+    //  ε ≡ r (by symmetry)
     crate::presentation::lemma_equiv_symmetric(p, r, empty_word());
-    // concat(ε, suffix) ≡ concat(r, suffix) → suffix ≡ concat(r, suffix)
+    //  concat(ε, suffix) ≡ concat(r, suffix) → suffix ≡ concat(r, suffix)
     lemma_equiv_concat_left(p, empty_word(), r, suffix);
-    // concat(prefix, suffix) ≡ concat(prefix, concat(r, suffix))
+    //  concat(prefix, suffix) ≡ concat(prefix, concat(r, suffix))
     lemma_equiv_concat_right(p, prefix, suffix, concat(r, suffix));
 }
 
-// ============================================================
-// Part G: Translation of base words at arbitrary level
-// ============================================================
+//  ============================================================
+//  Part G: Translation of base words at arbitrary level
+//  ============================================================
 
-/// A base word at level L translates to shift_word(w, L * ng).
+///  A base word at level L translates to shift_word(w, L * ng).
 pub proof fn lemma_translate_base_word_at(data: HNNData, w: Word, base_level: nat)
     requires
         hnn_data_valid(data),
@@ -467,7 +467,7 @@ pub proof fn lemma_translate_base_word_at(data: HNNData, w: Word, base_level: na
     }
 }
 
-/// A single stable letter translates to empty at any level.
+///  A single stable letter translates to empty at any level.
 proof fn lemma_translate_stable_empty(data: HNNData, s: Symbol, base_level: int)
     requires is_stable(data, s),
     ensures
@@ -479,7 +479,7 @@ proof fn lemma_translate_stable_empty(data: HNNData, s: Symbol, base_level: int)
     reveal_with_fuel(translate_word_at, 2);
 }
 
-/// Net level of a base word is 0.
+///  Net level of a base word is 0.
 proof fn lemma_net_level_base_word(data: HNNData, w: Word)
     requires
         hnn_data_valid(data),
@@ -501,7 +501,7 @@ proof fn lemma_net_level_base_word(data: HNNData, w: Word)
     }
 }
 
-/// Net level of a single stable letter.
+///  Net level of a single stable letter.
 proof fn lemma_net_level_stable(data: HNNData, s: Symbol)
     requires is_stable(data, s),
     ensures
@@ -514,7 +514,7 @@ proof fn lemma_net_level_stable(data: HNNData, s: Symbol)
     reveal_with_fuel(net_level, 2);
 }
 
-/// Net level distributes over concat.
+///  Net level distributes over concat.
 pub proof fn lemma_net_level_concat(data: HNNData, w1: Word, w2: Word)
     ensures
         net_level(data, concat(w1, w2)) == net_level(data, w1) + net_level(data, w2),
@@ -529,16 +529,16 @@ pub proof fn lemma_net_level_concat(data: HNNData, w1: Word, w2: Word)
     }
 }
 
-// ============================================================
-// Part H: HNN relator translates to identification relator
-// ============================================================
+//  ============================================================
+//  Part H: HNN relator translates to identification relator
+//  ============================================================
 
-/// The HNN relator t⁻¹·a_i·t·inv(b_i) at level k translates to
-/// the AFP identification relator at junction (k-1)↔k.
+///  The HNN relator t⁻¹·a_i·t·inv(b_i) at level k translates to
+///  the AFP identification relator at junction (k-1)↔k.
 ///
-/// This is the textbook correspondence (Lyndon-Schupp Ch. IV):
-/// each HNN relation at level k becomes an identification relation
-/// between copy k-1 and copy k in the tower.
+///  This is the textbook correspondence (Lyndon-Schupp Ch. IV):
+///  each HNN relation at level k becomes an identification relation
+///  between copy k-1 and copy k in the tower.
 pub proof fn lemma_translate_hnn_relator(
     data: HNNData, i: int, k: int,
 )
@@ -559,65 +559,65 @@ pub proof fn lemma_translate_hnn_relator(
     let t_inv = Seq::new(1, |_j: int| Symbol::Inv(ng));
     let t_gen = Seq::new(1, |_j: int| Symbol::Gen(ng));
 
-    // r = concat(part1, part2) where part1 = concat(t_inv, a_i), part2 = concat(t_gen, inv(b_i))
+    //  r = concat(part1, part2) where part1 = concat(t_inv, a_i), part2 = concat(t_gen, inv(b_i))
     let part1 = concat(t_inv, a_i);
     let part2 = concat(t_gen, inverse_word(b_i));
 
-    // Step 1: decompose r = concat(part1, part2)
+    //  Step 1: decompose r = concat(part1, part2)
     lemma_translate_concat(data, part1, part2, k);
 
-    // Step 2: net_level(part1) = -1 (t⁻¹ contributes -1, a_i contributes 0)
+    //  Step 2: net_level(part1) = -1 (t⁻¹ contributes -1, a_i contributes 0)
     lemma_net_level_concat(data, t_inv, a_i);
     lemma_net_level_stable(data, Symbol::Inv(ng));
     lemma_net_level_base_word(data, a_i);
     assert(net_level(data, part1) == -1);
 
-    // Step 3: translate(part1, k) =~= shift(a_i, (k-1)*ng)
+    //  Step 3: translate(part1, k) =~= shift(a_i, (k-1)*ng)
     lemma_translate_concat(data, t_inv, a_i, k);
     lemma_net_level_stable(data, Symbol::Inv(ng));
     lemma_translate_stable_empty(data, Symbol::Inv(ng), k);
     lemma_translate_base_word_at(data, a_i, (k - 1) as nat);
 
-    // Step 4: translate(part2, k-1) =~= shift(inv(b_i), k*ng)
+    //  Step 4: translate(part2, k-1) =~= shift(inv(b_i), k*ng)
     lemma_translate_concat(data, t_gen, inverse_word(b_i), k - 1);
     lemma_net_level_stable(data, Symbol::Gen(ng));
     lemma_translate_stable_empty(data, Symbol::Gen(ng), k - 1);
     crate::word::lemma_inverse_word_valid(b_i, ng);
     lemma_translate_base_word_at(data, inverse_word(b_i), k as nat);
 
-    // Intermediate assertions to chain the =~= results
+    //  Intermediate assertions to chain the =~= results
     assert(translate_word_at(data, part1, k)
         =~= shift_word(a_i, ((k - 1) as nat) * ng));
     assert(translate_word_at(data, part2, k - 1)
         =~= shift_word(inverse_word(b_i), k as nat * ng));
 
-    // Step 5: shift(inv(b_i), k*ng) =~= inv(shift(b_i, k*ng))
+    //  Step 5: shift(inv(b_i), k*ng) =~= inv(shift(b_i, k*ng))
     crate::free_product::lemma_shift_inverse_word(b_i, k as nat * ng);
 
-    // Step 6: connect to amalgamation_relator
+    //  Step 6: connect to amalgamation_relator
     lemma_tower_num_generators(data, (k - 1) as nat);
     assert(translate_word_at(data, part2, k - 1)
         =~= inverse_word(shift_word(b_i, k as nat * ng)));
 
-    // Connect hnn_relator to concat(part1, part2)
+    //  Connect hnn_relator to concat(part1, part2)
     assert(hnn_relator(data, i) =~= concat(part1, part2));
 
-    // Final chain
+    //  Final chain
     assert(translate_word_at(data, concat(part1, part2), k)
         =~= concat(shift_word(a_i, ((k - 1) as nat) * ng),
                     inverse_word(shift_word(b_i, k as nat * ng))));
 }
 
-// ============================================================
-// Part I: General middle-deletion lemma for translation
-// ============================================================
+//  ============================================================
+//  Part I: General middle-deletion lemma for translation
+//  ============================================================
 
-/// If the translated middle ≡ ε in tower and net_level(middle) == 0,
-/// then translate(prefix · middle · suffix) ≡ translate(prefix · suffix) in tower.
+///  If the translated middle ≡ ε in tower and net_level(middle) == 0,
+///  then translate(prefix · middle · suffix) ≡ translate(prefix · suffix) in tower.
 ///
-/// This handles ALL step types uniformly:
-/// - FreeReduce/Delete: w = prefix · middle · suffix → w' = prefix · suffix
-/// - FreeExpand/Insert: w = prefix · suffix → w' = prefix · middle · suffix (reverse direction)
+///  This handles ALL step types uniformly:
+///  - FreeReduce/Delete: w = prefix · middle · suffix → w' = prefix · suffix
+///  - FreeExpand/Insert: w = prefix · suffix → w' = prefix · middle · suffix (reverse direction)
 pub proof fn lemma_translate_delete_middle(
     data: HNNData, m: nat, base_level: int,
     prefix: Word, middle: Word, suffix: Word,
@@ -639,13 +639,13 @@ pub proof fn lemma_translate_delete_middle(
     let tp = tower_presentation(data, m);
     let lp = base_level + net_level(data, prefix);
 
-    // Decompose translate of w = prefix · middle · suffix
+    //  Decompose translate of w = prefix · middle · suffix
     lemma_translate_concat(data, prefix, concat(middle, suffix), base_level);
     lemma_translate_concat(data, middle, suffix, lp);
     lemma_net_level_concat(data, prefix, concat(middle, suffix));
     lemma_net_level_concat(data, middle, suffix);
 
-    // Decompose translate of w' = prefix · suffix
+    //  Decompose translate of w' = prefix · suffix
     lemma_translate_concat(data, prefix, suffix, base_level);
 
     let tr_prefix = translate_word_at(data, prefix, base_level);
@@ -655,8 +655,8 @@ pub proof fn lemma_translate_delete_middle(
     lemma_delete_equiv_empty(tp, tr_prefix, tr_middle, tr_suffix);
 }
 
-/// Reverse direction: translate(prefix · suffix) ≡ translate(prefix · middle · suffix).
-/// Needs symmetry infrastructure.
+///  Reverse direction: translate(prefix · suffix) ≡ translate(prefix · middle · suffix).
+///  Needs symmetry infrastructure.
 pub proof fn lemma_translate_insert_middle(
     data: HNNData, m: nat, base_level: int,
     prefix: Word, middle: Word, suffix: Word,
@@ -691,11 +691,11 @@ pub proof fn lemma_translate_insert_middle(
     lemma_insert_equiv_empty(tp, tr_prefix, tr_middle, tr_suffix);
 }
 
-// ============================================================
-// Part J: Specific middle ≡ ε results
-// ============================================================
+//  ============================================================
+//  Part J: Specific middle ≡ ε results
+//  ============================================================
 
-/// A stable inverse pair translates to ε (=~=, not just ≡).
+///  A stable inverse pair translates to ε (=~=, not just ≡).
 proof fn lemma_translate_stable_pair(data: HNNData, s: Symbol, base_level: int)
     requires
         is_stable(data, s),
@@ -716,7 +716,7 @@ proof fn lemma_translate_stable_pair(data: HNNData, s: Symbol, base_level: int)
     lemma_net_level_concat(data, s_word, inv_s_word);
     lemma_net_level_stable(data, s);
 
-    // inverse_symbol of stable is also stable
+    //  inverse_symbol of stable is also stable
     let ng = data.base.num_generators;
     assert(is_stable(data, inverse_symbol(s))) by {
         if s == Symbol::Gen(ng) {
@@ -735,11 +735,11 @@ proof fn lemma_translate_stable_pair(data: HNNData, s: Symbol, base_level: int)
     }
 }
 
-// ============================================================
-// Part G2: Base at copy k embeds in tower via shift homomorphism
-// ============================================================
+//  ============================================================
+//  Part G2: Base at copy k embeds in tower via shift homomorphism
+//  ============================================================
 
-/// Shift homomorphism: base → tower(m), mapping Gen(i) → [Gen(i + k*ng)].
+///  Shift homomorphism: base → tower(m), mapping Gen(i) → [Gen(i + k*ng)].
 pub open spec fn shift_hom(data: HNNData, m: nat, k: nat) -> crate::homomorphism::HomomorphismData {
     let ng = data.base.num_generators;
     crate::homomorphism::HomomorphismData {
@@ -749,7 +749,7 @@ pub open spec fn shift_hom(data: HNNData, m: nat, k: nat) -> crate::homomorphism
     }
 }
 
-/// The shift homomorphism maps words to their shifted versions.
+///  The shift homomorphism maps words to their shifted versions.
 #[verifier::rlimit(200)]
 proof fn lemma_shift_hom_applies(data: HNNData, k: nat, m: nat, w: Word)
     requires
@@ -769,28 +769,28 @@ proof fn lemma_shift_hom_applies(data: HNNData, k: nat, m: nat, w: Word)
         assert(shifted.len() == 0);
     } else {
         lemma_shift_hom_applies(data, k, m, w.drop_first());
-        // IH: apply_hom(h, rest) =~= shift_word(rest, k*ng)
-        // result = concat(apply_hom_symbol(h, w.first()), apply_hom(h, rest))
-        // shifted = Seq::new(w.len(), |j| shift_symbol(w[j], k*ng))
-        // Element-wise: result[0] == shifted[0] and result[j] == shifted[j] for j > 0
+        //  IH: apply_hom(h, rest) =~= shift_word(rest, k*ng)
+        //  result = concat(apply_hom_symbol(h, w.first()), apply_hom(h, rest))
+        //  shifted = Seq::new(w.len(), |j| shift_symbol(w[j], k*ng))
+        //  Element-wise: result[0] == shifted[0] and result[j] == shifted[j] for j > 0
 
-        // The result has same length as shifted
+        //  The result has same length as shifted
         let s = w.first();
         assert(symbol_valid(s, ng));
         let sym_img = crate::homomorphism::apply_hom_symbol(h, s);
-        // For both Gen and Inv: sym_img is a 1-element word = [shift_symbol(s, k*ng)]
+        //  For both Gen and Inv: sym_img is a 1-element word = [shift_symbol(s, k*ng)]
         match s {
             Symbol::Gen(i) => {
                 assert(sym_img.len() == 1);
                 assert(sym_img[0] == shift_symbol(s, k * ng));
             }
             Symbol::Inv(i) => {
-                // sym_img = inverse_word([Gen(i+k*ng)]) = [Inv(i+k*ng)]
+                //  sym_img = inverse_word([Gen(i+k*ng)]) = [Inv(i+k*ng)]
                 let gen_img = h.generator_images[i as int];
                 assert(gen_img.len() == 1);
                 assert(gen_img[0] == Symbol::Gen((i + k * ng) as nat));
-                // inverse_word definition: Seq::new(w.len(), |j| inverse_symbol(w[w.len()-1-j]))
-                // For len=1: Seq::new(1, |j| inverse_symbol(gen_img[0])) = [Inv(i+k*ng)]
+                //  inverse_word definition: Seq::new(w.len(), |j| inverse_symbol(w[w.len()-1-j]))
+                //  For len=1: Seq::new(1, |j| inverse_symbol(gen_img[0])) = [Inv(i+k*ng)]
                 crate::word::lemma_inverse_word_len(gen_img);
                 assert(sym_img.len() == 1);
                 assert(sym_img[0] == shift_symbol(s, k * ng));
@@ -799,7 +799,7 @@ proof fn lemma_shift_hom_applies(data: HNNData, k: nat, m: nat, w: Word)
     }
 }
 
-/// The shift homomorphism is valid: relator images ≡ ε in tower(m).
+///  The shift homomorphism is valid: relator images ≡ ε in tower(m).
 proof fn lemma_shift_hom_valid(data: HNNData, m: nat, k: nat)
     requires
         hnn_data_valid(data),
@@ -813,7 +813,7 @@ proof fn lemma_shift_hom_valid(data: HNNData, m: nat, k: nat)
     lemma_tower_valid(data, m);
     lemma_tower_num_generators(data, m);
 
-    // Generator images are word_valid for tower(m)
+    //  Generator images are word_valid for tower(m)
     assert forall|i: int| 0 <= i < h.generator_images.len()
         implies word_valid(h.generator_images[i], h.target.num_generators)
     by {
@@ -822,19 +822,19 @@ proof fn lemma_shift_hom_valid(data: HNNData, m: nat, k: nat)
             requires i < ng as int, k <= m;
     }
 
-    // Relator images ≡ ε: shift(relator, k*ng) ≡ ε in tower(m)
+    //  Relator images ≡ ε: shift(relator, k*ng) ≡ ε in tower(m)
     assert forall|i: int| 0 <= i < h.source.relators.len()
         implies equiv_in_presentation(h.target,
             crate::homomorphism::apply_hom(h, h.source.relators[i]), empty_word())
     by {
         lemma_shift_hom_applies(data, k, m, h.source.relators[i]);
-        // apply_hom(h, relator) =~= shift(relator, k*ng)
+        //  apply_hom(h, relator) =~= shift(relator, k*ng)
         lemma_base_relator_in_tower(data, m, k, i);
-        // shift(relator, k*ng) ≡ ε in tower(m)
+        //  shift(relator, k*ng) ≡ ε in tower(m)
     }
 }
 
-/// Base at copy k embeds in tower(m): equiv(base, w1, w2) → equiv(tower(m), shift(w1, k*ng), shift(w2, k*ng)).
+///  Base at copy k embeds in tower(m): equiv(base, w1, w2) → equiv(tower(m), shift(w1, k*ng), shift(w2, k*ng)).
 pub proof fn lemma_base_at_copy_k_embeds(
     data: HNNData, m: nat, k: nat, w1: Word, w2: Word,
 )
@@ -855,17 +855,17 @@ pub proof fn lemma_base_at_copy_k_embeds(
     lemma_shift_hom_applies(data, k, m, w2);
 }
 
-// Tower identifications_isomorphic from hnn_associations_isomorphic.
+//  Tower identifications_isomorphic from hnn_associations_isomorphic.
 //
-// Proof uses:
-// - Backward: base_at_copy_k_embeds (shift homomorphism)
-// - Forward: lemma_afp_injectivity_right (G₂ one-shot)
-// - shift-embedding distributivity for Seq::new closure matching
+//  Proof uses:
+//  - Backward: base_at_copy_k_embeds (shift homomorphism)
+//  - Forward: lemma_afp_injectivity_right (G₂ one-shot)
+//  - shift-embedding distributivity for Seq::new closure matching
 
-/// Shift-embedding distributivity: embedding with shifted images = shift of embedding.
-/// apply_embedding(shift_each(images, offset), w) =~= shift(apply_embedding(images, w), offset)
-/// Shift-embedding distributivity: embedding with shifted images = shift of embedding.
-/// Takes shifted_images as parameter to avoid Seq::new closure mismatch in ensures.
+///  Shift-embedding distributivity: embedding with shifted images = shift of embedding.
+///  apply_embedding(shift_each(images, offset), w) =~= shift(apply_embedding(images, w), offset)
+///  Shift-embedding distributivity: embedding with shifted images = shift of embedding.
+///  Takes shifted_images as parameter to avoid Seq::new closure mismatch in ensures.
 proof fn lemma_shift_embedding_distributes(
     images: Seq<Word>, shifted_images: Seq<Word>, w: Word, offset: nat,
 )
@@ -886,7 +886,7 @@ proof fn lemma_shift_embedding_distributes(
         crate::free_product::lemma_shift_concat(
             apply_embedding_symbol(images, s),
             apply_embedding(images, w.drop_first()), offset);
-        // Trigger the forall for the specific symbol index and establish symbol-level =~=
+        //  Trigger the forall for the specific symbol index and establish symbol-level =~=
         match s {
             Symbol::Gen(i) => {
                 assert(shifted_images[i as int] =~= shift_word(images[i as int], offset));
@@ -899,10 +899,10 @@ proof fn lemma_shift_embedding_distributes(
     }
 }
 
-/// Tower identifications_isomorphic from hnn_associations_isomorphic.
-/// Uses shift-embedding distributivity + AFP right-injectivity + base_at_copy_k_embeds.
+///  Tower identifications_isomorphic from hnn_associations_isomorphic.
+///  Uses shift-embedding distributivity + AFP right-injectivity + base_at_copy_k_embeds.
 #[verifier::rlimit(300)]
-/// Forward: tower(k) equiv → base equiv for embed_a_hnn.
+///  Forward: tower(k) equiv → base equiv for embed_a_hnn.
 proof fn lemma_tower_iso_forward_mid(
     data: HNNData, k: nat, embed_a_hnn: Word,
 )
@@ -918,7 +918,7 @@ proof fn lemma_tower_iso_forward_mid(
     let ng = data.base.num_generators;
     reveal(presentation_valid);
     if k == 0 {
-        // tower(0) = base, shift by 0 = identity
+        //  tower(0) = base, shift by 0 = identity
         assert(k * ng == 0) by (nonlinear_arith) requires k == 0;
         assert(shift_word(embed_a_hnn, 0nat) =~= embed_a_hnn);
     } else {
@@ -931,7 +931,7 @@ proof fn lemma_tower_iso_forward_mid(
     }
 }
 
-/// Backward: base equiv → tower(k) equiv for embed_a_hnn.
+///  Backward: base equiv → tower(k) equiv for embed_a_hnn.
 proof fn lemma_tower_iso_backward_mid(
     data: HNNData, k: nat, embed_a_hnn: Word,
 )
@@ -943,24 +943,24 @@ proof fn lemma_tower_iso_backward_mid(
         equiv_in_presentation(tower_presentation(data, k),
             shift_word(embed_a_hnn, k * data.base.num_generators), empty_word()),
 {
-    // shift(ε, k*ng) =~= ε
+    //  shift(ε, k*ng) =~= ε
     assert(shift_word(empty_word(), k * data.base.num_generators) =~= empty_word());
     lemma_base_at_copy_k_embeds(data, k, k, embed_a_hnn, empty_word());
 }
 
-// lemma_tower_iso_per_word: per-word biconditional for tower isomorphism.
-// Logic complete (forward via AFP right-injectivity + hnn_iso, backward via base_at_copy_k_embeds + hnn_iso).
-// Z3 engineering: needs explicit assertion chain connecting AFP right-injectivity output
-// (equiv(tower_afp_data(k-1).p2, embed_a_hnn, ε)) to equiv(data.base, embed_a_hnn, ε)
-// and shift(embed_a_hnn, k*ng) to embed_a_tower. ~10 more lines of intermediate assertions.
+//  lemma_tower_iso_per_word: per-word biconditional for tower isomorphism.
+//  Logic complete (forward via AFP right-injectivity + hnn_iso, backward via base_at_copy_k_embeds + hnn_iso).
+//  Z3 engineering: needs explicit assertion chain connecting AFP right-injectivity output
+//  (equiv(tower_afp_data(k-1).p2, embed_a_hnn, ε)) to equiv(data.base, embed_a_hnn, ε)
+//  and shift(embed_a_hnn, k*ng) to embed_a_tower. ~10 more lines of intermediate assertions.
 //
-// All building blocks verified (0 assumes):
-// - lemma_afp_injectivity_right ✓
-// - lemma_base_at_copy_k_embeds ✓ (shift homomorphism)
-// - lemma_shift_embedding_distributes ✓
-// - hnn_associations_isomorphic ✓ (precondition)
+//  All building blocks verified (0 assumes):
+//  - lemma_afp_injectivity_right ✓
+//  - lemma_base_at_copy_k_embeds ✓ (shift homomorphism)
+//  - lemma_shift_embedding_distributes ✓
+//  - hnn_associations_isomorphic ✓ (precondition)
 
-/// Helper: per-word proof of the tower isomorphism biconditional.
+///  Helper: per-word proof of the tower isomorphism biconditional.
 #[verifier::rlimit(1000)]
 proof fn lemma_tower_iso_per_word(
     data: HNNData, k: nat, w: Word,
@@ -987,24 +987,24 @@ proof fn lemma_tower_iso_per_word(
     assert(afp_data.identifications.len() == kk);
     let a_words_hnn = Seq::new(kk, |i: int| data.associations[i].0);
     let b_words_hnn = Seq::new(kk, |i: int| data.associations[i].1);
-    // EXACTLY match ensures clause's Seq::new (same length expression)
+    //  EXACTLY match ensures clause's Seq::new (same length expression)
     let a_words_tower = Seq::new(afp_data.identifications.len(), |i: int| afp_data.identifications[i].0);
     let b_words_tower = Seq::new(afp_data.identifications.len(), |i: int| afp_data.identifications[i].1);
 
-    // Element-wise: a_words_tower[i] = shift(a_words_hnn[i], k*ng) and b_words_tower[i] = b_words_hnn[i]
+    //  Element-wise: a_words_tower[i] = shift(a_words_hnn[i], k*ng) and b_words_tower[i] = b_words_hnn[i]
     assert forall|i: int| 0 <= i < kk implies
         afp_data.identifications[i].1 == data.associations[i].1 by {}
     assert forall|i: int| 0 <= i < kk implies
         #[trigger] b_words_tower[i] =~= b_words_hnn[i] by {}
     assert(b_words_tower =~= b_words_hnn);
 
-    // Shift-embedding distributivity
+    //  Shift-embedding distributivity
     assert forall|i: int| 0 <= i < a_words_hnn.len() implies
         #[trigger] a_words_tower[i] =~= shift_word(a_words_hnn[i], k * ng) by {}
     lemma_shift_embedding_distributes(a_words_hnn, a_words_tower, w, k * ng);
     let embed_a_hnn = apply_embedding(a_words_hnn, w);
 
-    // word_valid for embed_a_hnn
+    //  word_valid for embed_a_hnn
     assert forall|j: int| 0 <= j < a_words_hnn.len()
         implies word_valid(#[trigger] a_words_hnn[j], ng)
     by { assert(word_valid(data.associations[j].0, ng)); }
@@ -1013,29 +1013,29 @@ proof fn lemma_tower_iso_per_word(
     let embed_a_tower = apply_embedding(a_words_tower, w);
     let embed_b_tower = apply_embedding(b_words_tower, w);
 
-    // Connect embed_b_tower to embed_b_hnn (shift by 0 = identity)
+    //  Connect embed_b_tower to embed_b_hnn (shift by 0 = identity)
     assert forall|i: int| 0 <= i < b_words_hnn.len() implies
         #[trigger] b_words_tower[i] =~= shift_word(b_words_hnn[i], 0nat) by {}
     lemma_shift_embedding_distributes(b_words_hnn, b_words_tower, w, 0nat);
-    // embed_b_tower =~= shift(embed_b_hnn, 0) =~= embed_b_hnn
+    //  embed_b_tower =~= shift(embed_b_hnn, 0) =~= embed_b_hnn
     assert(embed_b_tower =~= apply_embedding(b_words_hnn, w));
 
-    // HNN biconditional (should fire from hnn_associations_isomorphic)
+    //  HNN biconditional (should fire from hnn_associations_isomorphic)
     assert(equiv_in_presentation(data.base, embed_a_hnn, empty_word())
         <==> equiv_in_presentation(data.base, apply_embedding(b_words_hnn, w), empty_word()));
 
-    // Key =~= connections
+    //  Key =~= connections
     assert(b_words_tower =~= b_words_hnn);
     assert(embed_b_tower =~= apply_embedding(b_words_hnn, w));
 
-    // Explicitly trigger hnn_iso biconditional
+    //  Explicitly trigger hnn_iso biconditional
     assert(word_valid(w, kk as nat));
     assert(equiv_in_presentation(data.base, embed_a_hnn, empty_word())
         <==> equiv_in_presentation(data.base, apply_embedding(b_words_hnn, w), empty_word()));
 
-    // Forward: equiv(p1, embed_a_tower, ε) → equiv(base, embed_a_hnn, ε)
-    // Then hnn_iso → equiv(base, embed_b_hnn, ε) =~= equiv(p2, embed_b_tower, ε)
-    // Setup for forward direction (AFP right-injectivity needs these)
+    //  Forward: equiv(p1, embed_a_tower, ε) → equiv(base, embed_a_hnn, ε)
+    //  Then hnn_iso → equiv(base, embed_b_hnn, ε) =~= equiv(p2, embed_b_tower, ε)
+    //  Setup for forward direction (AFP right-injectivity needs these)
     if k > 0 {
         assert(tower_textbook_prereqs_at(data, (k - 1) as nat));
         lemma_tower_afp_data_valid(data, (k - 1) as nat);
@@ -1043,22 +1043,22 @@ proof fn lemma_tower_iso_per_word(
         lemma_tower_num_generators(data, (k - 1) as nat);
     }
 
-    // Establish the two intermediate biconditionals, then chain
+    //  Establish the two intermediate biconditionals, then chain
     let mid = equiv_in_presentation(data.base, embed_a_hnn, empty_word());
     let lhs = equiv_in_presentation(afp_data.p1, apply_embedding(a_words_tower, w), empty_word());
     let rhs = equiv_in_presentation(afp_data.p2, apply_embedding(b_words_tower, w), empty_word());
 
-    // (1) mid ↔ rhs: from hnn_iso + embed_b connection
-    // Already have: mid ↔ equiv(base, embed_b_hnn, ε) from hnn_iso
-    // And: rhs = equiv(base, embed_b_tower, ε) = equiv(base, embed_b_hnn, ε) (from =~=)
-    // So: mid ↔ rhs
+    //  (1) mid ↔ rhs: from hnn_iso + embed_b connection
+    //  Already have: mid ↔ equiv(base, embed_b_hnn, ε) from hnn_iso
+    //  And: rhs = equiv(base, embed_b_tower, ε) = equiv(base, embed_b_hnn, ε) (from =~=)
+    //  So: mid ↔ rhs
 
-    // (2) lhs → mid: tower equiv → base equiv
+    //  (2) lhs → mid: tower equiv → base equiv
     if lhs {
         lemma_tower_iso_forward_mid(data, k, embed_a_hnn);
     }
 
-    // (3) mid → lhs: base equiv → tower equiv
+    //  (3) mid → lhs: base equiv → tower equiv
     if mid {
         lemma_tower_iso_backward_mid(data, k, embed_a_hnn);
     }
@@ -1093,7 +1093,7 @@ pub proof fn lemma_tower_identifications_isomorphic(
     }
 }
 
-/// A base inverse pair [s, inv(s)] at level k: net_level is 0 and translation ≡ ε in tower.
+///  A base inverse pair [s, inv(s)] at level k: net_level is 0 and translation ≡ ε in tower.
 proof fn lemma_translate_base_pair_trivial(
     data: HNNData, m: nat, s: Symbol, base_level: nat,
 )
@@ -1114,7 +1114,7 @@ proof fn lemma_translate_base_pair_trivial(
     let inv_s_word = Seq::new(1, |_j: int| inverse_symbol(s));
     let pair = concat(s_word, inv_s_word);
 
-    // net_level(pair) = 0 (neither s nor inv(s) is stable)
+    //  net_level(pair) = 0 (neither s nor inv(s) is stable)
     lemma_net_level_concat(data, s_word, inv_s_word);
     assert(s_word.first() == s);
     assert(s_word.drop_first() =~= Seq::<Symbol>::empty());
@@ -1131,21 +1131,21 @@ proof fn lemma_translate_base_pair_trivial(
         }
     }
 
-    // Fully unfold translate for 2-element pair
+    //  Fully unfold translate for 2-element pair
     reveal_with_fuel(translate_word_at, 3);
-    // translate(pair, bl) = [shift_symbol(s, bl*ng), shift_symbol(inv(s), bl*ng)]
-    // These form a cancelling pair
+    //  translate(pair, bl) = [shift_symbol(s, bl*ng), shift_symbol(inv(s), bl*ng)]
+    //  These form a cancelling pair
     let ss = shift_symbol(s, base_level * ng);
     let iss = shift_symbol(inverse_symbol(s), base_level * ng);
-    // ss and iss are inverses: Gen(j+k) and Inv(j+k)
+    //  ss and iss are inverses: Gen(j+k) and Inv(j+k)
     assert(is_inverse_pair(ss, iss)) by {
         match s { Symbol::Gen(i) => {} Symbol::Inv(i) => {} }
     }
-    // The translated pair has a cancellation at position 0
+    //  The translated pair has a cancellation at position 0
     let translated = translate_word_at(data, pair, base_level as int);
     assert(has_cancellation_at(translated, 0));
     assert(reduce_at(translated, 0) =~= empty_word());
-    // Free reduction gives a 1-step derivation proving ≡ ε
+    //  Free reduction gives a 1-step derivation proving ≡ ε
     let step = DerivationStep::FreeReduce { position: 0 };
     assert(apply_step(tower_presentation(data, m), translated, step)
         == Some(empty_word()));
@@ -1157,19 +1157,19 @@ proof fn lemma_translate_base_pair_trivial(
     assert(derivation_valid(tower_presentation(data, m), d, translated, empty_word()));
 }
 
-// ============================================================
-// Part K: Level bounds and prefix_levels_bounded
-// ============================================================
+//  ============================================================
+//  Part K: Level bounds and prefix_levels_bounded
+//  ============================================================
 
-/// All prefix net_levels of w are in [0, m].
-/// This means: for every j in [0, w.len()], net_level(w[0..j]) is in [0, m].
+///  All prefix net_levels of w are in [0, m].
+///  This means: for every j in [0, w.len()], net_level(w[0..j]) is in [0, m].
 pub open spec fn prefix_levels_bounded(data: HNNData, w: Word, m: nat) -> bool {
     forall|j: int| #![trigger w.subrange(0, j)]
         0 <= j <= w.len() ==>
             0 <= net_level(data, w.subrange(0, j)) <= m as int
 }
 
-/// Net level of a subrange [0, j] decomposes via concat.
+///  Net level of a subrange [0, j] decomposes via concat.
 proof fn lemma_net_level_subrange_prefix(data: HNNData, w: Word, pos: int)
     requires 0 <= pos <= w.len(),
     ensures
@@ -1181,11 +1181,11 @@ proof fn lemma_net_level_subrange_prefix(data: HNNData, w: Word, pos: int)
     lemma_net_level_concat(data, w.subrange(0, pos), w.subrange(pos, w.len() as int));
 }
 
-// ============================================================
-// Part L: word_valid for shift_word at arbitrary offset
-// ============================================================
+//  ============================================================
+//  Part L: word_valid for shift_word at arbitrary offset
+//  ============================================================
 
-/// shift_word(w, k * ng) is word_valid for (m+1)*ng when w is base-valid and k <= m.
+///  shift_word(w, k * ng) is word_valid for (m+1)*ng when w is base-valid and k <= m.
 proof fn lemma_shift_word_valid_for_tower(
     data: HNNData, w: Word, k: nat, m: nat,
 )
@@ -1200,7 +1200,7 @@ proof fn lemma_shift_word_valid_for_tower(
     let ng = data.base.num_generators;
     let sw = shift_word(w, k * ng);
     let n = (m + 1) * ng;
-    // k <= m implies k*ng <= m*ng, so i + k*ng < ng + m*ng = (m+1)*ng = n
+    //  k <= m implies k*ng <= m*ng, so i + k*ng < ng + m*ng = (m+1)*ng = n
     assert(k * ng <= m * ng) by(nonlinear_arith)
         requires k <= m
     {}
@@ -1219,7 +1219,7 @@ proof fn lemma_shift_word_valid_for_tower(
     }
 }
 
-/// inverse_word(shift_word(w, k*ng)) is word_valid for tower(m).
+///  inverse_word(shift_word(w, k*ng)) is word_valid for tower(m).
 proof fn lemma_inv_shift_word_valid_for_tower(
     data: HNNData, w: Word, k: nat, m: nat,
 )
@@ -1237,11 +1237,11 @@ proof fn lemma_inv_shift_word_valid_for_tower(
         shift_word(w, k * ng), (m + 1) * ng);
 }
 
-// ============================================================
-// Part M: Net level helpers for relators
-// ============================================================
+//  ============================================================
+//  Part M: Net level helpers for relators
+//  ============================================================
 
-/// Net level of inverse_word is the negation.
+///  Net level of inverse_word is the negation.
 proof fn lemma_net_level_inverse(data: HNNData, w: Word)
     ensures
         net_level(data, inverse_word(w)) == -net_level(data, w),
@@ -1254,20 +1254,20 @@ proof fn lemma_net_level_inverse(data: HNNData, w: Word)
         let s = w.first();
         let rest = w.drop_first();
 
-        // inverse_word(w) = concat(inverse_word(rest), [inv(s)])
+        //  inverse_word(w) = concat(inverse_word(rest), [inv(s)])
         let inv_s_word = Seq::new(1, |_j: int| inverse_symbol(s));
         assert(inverse_word(w) =~= concat(inverse_word(rest), inv_s_word));
 
-        // net_level decomposes
+        //  net_level decomposes
         lemma_net_level_concat(data, inverse_word(rest), inv_s_word);
         lemma_net_level_inverse(data, rest);
 
-        // net_level of [inv(s)]
+        //  net_level of [inv(s)]
         assert(inv_s_word.first() == inverse_symbol(s));
         assert(inv_s_word.drop_first() =~= Seq::<Symbol>::empty());
         reveal_with_fuel(net_level, 2);
 
-        // Case analysis: net_level([inv(s)]) == -net_level_contribution(s)
+        //  Case analysis: net_level([inv(s)]) == -net_level_contribution(s)
         if s == Symbol::Gen(ng) {
             assert(inverse_symbol(s) == Symbol::Inv(ng));
         } else if s == Symbol::Inv(ng) {
@@ -1291,7 +1291,7 @@ proof fn lemma_net_level_inverse(data: HNNData, w: Word)
     }
 }
 
-/// HNN relator has net_level 0.
+///  HNN relator has net_level 0.
 proof fn lemma_net_level_hnn_relator(data: HNNData, i: int)
     requires
         hnn_data_valid(data),
@@ -1317,7 +1317,7 @@ proof fn lemma_net_level_hnn_relator(data: HNNData, i: int)
     lemma_net_level_base_word(data, inverse_word(b_i));
 }
 
-/// Any relator in hnn_presentation has net_level 0.
+///  Any relator in hnn_presentation has net_level 0.
 proof fn lemma_net_level_hnn_pres_relator(data: HNNData, idx: int)
     requires
         hnn_data_valid(data),
@@ -1338,7 +1338,7 @@ proof fn lemma_net_level_hnn_pres_relator(data: HNNData, idx: int)
     }
 }
 
-/// get_relator has net_level 0 when the underlying relator does.
+///  get_relator has net_level 0 when the underlying relator does.
 proof fn lemma_net_level_get_relator(data: HNNData, idx: nat, inverted: bool)
     requires
         hnn_data_valid(data),
@@ -1353,8 +1353,8 @@ proof fn lemma_net_level_get_relator(data: HNNData, idx: nat, inverted: bool)
     }
 }
 
-/// Decompose inverse_word(hnn_relator):
-/// inv(t⁻¹ · a_i · t · inv(b_i)) = b_i · t⁻¹ · inv(a_i) · t
+///  Decompose inverse_word(hnn_relator):
+///  inv(t⁻¹ · a_i · t · inv(b_i)) = b_i · t⁻¹ · inv(a_i) · t
 proof fn lemma_inverse_hnn_relator_decomp(data: HNNData, i: int)
     requires
         hnn_data_valid(data),
@@ -1374,16 +1374,16 @@ proof fn lemma_inverse_hnn_relator_decomp(data: HNNData, i: int)
     let t_inv_word = Seq::new(1, |_j: int| Symbol::Inv(ng));
     let inv_b_i = inverse_word(b_i);
 
-    // hnn_relator = concat(t_inv_word, concat(a_i, concat(t_word, inv_b_i)))
+    //  hnn_relator = concat(t_inv_word, concat(a_i, concat(t_word, inv_b_i)))
     let r = hnn_relator(data, i);
     assert(r =~= concat(t_inv_word, concat(a_i, concat(t_word, inv_b_i))));
 
-    // Apply inverse_concat repeatedly
+    //  Apply inverse_concat repeatedly
     crate::word::lemma_inverse_concat(t_inv_word, concat(a_i, concat(t_word, inv_b_i)));
     crate::word::lemma_inverse_concat(a_i, concat(t_word, inv_b_i));
     crate::word::lemma_inverse_concat(t_word, inv_b_i);
 
-    // inverse of single-symbol words
+    //  inverse of single-symbol words
     assert(inverse_word(t_inv_word) =~= t_word) by {
         reveal_with_fuel(inverse_word, 2);
     }
@@ -1391,21 +1391,21 @@ proof fn lemma_inverse_hnn_relator_decomp(data: HNNData, i: int)
         reveal_with_fuel(inverse_word, 2);
     }
 
-    // inverse of inverse_word(b_i) = b_i
+    //  inverse of inverse_word(b_i) = b_i
     crate::word::lemma_inverse_involution(b_i);
 
-    // Chain: inv(r) = inv(inv_b_i) ++ inv(t_word) ++ inv(a_i) ++ inv(t_inv_word)
-    //               = b_i ++ t_inv_word ++ inv(a_i) ++ t_word
+    //  Chain: inv(r) = inv(inv_b_i) ++ inv(t_word) ++ inv(a_i) ++ inv(t_inv_word)
+    //                = b_i ++ t_inv_word ++ inv(a_i) ++ t_word
 }
 
-// ============================================================
-// Part N: Per-step translation — the core case analysis
-// ============================================================
+//  ============================================================
+//  Part N: Per-step translation — the core case analysis
+//  ============================================================
 
-/// Helper: A single free-reduce or free-expand step preserves translation equivalence.
-/// The inverse pair [s, inv(s)] either:
-///  - stable pair: translates to ε (=~=)
-///  - base pair: translates to a cancelling pair ≡ ε in tower
+///  Helper: A single free-reduce or free-expand step preserves translation equivalence.
+///  The inverse pair [s, inv(s)] either:
+///   - stable pair: translates to ε (=~=)
+///   - base pair: translates to a cancelling pair ≡ ε in tower
 proof fn lemma_pair_translate_equiv_empty(
     data: HNNData, m: nat, s: Symbol, base_level: int,
 )
@@ -1429,15 +1429,15 @@ proof fn lemma_pair_translate_equiv_empty(
     let tp = tower_presentation(data, m);
 
     if is_stable(data, s) {
-        // Stable pair: translate =~= ε
+        //  Stable pair: translate =~= ε
         lemma_translate_stable_pair(data, s, base_level);
         assert(translate_word_at(data, pair, base_level) =~= empty_word());
-        // empty word ≡ ε trivially
+        //  empty word ≡ ε trivially
         lemma_equiv_refl(tp, empty_word());
-        // word_valid of empty word
+        //  word_valid of empty word
         assert(word_valid(empty_word(), tp.num_generators));
     } else {
-        // Base pair: use existing lemma
+        //  Base pair: use existing lemma
         assert(symbol_valid(s, ng)) by {
             match s {
                 Symbol::Gen(i) => { assert(i < ng + 1); assert(i != ng); assert(i < ng); }
@@ -1446,7 +1446,7 @@ proof fn lemma_pair_translate_equiv_empty(
         }
         lemma_translate_base_pair_trivial(data, m, s, base_level as nat);
 
-        // word_valid: the translated pair is a 2-symbol word with shifted symbols
+        //  word_valid: the translated pair is a 2-symbol word with shifted symbols
         lemma_tower_num_generators(data, m);
         reveal_with_fuel(translate_word_at, 3);
         let translated = translate_word_at(data, pair, base_level);
@@ -1466,7 +1466,7 @@ proof fn lemma_pair_translate_equiv_empty(
     }
 }
 
-/// Helper: word_valid for the translation of a base relator at level k.
+///  Helper: word_valid for the translation of a base relator at level k.
 proof fn lemma_translate_base_relator_valid(
     data: HNNData, m: nat, k: nat, r_idx: int,
 )
@@ -1487,7 +1487,7 @@ proof fn lemma_translate_base_relator_valid(
     lemma_shift_word_valid_for_tower(data, r, k, m);
 }
 
-/// Helper: word_valid for the translation of an HNN relator at level k.
+///  Helper: word_valid for the translation of an HNN relator at level k.
 proof fn lemma_translate_hnn_relator_valid(
     data: HNNData, m: nat, k: nat, i: int,
 )
@@ -1505,13 +1505,13 @@ proof fn lemma_translate_hnn_relator_valid(
     let (a_i, b_i) = (data.associations[i].0, data.associations[i].1);
     lemma_translate_hnn_relator(data, i, k as int);
     lemma_tower_num_generators(data, m);
-    // translate = amalgamation_relator(tower_afp_data(data, (k-1)), i)
-    //           = concat(shift_word(a_i, (k-1)*ng), inverse_word(shift_word(b_i, k*ng)))
+    //  translate = amalgamation_relator(tower_afp_data(data, (k-1)), i)
+    //            = concat(shift_word(a_i, (k-1)*ng), inverse_word(shift_word(b_i, k*ng)))
     let afp_data = tower_afp_data(data, (k - 1) as nat);
     let tr = amalgamation_relator(afp_data, i);
     assert(translate_word_at(data, hnn_relator(data, i), k as int) =~= tr);
 
-    // Need tower_num_generators at k-1 to connect afp_data.p1.num_generators = k*ng
+    //  Need tower_num_generators at k-1 to connect afp_data.p1.num_generators = k*ng
     lemma_tower_num_generators(data, (k - 1) as nat);
 
     let sa = shift_word(a_i, ((k - 1) as nat) * ng);
@@ -1525,11 +1525,11 @@ proof fn lemma_translate_hnn_relator_valid(
     crate::word::lemma_inverse_word_valid(sb, (m + 1) * ng);
     crate::word::lemma_concat_word_valid(sa, inv_sb, (m + 1) * ng);
 
-    // Connect tr to concat(sa, inv_sb) via afp_data decomposition
+    //  Connect tr to concat(sa, inv_sb) via afp_data decomposition
     assert(afp_data.p1.num_generators == k * ng);
     assert(tr =~= concat(sa, inv_sb));
 
-    // Transfer word_valid through =~= to the translate
+    //  Transfer word_valid through =~= to the translate
     let tw = translate_word_at(data, hnn_relator(data, i), k as int);
     assert forall|j: int| 0 <= j < tw.len()
         implies symbol_valid(#[trigger] tw[j], tp.num_generators)
@@ -1538,7 +1538,7 @@ proof fn lemma_translate_hnn_relator_valid(
     }
 }
 
-/// Helper: translated relator (base or HNN, possibly inverted) is word_valid for tower(m).
+///  Helper: translated relator (base or HNN, possibly inverted) is word_valid for tower(m).
 proof fn lemma_translate_relator_valid(
     data: HNNData, m: nat, idx: nat, inverted: bool, level: int,
 )
@@ -1546,7 +1546,7 @@ proof fn lemma_translate_relator_valid(
         hnn_data_valid(data),
         0 <= idx < hnn_presentation(data).relators.len(),
         0 <= level <= m as int,
-        // HNN relators need level >= 1
+        //  HNN relators need level >= 1
         idx >= data.base.relators.len() ==> level >= 1,
     ensures
         word_valid(
@@ -1564,19 +1564,19 @@ proof fn lemma_translate_relator_valid(
 
     if !inverted {
         if idx < nb {
-            // Base relator
+            //  Base relator
             assert(p.relators[idx as int] == data.base.relators[idx as int]);
             lemma_translate_base_relator_valid(data, m, level as nat, idx as int);
         } else {
-            // HNN relator
+            //  HNN relator
             let hi = (idx - nb) as int;
             assert(p.relators[idx as int] == hnn_relator(data, hi));
             lemma_translate_hnn_relator_valid(data, m, level as nat, hi);
         }
     } else {
-        // Inverted relator: get_relator = inverse_word(p.relators[idx])
+        //  Inverted relator: get_relator = inverse_word(p.relators[idx])
         if idx < nb {
-            // Inverted base relator: inverse_word of a base word is still base-valid
+            //  Inverted base relator: inverse_word of a base word is still base-valid
             assert(p.relators[idx as int] == data.base.relators[idx as int]);
             let base_r = data.base.relators[idx as int];
             reveal(presentation_valid);
@@ -1585,7 +1585,7 @@ proof fn lemma_translate_relator_valid(
             lemma_tower_num_generators(data, m);
             lemma_shift_word_valid_for_tower(data, inverse_word(base_r), level as nat, m);
         } else {
-            // Inverted HNN relator: inv(t⁻¹·a_i·t·inv(b_i)) = b_i·t⁻¹·inv(a_i)·t
+            //  Inverted HNN relator: inv(t⁻¹·a_i·t·inv(b_i)) = b_i·t⁻¹·inv(a_i)·t
             let hi = (idx - nb) as int;
             assert(p.relators[idx as int] == hnn_relator(data, hi));
             lemma_inverse_hnn_relator_decomp(data, hi);
@@ -1596,7 +1596,7 @@ proof fn lemma_translate_relator_valid(
             let inv_a_i = inverse_word(a_i);
             let k = level as nat;
 
-            // Decompose and translate each part
+            //  Decompose and translate each part
             let part_a = b_i;
             let part_b = t_inv_word;
             let part_c = inv_a_i;
@@ -1607,7 +1607,7 @@ proof fn lemma_translate_relator_valid(
             assert(inverse_word(hnn_relator(data, hi))
                 =~= concat(part_a, part_bcd));
 
-            // net_level computations
+            //  net_level computations
             lemma_net_level_base_word(data, b_i);
             lemma_net_level_base_word(data, inv_a_i);
             lemma_net_level_stable(data, Symbol::Inv(ng));
@@ -1615,7 +1615,7 @@ proof fn lemma_translate_relator_valid(
             lemma_net_level_concat(data, part_c, part_d);
             lemma_net_level_concat(data, part_b, part_cd);
 
-            // translate_concat decompositions
+            //  translate_concat decompositions
             lemma_translate_concat(data, part_a, part_bcd, k as int);
             lemma_translate_concat(data, part_b, part_cd, k as int);
             lemma_translate_concat(data, part_c, part_d, (k - 1) as int);
@@ -1629,7 +1629,7 @@ proof fn lemma_translate_relator_valid(
                 shift_word(b_i, k * ng),
                 shift_word(inv_a_i, ((k - 1) as nat) * ng)));
 
-            // word_valid of the translated parts
+            //  word_valid of the translated parts
             lemma_shift_word_valid_for_tower(data, b_i, k, m);
             lemma_shift_word_valid_for_tower(data, inv_a_i, (k - 1) as nat, m);
             crate::word::lemma_concat_word_valid(
@@ -1640,7 +1640,7 @@ proof fn lemma_translate_relator_valid(
     }
 }
 
-/// Helper: translated relator (base or HNN, possibly inverted) ≡ ε in tower(m).
+///  Helper: translated relator (base or HNN, possibly inverted) ≡ ε in tower(m).
 proof fn lemma_translate_relator_equiv_empty(
     data: HNNData, m: nat, idx: nat, inverted: bool, level: int,
 )
@@ -1666,37 +1666,37 @@ proof fn lemma_translate_relator_equiv_empty(
 
     if !inverted {
         if idx < nb {
-            // Base relator at level k
+            //  Base relator at level k
             assert(r == data.base.relators[idx as int]);
             reveal(presentation_valid);
             lemma_translate_base_word_at(data, r, level as nat);
             lemma_base_relator_in_tower(data, m, level as nat, idx as int);
         } else {
-            // HNN relator at level k
+            //  HNN relator at level k
             let hi = (idx - nb) as int;
             assert(r == hnn_relator(data, hi));
             lemma_translate_hnn_relator(data, hi, level);
             lemma_ident_relator_in_tower(data, m, (level - 1) as nat, hi);
         }
     } else {
-        // Inverted: get_relator = inverse_word(relator)
+        //  Inverted: get_relator = inverse_word(relator)
         if idx < nb {
             assert(r == inverse_word(data.base.relators[idx as int]));
             let base_r = data.base.relators[idx as int];
             reveal(presentation_valid);
-            // First show non-inverted translate ≡ ε
+            //  First show non-inverted translate ≡ ε
             lemma_translate_base_word_at(data, base_r, level as nat);
             lemma_base_relator_in_tower(data, m, level as nat, idx as int);
 
-            // Now show inverted: inverse_word(base_r) is still base-valid
+            //  Now show inverted: inverse_word(base_r) is still base-valid
             crate::word::lemma_inverse_word_valid(base_r, ng);
             lemma_translate_base_word_at(data, inverse_word(base_r), level as nat);
 
-            // shift(inv(r), k*ng) = inv(shift(r, k*ng))
+            //  shift(inv(r), k*ng) = inv(shift(r, k*ng))
             crate::free_product::lemma_shift_inverse_word(base_r, (level as nat) * ng);
 
-            // translate(inv(r), k) =~= inv(shift(r, k*ng)) and translate(r, k) ≡ ε
-            // so inv(translate(r, k)) ≡ ε
+            //  translate(inv(r), k) =~= inv(shift(r, k*ng)) and translate(r, k) ≡ ε
+            //  so inv(translate(r, k)) ≡ ε
             lemma_tower_valid(data, m);
             lemma_tower_num_generators(data, m);
             lemma_shift_word_valid_for_tower(data, base_r, level as nat, m);
@@ -1706,7 +1706,7 @@ proof fn lemma_translate_relator_equiv_empty(
         } else {
             let hi = (idx - nb) as int;
             assert(r == inverse_word(hnn_relator(data, hi)));
-            // Decompose inv(hnn_relator) = b_i · t⁻¹ · inv(a_i) · t
+            //  Decompose inv(hnn_relator) = b_i · t⁻¹ · inv(a_i) · t
             lemma_inverse_hnn_relator_decomp(data, hi);
             let (a_i, b_i) = (data.associations[hi].0, data.associations[hi].1);
             let t_word = Seq::new(1, |_j: int| Symbol::Gen(ng));
@@ -1724,7 +1724,7 @@ proof fn lemma_translate_relator_equiv_empty(
 
             assert(r =~= concat(part_a, part_bcd));
 
-            // net_level and translate decomposition
+            //  net_level and translate decomposition
             lemma_net_level_base_word(data, b_i);
             lemma_net_level_base_word(data, inv_a_i);
             lemma_net_level_stable(data, Symbol::Inv(ng));
@@ -1739,19 +1739,19 @@ proof fn lemma_translate_relator_equiv_empty(
             lemma_translate_base_word_at(data, inv_a_i, (k - 1) as nat);
             lemma_translate_stable_empty(data, Symbol::Gen(ng), (k - 1) as int);
 
-            // translate(r, k) =~= concat(shift(b_i, k*ng), shift(inv(a_i), (k-1)*ng))
+            //  translate(r, k) =~= concat(shift(b_i, k*ng), shift(inv(a_i), (k-1)*ng))
             let tr_inv = translate_word_at(data, r, k as int);
             assert(tr_inv =~= concat(
                 shift_word(b_i, k * ng),
                 shift_word(inv_a_i, ((k - 1) as nat) * ng)));
 
-            // This equals inverse_word(amalgamation_relator(afp_data, hi))
-            // amal_r = concat(shift(a_i, (k-1)*ng), inv(shift(b_i, k*ng)))
-            // inv(amal_r) = concat(shift(b_i, k*ng), inv(shift(a_i, (k-1)*ng)))
+            //  This equals inverse_word(amalgamation_relator(afp_data, hi))
+            //  amal_r = concat(shift(a_i, (k-1)*ng), inv(shift(b_i, k*ng)))
+            //  inv(amal_r) = concat(shift(b_i, k*ng), inv(shift(a_i, (k-1)*ng)))
             crate::free_product::lemma_shift_inverse_word(a_i, ((k - 1) as nat) * ng);
-            // shift(inv(a_i), (k-1)*ng) =~= inv(shift(a_i, (k-1)*ng))
+            //  shift(inv(a_i), (k-1)*ng) =~= inv(shift(a_i, (k-1)*ng))
 
-            // amal_r ≡ ε, so inv(amal_r) ≡ ε
+            //  amal_r ≡ ε, so inv(amal_r) ≡ ε
             let afp_data = tower_afp_data(data, (level - 1) as nat);
             let amal_r = amalgamation_relator(afp_data, hi);
             lemma_translate_hnn_relator(data, hi, level);
@@ -1760,7 +1760,7 @@ proof fn lemma_translate_relator_equiv_empty(
             lemma_tower_valid(data, m);
             lemma_tower_num_generators(data, m);
 
-            // word_valid of amal_r for lemma_inverse_of_trivial
+            //  word_valid of amal_r for lemma_inverse_of_trivial
             lemma_tower_num_generators(data, (level - 1) as nat);
             let sa = shift_word(a_i, ((k - 1) as nat) * ng);
             let sb = shift_word(b_i, k * ng);
@@ -1768,9 +1768,9 @@ proof fn lemma_translate_relator_equiv_empty(
             lemma_shift_word_valid_for_tower(data, b_i, k, m);
             crate::word::lemma_inverse_word_valid(sb, (m + 1) * ng);
             crate::word::lemma_concat_word_valid(sa, inverse_word(sb), (m + 1) * ng);
-            // amal_r =~= concat(sa, inverse_word(sb))
+            //  amal_r =~= concat(sa, inverse_word(sb))
             assert(amal_r =~= concat(sa, inverse_word(sb)));
-            // Transfer word_valid through =~=
+            //  Transfer word_valid through =~=
             assert forall|j: int| 0 <= j < amal_r.len()
                 implies symbol_valid(#[trigger] amal_r[j], tp.num_generators)
             by {
@@ -1779,10 +1779,10 @@ proof fn lemma_translate_relator_equiv_empty(
             }
 
             crate::normal_form_amalgamated::lemma_inverse_of_trivial(tp, amal_r);
-            // inv(amal_r) = inv(concat(sa, inv(sb))) =~= concat(inv(inv(sb)), inv(sa)) =~= concat(sb, inv(sa))
+            //  inv(amal_r) = inv(concat(sa, inv(sb))) =~= concat(inv(inv(sb)), inv(sa)) =~= concat(sb, inv(sa))
             crate::word::lemma_inverse_concat(sa, inverse_word(sb));
             crate::word::lemma_inverse_involution(sb);
-            // inv(sa) =~= shift(inv(a_i), (k-1)*ng)
+            //  inv(sa) =~= shift(inv(a_i), (k-1)*ng)
             crate::free_product::lemma_shift_inverse_word(a_i, ((k - 1) as nat) * ng);
             assert(inverse_word(amal_r) =~= concat(sb, shift_word(inv_a_i, ((k - 1) as nat) * ng)));
             assert(tr_inv =~= inverse_word(amal_r));
@@ -1790,19 +1790,19 @@ proof fn lemma_translate_relator_equiv_empty(
     }
 }
 
-// ============================================================
-// Part O: The per-step lemma
-// ============================================================
+//  ============================================================
+//  Part O: The per-step lemma
+//  ============================================================
 
-/// For FreeReduce/RelatorDelete at position pos:
-/// the level at pos determines the middle's translation.
-/// Need: 0 <= net_level(prefix) <= m, and for HNN relators, >= 1.
+///  For FreeReduce/RelatorDelete at position pos:
+///  the level at pos determines the middle's translation.
+///  Need: 0 <= net_level(prefix) <= m, and for HNN relators, >= 1.
 ///
-/// For FreeExpand/RelatorInsert at position pos:
-/// the level at pos determines the middle's translation.
-/// Same level requirements.
+///  For FreeExpand/RelatorInsert at position pos:
+///  the level at pos determines the middle's translation.
+///  Same level requirements.
 ///
-/// In all cases: translate(w) ≡ translate(w_next) in tower(m).
+///  In all cases: translate(w) ≡ translate(w_next) in tower(m).
 pub proof fn lemma_hnn_step_tower_equiv(
     data: HNNData, m: nat, base_level: int, w: Word, step: DerivationStep,
 )
@@ -1899,11 +1899,11 @@ pub proof fn lemma_hnn_step_tower_equiv(
     }
 }
 
-// ============================================================
-// Part P: Derivation-level induction
-// ============================================================
+//  ============================================================
+//  Part P: Derivation-level induction
+//  ============================================================
 
-/// Get the position of a derivation step.
+///  Get the position of a derivation step.
 pub open spec fn step_position(step: DerivationStep) -> int {
     match step {
         DerivationStep::FreeReduce { position } => position,
@@ -1913,7 +1913,7 @@ pub open spec fn step_position(step: DerivationStep) -> int {
     }
 }
 
-/// Whether a step involves an HNN relator (not a base relator).
+///  Whether a step involves an HNN relator (not a base relator).
 pub open spec fn step_is_hnn_relator(data: HNNData, step: DerivationStep) -> bool {
     match step {
         DerivationStep::RelatorInsert { relator_index, .. } |
@@ -1923,7 +1923,7 @@ pub open spec fn step_is_hnn_relator(data: HNNData, step: DerivationStep) -> boo
     }
 }
 
-/// Level condition for a single step applied to word w.
+///  Level condition for a single step applied to word w.
 pub open spec fn step_level_ok(data: HNNData, m: nat, base_level: int, w: Word, step: DerivationStep) -> bool {
     let pos = step_position(step);
     let level = net_level(data, w.subrange(0, pos)) + base_level;
@@ -1931,8 +1931,8 @@ pub open spec fn step_level_ok(data: HNNData, m: nat, base_level: int, w: Word, 
     &&& (step_is_hnn_relator(data, step) ==> level >= 1)
 }
 
-/// A full derivation from w producing w', where every step has valid levels.
-/// Returns the final word (should equal w') when the derivation is valid.
+///  A full derivation from w producing w', where every step has valid levels.
+///  Returns the final word (should equal w') when the derivation is valid.
 pub open spec fn derivation_levels_ok(
     data: HNNData, m: nat, base_level: int,
     steps: Seq<DerivationStep>, start: Word,
@@ -1953,8 +1953,8 @@ pub open spec fn derivation_levels_ok(
     }
 }
 
-/// Main induction: if all steps in a derivation have valid (shifted) levels,
-/// then translate_at(start, base_level) ≡ translate_at(end, base_level) in tower(m).
+///  Main induction: if all steps in a derivation have valid (shifted) levels,
+///  then translate_at(start, base_level) ≡ translate_at(end, base_level) in tower(m).
 pub proof fn lemma_hnn_derivation_to_tower_equiv(
     data: HNNData, m: nat, base_level: int,
     steps: Seq<DerivationStep>, start: Word, end: Word,
@@ -1980,17 +1980,17 @@ pub proof fn lemma_hnn_derivation_to_tower_equiv(
         let step = steps.first();
         let mid = apply_step(p, start, step).unwrap();
 
-        // Per-step: translate(start) ≡ translate(mid)
+        //  Per-step: translate(start) ≡ translate(mid)
         lemma_hnn_step_tower_equiv(data, m, base_level, start, step);
 
-        // mid is word_valid (step preserves word_valid)
+        //  mid is word_valid (step preserves word_valid)
         lemma_hnn_presentation_valid(data);
         crate::presentation::lemma_step_preserves_word_valid_pres(p, start, step, mid);
 
-        // Inductive: translate(mid) ≡ translate(end)
+        //  Inductive: translate(mid) ≡ translate(end)
         lemma_hnn_derivation_to_tower_equiv(data, m, base_level, steps.drop_first(), mid, end);
 
-        // Chain: translate(start) ≡ translate(end)
+        //  Chain: translate(start) ≡ translate(end)
         lemma_equiv_transitive(tp,
             translate_word_at(data, start, base_level),
             translate_word_at(data, mid, base_level),
@@ -1998,15 +1998,15 @@ pub proof fn lemma_hnn_derivation_to_tower_equiv(
     }
 }
 
-/// **Britton's Lemma (Lyndon-Schupp Ch. IV):**
-/// If w is a base word (no stable letters) and w ≡ ε in the HNN extension G*,
-/// then w ≡ ε in the base group G.
+///  **Britton's Lemma (Lyndon-Schupp Ch. IV):**
+///  If w is a base word (no stable letters) and w ≡ ε in the HNN extension G*,
+///  then w ≡ ε in the base group G.
 ///
-/// Proof:
-/// 1. w ≡ ε in G* → derivation D with levels fitting in tower(m)
-/// 2. lemma_hnn_derivation_to_tower_equiv → translate(w) ≡ translate(ε) in tower(m)
-/// 3. translate(w) = w (base word), translate(ε) = ε
-/// 4. lemma_g0_embeds_in_tower_textbook → w ≡ ε in G
+///  Proof:
+///  1. w ≡ ε in G* → derivation D with levels fitting in tower(m)
+///  2. lemma_hnn_derivation_to_tower_equiv → translate(w) ≡ translate(ε) in tower(m)
+///  3. translate(w) = w (base word), translate(ε) = ε
+///  4. lemma_g0_embeds_in_tower_textbook → w ≡ ε in G
 pub proof fn britton_lemma(
     data: HNNData, m: nat, w: Word,
 )
@@ -2014,13 +2014,13 @@ pub proof fn britton_lemma(
         hnn_data_valid(data),
         word_valid(w, data.base.num_generators),
         equiv_in_presentation(hnn_presentation(data), w, empty_word()),
-        // The derivation fits within tower height m (at base_level 0)
+        //  The derivation fits within tower height m (at base_level 0)
         ({
             let d: Derivation = choose|d: Derivation|
                 derivation_valid(hnn_presentation(data), d, w, empty_word());
             derivation_levels_ok(data, m, 0, d.steps, w)
         }),
-        // Tower textbook prerequisites
+        //  Tower textbook prerequisites
         tower_textbook_chain(data, m),
     ensures
         equiv_in_presentation(data.base, w, empty_word()),
@@ -2043,14 +2043,14 @@ pub proof fn britton_lemma(
     lemma_g0_embeds_in_tower_textbook(data, m, w);
 }
 
-// ============================================================
-// Part S: Derivation level bounds for shifted translation
-// ============================================================
+//  ============================================================
+//  Part S: Derivation level bounds for shifted translation
+//  ============================================================
 
-/// Minimum "adjusted" step level across a derivation.
-/// For HNN relator steps, returns level - 1 (since they need level >= 1).
-/// For other steps, returns level (since they need level >= 0).
-/// Shift >= -derivation_min_adj_level ensures all shifted levels are valid.
+///  Minimum "adjusted" step level across a derivation.
+///  For HNN relator steps, returns level - 1 (since they need level >= 1).
+///  For other steps, returns level (since they need level >= 0).
+///  Shift >= -derivation_min_adj_level ensures all shifted levels are valid.
 pub open spec fn derivation_min_adj_level(
     data: HNNData, steps: Seq<DerivationStep>, start: Word,
 ) -> int
@@ -2072,7 +2072,7 @@ pub open spec fn derivation_min_adj_level(
     }
 }
 
-/// Maximum step level across a derivation.
+///  Maximum step level across a derivation.
 pub open spec fn derivation_max_step_level(
     data: HNNData, steps: Seq<DerivationStep>, start: Word,
 ) -> int
@@ -2093,8 +2093,8 @@ pub open spec fn derivation_max_step_level(
     }
 }
 
-/// If base_level >= -min_adj and m >= max_level + base_level,
-/// then derivation_levels_ok holds.
+///  If base_level >= -min_adj and m >= max_level + base_level,
+///  then derivation_levels_ok holds.
 proof fn lemma_derivation_levels_ok_from_bounds(
     data: HNNData, m: nat, base_level: int,
     steps: Seq<DerivationStep>, start: Word,
@@ -2115,12 +2115,12 @@ proof fn lemma_derivation_levels_ok_from_bounds(
         let level = net_level(data, start.subrange(0, pos));
         let adj = if step_is_hnn_relator(data, step) { level - 1 } else { level };
 
-        // adj >= derivation_min_adj_level, so base_level >= -adj, so level + base_level >= 0 (or >= 1)
+        //  adj >= derivation_min_adj_level, so base_level >= -adj, so level + base_level >= 0 (or >= 1)
         assert(adj >= derivation_min_adj_level(data, steps, start));
-        // level <= derivation_max_step_level, so level + base_level <= m
+        //  level <= derivation_max_step_level, so level + base_level <= m
         assert(level <= derivation_max_step_level(data, steps, start));
 
-        // Recurse: rest_min >= whole_min and rest_max <= whole_max
+        //  Recurse: rest_min >= whole_min and rest_max <= whole_max
         let rest_min = derivation_min_adj_level(data, steps.drop_first(), next);
         let rest_max = derivation_max_step_level(data, steps.drop_first(), next);
         assert(rest_min >= derivation_min_adj_level(data, steps, start)) by {
@@ -2134,11 +2134,11 @@ proof fn lemma_derivation_levels_ok_from_bounds(
     }
 }
 
-// ============================================================
-// Part T: Tower textbook chain from HNN associations
-// ============================================================
+//  ============================================================
+//  Part T: Tower textbook chain from HNN associations
+//  ============================================================
 
-/// Derive tower_textbook_chain from hnn_associations_isomorphic by induction.
+///  Derive tower_textbook_chain from hnn_associations_isomorphic by induction.
 pub proof fn lemma_tower_textbook_chain_from_hnn_iso(data: HNNData, m: nat)
     requires
         hnn_data_valid(data),
@@ -2151,16 +2151,16 @@ pub proof fn lemma_tower_textbook_chain_from_hnn_iso(data: HNNData, m: nat)
         assert forall|k: nat| k < 0nat
             implies #[trigger] tower_textbook_prereqs_at(data, k) by {}
     } else {
-        // IH: tower_textbook_chain(data, m-1)
+        //  IH: tower_textbook_chain(data, m-1)
         lemma_tower_textbook_chain_from_hnn_iso(data, (m - 1) as nat);
 
         let k = (m - 1) as nat;
         let afp_data = tower_afp_data(data, k);
 
-        // Prove identifications_isomorphic at level k
+        //  Prove identifications_isomorphic at level k
         lemma_tower_identifications_isomorphic(data, k);
 
-        // Prove action_preserves_canonical at level k
+        //  Prove action_preserves_canonical at level k
         lemma_tower_afp_data_valid(data, k);
         lemma_tower_valid(data, k);
         reveal(presentation_valid);
@@ -2171,18 +2171,18 @@ pub proof fn lemma_tower_textbook_chain_from_hnn_iso(data: HNNData, m: nat)
         assert forall|j: nat| j < m
             implies #[trigger] tower_textbook_prereqs_at(data, j)
         by {
-            if j < k {} // from IH
+            if j < k {} //  from IH
         }
     }
 }
 
-// ============================================================
-// Part U: Copy-s tower embedding
-// ============================================================
+//  ============================================================
+//  Part U: Copy-s tower embedding
+//  ============================================================
 
-/// Generalized tower embedding: if shift(w, s*ng) ≡ ε in tower(m) where s <= m,
-/// then w ≡ ε in base. Uses AFP left-injectivity to peel from tower(m) down to
-/// tower(s), then AFP right-injectivity at level s-1.
+///  Generalized tower embedding: if shift(w, s*ng) ≡ ε in tower(m) where s <= m,
+///  then w ≡ ε in base. Uses AFP left-injectivity to peel from tower(m) down to
+///  tower(s), then AFP right-injectivity at level s-1.
 pub proof fn lemma_copy_s_embeds(data: HNNData, m: nat, s: nat, w: Word)
     requires
         hnn_data_valid(data),
@@ -2201,7 +2201,7 @@ pub proof fn lemma_copy_s_embeds(data: HNNData, m: nat, s: nat, w: Word)
         assert(s * ng == 0) by (nonlinear_arith) requires s == 0;
         assert(shift_word(w, 0nat) =~= w);
     } else if s == m {
-        // shift(w, m*ng) is in the G₂ part of AFP at level m-1
+        //  shift(w, m*ng) is in the G₂ part of AFP at level m-1
         let prev = (m - 1) as nat;
         assert(tower_textbook_prereqs_at(data, prev));
         lemma_tower_afp_data_valid(data, prev);
@@ -2211,7 +2211,7 @@ pub proof fn lemma_copy_s_embeds(data: HNNData, m: nat, s: nat, w: Word)
         crate::normal_form_afp_textbook::lemma_afp_injectivity_right(
             tower_afp_data(data, prev), w);
     } else {
-        // s < m: shift(w, s*ng) is a tower(m-1) word
+        //  s < m: shift(w, s*ng) is a tower(m-1) word
         let prev = (m - 1) as nat;
         assert(tower_textbook_prereqs_at(data, prev));
         lemma_tower_afp_data_valid(data, prev);
@@ -2232,22 +2232,22 @@ pub proof fn lemma_copy_s_embeds(data: HNNData, m: nat, s: nat, w: Word)
     }
 }
 
-// ============================================================
-// Part V: Translation of base word at shifted level
-// ============================================================
+//  ============================================================
+//  Part V: Translation of base word at shifted level
+//  ============================================================
 
-/// translate_word_at(data, ε, base_level) = ε for any base_level.
+///  translate_word_at(data, ε, base_level) = ε for any base_level.
 proof fn lemma_translate_empty_at(data: HNNData, base_level: int)
     ensures
         translate_word_at(data, empty_word(), base_level) =~= empty_word(),
 {}
 
-/// **Britton's Lemma (Unconditional, Lyndon-Schupp Ch. IV):**
-/// If w is a base word and w ≡ ε in the HNN extension G*, then w ≡ ε in G.
+///  **Britton's Lemma (Unconditional, Lyndon-Schupp Ch. IV):**
+///  If w is a base word and w ≡ ε in the HNN extension G*, then w ≡ ε in G.
 ///
-/// No additional assumptions beyond hnn_data_valid and hnn_associations_isomorphic.
-/// The tower textbook prerequisites are derived from hnn_associations_isomorphic,
-/// and the derivation levels are handled by shifting to a non-negative base level.
+///  No additional assumptions beyond hnn_data_valid and hnn_associations_isomorphic.
+///  The tower textbook prerequisites are derived from hnn_associations_isomorphic,
+///  and the derivation levels are handled by shifting to a non-negative base level.
 pub proof fn britton_lemma_unconditional(
     data: HNNData, w: Word,
 )
@@ -2262,48 +2262,48 @@ pub proof fn britton_lemma_unconditional(
     let hp = hnn_presentation(data);
     let ng = data.base.num_generators;
 
-    // Get the derivation
+    //  Get the derivation
     let d: Derivation = choose|d: Derivation|
         derivation_valid(hp, d, w, empty_word());
 
-    // Compute shift amount from derivation bounds
+    //  Compute shift amount from derivation bounds
     let min_adj = derivation_min_adj_level(data, d.steps, w);
     let max_lev = derivation_max_step_level(data, d.steps, w);
-    // base_level >= -min_adj ensures shifted levels are valid
+    //  base_level >= -min_adj ensures shifted levels are valid
     let base_level: nat = if min_adj >= 0 { 0 } else { (-min_adj) as nat };
-    // m >= max_lev + base_level and m >= base_level (since max_lev >= 0 for base word derivations)
-    // Use base_level + max_lev.abs() + 1 as a safe upper bound
+    //  m >= max_lev + base_level and m >= base_level (since max_lev >= 0 for base word derivations)
+    //  Use base_level + max_lev.abs() + 1 as a safe upper bound
     let max_lev_abs: nat = if max_lev >= 0 { max_lev as nat } else { (-max_lev) as nat };
     let m: nat = (base_level + max_lev_abs + 1) as nat;
 
-    // base_level <= m (since m = base_level + max_lev_abs + 1 > base_level)
+    //  base_level <= m (since m = base_level + max_lev_abs + 1 > base_level)
     assert(base_level <= m);
-    // m >= max_lev + base_level (since m = base_level + |max_lev| + 1 >= base_level + max_lev)
+    //  m >= max_lev + base_level (since m = base_level + |max_lev| + 1 >= base_level + max_lev)
     assert(m as int >= max_lev + base_level as int);
 
-    // word_valid(w, hp.num_generators) — weaken from ng to ng+1
+    //  word_valid(w, hp.num_generators) — weaken from ng to ng+1
     assert(word_valid(w, hp.num_generators)) by {
         assert forall|k: int| 0 <= k < w.len()
             implies symbol_valid(#[trigger] w[k], hp.num_generators)
         by {}
     }
 
-    // Step 1: Levels are OK with the chosen base_level
+    //  Step 1: Levels are OK with the chosen base_level
     lemma_derivation_levels_ok_from_bounds(data, m, base_level as int, d.steps, w);
 
-    // Step 2: Translate derivation to tower equivalence
+    //  Step 2: Translate derivation to tower equivalence
     lemma_hnn_derivation_to_tower_equiv(data, m, base_level as int, d.steps, w, empty_word());
 
-    // Step 3: translate_at(w, base_level) = shift_word(w, base_level * ng)
+    //  Step 3: translate_at(w, base_level) = shift_word(w, base_level * ng)
     lemma_translate_base_word_at(data, w, base_level);
-    // Step 3b: translate_at(ε, base_level) = ε
+    //  Step 3b: translate_at(ε, base_level) = ε
     lemma_translate_empty_at(data, base_level as int);
 
-    // Step 4: Tower textbook chain from hnn_associations_isomorphic
+    //  Step 4: Tower textbook chain from hnn_associations_isomorphic
     lemma_tower_textbook_chain_from_hnn_iso(data, m);
 
-    // Step 5: Copy-s tower embedding → w ≡ ε in base
+    //  Step 5: Copy-s tower embedding → w ≡ ε in base
     lemma_copy_s_embeds(data, m, base_level, w);
 }
 
-} // verus!
+} //  verus!

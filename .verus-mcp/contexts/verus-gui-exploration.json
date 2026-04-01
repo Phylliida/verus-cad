@@ -1,0 +1,20 @@
+{
+  "name": "verus-gui-exploration",
+  "created": 1774894137,
+  "last_used": 1774898751,
+  "items": [
+    "congruence_depth",
+    "min_children_congruence_depth",
+    "lemma_layout_widget_full_depth_congruence",
+    "lemma_deeply_eqv_depth_monotone",
+    "lemma_measure_widget_congruence",
+    "wf",
+    "wf_spec",
+    "is_nonneg",
+    "lemma_add_identity_unique",
+    "axiom_add_zero_right",
+    "axiom_add_commutative",
+    "lemma_mul_identity_unique",
+    "axiom_mul_one_right"
+  ]
+}

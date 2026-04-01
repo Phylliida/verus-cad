@@ -53,12 +53,12 @@ m = 0, z = 0
 while not escaped and m < M:
     bla = find_largest_valid_bla(m, |z|)
     if bla:
-        z = bla.A · z + bla.B · c    // skip l iterations!
+        z = bla.A · z + bla.B · c    //  skip l iterations!
         m += bla.l
     else:
-        z = 2·Z[m]·z + z² + c        // one perturbation step
+        z = 2·Z[m]·z + z² + c        //  one perturbation step
         m += 1
-    if |Z[m] + z| < |z|:             // rebase check
+    if |Z[m] + z| < |z|:             //  rebase check
         z = Z[m] + z
         m = 0
 ```
@@ -146,14 +146,14 @@ The per-pixel iteration (with BLA lookup) is a map kernel: each pixel independen
 Types:
 ```rust
 struct BlaEntry {
-    a_re: f64, a_im: f64,  // complex A coefficient
-    b_re: f64, b_im: f64,  // complex B coefficient
-    r2: f64,               // validity radius squared
-    l: u32,                // skip length
+    a_re: f64, a_im: f64,  //  complex A coefficient
+    b_re: f64, b_im: f64,  //  complex B coefficient
+    r2: f64,               //  validity radius squared
+    l: u32,                //  skip length
 }
 
 struct BlaTable {
-    entries: Vec<Vec<BlaEntry>>,  // entries[level][index]
+    entries: Vec<Vec<BlaEntry>>,  //  entries[level][index]
     num_levels: nat,
 }
 ```
