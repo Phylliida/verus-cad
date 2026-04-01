@@ -112,7 +112,7 @@ Prove that the generated WGSL/SPIR-V computes the same arithmetic as the Verus s
 
 #### WGSL emission
 ```rust
-// Exec function: emit ArithExpr as WGSL string
+//  Exec function: emit ArithExpr as WGSL string
 fn arith_to_wgsl(expr: &RuntimeArithExpr) -> String
     ensures /* output parses to equivalent computation */;
 ```
@@ -153,13 +153,13 @@ For SPIR-V, same approach: each ArithExpr node maps to specific SPIR-V ops whose
 ### The irreducible axioms
 
 ```rust
-/// Read a value from GPU global memory.
+///  Read a value from GPU global memory.
 #[verifier::external_body]
 fn gpu_read(buffer: &GpuBuffer, offset: u64) -> (val: i64)
     requires offset < buffer@.len(),
     ensures val == buffer@[offset as int];
 
-/// Write a value to GPU global memory.
+///  Write a value to GPU global memory.
 #[verifier::external_body]
 fn gpu_write(buffer: &mut GpuBuffer, offset: u64, val: i64)
     requires offset < buffer@.len(),
@@ -167,7 +167,7 @@ fn gpu_write(buffer: &mut GpuBuffer, offset: u64, val: i64)
             forall|j: int| j != offset as int && 0 <= j < buffer@.len() ==>
                 buffer@[j] == old(buffer)@[j];
 
-/// Workgroup barrier: all threads' prior memory ops complete before any proceeds.
+///  Workgroup barrier: all threads' prior memory ops complete before any proceeds.
 #[verifier::external_body]
 fn gpu_barrier(smem: &SharedMem)
     ensures /* all threads' shared memory writes are visible */;
@@ -177,9 +177,9 @@ fn gpu_barrier(smem: &SharedMem)
 ```rust
 spec struct SharedMemModel {
     data: Seq<i64>,
-    // Per-thread write history for race detection
+    //  Per-thread write history for race detection
 }
-// Race freedom from divide bijectivity (already proved)
+//  Race freedom from divide bijectivity (already proved)
 ```
 
 ### Thread execution model
@@ -308,38 +308,279 @@ The infrastructure above (ArithExpr IR, verified emission, GPU intrinsics, CTA c
 - Proof: Gauss-Seidel / PBD convergence, energy dissipation
 - New infrastructure: constraint solver verification, FP convergence bounds
 
-### Key Infrastructure Gaps
+### Key Infrastructure: Stage-Based Kernel Composition
 
-#### 1. Control flow in ArithExpr
-Current ArithExpr is expression-only (no loops, no conditionals). Need:
+#### The Problem
+
+`ArithExpr` + `KernelSpec` model a **single parallel map** — one pass where each thread
+computes one output. Real GPU kernels are multi-phase: load data, barrier, compute, barrier,
+scan, barrier, scatter. Production kernels (Flash Attention, tiled GEMM, Mandelbrot with
+work compaction) need **temporal composition** of parallel phases within a single dispatch.
+
+The original plan proposed extending ArithExpr with `IfThenElse` and `Loop` nodes. After
+extensive literature review (see citations below), we determined a better approach:
+**don't extend ArithExpr — compose KernelSpecs with explicit barriers.**
+
+#### The Abstraction: Hoare Logic over Parallel Primitives
+
+The `Stage` type models a GPU kernel as a tree of barrier-separated parallel operations.
+This is **phase-based verification** — a well-established paradigm in GPU verification
+research (see Literature section below).
+
 ```rust
-// Proposed extensions
-ArithExpr::IfThenElse(Box<ArithExpr>, Box<ArithExpr>, Box<ArithExpr>),
-ArithExpr::Loop { init: Box<ArithExpr>, cond: Box<ArithExpr>,
-                  body: Box<ArithExpr>, max_iter: nat },
-```
-- `IfThenElse` maps to WGSL `select()` or ternary
-- `Loop` maps to WGSL `for` loop with bounded iteration
-- Correctness: `arith_eval` extended with loop semantics, termination from `max_iter` bound
-
-#### 2. Verified fixed-point arithmetic
-```rust
-/// Fixed-point number with N fractional bits.
-/// Backed by i64: value = raw / 2^N.
-struct FixedPoint<const N: u32> { raw: i64 }
-
-spec fn fp_value<const N: u32>(fp: FixedPoint<N>) -> int {
-    fp.raw as int  // exact integer representation; real value = raw / 2^N
+///  A predicate on shared state at a barrier point.
+pub struct StatePredicate {
+    pub pred: spec_fn(SharedState) -> bool,
 }
 
-// Verified operations with proven error bounds:
-fn fp_add(a: FixedPoint<N>, b: FixedPoint<N>) -> FixedPoint<N>
-    ensures fp_value(result) == fp_value(a) + fp_value(b);  // exact
+///  Shared state model: named buffers of integers.
+pub struct SharedState {
+    pub buffers: Seq<Seq<int>>,
+    pub workgroup_size: nat,
+}
 
-fn fp_mul(a: FixedPoint<N>, b: FixedPoint<N>) -> FixedPoint<N>
-    ensures |fp_value(result) - fp_value(a) * fp_value(b) / 2^N| <= 1;  // 1-ULP error
+///  Barrier scope — workgroup-level by default.
+pub enum BarrierScope {
+    Workgroup,   //  __syncthreads() / workgroupBarrier() — cheap, ~20 cycles
+    Grid,        //  cooperative groups grid_group::sync() — rare, expensive
+}
+
+///  A GPU kernel as a tree of composable stages.
+pub enum Stage {
+    ///  Parallel map: each thread computes outputs (existing KernelSpec).
+    ///  No barrier before or after — fuses with adjacent Maps.
+    Map(KernelSpec),
+
+    ///  Parallel prefix sum on a buffer (existing verified scan specs).
+    Scan { buffer: nat, op: ScanOp },
+
+    ///  Explicit barrier with invariant. Only sync point in the model.
+    ///  Developer places these where cross-thread communication occurs.
+    Barrier { scope: BarrierScope, post: StatePredicate },
+
+    ///  Sequential composition — NO implicit barriers between stages.
+    ///  Adjacent Maps without a Barrier between them are fused.
+    Seq(Seq<Stage>),
+
+    ///  Bounded loop with inductive invariant (checked at Barriers inside body).
+    Loop { bound: ArithExpr, body: Box<Stage>, invariant: StatePredicate },
+}
 ```
-This sidesteps the FP verification problem entirely — all proofs use exact integer arithmetic on the `raw` field, with known precision loss from rounding.
+
+#### Design Principles
+
+1. **Barriers are explicit, not implicit.** The developer places `Barrier` stages where
+   cross-thread synchronization is needed. Adjacent `Map` stages without a `Barrier` between
+   them fuse — data flows thread-locally with no sync overhead.
+
+2. **Barriers are workgroup-scoped by default.** `Workgroup` barriers map to
+   `__syncthreads()` / `workgroupBarrier()` and are cheap. `Grid` barriers (cooperative
+   groups) are expensive and rarely needed. Cross-workgroup communication normally happens
+   through global memory between separate dispatches.
+
+3. **Verification is compositional.** Each barrier interval (code between two `Barrier`
+   stages) is verified independently:
+   - **Race-freedom**: no two threads write the same location; no thread reads what another
+     writes. This follows from `KernelSpec`'s scatter injectivity (already proved).
+   - **Barrier invariants**: the `StatePredicate` holds at each barrier point. This is
+     standard Hoare logic — {pre} stage {post} — where barriers are the assertion points.
+   - **Loop invariants**: inductive over iterations, checked at barriers inside the body.
+
+4. **The abstraction is extensible.** New `Stage` variants can be added without breaking
+   existing proofs:
+
+   | Future need | Add variant | When |
+   |---|---|---|
+   | Pipeline verification | `Pipeline { stages, depth }` | Prove sequential ≡ pipelined |
+   | Data-dependent early exit | `LoopWhile { body, cond, max }` | Break when active set empty |
+   | Conditional stages | `Cond { pred, then, else }` | Adaptive algorithms |
+   | Warp specialization | Already works | `Map` guard branches on warp ID |
+   | Async copy | Model as sequential Map | Codegen overlaps; spec is sequential |
+
+   **Note on Loop bounds:** `Loop.bound` is an `ArithExpr` evaluated once before the loop
+   starts — no data-dependent early exit. If all Mandelbrot pixels escape at epoch 50 of
+   100, epochs 51-100 still execute as no-ops (Map guard filters inactive threads, Scan on
+   empty set is identity). Correct but not optimal. `LoopWhile` can be added later without
+   breaking existing proofs.
+
+#### Kernel Examples
+
+**Mandelbrot with work compaction** (3 barriers per epoch, not 6):
+```
+Loop(max_epochs, Seq([
+    Map(mandelbrot_step),    //  thread-local, no barrier
+    Map(escape_check),       //  thread-local, no barrier
+    Barrier(Workgroup, "escape flags written to shared memory"),
+    Scan(compact),           //  reads all threads' flags — needs prior barrier
+    Barrier(Workgroup, "scan results visible"),
+    Map(scatter),            //  reads scan output — needs prior barrier
+    Barrier(Workgroup, "compaction done, active set updated"),
+]), inv: "active ∪ escaped = all pixels")
+```
+
+**Flash Attention** (developer controls double-buffering):
+```
+Seq([
+    Map(load_Q),
+    Barrier(Workgroup, "Q in shared memory"),
+    Loop(num_kv_blocks, Seq([
+        Map(async_load_K_next),      //  start loading NEXT tile
+        Map(compute_on_current_K),   //  compute on CURRENT — no barrier needed
+        Barrier(Workgroup, "next tile load complete"),
+        Map(swap_buffers),           //  no barrier after — thread-local
+    ]), inv: "O_partial / l = correct attention through block k"),
+    Map(normalize_store),
+])
+```
+
+**Water simulation (SPH):**
+```
+Loop(timesteps, Seq([
+    Map(hash_particles),
+    Barrier(Workgroup, "grid built"),
+    Scan(sort_by_cell),
+    Barrier(Workgroup, "sorted"),
+    Map(compute_density),        //  reads neighbors — needs prior barrier
+    Barrier(Workgroup, "densities ready"),
+    Map(compute_forces),         //  reads neighbor densities
+    Map(integrate),              //  thread-local — no barrier needed
+]), inv: "CFL holds ∧ conservation laws")
+```
+
+**Tiled GEMM:**
+```
+Seq([
+    Loop(k_tiles, Seq([
+        Map(load_A_B_to_shared),
+        Barrier(Workgroup, "tiles in shared memory"),
+        Map(accumulate_C_tile),
+    ]), inv: "C_partial = sum of first k tile products"),
+    Map(store_epilogue),
+])
+```
+
+#### Verification Obligations
+
+For a `Stage` tree, the verifier checks:
+
+1. **Per barrier-interval race-freedom:** Between consecutive `Barrier` stages, the `Map`
+   operations have injective scatter indices (already proved by `KernelSpec`). No two threads
+   touch the same shared memory location without an intervening barrier.
+
+2. **Barrier invariant validity:** Each `Barrier`'s `StatePredicate` follows from the
+   prior barrier's predicate + the intervening `Map`/`Scan` operations' postconditions.
+
+3. **Loop invariant inductiveness:** The `invariant` holds initially and is preserved by
+   each iteration of the loop body (checked at `Barrier` stages within the body).
+
+4. **Scan correctness:** `Scan` stages use existing verified scan proofs (Hillis-Steele,
+   Blelloch, Brent-Kung). The scan's postcondition is established by the scan lemmas.
+
+5. **Top-level correctness:** The final shared state satisfies the kernel's functional
+   specification (e.g., `output[pixel] == escape_time(c[pixel], max_iter)`).
+
+#### Codegen
+
+The `Stage` tree maps mechanically to WGSL/SPIR-V:
+- `Map(spec)` → parallel for-each (existing ArithExpr → WGSL emission)
+- `Scan { buffer, op }` → Hillis-Steele in shared memory (fixed template)
+- `Barrier(Workgroup, _)` → `workgroupBarrier()`
+- `Barrier(Grid, _)` → cooperative groups `grid_sync()` (requires special launch)
+- `Seq(stages)` → concatenate generated code
+- `Loop { bound, body, _ }` → `for (var i = 0u; i < bound; i++) { body }`
+
+The trust boundary is the same as for ArithExpr → WGSL: structural correspondence
+between spec-level `Stage` and generated code. Each variant has a fixed, auditable
+template.
+
+#### Literature & Citations
+
+This design follows the **barrier-interval / phase-based verification** paradigm,
+which is the dominant approach in GPU kernel verification since 2012:
+
+**Foundational:**
+- Betts, Chong, Donaldson, Qadeer, Thomson. "GPUVerify: A Verifier for GPU Kernels."
+  OOPSLA 2012. (SIGPLAN Most Influential Paper 2022.)
+  Divides execution into barrier intervals, verifies race-freedom per-interval via
+  two-thread reduction. Barriers are explicit, developer-placed.
+
+- Chong, Donaldson, Kelly, Ketema, Qadeer. "Barrier Invariants: A Shared State
+  Abstraction for the Analysis of Data-Dependent GPU Kernels." OOPSLA 2013.
+  Adds Hoare-style predicates at barrier points for compositional functional correctness.
+  Directly validates our "StatePredicate at each Barrier" approach.
+
+**Hoare Logic for GPU:**
+- Kojima, Igarashi. "A Hoare Logic for GPU Kernels." ACM TOCL 2017.
+  Full Hoare logic for SIMT programs with explicit barrier rule. Proved sound and
+  relatively complete. Most direct precedent for our proof methodology.
+
+- Kojima, Igarashi. "A Hoare Logic for SIMT Programs." APLAS 2013.
+  Earlier conference version with automated verification condition generation.
+
+**Compositional Analysis:**
+- Cogumbreiro et al. "Checking Data-Race Freedom of GPU Kernels, Compositionally."
+  CAV 2021. "Memory Access Protocols." FMSD 2023.
+  Treats barrier intervals as independent "protocols" — linear scaling vs exponential.
+  Verified 1.42x more real kernels than competitors. Validates our per-interval
+  independence property.
+
+**Separation Logic:**
+- Blom, Huisman, Mihelcic. "Specification and Verification of GPGPU Programs" (VerCors).
+  Permission-based separation logic with barrier pre/postconditions. Covers race-freedom
+  AND functional correctness for OpenCL kernels.
+
+- Hobor, Gherghina. "Barriers in Concurrent Separation Logic." ESOP 2011, LMCS 2012.
+  CSL for barriers with simultaneous resource redistribution. Machine-checked in Coq.
+
+**Type-System Approaches:**
+- Steffen, Giarrusso, Rompf. "Descend: A Safe GPU Systems Programming Language."
+  PLDI 2024. Rust-style borrow checker enforces correct barrier placement statically.
+
+**Automatic Barrier Placement:**
+- Anand, Polikarpova. "Automatic Synchronization for GPU Kernels (AUTOSYNC)." FMCAD 2018.
+  Synthesizes optimal barrier placement via MaxSAT, using GPUVerify as oracle.
+
+**Production Systems:**
+- NVIDIA CUTLASS 3.x `sm90_pipeline.hpp` — Producer-consumer pipeline with paired
+  barriers per stage, circular buffer phase tracking, thread role categorization.
+  Closest production model to our Stage abstraction.
+
+- OpenAI Triton — Block-level programming where barriers are compiler-managed.
+  Persistent kernel support with explicit multi-phase loops.
+
+- Hou, Zhou, Guo. "BSGP: Bulk-Synchronous GPU Programming." SIGGRAPH 2008.
+  BSP model for GPU with explicit developer-placed barriers.
+
+**Our contribution relative to the literature:** Existing work reasons at the
+**thread level** (GPUVerify, Kojima-Igarashi, VerCors) or makes barriers
+**compiler-implicit** (Futhark, Halide). Our model reasons at the **collective
+operation level** — `Map` and `Scan` are atomic proof-level statements whose
+internal thread-level correctness is established separately (KernelSpec scatter
+injectivity, scan algorithm proofs). This gives a higher-level, more compositional
+proof structure while reusing the existing verified CuTe layout algebra for the
+spatial correctness within each stage.
+
+#### Estimated Implementation
+
+| New piece | Lines | Difficulty |
+|---|---|---|
+| `Stage` enum + `SharedState` + `StatePredicate` types | ~65 | Trivial |
+| `staged_eval` spec (sequential composition semantics) | ~80 | Medium |
+| Race-freedom checker (scatter injectivity between barriers) | ~50 | Easy (reuses KernelSpec proofs) |
+| Per-kernel composition proofs (Mandelbrot, GEMM, etc.) | ~100 each | Medium |
+| Codegen: `Stage` → WGSL with barriers | ~150 | Trust boundary |
+| **Total framework** | **~345** | |
+
+#### 2. Verified fixed-point arithmetic
+
+`verus-fixed-point` already provides multi-limb fixed-point with verified arithmetic
+(275 functions), NTT-based multiplication, and Karatsuba proofs. For GPU use:
+
+- **N ≤ 8 limbs:** Karatsuba unrolled as ArithExpr (per-thread, no shared memory)
+- **N ≥ 16 limbs:** Batch NTT via multi-stage KernelSpecs (butterfly passes as Map stages,
+  barriers between passes, reusing `ntt_butterfly_exec` proofs from verus-fixed-point)
+- Both approaches compose with the Stage model — the NTT butterfly passes are just
+  `Seq([Map(butterfly_pass_1), Barrier, Map(butterfly_pass_2), Barrier, ...])`
 
 #### 3. Vector/matrix types
 GPU kernels operate on vec2/vec3/vec4 and mat2/mat3/mat4. Need:
@@ -349,6 +590,7 @@ fn vec3_dot(a: Vec3, b: Vec3) -> int
     ensures result == a.x * b.x + a.y * b.y + a.z * b.z;
 ```
 These are straightforward to verify — just named tuples with arithmetic.
+`verus-linalg` already has generic `Vec2<T>`, `Vec3<T>`, `Mat3<T>` over any Ring.
 
 #### 4. SDF primitives library
 For raymarching kernels:
@@ -359,7 +601,7 @@ spec fn sdf_union(d1: int, d2: int) -> int { min(d1, d2) }
 spec fn sdf_intersect(d1: int, d2: int) -> int { max(d1, d2) }
 spec fn sdf_subtract(d1: int, d2: int) -> int { max(d1, -d2) }
 
-// Key property: Lipschitz-1 (|sdf(a) - sdf(b)| <= |a - b|)
+//  Key property: Lipschitz-1 (|sdf(a) - sdf(b)| <= |a - b|)
 proof fn lemma_sphere_lipschitz(p1: Vec3, p2: Vec3, center: Vec3, r: int)
     ensures |sdf_sphere(p1, center, r) - sdf_sphere(p2, center, r)| <= vec3_dist(p1, p2);
 ```
@@ -376,32 +618,46 @@ Phase 1: Codegen (ArithExpr → WGSL)                    ← CURRENT FOCUS
     ├── Phase 1b: SPIR-V binary emission
     └── Phase 1c: #[kernel] proc macro
     │
-Phase 2: GPU intrinsics + memory model                  ← parallel with Phase 1
+Phase 2: Stage framework (Stage, Barrier, staged_eval)  ← parallel with Phase 1
+    │   ~345 lines. Compositional kernel model with
+    │   explicit barriers + Hoare-style invariants.
+    │   No GPU axioms needed — pure spec-level model.
     │
-Phase 3: First verified kernel (GEMM)                   ← depends on 1 + 2
+Phase 3: First verified kernel (tiled GEMM)             ← depends on 1 + 2
+    │   Stage tree: Loop(k_tiles, [Map(load), Barrier, Map(accumulate)])
     │
-Phase 4: FixedPoint<N> type + arithmetic                ← independent
+Phase 4: FixedPoint on GPU (Karatsuba + batch NTT)      ← independent
+    │   Karatsuba unrolled as ArithExpr for N≤8.
+    │   Batch NTT as Stage pipeline for N≥16.
     │
-Phase 5: ArithExpr extensions (IfThenElse, Loop)        ← independent
+Phase 5: Verified Mandelbrot renderer                   ← depends on 1 + 2 + 4
+    │   Stage tree: Loop(epochs, [Map(step), Barrier,
+    │   Scan(compact), Barrier, Map(scatter), Barrier])
+    │   First kernel with dynamic work redistribution!
     │
-Phase 6: Verified Mandelbrot renderer                   ← depends on 1 + 2 + 4 + 5
-    │   (first complete verified GPU kernel!)
+Phase 6: Verified Flash Attention                       ← depends on 1 + 2 + 3
+    │   Stage tree: [Map(load_Q), Barrier, Loop(kv_blocks,
+    │   [Map(load_K), Map(compute), Barrier, Map(swap)])]
+    │   Developer-controlled double buffering.
     │
-Phase 7: SDF primitives + raymarching                   ← depends on 4 + 5
+Phase 7: SDF primitives + raymarching                   ← depends on 4
     │
 Phase 8: Marching cubes                                 ← depends on 1 + 2 + vec3
     │
-Phase 9: Water simulation                               ← depends on all above
+Phase 9: Water simulation (SPH)                         ← depends on 1 + 2
+    │   Stage tree: Loop(timesteps, [Map(hash), Barrier,
+    │   Scan(sort), Barrier, Map(density), Barrier,
+    │   Map(forces), Map(integrate)])
 ```
 
 ### Milestone targets
 
 1. **First shader**: ArithExpr → WGSL that actually runs on GPU (Phase 1)
-2. **First verified kernel**: GEMM with end-to-end proof chain (Phase 3)
-3. **First graphics kernel**: Mandelbrot fixed-point renderer (Phase 6)
-4. **First 3D kernel**: Raymarching SDF with convergence proof (Phase 7)
-5. **First mesh kernel**: Marching cubes with manifold proof (Phase 8)
-6. **First physics kernel**: Water sim with stability proof (Phase 9)
+2. **Stage framework**: Stage type + staged_eval + race-freedom checker (Phase 2)
+3. **First verified multi-stage kernel**: tiled GEMM (Phase 3)
+4. **First kernel with work compaction**: Mandelbrot renderer (Phase 5)
+5. **First ML kernel**: Flash Attention with verified online softmax (Phase 6)
+6. **First physics kernel**: Water sim with CFL stability proof (Phase 9)
 
 ---
 
@@ -414,15 +670,22 @@ Phase 9: Water simulation                               ← depends on all above
 | ArithExpr exec evaluator | Verified | None |
 | GEMM value correctness | Verified | None |
 | Bank conflict freedom | Verified | None |
+| Scan algorithms (Hillis-Steele, Blelloch, Brent-Kung) | Verified | None |
+| Stream compaction (compact_result, compact_indices) | Verified | None |
+| FixedPoint arithmetic (add, sub, mul, NTT, Karatsuba) | Verified (275 fns) | None |
+| Stage framework (staged_eval, race-freedom, invariants) | **Phase 2 (next)** | None (once proved) |
 | ArithExpr → WGSL/SPIR-V emission | **Phase 1 (next)** | None (once proved) |
-| CTA kernel coordination | Phase 3 | None (once proved) |
-| FixedPoint arithmetic | Phase 4 | None (once proved) |
-| gpu_read / gpu_write / gpu_barrier | Axioms (Phase 2) | **Axioms** |
+| Stage → WGSL codegen (barrier placement, loop emission) | **Phase 2** | **Trusted** (auditable template) |
+| Barrier semantics (workgroupBarrier = full sync) | Axiom | **Axiom** |
 | SPIR-V → GPU machine code | Driver | **Trusted** |
 | GPU hardware | Silicon | **Trusted** |
 | Verus + Z3 | Proof checker | **Trusted** |
 
-**Irreducible trust: proof checker + GPU axioms + driver + silicon.**
+**Irreducible trust: proof checker + barrier axiom + Stage→WGSL codegen + driver + silicon.**
+
+Note: the barrier axiom is minimal — it states only that after `workgroupBarrier()`,
+all prior shared memory writes by all threads in the workgroup are visible to all threads.
+This is guaranteed by the WGSL/Vulkan/CUDA specification.
 
 ---
 

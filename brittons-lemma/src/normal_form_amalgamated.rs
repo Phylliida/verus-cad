@@ -12,19 +12,19 @@ use crate::benign::*;
 
 verus! {
 
-// ============================================================
-// Amalgamated Free Product — Structural Lemmas
-// ============================================================
+//  ============================================================
+//  Amalgamated Free Product — Structural Lemmas
+//  ============================================================
 //
-// Key structural property: free reductions NEVER cross factor boundaries.
-// is_inverse_pair requires the same generator index, and G₁ uses < n₁
-// while G₂ uses ≥ n₁.
+//  Key structural property: free reductions NEVER cross factor boundaries.
+//  is_inverse_pair requires the same generator index, and G₁ uses < n₁
+//  while G₂ uses ≥ n₁.
 
-// ============================================================
-// Definitions
-// ============================================================
+//  ============================================================
+//  Definitions
+//  ============================================================
 
-/// The identifications define an isomorphism between generated subgroups.
+///  The identifications define an isomorphism between generated subgroups.
 pub open spec fn identifications_isomorphic(data: AmalgamatedData) -> bool {
     let k = data.identifications.len();
     let a_words = Seq::new(k, |i: int| data.identifications[i].0);
@@ -36,16 +36,16 @@ pub open spec fn identifications_isomorphic(data: AmalgamatedData) -> bool {
     )
 }
 
-/// A word is a "left word" (uses only G₁ generators).
+///  A word is a "left word" (uses only G₁ generators).
 pub open spec fn is_left_word(w: Word, n1: nat) -> bool {
     forall|k: int| 0 <= k < w.len() ==> generator_index(#[trigger] w[k]) < n1
 }
 
-// ============================================================
-// add_relators structure
-// ============================================================
+//  ============================================================
+//  add_relators structure
+//  ============================================================
 
-/// add_relators(p, rs).relators =~= p.relators + rs.
+///  add_relators(p, rs).relators =~= p.relators + rs.
 pub proof fn lemma_add_relators_concat(p: Presentation, rs: Seq<Word>)
     ensures
         add_relators(p, rs).relators =~= p.relators + rs,
@@ -80,7 +80,7 @@ pub proof fn lemma_add_relators_concat(p: Presentation, rs: Seq<Word>)
     }
 }
 
-/// The AFP's relators are: fp.relators ++ amalgamation_relators(data).
+///  The AFP's relators are: fp.relators ++ amalgamation_relators(data).
 pub proof fn lemma_afp_relators(data: AmalgamatedData)
     ensures
         amalgamated_free_product(data).relators =~=
@@ -92,11 +92,11 @@ pub proof fn lemma_afp_relators(data: AmalgamatedData)
     );
 }
 
-// ============================================================
-// Relator classification helpers
-// ============================================================
+//  ============================================================
+//  Relator classification helpers
+//  ============================================================
 
-/// AFP relator at index < p1.relators.len() equals p1's relator.
+///  AFP relator at index < p1.relators.len() equals p1's relator.
 pub proof fn lemma_afp_relator_g1(data: AmalgamatedData, idx: nat)
     requires idx < data.p1.relators.len(),
     ensures ({
@@ -110,7 +110,7 @@ pub proof fn lemma_afp_relator_g1(data: AmalgamatedData, idx: nat)
     assert(fp.relators[idx as int] == data.p1.relators[idx as int]);
 }
 
-/// Shifted G₂ relators have all symbols with generator_index >= n1.
+///  Shifted G₂ relators have all symbols with generator_index >= n1.
 proof fn lemma_shifted_relator_has_g2(data: AmalgamatedData, g2_idx: nat)
     requires g2_idx < data.p2.relators.len(),
     ensures
@@ -133,7 +133,7 @@ proof fn lemma_shifted_relator_has_g2(data: AmalgamatedData, g2_idx: nat)
     }
 }
 
-/// If v_i non-empty, identification relator has a G₂ symbol.
+///  If v_i non-empty, identification relator has a G₂ symbol.
 proof fn lemma_ident_relator_has_g2_if_v_nonempty(
     data: AmalgamatedData, ident_idx: int,
 )
@@ -170,7 +170,7 @@ proof fn lemma_ident_relator_has_g2_if_v_nonempty(
     }
 }
 
-/// inverse_word(w)[w.len()-1] == inverse_symbol(w.first()) when non-empty.
+///  inverse_word(w)[w.len()-1] == inverse_symbol(w.first()) when non-empty.
 proof fn lemma_inverse_word_last_is_inv_of_first(w: Word)
     requires w.len() > 0,
     ensures
@@ -186,7 +186,7 @@ proof fn lemma_inverse_word_last_is_inv_of_first(w: Word)
     assert((inv_rest + tail)[(w.len() - 1) as int] == tail[0]);
 }
 
-/// If w has a symbol with generator_index >= n, so does inverse_word(w).
+///  If w has a symbol with generator_index >= n, so does inverse_word(w).
 proof fn lemma_inverse_preserves_gen_bound_lower(w: Word, n: nat)
     requires
         w.len() > 0,
@@ -220,7 +220,7 @@ proof fn lemma_inverse_preserves_gen_bound_lower(w: Word, n: nat)
     }
 }
 
-/// If v_i is empty, then u_i ≡ ε in G₁ (via isomorphism condition).
+///  If v_i is empty, then u_i ≡ ε in G₁ (via isomorphism condition).
 proof fn lemma_empty_v_means_u_trivial(
     data: AmalgamatedData, ident_idx: nat,
 )
@@ -260,11 +260,11 @@ proof fn lemma_empty_v_means_u_trivial(
     assert(apply_embedding(a_words, gen_word) =~= u_i);
 }
 
-// ============================================================
-// Inverse of trivial is trivial (with proper preconditions)
-// ============================================================
+//  ============================================================
+//  Inverse of trivial is trivial (with proper preconditions)
+//  ============================================================
 
-/// If w ≡ ε and we have word_valid + presentation_valid, inverse_word(w) ≡ ε.
+///  If w ≡ ε and we have word_valid + presentation_valid, inverse_word(w) ≡ ε.
 pub proof fn lemma_inverse_of_trivial(p: Presentation, w: Word)
     requires
         presentation_valid(p),
@@ -273,15 +273,15 @@ pub proof fn lemma_inverse_of_trivial(p: Presentation, w: Word)
     ensures
         equiv_in_presentation(p, inverse_word(w), empty_word()),
 {
-    // w ≡ ε, so by symmetry (needs word_valid + pres_valid): ε ≡ w
+    //  w ≡ ε, so by symmetry (needs word_valid + pres_valid): ε ≡ w
     lemma_equiv_symmetric(p, w, empty_word());
-    // concat(inv(w), ε) ≡ concat(inv(w), w)   (concat_right with ε ≡ w)
+    //  concat(inv(w), ε) ≡ concat(inv(w), w)   (concat_right with ε ≡ w)
     lemma_equiv_concat_right(p, inverse_word(w), empty_word(), w);
-    // concat(inv(w), ε) =~= inv(w)
+    //  concat(inv(w), ε) =~= inv(w)
     assert(concat(inverse_word(w), empty_word()) =~= inverse_word(w));
-    // concat(inv(w), w) ≡ ε   (word_inverse_left)
+    //  concat(inv(w), w) ≡ ε   (word_inverse_left)
     lemma_word_inverse_left(p, w);
-    // Chain: inv(w) =~= concat(inv(w), ε) ≡ concat(inv(w), w) ≡ ε
+    //  Chain: inv(w) =~= concat(inv(w), ε) ≡ concat(inv(w), w) ≡ ε
     lemma_equiv_transitive(p, concat(inverse_word(w), empty_word()),
         concat(inverse_word(w), w), empty_word());
     lemma_equiv_refl(p, inverse_word(w));
@@ -289,13 +289,13 @@ pub proof fn lemma_inverse_of_trivial(p: Presentation, w: Word)
         concat(inverse_word(w), empty_word()), empty_word());
 }
 
-// ============================================================
-// Insert/delete of trivial word preserves equivalence
-// ============================================================
+//  ============================================================
+//  Insert/delete of trivial word preserves equivalence
+//  ============================================================
 
-/// Inserting r ≡ ε at position preserves equivalence.
-/// Proves w ≡ (w[0..p] + r + w[p..]) by building w_prime → w (reducing r to ε)
-/// then using symmetry.
+///  Inserting r ≡ ε at position preserves equivalence.
+///  Proves w ≡ (w[0..p] + r + w[p..]) by building w_prime → w (reducing r to ε)
+///  then using symmetry.
 proof fn lemma_insert_trivial_preserves_equiv(
     p: Presentation, w: Word, r: Word, position: int,
 )
@@ -322,17 +322,17 @@ proof fn lemma_insert_trivial_preserves_equiv(
         by { if k < position { } else { } }
     }
 
-    // Build: w_prime ≡ w (direction: derivation from w_prime to w)
-    // concat(r, suffix) ≡ concat(ε, suffix) =~= suffix
+    //  Build: w_prime ≡ w (direction: derivation from w_prime to w)
+    //  concat(r, suffix) ≡ concat(ε, suffix) =~= suffix
     lemma_equiv_concat_left(p, r, empty_word(), suffix);
     assert(concat(empty_word(), suffix) =~= suffix);
     lemma_equiv_refl(p, suffix);
     lemma_equiv_transitive(p, concat(r, suffix), concat(empty_word(), suffix), suffix);
 
-    // concat(prefix, concat(r, suffix)) ≡ concat(prefix, suffix)
+    //  concat(prefix, concat(r, suffix)) ≡ concat(prefix, suffix)
     lemma_equiv_concat_right(p, prefix, concat(r, suffix), suffix);
 
-    // w_prime =~= concat(prefix, concat(r, suffix))
+    //  w_prime =~= concat(prefix, concat(r, suffix))
     assert(w_prime =~= concat(prefix, concat(r, suffix))) by {
         let lhs = prefix + r + suffix;
         let rhs = concat(prefix, concat(r, suffix));
@@ -350,10 +350,10 @@ proof fn lemma_insert_trivial_preserves_equiv(
         }
     }
 
-    // w =~= concat(prefix, suffix)
-    // So: w_prime ≡ w (derivation from w_prime to w)
-    // Now use symmetry to get w ≡ w_prime.
-    // Need word_valid(w_prime, n) for symmetry.
+    //  w =~= concat(prefix, suffix)
+    //  So: w_prime ≡ w (derivation from w_prime to w)
+    //  Now use symmetry to get w ≡ w_prime.
+    //  Need word_valid(w_prime, n) for symmetry.
     reveal(presentation_valid);
     assert(word_valid(w_prime, p.num_generators)) by {
         assert forall|k: int| 0 <= k < w_prime.len()
@@ -373,11 +373,11 @@ proof fn lemma_insert_trivial_preserves_equiv(
     lemma_equiv_symmetric(p, w_prime, w);
 }
 
-// ============================================================
-// Non-G₁ AFP relator that's all-G₁ must be trivial in G₁
-// ============================================================
+//  ============================================================
+//  Non-G₁ AFP relator that's all-G₁ must be trivial in G₁
+//  ============================================================
 
-/// Any AFP relator at index >= p1.relators.len(), if all-G₁, is ≡ ε in G₁.
+///  Any AFP relator at index >= p1.relators.len(), if all-G₁, is ≡ ε in G₁.
 proof fn lemma_nonstandard_afp_relator_trivial(
     data: AmalgamatedData, relator_index: nat, inverted: bool,
 )
@@ -407,7 +407,7 @@ proof fn lemma_nonstandard_afp_relator_trivial(
 
     lemma_afp_relators(data);
 
-    // Case: shifted G₂ relator — impossible (has G₂ symbols)
+    //  Case: shifted G₂ relator — impossible (has G₂ symbols)
     if relator_index < n_g1 + n_g2 {
         let g2_idx = (relator_index - n_g1) as nat;
         lemma_shifted_relator_has_g2(data, g2_idx);
@@ -431,7 +431,7 @@ proof fn lemma_nonstandard_afp_relator_trivial(
                 assert(generator_index(r[k2]) < n1);
             }
         }
-        // sr empty → raw_rel empty → r empty (contradicts r.len() > 0)
+        //  sr empty → raw_rel empty → r empty (contradicts r.len() > 0)
         assert(sr.len() == 0);
         assert(raw_rel.len() == 0);
         if !inverted { assert(r.len() == 0); }
@@ -439,7 +439,7 @@ proof fn lemma_nonstandard_afp_relator_trivial(
         assert(false);
     }
 
-    // Case: identification relator
+    //  Case: identification relator
     let ident_idx = (relator_index - n_g1 - n_g2) as nat;
     assert(ident_idx < data.identifications.len()) by {
         let ident_rels = amalgamation_relators(data);
@@ -458,7 +458,7 @@ proof fn lemma_nonstandard_afp_relator_trivial(
             == ident_rels[ident_idx as int]);
     }
 
-    // If v_i non-empty → contradiction (relator has G₂ symbol)
+    //  If v_i non-empty → contradiction (relator has G₂ symbol)
     if v_i.len() > 0 {
         lemma_ident_relator_has_g2_if_v_nonempty(data, ident_idx as int);
         let g2_k = choose|k: int| 0 <= k < raw_ident.len()
@@ -478,7 +478,7 @@ proof fn lemma_nonstandard_afp_relator_trivial(
         assert(false);
     }
 
-    // v_i empty → u_i ≡ ε in G₁
+    //  v_i empty → u_i ≡ ε in G₁
     lemma_empty_v_means_u_trivial(data, ident_idx);
 
     assert(v_i =~= empty_word());
@@ -491,8 +491,8 @@ proof fn lemma_nonstandard_afp_relator_trivial(
     if !inverted {
         assert(r == raw_rel);
     } else {
-        // r = inverse_word(u_i), u_i ≡ ε, need inverse_word(u_i) ≡ ε
-        // u_i is word_valid (from amalgamated_data_valid) and p1 is presentation_valid
+        //  r = inverse_word(u_i), u_i ≡ ε, need inverse_word(u_i) ≡ ε
+        //  u_i is word_valid (from amalgamated_data_valid) and p1 is presentation_valid
         reveal(presentation_valid);
         assert(word_valid(u_i, n1));
         assert(presentation_valid(data.p1));
@@ -501,12 +501,12 @@ proof fn lemma_nonstandard_afp_relator_trivial(
     }
 }
 
-// ============================================================
-// Left-to-left steps are G₁ steps
-// ============================================================
+//  ============================================================
+//  Left-to-left steps are G₁ steps
+//  ============================================================
 
-/// KEY LEMMA: If both w and w' are left words and the AFP step takes w to w',
-/// then w ≡ w' in G₁.
+///  KEY LEMMA: If both w and w' are left words and the AFP step takes w to w',
+///  then w ≡ w' in G₁.
 pub proof fn lemma_left_step_valid_in_g1(
     data: AmalgamatedData,
     w: Word, step: DerivationStep, w_prime: Word,
@@ -603,22 +603,22 @@ pub proof fn lemma_left_step_valid_in_g1(
                 lemma_equiv_refl(data.p1, w);
             } else {
                 lemma_nonstandard_afp_relator_trivial(data, relator_index, inverted);
-                // r ≡ ε in G₁. w = prefix + r + suffix, w_prime = prefix + suffix.
-                // Need w ≡ w_prime. Since r ≡ ε: w = prefix + r + suffix ≡ prefix + suffix = w_prime.
+                //  r ≡ ε in G₁. w = prefix + r + suffix, w_prime = prefix + suffix.
+                //  Need w ≡ w_prime. Since r ≡ ε: w = prefix + r + suffix ≡ prefix + suffix = w_prime.
                 let prefix = w.subrange(0, position);
                 let suffix = w.subrange(position + rlen as int, w.len() as int);
 
-                // concat(r, suffix) ≡ suffix
+                //  concat(r, suffix) ≡ suffix
                 lemma_equiv_concat_left(data.p1, r, empty_word(), suffix);
                 assert(concat(empty_word(), suffix) =~= suffix);
                 lemma_equiv_refl(data.p1, suffix);
                 lemma_equiv_transitive(data.p1, concat(r, suffix),
                     concat(empty_word(), suffix), suffix);
 
-                // prefix + concat(r, suffix) ≡ prefix + suffix = w_prime
+                //  prefix + concat(r, suffix) ≡ prefix + suffix = w_prime
                 lemma_equiv_concat_right(data.p1, prefix, concat(r, suffix), suffix);
 
-                // w =~= concat(prefix, concat(r, suffix))
+                //  w =~= concat(prefix, concat(r, suffix))
                 assert(w =~= concat(prefix, concat(r, suffix))) by {
                     let lhs = w;
                     let rhs = concat(prefix, concat(r, suffix));
@@ -648,61 +648,61 @@ pub proof fn lemma_left_step_valid_in_g1(
     }
 }
 
-// ============================================================
-// Part F: Van der Waerden action — state and action definitions
-// ============================================================
+//  ============================================================
+//  Part F: Van der Waerden action — state and action definitions
+//  ============================================================
 //
-// The action is on states (h, syllables) where:
-//   h: Word — an element of A (the amalgamated subgroup in G₁)
-//   syllables: Seq<(bool, nat)> — alternating (is_left, coset_index) pairs
-//     is_left = true means the syllable is from G₁/A
-//     is_left = false means the syllable is from G₂/B
-//     Each coset_index represents a non-trivial coset (different from the subgroup coset)
+//  The action is on states (h, syllables) where:
+//    h: Word — an element of A (the amalgamated subgroup in G₁)
+//    syllables: Seq<(bool, nat)> — alternating (is_left, coset_index) pairs
+//      is_left = true means the syllable is from G₁/A
+//      is_left = false means the syllable is from G₂/B
+//      Each coset_index represents a non-trivial coset (different from the subgroup coset)
 //
-// The action of a G₁-symbol on a state processes through the coset structure.
-// The action of a G₂-symbol similarly.
-// Well-definedness means AFP-equivalent words act the same (up to G₁-equiv of h).
+//  The action of a G₁-symbol on a state processes through the coset structure.
+//  The action of a G₂-symbol similarly.
+//  Well-definedness means AFP-equivalent words act the same (up to G₁-equiv of h).
 
-/// A word is in the left amalgamated subgroup A (generated by u_i words).
+///  A word is in the left amalgamated subgroup A (generated by u_i words).
 pub open spec fn in_left_subgroup(data: AmalgamatedData, w: Word) -> bool {
     let k = data.identifications.len();
     let a_words = Seq::new(k, |i: int| data.identifications[i].0);
     in_generated_subgroup(data.p1, a_words, w)
 }
 
-/// A word is in the right amalgamated subgroup B (generated by v_i words).
+///  A word is in the right amalgamated subgroup B (generated by v_i words).
 pub open spec fn in_right_subgroup(data: AmalgamatedData, w: Word) -> bool {
     let k = data.identifications.len();
     let b_words = Seq::new(k, |i: int| data.identifications[i].1);
     in_generated_subgroup(data.p2, b_words, w)
 }
 
-/// Two G₁-words are in the same A-coset: w₁⁻¹ · w₂ ∈ A.
+///  Two G₁-words are in the same A-coset: w₁⁻¹ · w₂ ∈ A.
 pub open spec fn same_left_coset(data: AmalgamatedData, w1: Word, w2: Word) -> bool {
     in_left_subgroup(data, concat(inverse_word(w1), w2))
 }
 
-/// Two G₂-words are in the same B-coset.
+///  Two G₂-words are in the same B-coset.
 pub open spec fn same_right_coset(data: AmalgamatedData, w1: Word, w2: Word) -> bool {
     in_right_subgroup(data, concat(inverse_word(w1), w2))
 }
 
 
-// ============================================================
-// Part G: H-only VDW action (no syllables)
-// ============================================================
+//  ============================================================
+//  Part G: H-only VDW action (no syllables)
+//  ============================================================
 //
-// For AFP injectivity, we only need the h-component of the VDW state.
-// The h-only action tracks a single nat (ct1 Cayley table element).
+//  For AFP injectivity, we only need the h-component of the VDW state.
+//  The h-only action tracks a single nat (ct1 Cayley table element).
 //
-// G₁ symbol s: h → ct1.table[h][sym_col(s)]  (trace in G₁)
-// G₂ symbol s: h → phi(ct2.table[phi_inv(h)][sym_col(unshift(s))])
-//              (translate to G₂, trace, translate back)
+//  G₁ symbol s: h → ct1.table[h][sym_col(s)]  (trace in G₁)
+//  G₂ symbol s: h → phi(ct2.table[phi_inv(h)][sym_col(unshift(s))])
+//               (translate to G₂, trace, translate back)
 //
-// This is the "H-projection" of the full VDW action. It's sufficient for
-// injectivity because for G₁-words on h=0, it equals trace_word(ct1, 0, w).
+//  This is the "H-projection" of the full VDW action. It's sufficient for
+//  injectivity because for G₁-words on h=0, it equals trace_word(ct1, 0, w).
 
-/// Lookup in a Cayley table: ct.table[elem][col], defaulting to 0.
+///  Lookup in a Cayley table: ct.table[elem][col], defaulting to 0.
 pub open spec fn ct_lookup(
     ct: crate::todd_coxeter::CosetTable, elem: nat, col: nat,
 ) -> nat {
@@ -712,12 +712,12 @@ pub open spec fn ct_lookup(
     }
 }
 
-/// symbol_to_column shorthand.
+///  symbol_to_column shorthand.
 pub open spec fn sym_col(s: Symbol) -> nat {
     crate::todd_coxeter::symbol_to_column(s)
 }
 
-/// Unshift a G₂ symbol.
+///  Unshift a G₂ symbol.
 pub open spec fn unshift_sym(s: Symbol, n1: nat) -> Symbol {
     match s {
         Symbol::Gen(i) => Symbol::Gen((i - n1) as nat),
@@ -726,4 +726,4 @@ pub open spec fn unshift_sym(s: Symbol, n1: nat) -> Symbol {
 }
 
 
-} // verus!
+} //  verus!

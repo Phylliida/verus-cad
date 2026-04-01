@@ -15,9 +15,9 @@ canvas{display:block;cursor:crosshair;touch-action:none}
 <canvas id="c"></canvas>
 <div id="hud"></div>
 <script>
-// ============================================================
-//  Arbitrary-precision rationals
-// ============================================================
+//  ============================================================
+//   Arbitrary-precision rationals
+//  ============================================================
 function gcd(a, b) {
   if (a < 0n) a = -a;
   if (b < 0n) b = -b;
@@ -67,23 +67,23 @@ function zoomLog() {
 const ZERO = new Q(0n), ONE = new Q(1n);
 const ZI = new Q(11n, 10n), ZO = new Q(10n, 11n);
 
-// ============================================================
-//  State
-// ============================================================
+//  ============================================================
+//   State
+//  ============================================================
 let cx = ZERO, cy = ZERO, zoom = ONE;
 let strokes = [];
 let cur = null;
 let drawing = false, panning = false, lastPan = null, lastDrawScreen = null;
 
-// ============================================================
-//  Canvas
-// ============================================================
+//  ============================================================
+//   Canvas
+//  ============================================================
 const canvas = document.getElementById('c');
 const ctx = canvas.getContext('2d');
 const hud = document.getElementById('hud');
 let W, H, DPR;
 
-// Offscreen canvas for zoom-animation snapshots
+//  Offscreen canvas for zoom-animation snapshots
 let offCanvas, offCtx;
 
 function resize() {
@@ -100,9 +100,9 @@ function resize() {
 }
 addEventListener('resize', resize);
 
-// ============================================================
-//  Bounding box (one-time per stroke)
-// ============================================================
+//  ============================================================
+//   Bounding box (one-time per stroke)
+//  ============================================================
 function computeBBox(pts) {
   let minX = pts[0].x, maxX = pts[0].x, minY = pts[0].y, maxY = pts[0].y;
   for (let i = 1; i < pts.length; i++) {
@@ -120,9 +120,9 @@ function finishStroke(s) {
   addToScreenCache(s);
 }
 
-// ============================================================
-//  Coordinate transforms
-// ============================================================
+//  ============================================================
+//   Coordinate transforms
+//  ============================================================
 function s2w(sx, sy) {
   const hw = new Q(BigInt(W), 2n), hh = new Q(BigInt(H), 2n);
   return {
@@ -137,12 +137,12 @@ function anchorZoom(wp, sx, sy) {
   cy = wp.y.sub(new Q(BigInt(Math.round(sy))).sub(hh).div(zoom));
 }
 
-// ============================================================
-//  Screen-coordinate cache
+//  ============================================================
+//   Screen-coordinate cache
 //
-//  Float64Array of screen coords per visible stroke, rebuilt
-//  on zoom change. Pan just adds a float offset — no BigInt.
-// ============================================================
+//   Float64Array of screen coords per visible stroke, rebuilt
+//   on zoom change. Pan just adds a float offset — no BigInt.
+//  ============================================================
 let screenEntries = [];
 let scDirty = true;
 let panTotalX = 0, panTotalY = 0;
@@ -187,7 +187,7 @@ function buildScreenCache() {
   panTotalX = 0; panTotalY = 0;
   const zn = zoom.n, zd = zoom.d, cxn = cx.n, cxd = cx.d, cyn = cy.n, cyd = cy.d;
   const bw = BigInt(W), bh = BigInt(H);
-  // 5x viewport margin for pan tolerance
+  //  5x viewport margin for pan tolerance
   const hvw = new Q(bw * zd * 5n, 2n * zn), hvh = new Q(bh * zd * 5n, 2n * zn);
   const vpMinX = cx.sub(hvw), vpMaxX = cx.add(hvw);
   const vpMinY = cy.sub(hvh), vpMaxY = cy.add(hvh);
@@ -209,15 +209,15 @@ function addToScreenCache(s) {
   const zn = zoom.n, zd = zoom.d, cxn = cx.n, cxd = cx.d, cyn = cy.n, cyd = cy.d;
   const bw = BigInt(W), bh = BigInt(H);
   const pts = transformStrokePts(s, zn, zd, cxn, cxd, cyn, cyd, bw, bh);
-  // Adjust to cache reference frame
+  //  Adjust to cache reference frame
   for (let i = 0; i < pts.length; i += 2) { pts[i] -= panTotalX; pts[i+1] -= panTotalY; }
   const fb = floatBBox(pts);
   screenEntries.push({ pts, col: s.col, w: s.w, ...fb });
 }
 
-// ============================================================
-//  Drawing helpers
-// ============================================================
+//  ============================================================
+//   Drawing helpers
+//  ============================================================
 function drawCachedStrokes(target, ox, oy) {
   const cL = -500, cR = W + 500, cT = -500, cB = H + 500;
   let vis = 0;
@@ -261,31 +261,31 @@ function drawLiveStroke(target) {
   target.stroke();
 }
 
-// ============================================================
-//  Zoom animation
+//  ============================================================
+//   Zoom animation
 //
-//  Two-state design (learned from tldraw/Excalidraw/Fabric.js):
+//   Two-state design (learned from tldraw/Excalidraw/Fabric.js):
 //
-//  NORMAL: render from screen-coord cache + panTotal offset.
-//  ZOOM_ANIM: GPU-scale a snapshot of the canvas. Zero BigInt.
+//   NORMAL: render from screen-coord cache + panTotal offset.
+//   ZOOM_ANIM: GPU-scale a snapshot of the canvas. Zero BigInt.
 //
-//  Transition zoom→normal: sync buildScreenCache() — one
-//  potential frame drop, but no complex async state machine.
-// ============================================================
+//   Transition zoom→normal: sync buildScreenCache() — one
+//   potential frame drop, but no complex async state machine.
+//  ============================================================
 let zoomAnim = false;
 let zScale = 1, zTx = 0, zTy = 0;
 let zoomTimer = 0;
 
-// Render committed strokes to offscreen from float cache (never from a bitmap).
-// This prevents stacking: the offscreen is always a clean first-generation render.
+//  Render committed strokes to offscreen from float cache (never from a bitmap).
+//  This prevents stacking: the offscreen is always a clean first-generation render.
 function renderOffscreen() {
   offCtx.clearRect(0, 0, W, H);
   drawCachedStrokes(offCtx, panTotalX, panTotalY);
 }
 
-// ============================================================
-//  Render — only two code paths, easy to reason about
-// ============================================================
+//  ============================================================
+//   Render — only two code paths, easy to reason about
+//  ============================================================
 let renderRequested = false;
 function requestRender() {
   if (!renderRequested) { renderRequested = true; requestAnimationFrame(render); }
@@ -297,7 +297,7 @@ function render() {
   let visCount = 0;
 
   if (zoomAnim) {
-    // Scale the offscreen canvas (always clean — rendered from float cache, never a bitmap copy)
+    //  Scale the offscreen canvas (always clean — rendered from float cache, never a bitmap copy)
     ctx.save();
     ctx.imageSmoothingEnabled = false;
     ctx.transform(zScale, 0, 0, zScale, Math.round(zTx), Math.round(zTy));
@@ -306,15 +306,15 @@ function render() {
     ctx.imageSmoothingEnabled = true;
     visCount = screenEntries.length;
   } else {
-    // Accurate render: rebuild cache if needed, render to BOTH offscreen and main canvas.
-    // The offscreen always mirrors committed strokes so it's ready for the next zoom burst.
+    //  Accurate render: rebuild cache if needed, render to BOTH offscreen and main canvas.
+    //  The offscreen always mirrors committed strokes so it's ready for the next zoom burst.
     if (scDirty || Math.abs(panTotalX) > W * 2 || Math.abs(panTotalY) > H * 2) {
       buildScreenCache();
     }
     renderOffscreen();
     ctx.drawImage(offCanvas, 0, 0, W, H);
     visCount = screenEntries.length;
-    // Reset zoom transform — clean slate for next burst
+    //  Reset zoom transform — clean slate for next burst
     zScale = 1; zTx = 0; zTy = 0;
   }
 
@@ -325,7 +325,7 @@ function render() {
     zoomAnim ? 'zooming...' : 'ready'} | right-drag=pan  scroll=zoom  ctrl+z=undo`;
 }
 
-// Force a synchronous first render so offscreen + canvas have content
+//  Force a synchronous first render so offscreen + canvas have content
 function ensureRendered() {
   if (scDirty) { buildScreenCache(); }
   renderOffscreen();
@@ -335,9 +335,9 @@ function ensureRendered() {
   zScale = 1; zTx = 0; zTy = 0;
 }
 
-// ============================================================
-//  Mouse
-// ============================================================
+//  ============================================================
+//   Mouse
+//  ============================================================
 canvas.addEventListener('mousedown', e => {
   e.preventDefault();
   if (e.button === 2 || e.button === 1 || (e.button === 0 && (e.ctrlKey || e.metaKey))) {
@@ -379,14 +379,14 @@ addEventListener('mouseup', () => {
 
 canvas.addEventListener('contextmenu', e => e.preventDefault());
 
-// ============================================================
-//  Scroll zoom
-// ============================================================
+//  ============================================================
+//   Scroll zoom
+//  ============================================================
 canvas.addEventListener('wheel', e => {
   e.preventDefault();
   if (!e.deltaY) return;
 
-  // Exact BigInt state update (always, so state is correct when anim ends)
+  //  Exact BigInt state update (always, so state is correct when anim ends)
   const mw = s2w(e.clientX, e.clientY);
   zoom = zoom.mul(e.deltaY < 0 ? ZI : ZO);
   anchorZoom(mw, e.clientX, e.clientY);
@@ -394,22 +394,22 @@ canvas.addEventListener('wheel', e => {
   const factor = e.deltaY < 0 ? 1.1 : 1 / 1.1;
 
   if (!zoomAnim) {
-    // The offscreen already has a clean render of committed strokes from the
-    // last normal render (or init). zScale/zTx/zTy carry the accumulated
-    // transform from the last accurate render — they persist across bursts
-    // and are only reset when a normal render completes. This prevents
-    // stacking: we never snapshot a scaled bitmap.
+    //  The offscreen already has a clean render of committed strokes from the
+    //  last normal render (or init). zScale/zTx/zTy carry the accumulated
+    //  transform from the last accurate render — they persist across bursts
+    //  and are only reset when a normal render completes. This prevents
+    //  stacking: we never snapshot a scaled bitmap.
     zoomAnim = true;
   }
 
-  // Compound float transform around mouse position
+  //  Compound float transform around mouse position
   zTx = zTx * factor + e.clientX * (1 - factor);
   zTy = zTy * factor + e.clientY * (1 - factor);
   zScale *= factor;
 
   requestRender();
 
-  // Debounce: when scrolling stops, exit animation and rebuild
+  //  Debounce: when scrolling stops, exit animation and rebuild
   clearTimeout(zoomTimer);
   zoomTimer = setTimeout(() => {
     zoomAnim = false;
@@ -419,9 +419,9 @@ canvas.addEventListener('wheel', e => {
   }, 150);
 }, { passive: false });
 
-// ============================================================
-//  Keyboard
-// ============================================================
+//  ============================================================
+//   Keyboard
+//  ============================================================
 addEventListener('keydown', e => {
   if ((e.ctrlKey || e.metaKey) && e.key === 'z') {
     e.preventDefault();
@@ -433,9 +433,9 @@ addEventListener('keydown', e => {
   }
 });
 
-// ============================================================
-//  Touch
-// ============================================================
+//  ============================================================
+//   Touch
+//  ============================================================
 let tch = {};
 
 canvas.addEventListener('touchstart', e => {
@@ -493,12 +493,12 @@ canvas.addEventListener('touchend', e => {
   }
 });
 
-// ============================================================
-//  Persistence
+//  ============================================================
+//   Persistence
 //
-//  Strokes → localStorage (immediate, no debounce)
-//  Viewport (cx, cy, zoom) → URL hash (so you can share/bookmark a location)
-// ============================================================
+//   Strokes → localStorage (immediate, no debounce)
+//   Viewport (cx, cy, zoom) → URL hash (so you can share/bookmark a location)
+//  ============================================================
 function saveStrokes() {
   try {
     localStorage.setItem('izd2', JSON.stringify(
@@ -517,7 +517,7 @@ function saveViewport() {
 
 function loadStrokes() {
   try {
-    // Try new format first
+    //  Try new format first
     let raw = localStorage.getItem('izd2');
     if (raw) {
       const arr = JSON.parse(raw);
@@ -527,7 +527,7 @@ function loadStrokes() {
       });
       return;
     }
-    // Migrate from old format
+    //  Migrate from old format
     raw = localStorage.getItem('izd');
     if (raw) {
       const d = JSON.parse(raw);
@@ -535,12 +535,12 @@ function loadStrokes() {
         const pts = s.p.map(p => ({ x: Q.parse(p.x), y: Q.parse(p.y) }));
         return { pts, w: s.w, col: s.c, zlog: s.zl || 0, bbox: computeBBox(pts) };
       });
-      // If no hash yet, migrate viewport from old format
+      //  If no hash yet, migrate viewport from old format
       if (!location.hash.slice(1)) {
         cx = Q.parse(d.cx); cy = Q.parse(d.cy); zoom = Q.parse(d.z);
         saveViewport();
       }
-      // Save in new format and remove old key
+      //  Save in new format and remove old key
       saveStrokes();
       localStorage.removeItem('izd');
     }
@@ -562,7 +562,7 @@ function loadViewport() {
   } catch (e) { return false; }
 }
 
-// Navigate to a hash location (browser back/forward)
+//  Navigate to a hash location (browser back/forward)
 addEventListener('hashchange', () => {
   if (loadViewport()) {
     scDirty = true;
@@ -571,14 +571,14 @@ addEventListener('hashchange', () => {
   }
 });
 
-// ============================================================
-//  Init
-// ============================================================
-loadStrokes();       // strokes from localStorage
-loadViewport();      // viewport from URL hash (overrides default cx/cy/zoom)
+//  ============================================================
+//   Init
+//  ============================================================
+loadStrokes();       //  strokes from localStorage
+loadViewport();      //  viewport from URL hash (overrides default cx/cy/zoom)
 resize();
-ensureRendered();    // force first render so canvas has content for zoom snapshots
-if (!location.hash.slice(1)) saveViewport(); // seed the hash if empty
+ensureRendered();    //  force first render so canvas has content for zoom snapshots
+if (!location.hash.slice(1)) saveViewport(); //  seed the hash if empty
 </script>
 </body>
 </html>

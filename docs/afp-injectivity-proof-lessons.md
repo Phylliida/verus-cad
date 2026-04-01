@@ -80,8 +80,8 @@ Examples from this proof:
 
 Pattern to fire triggers:
 ```rust
-let _ = ct1.table[h as int];           // fire table trigger
-let _ = data.identifications[idx as int]; // fire identification trigger
+let _ = ct1.table[h as int];           //  fire table trigger
+let _ = data.identifications[idx as int]; //  fire identification trigger
 ```
 
 **Rule**: When a quantified fact should apply but doesn't, add explicit `let _` bindings

@@ -28,15 +28,10 @@ fmt_remaining() {
     echo "$out"
 }
 
-# Build context bar: filled/total out of 95%
-bar_width=10
+# Context: total percent
 if [ -n "$ctx_pct" ]; then
-    filled=$(echo "$ctx_pct 95 $bar_width" | awk '{printf "%d", ($1/$2)*$3}')
-    [ "$filled" -gt "$bar_width" ] && filled=$bar_width
-    bar=""
-    for ((i=0; i<filled; i++)); do bar="${bar}█"; done
-    for ((i=filled; i<bar_width; i++)); do bar="${bar}░"; done
-    ctx_part="${bar} $(printf '%.0f' "$ctx_pct")/95%"
+    pct_int=$(printf '%.0f' "$ctx_pct")
+    ctx_part="${pct_int}%/95%"
 else
     ctx_part=""
 fi
@@ -46,16 +41,16 @@ five_remaining=$(fmt_remaining "$five_reset")
 week_remaining=$(fmt_remaining "$week_reset")
 
 rl_part=""
-[ -n "$five_pct" ] && rl_part="5h: $(printf '%.0f' "$five_pct")%"
-[ -n "$five_remaining" ] && rl_part="${rl_part} (${five_remaining})"
+[ -n "$five_pct" ] && rl_part="5h $(printf '%.0f' "$five_pct")%"
+[ -n "$five_remaining" ] && rl_part="${rl_part} ${five_remaining}"
 if [ -n "$week_pct" ]; then
-    [ -n "$rl_part" ] && rl_part="${rl_part}  "
-    rl_part="${rl_part}7d: $(printf '%.0f' "$week_pct")%"
-    [ -n "$week_remaining" ] && rl_part="${rl_part} (${week_remaining})"
+    [ -n "$rl_part" ] && rl_part="${rl_part} "
+    rl_part="${rl_part}7d $(printf '%.0f' "$week_pct")%"
+    [ -n "$week_remaining" ] && rl_part="${rl_part} ${week_remaining}"
 fi
 
 # Combine
 out=""
 [ -n "$ctx_part" ] && out="$ctx_part"
-[ -n "$rl_part" ] && { [ -n "$out" ] && out="$out  │  "; out="${out}${rl_part}"; }
+[ -n "$rl_part" ] && { [ -n "$out" ] && out="$out "; out="${out}${rl_part}"; }
 echo "$out"

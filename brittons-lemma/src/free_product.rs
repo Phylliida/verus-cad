@@ -7,12 +7,12 @@ use crate::presentation_lemmas::*;
 
 verus! {
 
-// ============================================================
-// Free Products of Presented Groups
-// ============================================================
+//  ============================================================
+//  Free Products of Presented Groups
+//  ============================================================
 
-/// Shift a symbol's generator index by an offset.
-/// Gen(i) → Gen(i + offset), Inv(i) → Inv(i + offset).
+///  Shift a symbol's generator index by an offset.
+///  Gen(i) → Gen(i + offset), Inv(i) → Inv(i + offset).
 pub open spec fn shift_symbol(s: Symbol, offset: nat) -> Symbol {
     match s {
         Symbol::Gen(i) => Symbol::Gen(i + offset),
@@ -20,19 +20,19 @@ pub open spec fn shift_symbol(s: Symbol, offset: nat) -> Symbol {
     }
 }
 
-/// Shift every symbol in a word by an offset.
+///  Shift every symbol in a word by an offset.
 pub open spec fn shift_word(w: Word, offset: nat) -> Word {
     Seq::new(w.len(), |i: int| shift_symbol(w[i], offset))
 }
 
-/// Shift every word in a sequence of relators.
+///  Shift every word in a sequence of relators.
 pub open spec fn shift_relators(relators: Seq<Word>, offset: nat) -> Seq<Word> {
     Seq::new(relators.len(), |i: int| shift_word(relators[i], offset))
 }
 
-/// The free product of two presentations.
-/// Generators: p1's generators (0..n1-1) and p2's generators (n1..n1+n2-1).
-/// Relators: p1's relators followed by p2's relators (shifted).
+///  The free product of two presentations.
+///  Generators: p1's generators (0..n1-1) and p2's generators (n1..n1+n2-1).
+///  Relators: p1's relators followed by p2's relators (shifted).
 pub open spec fn free_product(p1: Presentation, p2: Presentation) -> Presentation {
     Presentation {
         num_generators: p1.num_generators + p2.num_generators,
@@ -40,37 +40,37 @@ pub open spec fn free_product(p1: Presentation, p2: Presentation) -> Presentatio
     }
 }
 
-/// A word uses only generators from p1 (indices < p1.num_generators).
+///  A word uses only generators from p1 (indices < p1.num_generators).
 pub open spec fn word_in_left(w: Word, p1: Presentation) -> bool {
     forall|i: int| 0 <= i < w.len() ==> generator_index(#[trigger] w[i]) < p1.num_generators
 }
 
-/// A word uses only generators from p2 (indices >= p1.num_generators).
+///  A word uses only generators from p2 (indices >= p1.num_generators).
 pub open spec fn word_in_right(w: Word, p1: Presentation, p2: Presentation) -> bool {
     forall|i: int| 0 <= i < w.len() ==>
         p1.num_generators <= generator_index(#[trigger] w[i])
         && generator_index(w[i]) < p1.num_generators + p2.num_generators
 }
 
-// ============================================================
-// Shift lemmas
-// ============================================================
+//  ============================================================
+//  Shift lemmas
+//  ============================================================
 
-/// Shifting preserves inverse pair relationships.
+///  Shifting preserves inverse pair relationships.
 pub proof fn lemma_shift_preserves_inverse_pair(s1: Symbol, s2: Symbol, offset: nat)
     ensures
         is_inverse_pair(s1, s2) == is_inverse_pair(shift_symbol(s1, offset), shift_symbol(s2, offset)),
 {
 }
 
-/// Shifting a word preserves its length.
+///  Shifting a word preserves its length.
 pub proof fn lemma_shift_word_len(w: Word, offset: nat)
     ensures
         shift_word(w, offset).len() == w.len(),
 {
 }
 
-/// Shifting preserves cancellations.
+///  Shifting preserves cancellations.
 pub proof fn lemma_shift_preserves_cancellation(w: Word, offset: nat, i: int)
     requires
         has_cancellation_at(w, i),
@@ -83,7 +83,7 @@ pub proof fn lemma_shift_preserves_cancellation(w: Word, offset: nat, i: int)
     lemma_shift_preserves_inverse_pair(w[i], w[i + 1], offset);
 }
 
-/// reduce_at commutes with shifting.
+///  reduce_at commutes with shifting.
 pub proof fn lemma_shift_reduce_at(w: Word, offset: nat, i: int)
     requires
         has_cancellation_at(w, i),
@@ -114,7 +114,7 @@ pub proof fn lemma_shift_reduce_at(w: Word, offset: nat, i: int)
     };
 }
 
-/// Shifting distributes over concatenation.
+///  Shifting distributes over concatenation.
 pub proof fn lemma_shift_concat(w1: Word, w2: Word, offset: nat)
     ensures
         shift_word(concat(w1, w2), offset) =~= concat(shift_word(w1, offset), shift_word(w2, offset)),
@@ -135,7 +135,7 @@ pub proof fn lemma_shift_concat(w1: Word, w2: Word, offset: nat)
     };
 }
 
-/// Shifting distributes over word inversion.
+///  Shifting distributes over word inversion.
 pub proof fn lemma_shift_inverse_word(w: Word, offset: nat)
     ensures
         shift_word(inverse_word(w), offset) =~= inverse_word(shift_word(w, offset)),
@@ -167,13 +167,13 @@ pub proof fn lemma_shift_inverse_word(w: Word, offset: nat)
     }
 }
 
-// ============================================================
-// Left Embedding
-// ============================================================
+//  ============================================================
+//  Left Embedding
+//  ============================================================
 
-/// A derivation step valid in p1 is also valid in free_product(p1, p2).
-/// apply_step doesn't check num_generators, only relator indices.
-/// p1's relators are at the same indices in fp.
+///  A derivation step valid in p1 is also valid in free_product(p1, p2).
+///  apply_step doesn't check num_generators, only relator indices.
+///  p1's relators are at the same indices in fp.
 proof fn lemma_step_valid_in_free_product_left(
     p1: Presentation, p2: Presentation,
     w: Word, step: DerivationStep, w_prime: Word,
@@ -186,10 +186,10 @@ proof fn lemma_step_valid_in_free_product_left(
     let fp = free_product(p1, p2);
     match step {
         DerivationStep::FreeReduce { position } => {
-            // Doesn't use relators
+            //  Doesn't use relators
         },
         DerivationStep::FreeExpand { position, symbol } => {
-            // Doesn't use relators
+            //  Doesn't use relators
         },
         DerivationStep::RelatorInsert { position, relator_index, inverted } => {
             assert(0 <= relator_index < p1.relators.len());
@@ -204,7 +204,7 @@ proof fn lemma_step_valid_in_free_product_left(
     }
 }
 
-/// A derivation valid in p1 is also valid in free_product(p1, p2).
+///  A derivation valid in p1 is also valid in free_product(p1, p2).
 proof fn lemma_derivation_valid_in_free_product_left(
     p1: Presentation, p2: Presentation,
     steps: Seq<DerivationStep>, w1: Word, w2: Word,
@@ -224,7 +224,7 @@ proof fn lemma_derivation_valid_in_free_product_left(
     }
 }
 
-/// Left embedding: equivalence in p1 implies equivalence in free_product(p1, p2).
+///  Left embedding: equivalence in p1 implies equivalence in free_product(p1, p2).
 pub proof fn lemma_left_embeds(p1: Presentation, p2: Presentation, w1: Word, w2: Word)
     requires
         equiv_in_presentation(p1, w1, w2),
@@ -237,11 +237,11 @@ pub proof fn lemma_left_embeds(p1: Presentation, p2: Presentation, w1: Word, w2:
     assert(derivation_valid(free_product(p1, p2), d_fp, w1, w2));
 }
 
-// ============================================================
-// Right Embedding
-// ============================================================
+//  ============================================================
+//  Right Embedding
+//  ============================================================
 
-/// Shift a derivation step: shift symbols by offset, shift relator indices by relator_offset.
+///  Shift a derivation step: shift symbols by offset, shift relator indices by relator_offset.
 pub open spec fn shift_derivation_step(step: DerivationStep, offset: nat, relator_offset: nat) -> DerivationStep {
     match step {
         DerivationStep::FreeReduce { position } =>
@@ -255,7 +255,7 @@ pub open spec fn shift_derivation_step(step: DerivationStep, offset: nat, relato
     }
 }
 
-/// A shifted derivation step on a shifted word produces a shifted result in the free product.
+///  A shifted derivation step on a shifted word produces a shifted result in the free product.
 proof fn lemma_shifted_step_valid(
     p1: Presentation, p2: Presentation,
     w: Word, step: DerivationStep, w_prime: Word,
@@ -291,7 +291,7 @@ proof fn lemma_shifted_step_valid(
         DerivationStep::RelatorInsert { position, relator_index, inverted } => {
             let r = get_relator(p2, relator_index, inverted);
             let shifted_idx = relator_index + roff;
-            // fp.relators[shifted_idx] == shift_word(p2.relators[relator_index], offset)
+            //  fp.relators[shifted_idx] == shift_word(p2.relators[relator_index], offset)
             assert(fp.relators[shifted_idx as int] == shift_word(p2.relators[relator_index as int], offset));
             let r_fp = get_relator(fp, shifted_idx, inverted);
             if inverted {
@@ -326,7 +326,7 @@ proof fn lemma_shifted_step_valid(
     }
 }
 
-/// A shifted derivation valid in fp.
+///  A shifted derivation valid in fp.
 proof fn lemma_shifted_derivation_valid(
     p1: Presentation, p2: Presentation,
     steps: Seq<DerivationStep>, w1: Word, w2: Word,
@@ -354,22 +354,22 @@ proof fn lemma_shifted_derivation_valid(
         let shifted_step = shift_derivation_step(step, offset, p1.relators.len());
         lemma_shifted_step_valid(p1, p2, w1, step, next);
 
-        // Single-step derivation in fp
+        //  Single-step derivation in fp
         let d = Derivation { steps: Seq::new(1, |_i: int| shifted_step) };
         assert(d.steps.first() == shifted_step);
         assert(d.steps.drop_first() =~= Seq::<DerivationStep>::empty());
         assert(derivation_produces(fp, d.steps.drop_first(), shift_word(next, offset)) == Some(shift_word(next, offset)));
         assert(derivation_valid(fp, d, shift_word(w1, offset), shift_word(next, offset)));
 
-        // Recurse
+        //  Recurse
         lemma_shifted_derivation_valid(p1, p2, rest, next, w2);
 
-        // Chain
+        //  Chain
         lemma_equiv_transitive(fp, shift_word(w1, offset), shift_word(next, offset), shift_word(w2, offset));
     }
 }
 
-/// Right embedding: equivalence in p2 implies equivalence of shifted words in free_product(p1, p2).
+///  Right embedding: equivalence in p2 implies equivalence of shifted words in free_product(p1, p2).
 pub proof fn lemma_right_embeds(p1: Presentation, p2: Presentation, w1: Word, w2: Word)
     requires
         equiv_in_presentation(p2, w1, w2),
@@ -384,4 +384,4 @@ pub proof fn lemma_right_embeds(p1: Presentation, p2: Presentation, w1: Word, w2
     lemma_shifted_derivation_valid(p1, p2, d.steps, w1, w2);
 }
 
-} // verus!
+} //  verus!

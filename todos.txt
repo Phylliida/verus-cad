@@ -1,3 +1,8 @@
 ● verus - batch_lookup (MCP)(names: "[\"lemma_mul_sub_distribute\",
                             \"axiom_mul_distributive\", \"lemma_mul_distribute\"]")
 "10" in topk
+
+
+● verus - search_trait (MCP)(query: "Ring", crate_name: "verus-algebra",
+                            details: "true")
+instead of name they put query
