@@ -137,7 +137,8 @@ impl WgslExpr {
                     CmpOp::Gt => ">", CmpOp::Ge => ">=",
                     CmpOp::Eq => "==", CmpOp::Ne => "!=",
                 };
-                format!("({} {} {})", a.emit(var_names, array_names), op_str, b.emit(var_names, array_names))
+                // Emit as u32 (0 or 1) via select — matches ArithExpr spec where Cmp returns int
+                format!("select(0u, 1u, ({} {} {}))", a.emit(var_names, array_names), op_str, b.emit(var_names, array_names))
             }
             WgslExpr::Reduce(_, _, _) => {
                 //  Reduce can't be emitted inline — needs statement hoisting.
