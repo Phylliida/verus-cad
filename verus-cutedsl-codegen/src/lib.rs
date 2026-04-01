@@ -375,6 +375,177 @@ pub fn emit_kernel_wgsl(k: &KernelDesc) -> String {
 }
 
 //  ══════════════════════════════════════════════════════════════
+//  StageDesc: composable GPU kernel stages (mirrors Stage from stage.rs)
+//  ══════════════════════════════════════════════════════════════
+
+///  A composable GPU stage — mirrors `Stage` from verus-cutedsl/src/stage.rs.
+///
+///  Stages compose into full GPU programs:
+///  - Map: single-pass kernel (scatter/compute outputs)
+///  - Loop: repeat a stage with local variable state
+///  - Seq: sequential composition
+///  - Noop: identity
+#[allow(dead_code)]
+pub enum StageDesc {
+    /// No-op.
+    Noop,
+
+    /// Single-pass parallel map (existing KernelDesc).
+    Map(KernelDesc),
+
+    /// Bounded loop: read initial state from buffers, iterate with local vars,
+    /// write final state back. `state_vars` names the local iteration variables.
+    /// `body_outputs` gives the updated value for each state var per iteration.
+    Loop {
+        bound: WgslExpr,
+        /// Names of the local state variables (mutable across iterations).
+        state_vars: Vec<String>,
+        /// Initial values for state vars (typically buffer reads).
+        state_init: Vec<WgslExpr>,
+        /// Updated values per iteration (expressions over state_vars + read-only vars).
+        state_update: Vec<WgslExpr>,
+        /// Early exit condition (optional): break if this is true.
+        break_cond: Option<WgslExpr>,
+        /// Outputs to write after the loop. Each (buffer_name, scatter, value).
+        final_outputs: Vec<(String, WgslExpr, WgslExpr)>,
+    },
+
+    /// Sequential composition.
+    Seq(Vec<StageDesc>),
+}
+
+///  Full shader description with stages.
+#[allow(dead_code)]
+pub struct ShaderDesc {
+    pub name: String,
+    pub stage: StageDesc,
+    pub buffers: Vec<BufferDesc>,
+    pub var_names: Vec<String>,
+    pub workgroup_size: [u32; 3],
+    pub dispatch_dims: u32,
+}
+
+///  Emit a complete WGSL compute shader from a ShaderDesc.
+#[allow(dead_code)]
+pub fn emit_shader_wgsl(s: &ShaderDesc) -> String {
+    let var_refs: Vec<&str> = s.var_names.iter().map(|s| s.as_str()).collect();
+    let array_names: Vec<&str> = s.buffers.iter().map(|b| b.name.as_str()).collect();
+
+    let mut shader = String::new();
+
+    // Buffer declarations
+    for buf in &s.buffers {
+        let access = if buf.read_only { "read" } else { "read_write" };
+        shader.push_str(&format!(
+            "@group(0) @binding({}) var<storage, {}> {}: array<u32>;\n",
+            buf.binding, access, buf.name
+        ));
+    }
+    shader.push('\n');
+
+    // Entry point
+    shader.push_str(&format!(
+        "@compute @workgroup_size({}, {}, {})\n",
+        s.workgroup_size[0], s.workgroup_size[1], s.workgroup_size[2]
+    ));
+    shader.push_str(&format!(
+        "fn {}(\n  @builtin(global_invocation_id) gid: vec3<u32>,\n) {{\n",
+        s.name
+    ));
+
+    // Thread variable extraction
+    if s.dispatch_dims >= 1 && !s.var_names.is_empty() {
+        shader.push_str(&format!("  let {} = gid.x;\n", s.var_names[0]));
+    }
+    if s.dispatch_dims >= 2 && s.var_names.len() >= 2 {
+        shader.push_str(&format!("  let {} = gid.y;\n", s.var_names[1]));
+    }
+
+    // Emit stage body
+    emit_stage_body(&s.stage, &var_refs, &array_names, &mut shader, "  ");
+
+    shader.push_str("}\n");
+    shader
+}
+
+fn emit_stage_body(
+    stage: &StageDesc,
+    var_names: &[&str], array_names: &[&str],
+    out: &mut String, indent: &str,
+) {
+    match stage {
+        StageDesc::Noop => {}
+
+        StageDesc::Map(k) => {
+            // Guard
+            let guard = k.guard.emit(var_names, array_names);
+            out.push_str(&format!("{}if (!{}) {{ return; }}\n", indent, guard));
+
+            // Outputs
+            let mut counter = 0;
+            for output in &k.outputs {
+                let mut body = String::new();
+                let val = output.compute.emit_stmt(var_names, array_names,
+                    &mut body, indent, &mut counter);
+                out.push_str(&body);
+                let scatter = output.scatter.emit(var_names, array_names);
+                out.push_str(&format!("{}{}[{}] = {};\n",
+                    indent, output.buffer_name, scatter, val));
+            }
+        }
+
+        StageDesc::Loop { bound, state_vars, state_init, state_update,
+                          break_cond, final_outputs } => {
+            // Initialize mutable state variables
+            for (name, init_expr) in state_vars.iter().zip(state_init.iter()) {
+                let init = init_expr.emit(var_names, array_names);
+                out.push_str(&format!("{}var {}: u32 = {};\n", indent, name, init));
+            }
+            out.push_str(&format!("{}var _iter: u32 = 0u;\n", indent));
+
+            // Loop
+            let bound_str = bound.emit(var_names, array_names);
+            out.push_str(&format!("{}for (var _i: u32 = 0u; _i < {}; _i++) {{\n",
+                indent, bound_str));
+            let inner = format!("{}  ", indent);
+
+            // Break condition
+            if let Some(cond) = break_cond {
+                let cond_str = cond.emit(var_names, array_names);
+                out.push_str(&format!("{}if ({}) {{ break; }}\n", inner, cond_str));
+            }
+
+            // Compute updated values into temporaries
+            for (i, (name, update)) in state_vars.iter().zip(state_update.iter()).enumerate() {
+                let val = update.emit(var_names, array_names);
+                out.push_str(&format!("{}let _next_{}: u32 = {};\n", inner, i, val));
+            }
+
+            // Assign temporaries to state vars
+            for (i, name) in state_vars.iter().enumerate() {
+                out.push_str(&format!("{}{} = _next_{};\n", inner, name, i));
+            }
+            out.push_str(&format!("{}_iter = _i + 1u;\n", inner));
+
+            out.push_str(&format!("{}}}\n", indent));
+
+            // Final outputs
+            for (buf_name, scatter, value) in final_outputs {
+                let s = scatter.emit(var_names, array_names);
+                let v = value.emit(var_names, array_names);
+                out.push_str(&format!("{}{}[{}] = {};\n", indent, buf_name, s, v));
+            }
+        }
+
+        StageDesc::Seq(stages) => {
+            for s in stages {
+                emit_stage_body(s, var_names, array_names, out, indent);
+            }
+        }
+    }
+}
+
+//  ══════════════════════════════════════════════════════════════
 //  Kernel constructors (mirrors verified constructors from kernel.rs)
 //  ══════════════════════════════════════════════════════════════
 
