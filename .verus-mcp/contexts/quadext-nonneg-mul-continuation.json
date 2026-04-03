@@ -1,0 +1,30 @@
+{
+  "name": "quadext-nonneg-mul-continuation",
+  "created": 1775231749,
+  "last_used": 1775251206,
+  "items": [
+    "lemma_neg_zero",
+    "lemma_sub_congruence",
+    "lemma_dts_square_le_square_fuel",
+    "lemma_square_le_implies_le",
+    "lemma_dts_nonneg_conclude_im_fuel",
+    "lemma_dts_same_radicand_neg",
+    "lemma_dts_neg_well_formed",
+    "lemma_dts_sub_congruence_both",
+    "lemma_dts_neg_congruence",
+    "lemma_dts_neg_sub_swap",
+    "lemma_dts_nonneg_fuel_congruence",
+    "lemma_dts_eqv_symmetric",
+    "lemma_dts_eqv_transitive",
+    "lemma_dts_same_radicand_symmetric",
+    "lemma_dts_same_radicand_transitive",
+    "lemma_dts_same_radicand_reflexive",
+    "lemma_dts_mul_closed",
+    "lemma_dts_add_closed",
+    "lemma_dts_depth_mul_le",
+    "lemma_dts_depth_add_le",
+    "lemma_dts_depth_neg",
+    "lemma_dts_nonneg_fuel_zero",
+    "dts_is_zero"
+  ]
+}

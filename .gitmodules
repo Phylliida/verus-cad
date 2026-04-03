@@ -111,3 +111,9 @@
 [submodule "verus-fixed-point"]
 	path = verus-fixed-point
 	url = https://github.com/Phylliida/verus-fixed-point.git
+[submodule "verus-gpu-transpiler"]
+	path = verus-gpu-transpiler
+	url = https://github.com/Phylliida/verus-gpu-transpiler.git
+[submodule "verus-parser"]
+	path = verus-parser
+	url = https://github.com/Phylliida/verus-parser.git
