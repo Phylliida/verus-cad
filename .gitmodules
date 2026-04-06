@@ -117,3 +117,6 @@
 [submodule "verus-parser"]
 	path = verus-parser
 	url = https://github.com/Phylliida/verus-parser.git
+[submodule "verus-gpu-parser"]
+	path = verus-gpu-parser
+	url = https://github.com/Phylliida/verus-gpu-parser.git

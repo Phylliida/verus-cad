@@ -1,13 +1,21 @@
 {
   "name": "gpu-native-limbops-fix",
   "created": 1775235936,
-  "last_used": 1775248750,
+  "last_used": 1775276637,
   "items": [
     "lemma_sem_seq_push",
     "lemma_vec_val_zeros",
     "generic_slice_vec",
-    "lemma_vec_val_split",
     "generic_pad_to_length",
-    "lemma_vec_val_pad"
+    "generic_add_limbs",
+    "generic_sub_limbs",
+    "vec_val",
+    "lemma_vec_val_bounded",
+    "lemma_vec_val_split",
+    "lemma_vec_val_pad",
+    "lemma_mod_add_left",
+    "generic_mul_by_limb",
+    "lemma_limb_power_add",
+    "lemma_limb_power_eq_pow2"
   ]
 }
