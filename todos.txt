@@ -6,3 +6,6 @@
 ● verus - search_trait (MCP)(query: "Ring", crate_name: "verus-algebra",
                             details: "true")
 instead of name they put query
+
+
+verus compile and verus check should print the statements they call so the model knows how to do it or something
