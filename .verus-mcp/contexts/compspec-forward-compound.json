@@ -1,7 +1,7 @@
 {
   "name": "compspec-forward-compound",
   "created": 1775244626,
-  "last_used": 1775246550,
+  "last_used": 1775426003,
   "items": [
     "check_subst_step",
     "check_subst_comp",
@@ -38,6 +38,15 @@
     "subst",
     "has_free_var",
     "lemma_subst_dispatch_compound",
-    "extract_general"
+    "extract_general",
+    "br_acc",
+    "lemma_eval_br_acc",
+    "lemma_encode_is_pair",
+    "lemma_pair_gt_components",
+    "lemma_pair_ge_sum",
+    "lemma_subst_one_term_eval_general",
+    "check_subst_atomic_terms",
+    "lemma_subst_traversal_cost_pos",
+    "formula_tag"
   ]
 }
