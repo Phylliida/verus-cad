@@ -1,7 +1,7 @@
 {
   "name": "quadext-nonneg-mul-continuation",
   "created": 1775231749,
-  "last_used": 1775501975,
+  "last_used": 1775504775,
   "items": [
     "lemma_neg_zero",
     "lemma_sub_congruence",
@@ -9,10 +9,8 @@
     "lemma_dts_nonneg_conclude_im_fuel",
     "lemma_dts_same_radicand_neg",
     "lemma_dts_neg_well_formed",
-    "lemma_dts_sub_congruence_both",
     "lemma_dts_neg_congruence",
     "lemma_dts_neg_sub_swap",
-    "lemma_dts_nonneg_fuel_congruence",
     "lemma_dts_eqv_symmetric",
     "lemma_dts_eqv_transitive",
     "lemma_dts_same_radicand_symmetric",
@@ -24,7 +22,6 @@
     "lemma_dts_depth_add_le",
     "lemma_dts_depth_neg",
     "dts_is_zero",
-    "lemma_dts_le_mul_nonneg_monotone_fuel",
     "lemma_dts_cauchy_schwarz_step",
     "lemma_cauchy_schwarz_2d",
     "dts_norm",
@@ -41,12 +38,16 @@
     "lemma_dts_difference_of_squares",
     "lemma_dts_nonneg_fuel_zero",
     "lemma_dts_square_le_square_fuel",
-    "lemma_dts_le_antisymmetric_fuel",
-    "lemma_dts_nonneg_add_closed_fuel",
     "lemma_dts_add_associative",
     "lemma_dts_add_inverse_right",
     "lemma_dts_add_zero_right",
     "lemma_dts_square_nonneg",
-    "lemma_dts_square_mul"
+    "lemma_dts_square_mul",
+    "lemma_dts_square_le_implies_le_fuel",
+    "lemma_dts_le_antisymmetric_fuel",
+    "lemma_dts_nonneg_add_closed_fuel",
+    "lemma_dts_sub_congruence_both",
+    "lemma_dts_nonneg_fuel_congruence",
+    "lemma_dts_le_mul_nonneg_monotone_fuel"
   ]
 }
