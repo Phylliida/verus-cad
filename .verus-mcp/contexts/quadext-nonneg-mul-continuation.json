@@ -1,7 +1,7 @@
 {
   "name": "quadext-nonneg-mul-continuation",
   "created": 1775231749,
-  "last_used": 1775500570,
+  "last_used": 1775501975,
   "items": [
     "lemma_neg_zero",
     "lemma_sub_congruence",
@@ -46,6 +46,7 @@
     "lemma_dts_add_associative",
     "lemma_dts_add_inverse_right",
     "lemma_dts_add_zero_right",
-    "lemma_dts_square_nonneg"
+    "lemma_dts_square_nonneg",
+    "lemma_dts_square_mul"
   ]
 }
