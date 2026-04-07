@@ -120,3 +120,9 @@
 [submodule "verus-gpu-parser"]
 	path = verus-gpu-parser
 	url = https://github.com/Phylliida/verus-gpu-parser.git
+[submodule "verus-metamath-zero"]
+	path = verus-metamath-zero
+	url = https://github.com/Phylliida/verus-metamath-zero.git
+[submodule "mm0"]
+	path = mm0
+	url = https://github.com/digama0/mm0.git

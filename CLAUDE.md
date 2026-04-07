@@ -710,6 +710,57 @@ proof fn part2(x, y) requires mid1 ensures mid2 { P2; }
 proof fn part3(x, y) requires mid2 ensures e { P3; }
 ```
 
+### Ghost Equality Params for Z3 Context Pollution
+In large functions (>200 lines), Z3 loses track of let-bindings when matching preconditions hundreds of lines away. Use a clean-context wrapper with ghost equality parameters:
+```rust
+//  BAD: Z3 can't connect `nx` (let-bound 400 lines ago) to the expanded form
+lemma_needs_expanded(a1, a2, b1, b2, dd, f);  //  precondition: nonneg(neg(sub(mul(a1,a1), ...)))
+
+//  GOOD: wrapper takes the let-binding as ghost param with equality
+proof fn dispatch_wrapper<T: OrderedField>(
+    a1: T, ..., f: nat,
+    nx: T,  //  ghost parameter
+)
+    requires
+        nx == sub(mul(a1, a1), mul(dd, mul(b1, b1))),  //  equality constraint
+        nonneg(neg(nx)),  //  uses SHORT form — Z3 matches let-binding at call site
+    ensures ...
+{
+    //  Inside: Z3 derives expanded form from nx == ... + nonneg(neg(nx))
+    lemma_needs_expanded(a1, a2, b1, b2, dd, f);
+}
+//  Call site: pass the let-binding directly
+dispatch_wrapper(a1, ..., f, nx);  //  Z3 easily matches nx from local let
+```
+Why it works: at the call site, `nx == sub(...)` is trivially true from the let-binding. `nonneg(neg(nx))` uses the short variable name which Z3 can find from a nearby if-condition. Inside the wrapper, Z3 uses the equality to derive the expanded precondition in a clean ~5-assertion context.
+
+### Early Fact Establishment (Beat Context Pollution)
+When Z3 needs a fact 300+ lines later but the if-condition establishing it is local, prove the consequence IMMEDIATELY at the if-check while Z3 has fresh context:
+```rust
+if !dts_nonneg_fuel(b1, f) {
+    //  !nonneg(b1) is a LOCAL fact here — Z3 sees it clearly
+    //  Establish derived consequences NOW, not 300 lines later:
+    lemma_dts_nonneg_re_from_neg_im(a1, b1, dd, f);  //  → nonneg(a1)
+    //  ...nonneg(a1) will propagate better than !nonneg(b1) through 300 lines
+}
+```
+Key insight: simple positive facts (`nonneg(a1)`) propagate through Z3's context better than derived negations (`!nonneg(b1) + le_total → nonneg(neg(b1))`). Establish the downstream consequence while the upstream fact is fresh.
+
+### Eliminating Disjunction Cases via le_antisymmetric
+When a recursive spec fn (like `dts_nonneg_fuel`) unfolds to `C1 || C2 || C3` and you need to rule out one case:
+```rust
+//  Goal: from Ext(a,b,d) nonneg + neg(b)≥0, derive nonneg(a)
+//  C3 requires nonneg(b) && !is_zero(b). Rule it out:
+lemma_dts_nonneg_or_neg_nonneg_fuel(b, f);  //  nonneg(b) || nonneg(neg(b))
+if dts_nonneg_fuel(b, f) {
+    //  nonneg(b) && nonneg(neg(b)) → le_antisymmetric → is_zero(b)
+    lemma_dts_le_antisymmetric_fuel(b, f);
+    //  dts_is_zero(b) contradicts C3's !is_zero(b) → C3 eliminated
+}
+//  Only C1/C2 remain → nonneg(a)
+```
+This pattern works whenever you need to narrow a disjunctive spec fn result. The if-check gives Z3 a local scope where both nonneg and neg-nonneg hold, enabling le_antisymmetric.
+
 ### spec_fn in Quantifiers (Trigger Inference)
 `spec_fn` applications in `forall`/`exists` cause "Could not automatically infer triggers" — Z3 can't match opaque function applications.
 ```rust
@@ -833,6 +884,13 @@ if is_case_0(f) {
 - Put preconditions (e.g., `axiom_eqv_reflexive`) BEFORE the call that needs them
 - For proof-by-contradiction: use `if P { ... }` in main context, NOT inside `assert by`
 
+**Z3 context pollution in large functions (>200 lines):**
+Z3 loses track of if-condition facts and let-binding expansions hundreds of lines later. Symptoms: precondition or assertion failures on facts that are "obviously" true from control flow. Fixes:
+- **Ghost equality wrapper**: Extract the call into a clean-context helper with ghost params (see Patterns section)
+- **Early fact establishment**: Derive consequences at the if-check point, not 300 lines later
+- **Local if-recheck**: Re-introduce `if !nonneg(x)` right before the call to refresh Z3's knowledge
+- **Function extraction**: Move the entire code section into a helper with explicit preconditions (nuclear option but always works)
+
 ### "cannot prove termination"
 1. Add `decreases` clause
 2. Use `via` clause with termination proof
@@ -937,6 +995,16 @@ requires x == mk_my_struct(42)
 
 ### Lemma Ordering
 Reflexive axioms MUST come before congruence/transitive: `axiom_eqv_symmetric` before `axiom_eqv_transitive`.
+
+### `same_radicand_symmetric` Direction
+`same_radicand_symmetric(a, b)` requires `same_radicand(a, b)`, NOT `same_radicand(b, a)`. To flip `same_radicand(X, Y)` to `same_radicand(Y, X)`, call `symmetric(X, Y)`. Common mistake: calling `symmetric(Y, X)` which requires `same_radicand(Y, X)` — the thing you're trying to prove.
+```rust
+//  BAD: circular — needs sr(Y, X) which is what we want
+lemma_dts_same_radicand_symmetric(Y, X);  //  requires sr(Y, X)!
+
+//  GOOD: flip from sr(X, Y) to sr(Y, X)
+lemma_dts_same_radicand_symmetric(X, Y);  //  requires sr(X, Y), ensures sr(Y, X)
+```
 
 ---
 
