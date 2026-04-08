@@ -2,13 +2,14 @@
 set -euo pipefail
 
 usage() {
-  echo "Usage: $0 <crate> [--module <module>] [--raw]"
+  echo "Usage: $0 <crate> [--module <module>] [--raw] [--no-cache]"
   echo ""
   echo "Run Verus verification on a crate."
   echo ""
   echo "  <crate>              Crate directory name (e.g. verus-geometry)"
   echo "  --module, -m <mod>   Verify only this module (file path or module path)"
   echo "  --raw, -r            Show raw compiler output"
+  echo "  --no-cache           Disable verification caching"
   echo ""
   echo "Examples:"
   echo "  $0 verus-geometry"
@@ -22,13 +23,15 @@ usage() {
 CRATE="$1"; shift
 MODULE=""
 RAW=false
+CACHE=true
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --module|-m) MODULE="$2"; shift 2 ;;
-    --raw|-r)    RAW=true; shift ;;
-    -h|--help)   usage ;;
-    *)           echo "Unknown arg: $1"; usage ;;
+    --module|-m)  MODULE="$2"; shift 2 ;;
+    --raw|-r)     RAW=true; shift ;;
+    --no-cache)   CACHE=false; shift ;;
+    -h|--help)    usage ;;
+    *)            echo "Unknown arg: $1"; usage ;;
   esac
 done
 
@@ -45,14 +48,14 @@ if [[ ! -d "$CRATE_DIR/src" ]]; then
   exit 1
 fi
 
-VERUS_ROOT="${VERUS_ROOT:-$SCRIPT_DIR/verus}"
+VERUS_ROOT="${VERUS_ROOT:-$SCRIPT_DIR/verus-dev}"
 VERUS_SOURCE="$VERUS_ROOT/source"
 CARGO_VERUS="$VERUS_SOURCE/target-verus/release/cargo-verus"
 
 case "$(uname -s)-$(uname -m)" in
-  Darwin-arm64)  TOOLCHAIN="1.93.0-aarch64-apple-darwin" ;;
-  Darwin-x86_64) TOOLCHAIN="1.93.0-x86_64-apple-darwin" ;;
-  *)             TOOLCHAIN="1.93.0-x86_64-unknown-linux-gnu" ;;
+  Darwin-arm64)  TOOLCHAIN="1.94.0-aarch64-apple-darwin" ;;
+  Darwin-x86_64) TOOLCHAIN="1.94.0-x86_64-apple-darwin" ;;
+  *)             TOOLCHAIN="1.94.0-x86_64-unknown-linux-gnu" ;;
 esac
 
 export PATH="$VERUS_SOURCE/target-verus/release:$PATH"
@@ -83,8 +86,13 @@ fi
 
 cd "$CRATE_DIR"
 
+CACHE_FLAG=""
+if $CACHE; then
+  CACHE_FLAG="-V cache "
+fi
+
 if $RAW; then
-  "$CARGO_VERUS" verify --manifest-path Cargo.toml -p "$CRATE" -- ${MODULE_FLAG}--triggers-mode silent
+  "$CARGO_VERUS" verify --manifest-path Cargo.toml -p "$CRATE" -- ${MODULE_FLAG}${CACHE_FLAG}--triggers-mode silent
 else
-  "$CARGO_VERUS" verify --manifest-path Cargo.toml -p "$CRATE" --message-format=json -- ${MODULE_FLAG}--triggers-mode silent
+  "$CARGO_VERUS" verify --manifest-path Cargo.toml -p "$CRATE" --message-format=json -- ${MODULE_FLAG}${CACHE_FLAG}--triggers-mode silent
 fi
