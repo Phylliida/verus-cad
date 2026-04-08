@@ -126,3 +126,6 @@
 [submodule "mm0"]
 	path = mm0
 	url = https://github.com/digama0/mm0.git
+[submodule "verus-dev"]
+	path = verus-dev
+	url = https://github.com/Phylliida/verus.git
