@@ -1028,6 +1028,58 @@ The "N verified" count includes proof fn and exec fn (both require proof obligat
 - **Build helpers up** - create smaller lemmas, check each one
 - **Don't use `raw=True`** on `verus_check` - it's very verbose and fills context; rarely needed
 - **No need to clean builds** - Verus is reproducible and builds are always up to date
+- **Caching is on by default** - `check.sh` and the MCP server pass `-V cache`. Unchanged functions are skipped on re-runs. See [Verification Caching](#verification-caching) below for how to get the most out of it.
+
+### Verification Caching
+
+`verus-dev` adds a function-level disk cache (`-V cache` flag, on by default in `check.sh` and MCP). Verified results are stored in `target/verus-cache/` keyed by SHA-256. The cache reports `N verified, M errors, K cached` after each run.
+
+#### How the cache key is built
+
+For each function query, the key combines:
+1. **Base hash** — solver type + entire pruned krate (datatypes, traits, function list)
+2. **Function name** + **bucket ID** (module path)
+3. **Hashes of transitive call-graph dependencies' SST** (only functions this function calls, transitively)
+4. **Query op type** (`Body(Normal)`, `SpecTermination`, `CheckApiSafety`)
+
+Hashes are computed at the **SST level** (source-level IR), not AIR (lowered IR), so they're deterministic across runs.
+
+#### What invalidates a cached function
+
+| Change | What gets re-verified |
+|---|---|
+| Function A's body only | Just A |
+| Function A's `requires`/`ensures` | A + everything that calls A (transitively) |
+| A datatype, trait, or new function in the same module | Everything in the module (base hash changed) |
+| Z3 version, solver type, or rustc version | Everything (base hash changed) |
+| Nothing | Nothing — all cache hits |
+
+#### Tips for getting the most out of caching
+
+1. **Make small, targeted edits** — change one function body at a time. Cache hit rate is highest when you touch fewer functions.
+2. **Avoid touching shared signatures** — modifying a `requires`/`ensures` invalidates ALL callers transitively. Save signature changes for batched refactor sessions.
+3. **Datatypes and traits are "all-or-nothing"** — adding a single field to a datatype invalidates every function in every module that imports it (because the datatype is in the base hash). Plan datatype changes carefully.
+4. **Don't `cargo clean` unnecessarily** — Verus is reproducible and incremental; there's almost never a reason to clean. `cargo clean` wipes `target/verus-cache/` and forces a slow cold rebuild.
+5. **Never manually wipe `target/verus-cache/`** — it's never necessary. If you suspect a stale cache entry is masking a real error, that would be a soundness bug worth investigating, not something to paper over by deleting the cache.
+6. **Use spinoff isolation freely** — caching automatically enables `spinoff_all` mode (each query gets a fresh Z3 process), so cache hits cannot affect other functions' verification state. This is sound by construction.
+7. **The cache persists across `verus-cad` sessions** — `target/verus-cache/` is per-crate, so your warm cache survives editor restarts and computer reboots.
+
+#### Limitations
+
+- **Cold runs are slightly slower than no-cache** (~2x) due to SHA-256 hashing and spinoff mode overhead. Warm runs are much faster.
+- **A few false misses per run** (~2% on large crates) come from `VarIdentDisambiguate::RustcId` values in the SST that shift between rustc invocations. These cause unnecessary re-verification but are sound.
+- **Failing functions are not cached** — only valid results are stored. If a function times out non-deterministically, it will be re-verified each time until it succeeds.
+- **The cache only skips Z3 work, not Rust compilation.** A warm-cache run still has to invoke `rustc`, build VIR/SST, and compute hashes before checking the cache. For verus-group-theory this is ~25s of irreducible overhead.
+
+#### Disabling the cache
+
+The cache is on by default and you should leave it on. The only time to disable it is when measuring rlimit improvements, since cached functions show 0 rlimit:
+
+```bash
+./check.sh verus-foo --no-cache    # one-off without cache (rare)
+```
+
+`verus_profile` already bypasses the cache for the functions it profiles, so prefer that for rlimit measurements rather than `--no-cache`.
 
 ### Session Start Workflow
 ```bash

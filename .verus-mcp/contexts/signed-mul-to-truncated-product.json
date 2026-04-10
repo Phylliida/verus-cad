@@ -1,0 +1,30 @@
+{
+  "name": "signed-mul-to-truncated-product",
+  "created": 1775845779,
+  "last_used": 1775863114,
+  "items": [
+    "signed_mul_to",
+    "mul_schoolbook_to",
+    "truncated_product_spec",
+    "lemma_truncated_product",
+    "slice_vec_to",
+    "vec_val",
+    "lemma_vec_val_eq_from_sem_eq",
+    "generic_mul_schoolbook",
+    "mul_to",
+    "generic_mul_by_limb",
+    "limbs_val",
+    "sem_seq",
+    "lemma_limbs_val_subrange_extend",
+    "mul2",
+    "lemma_vec_val_split",
+    "lemma_limbs_val_split",
+    "limb_power",
+    "valid_limbs",
+    "signed_add_to",
+    "lemma_signed_add_correct",
+    "vslice",
+    "signed_mul_to_buf",
+    "lemma_signed_add_exact"
+  ]
+}
