@@ -2,15 +2,16 @@
 
 ## Table of Contents
 1. [Measuring Performance](#measuring-performance)
-2. [Quick Wins (Try First)](#quick-wins)
-3. [Opaque + Reveal](#opaque--reveal)
-4. [Breaking Proofs into Smaller Pieces](#breaking-proofs-into-smaller-pieces)
-5. [Module Splitting](#module-splitting)
-6. [Loop Optimization](#loop-optimization)
-7. [Quantifier Management](#quantifier-management)
-8. [Proof by Computation](#proof-by-computation)
-9. [Anti-Patterns (Things That Make It Worse)](#anti-patterns)
-10. [Decision Flowchart](#decision-flowchart)
+2. [Verification Caching](#verification-caching)
+3. [Quick Wins (Try First)](#quick-wins)
+4. [Opaque + Reveal](#opaque--reveal)
+5. [Breaking Proofs into Smaller Pieces](#breaking-proofs-into-smaller-pieces)
+6. [Module Splitting](#module-splitting)
+7. [Loop Optimization](#loop-optimization)
+8. [Quantifier Management](#quantifier-management)
+9. [Proof by Computation](#proof-by-computation)
+10. [Anti-Patterns (Things That Make It Worse)](#anti-patterns)
+11. [Decision Flowchart](#decision-flowchart)
 
 ---
 
@@ -55,6 +56,68 @@ When a function times out or is slow, run Verus directly with `--profile --rlimi
 2. `profile(crate_name, module)` — isolate the module
 3. Make a change
 4. `profile(crate_name, module)` again — compare rlimit (not SMT time)
+
+### Caching note for measurements
+
+The cache is **on by default** in `check.sh` and the MCP server. This makes iterative checks fast but means rlimit numbers reported include only re-verified functions. **For accurate rlimit measurements**, use `verus_profile` — it forces re-verification of the functions it profiles, so the rlimit numbers are real.
+
+---
+
+## Verification Caching
+
+The biggest "rlimit reduction" available is often: **don't verify the function at all**. The disk-backed verification cache (`-V cache`, on by default) skips functions whose source code and dependencies haven't changed.
+
+### How it works
+
+For each function query, Verus computes a SHA-256 key from:
+1. **Base hash**: solver type + entire pruned krate (datatypes, traits, function list)
+2. **Function name** + **bucket ID** (module path)
+3. **SST hashes of transitive call-graph dependencies**
+4. **Query op type** (`Body(Normal)`, `SpecTermination`, `CheckApiSafety`)
+
+If a `.cache` file exists for that key in `target/verus-cache/`, the function is skipped. Hashes are computed at the SST level (source-level IR, before counter-based lowering), so they're stable across runs.
+
+### What invalidates a cached function
+
+| Change | What gets re-verified |
+|---|---|
+| Function A's body only | Just A |
+| Function A's `requires`/`ensures` | A + all callers (transitively) |
+| A datatype, trait, or new function in same module | Everything in that module |
+| Z3 version, solver type, or rustc version | Everything |
+| Nothing | Nothing — full cache hit |
+
+### Tips for maximizing cache hit rate
+
+1. **Make small, focused edits.** Changing one function body keeps the cache mostly warm. Changing 10 function bodies invalidates 10 functions and their callers.
+
+2. **Avoid touching `requires`/`ensures` casually.** Signature changes invalidate every transitive caller. Batch signature refactors into dedicated sessions.
+
+3. **Datatype/trait changes are nuclear.** Adding a field to a datatype invalidates **every function in every module that imports it**. Plan datatype changes carefully and group them together.
+
+4. **Don't `cargo clean` unnecessarily.** The cache lives in `target/verus-cache/` and `cargo clean` wipes it. Avoid it — there's almost never a reason to clean a Verus build, since Verus is reproducible and incremental.
+
+5. **Never manually wipe `target/verus-cache/`.** It's never necessary. If you suspect a stale cache entry is wrong, that would be a soundness bug worth investigating, not something to paper over.
+
+6. **Spinoff mode is automatic.** Caching enables `spinoff_all` so each query gets a fresh Z3 process. This is what makes it sound — skipped functions cannot affect other queries' Z3 state. The cost: cold runs are ~2x slower than no-cache, warm runs much faster.
+
+7. **The cache is per-crate.** Each crate has its own `target/verus-cache/`. Verifying `verus-algebra` doesn't help `verus-quadratic-extension`'s cache, even though they share types.
+
+### Limitations to know about
+
+- **Cold-run overhead**: Hashing the SST for every function plus spinoff mode adds ~2x overhead vs. no-cache on first run. Only worth it if you'll iterate.
+- **~2% false miss rate**: Some functions have `VarIdentDisambiguate::RustcId(u64)` values in their SST that shift between rustc invocations. These cause spurious re-verification but never false hits (sound, just slow).
+- **Failures aren't cached**: Only valid results are stored. A function that times out non-deterministically will be re-verified every run until it succeeds.
+- **Only Z3 work is cached**: Rust compilation, VIR/SST construction, and pruning still happen on every run. For `verus-group-theory` this is ~25s of irreducible overhead per warm run.
+
+### Typical results
+
+| Crate | No-cache | Cold cache | Warm cache | Hit rate |
+|---|---|---|---|---|
+| verus-group-theory (~2000 queries) | 38s | 91s | 27s | ~98% |
+| verus-quadratic-extension (~300 queries) | ~120s | ~150s | ~30s | ~95% |
+
+Warm-cache time is dominated by Rust compilation, not verification.
 
 ---
 

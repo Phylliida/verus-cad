@@ -1,0 +1,9 @@
+{
+  "name": "compspec-eq-subst-forward-walk",
+  "created": 1775861067,
+  "last_used": 1775862380,
+  "items": [
+    "lemma_iterate_input_independent",
+    "lemma_eq_subst_walk"
+  ]
+}
