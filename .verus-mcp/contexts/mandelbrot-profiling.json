@@ -1,0 +1,26 @@
+{
+  "name": "mandelbrot-profiling",
+  "created": 1776192697,
+  "last_used": 1776210616,
+  "items": [
+    "mul_karatsuba_one_level_to",
+    "lemma_karatsuba_identity",
+    "lemma_karatsuba_combine",
+    "lemma_karatsuba_no_overflow",
+    "lemma_vec_val_split",
+    "lemma_vec_val_shift",
+    "lemma_vec_val_bounded",
+    "add_limbs_to",
+    "mul_schoolbook_to",
+    "limbs_val",
+    "sem_seq",
+    "limb_power",
+    "lemma_limbs_val_subrange_extend",
+    "vec_val",
+    "signed_lt_indicator",
+    "lemma_limb_power_add",
+    "lemma_vec_val_eq_from_sem_eq",
+    "signed_mul_to",
+    "signed_mul_to_buf"
+  ]
+}

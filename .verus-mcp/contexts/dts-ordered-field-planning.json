@@ -1,0 +1,19 @@
+{
+  "name": "dts-ordered-field-planning",
+  "created": 1776117259,
+  "last_used": 1776117716,
+  "items": [
+    "lemma_nonneg_mul_closed",
+    "lemma_dts_nonneg_mul_closed_fuel",
+    "axiom_le_total",
+    "axiom_le_add_monotone",
+    "dts_recip",
+    "dts_recip_fuel",
+    "lemma_dts_nonneg_or_neg_nonneg_fuel",
+    "lemma_dts_is_zero_mul_left",
+    "lemma_dts_is_zero_mul_right",
+    "lemma_dts_mul_cancel_zero",
+    "lemma_dts_add_commutative",
+    "lemma_dts_mul_commutative"
+  ]
+}

@@ -129,3 +129,21 @@
 [submodule "verus-dev"]
 	path = verus-dev
 	url = https://github.com/Phylliida/verus.git
+[submodule "lean-cooks-theorem"]
+	path = lean-cooks-theorem
+	url = https://github.com/Phylliida/lean-cooks-theorem
+[submodule "tree-sitter-tactus"]
+	path = tree-sitter-tactus
+	url = https://github.com/Phylliida/tree-sitter-tactus.git
+[submodule "tree-sitter-lean"]
+	path = tree-sitter-lean
+	url = https://github.com/Julian/tree-sitter-lean.git
+[submodule "tactus"]
+	path = tactus
+	url = https://github.com/Phylliida/tactus.git
+[submodule "self-hosted-creature-collect"]
+	path = self-hosted-creature-collect
+	url = https://github.com/Phylliida/self-hosted-creature-collect.git
+[submodule "pretext"]
+	path = pretext
+	url = https://github.com/chenglou/pretext.git

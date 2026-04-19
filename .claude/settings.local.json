@@ -3,7 +3,9 @@
     "allow": [
       "mcp__verus__lookup_source",
       "mcp__verus__search",
-      "mcp__verus__check"
+      "mcp__verus__check",
+      "Bash(nvidia-smi --query-gpu=name,memory.total,memory.used,memory.free --format=csv,noheader)",
+      "Bash(rocm-smi --showmeminfo vram)"
     ]
   },
   "enableAllProjectMcpServers": true,
