@@ -1,0 +1,13 @@
+{
+  "name": "quadext-c2c3-neg-norm-bound",
+  "created": 1776103752,
+  "last_used": 1776113276,
+  "items": [
+    "lemma_dts_c2c3_norm_bound",
+    "lemma_dts_nonneg_conclude_im_fuel",
+    "lemma_dts_square_le_implies_le_fuel",
+    "lemma_dts_nonneg_fuel_monotone",
+    "axiom_le_total",
+    "lemma_dts_nonneg_or_neg_nonneg_fuel"
+  ]
+}

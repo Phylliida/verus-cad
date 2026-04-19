@@ -1,0 +1,383 @@
+# Lean 4 Unicode -> ASCII Macro Library
+#
+# For each Unicode symbol used in Lean 4 / Mathlib4, this file lists:
+#   UNICODE | CODEPOINT | NAME | ASCII REPLACEMENT | NOTES
+#
+# Symbols with [BUILTIN] have official Lean 4 ASCII alternatives.
+# Symbols with [DEFINE] need a `notation` or `macro` definition.
+# Symbols with [IDENT] are used in identifiers (Greek, subscript, superscript).
+
+################################################################################
+# 1. CORE SYNTAX — Arrows
+################################################################################
+
+->     for  →   U+2192  Rightwards Arrow (function type, implication)         [BUILTIN]
+<-     for  ←   U+2190  Leftwards Arrow (do-notation, have)                   [BUILTIN]
+<->    for  ↔   U+2194  Left Right Arrow (iff)                                [BUILTIN]
+=>     for  ⇒   U+21D2  Rightwards Double Arrow (match arms, fun)             [BUILTIN]
+|->    for  ↦   U+21A6  Rightwards Arrow From Bar (mapsto)                    [DEFINE]
+->>    for  ↠   U+21A0  Rightwards Two Headed Arrow (surjection)              [DEFINE]
+>->    for  ↪   U+21AA  Rightwards Arrow With Hook (injection/embedding)      [DEFINE]
+-->    for  ⟶   U+27F6  Long Rightwards Arrow (hom in Mathlib)                [DEFINE]
+<--    for  ⟵   U+27F5  Long Leftwards Arrow                                  [DEFINE]
+<-->   for  ⟷   U+27F7  Long Left Right Arrow                                 [DEFINE]
+==>    for  ⟹   U+27F9  Long Rightwards Double Arrow                          [DEFINE]
+<==    for  ⟸   U+27F8  Long Leftwards Double Arrow                           [DEFINE]
+<==>   for  ⟺   U+27FA  Long Left Right Double Arrow                          [DEFINE]
+~~>    for  ⤳   U+2933  Wave Arrow (leadsto)                                  [DEFINE]
++->    for  ⥤   U+2964  Rightwards Harpoon (functor, Mathlib)                 [DEFINE]
+
+################################################################################
+# 2. CORE SYNTAX — Quantifiers & Binders
+################################################################################
+
+forall  for  ∀   U+2200  For All                                              [BUILTIN]
+exists  for  ∃   U+2203  There Exists                                         [BUILTIN]
+fun     for  λ   U+03BB  Lambda                                               [BUILTIN]
+Fun     for  Λ   U+039B  Type-level lambda                                    [BUILTIN]
+Sigma   for  Σ   U+03A3  Dependent sum type                                   [BUILTIN]
+
+################################################################################
+# 3. CORE SYNTAX — Logical Connectives
+################################################################################
+
+/\     for  ∧   U+2227  Logical And                                           [BUILTIN]
+\/     for  ∨   U+2228  Logical Or                                            [BUILTIN]
+Not    for  ¬   U+00AC  Not                                                   [BUILTIN]
+True   for  ⊤   U+22A4  Top / True                                            [BUILTIN]
+False  for  ⊥   U+22A5  Bottom / False                                        [BUILTIN]
+|-     for  ⊢   U+22A2  Right Tack (turnstile, proves)                        [DEFINE]
+-|     for  ⊣   U+22A3  Left Tack (dashv, adjunction)                         [DEFINE]
+|=     for  ⊨   U+22A8  Models / double turnstile                             [DEFINE]
+||-    for  ⊩   U+22A9  Forces                                                [DEFINE]
+!|-    for  ⊬   U+22AC  Does Not Prove                                        [DEFINE]
+!|=    for  ⊭   U+22AD  Not True                                              [DEFINE]
+
+################################################################################
+# 4. COMPARISON & RELATIONS
+################################################################################
+
+<=     for  ≤   U+2264  Less-Than Or Equal To                                 [BUILTIN]
+>=     for  ≥   U+2265  Greater-Than Or Equal To                              [BUILTIN]
+!=     for  ≠   U+2260  Not Equal To                                          [BUILTIN]
+~=     for  ≈   U+2248  Almost Equal To (approx)                              [DEFINE]
+===    for  ≡   U+2261  Identical To (definitional equality)                  [DEFINE]
+!==    for  ≢   U+2262  Not Identical To                                      [DEFINE]
+~==    for  ≅   U+2245  Approximately Equal To (isomorphism)                  [DEFINE]
+~-     for  ≃   U+2243  Asymptotically Equal To (equiv in Mathlib)            [DEFINE]
+<<.    for  ≺   U+227A  Precedes                                              [DEFINE]
+.>>    for  ≻   U+227B  Succeeds                                              [DEFINE]
+<<.=   for  ≼   U+227C  Precedes Or Equal To                                  [DEFINE]
+.>>=   for  ≽   U+227D  Succeeds Or Equal To                                  [DEFINE]
+dvd    for  ∣   U+2223  Divides                                               [DEFINE]
+!dvd   for  ∤   U+2224  Does Not Divide                                       [DEFINE]
+||     for  ∥   U+2225  Parallel To                                           [DEFINE]
+~      for  ∼   U+223C  Tilde Operator (equivalence relation)                 [DEFINE]
+!~     for  ≁   U+2241  Not Tilde                                             [DEFINE]
+.=     for  ≐   U+2250  Approaches The Limit (doteq)                          [DEFINE]
+propto for  ∝   U+221D  Proportional To                                       [DEFINE]
+
+################################################################################
+# 5. SET & COLLECTION OPERATIONS
+################################################################################
+
+mem     for  ∈   U+2208  Element Of                                           [DEFINE]  (or use `in`)
+!mem    for  ∉   U+2209  Not An Element Of                                    [DEFINE]
+ni      for  ∋   U+220B  Contains As Member                                   [DEFINE]
+ssubset for  ⊂   U+2282  Strict Subset Of                                     [DEFINE]
+ssupset for  ⊃   U+2283  Strict Superset Of                                   [DEFINE]
+subset  for  ⊆   U+2286  Subset Of Or Equal To                                [DEFINE]
+supset  for  ⊇   U+2287  Superset Of Or Equal To                              [DEFINE]
+!subset for  ⊄   U+2284  Not A Subset Of                                      [DEFINE]
+cup     for  ∪   U+222A  Union                                                [DEFINE]
+cap     for  ∩   U+2229  Intersection                                         [DEFINE]
+sdiff   for  ∖   U+2216  Set Minus                                            [DEFINE]
+empty   for  ∅   U+2205  Empty Set                                            [DEFINE]
+powset  for  ℘   U+2118  Weierstrass P (powerset)                             [DEFINE]
+
+# Big operators
+Union   for  ⋃   U+22C3  N-Ary Union                                          [DEFINE]
+Inter   for  ⋂   U+22C2  N-Ary Intersection                                   [DEFINE]
+Sum     for  ∑   U+2211  N-Ary Summation                                      [DEFINE]
+Prod    for  ∏   U+220F  N-Ary Product                                        [DEFINE]
+iSup    for  ⨆   U+2A06  N-Ary Square Union (supremum)                        [DEFINE]
+iInf    for  ⨅   U+2A05  N-Ary Square Intersection (infimum)                  [DEFINE]
+
+################################################################################
+# 6. LATTICE OPERATIONS
+################################################################################
+
+sqcup   for  ⊔   U+2294  Square Cup (sup/join)                                [DEFINE]
+sqcap   for  ⊓   U+2293  Square Cap (inf/meet)                                [DEFINE]
+top     for  ⊤   U+22A4  Top element                                          [DEFINE]
+bot     for  ⊥   U+22A5  Bottom element                                       [DEFINE]
+
+################################################################################
+# 7. ALGEBRAIC & ARITHMETIC SYMBOLS
+################################################################################
+
+*      for  ·   U+00B7  Middle Dot (multiplication, focusing)                 [DEFINE]
+comp   for  ∘   U+2218  Ring Operator (function composition)                  [DEFINE]
+><     for  ×   U+00D7  Multiplication Sign (cartesian product)               [DEFINE]  (also: Prod)
+^(-1)  for  ⁻¹  U+207B+00B9  Superscript inverse                             [DEFINE]
+sqrt   for  √   U+221A  Square Root                                           [DEFINE]
+infty  for  ∞   U+221E  Infinity                                              [DEFINE]
+oplus  for  ⊕   U+2295  Circled Plus (direct sum)                             [DEFINE]
+otimes for  ⊗   U+2297  Circled Times (tensor product)                        [DEFINE]
+ominus for  ⊖   U+2296  Circled Minus                                         [DEFINE]
+odot   for  ⊙   U+2299  Circled Dot                                           [DEFINE]
+dag    for  †   U+2020  Dagger (adjoint)                                      [DEFINE]
+ddag   for  ‡   U+2021  Double Dagger                                         [DEFINE]
+star   for  ⋆   U+22C6  Star Operator                                         [DEFINE]
+bullet for  •   U+2022  Bullet                                                [DEFINE]
+wr     for  ≀   U+2240  Wreath Product                                        [DEFINE]
+bowtie for  ⋈   U+22C8  Bowtie (natural join)                                 [DEFINE]
+ltimes for  ⋉   U+22C9  Left Semidirect Product                               [DEFINE]
+rtimes for  ⋊   U+22CA  Right Semidirect Product                              [DEFINE]
+
+################################################################################
+# 8. NUMBER SETS (Double-Struck)
+################################################################################
+
+Nat      for  ℕ   U+2115  Natural numbers                                     [BUILTIN]
+Int      for  ℤ   U+2124  Integers                                            [BUILTIN]
+Rat      for  ℚ   U+211A  Rationals                                           [BUILTIN]
+Real     for  ℝ   U+211D  Reals                                               [BUILTIN]
+Complex  for  ℂ   U+2102  Complex numbers                                     [BUILTIN]
+# These are type names, not notation — always available as ASCII
+
+################################################################################
+# 9. BRACKETS
+################################################################################
+
+<.  .>   for  ⟨ ⟩   U+27E8 U+27E9  Angle Brackets (anonymous constructor)   [DEFINE]
+<<. .>>  for  ⟪ ⟫   U+27EA U+27EB  Double Angle Brackets                     [DEFINE]
+{{  }}   for  ⦃ ⦄   U+2983 U+2984  Strict implicit argument brackets         [DEFINE]
+[[  ]]   for  ⟦ ⟧   U+27E6 U+27E7  White Square Brackets (denotation)        [DEFINE]
+ceil(x)  for  ⌈x⌉   U+2308 U+2309  Ceiling brackets                          [DEFINE]
+floor(x) for  ⌊x⌋   U+230A U+230B  Floor brackets                            [DEFINE]
+norm(x)  for  ‖x‖   U+2016         Double Vertical Line (norm)                [DEFINE]
+
+# Note: ⟨ ⟩ is the biggest pain point for ASCII-only. These are used everywhere
+# for anonymous constructors. We use <. .> to avoid ambiguity with < >.
+
+################################################################################
+# 10. TACTIC & PROOF SYMBOLS
+################################################################################
+
+subst_arrow  for  ▸   U+25B8  Black Right-Pointing Triangle (subst/rewrite)   [DEFINE]  (use `rw` or `subst` instead)
+.            for  ·   U+00B7  Middle Dot (focusing in tactic blocks)           [BUILTIN] (partial)
+<: :>        for  ‹ ›  U+2039 U+203A  Auto-bound assumption by type            [DEFINE]
+trans_sq     for  ⬝   U+2B1D  Transitivity square                             [DEFINE]  (use Trans.trans)
+
+################################################################################
+# 11. COERCION ARROWS
+################################################################################
+
+up    for  ↑   U+2191  Upwards Arrow (coercion up)                            [DEFINE]
+down  for  ↓   U+2193  Downwards Arrow (coercion down)                        [DEFINE]
+Up    for  ⇑   U+21D1  Upwards Double Arrow                                   [DEFINE]
+Down  for  ⇓   U+21D3  Downwards Double Arrow                                 [DEFINE]
+
+################################################################################
+# 12. GROUP THEORY & ABSTRACT ALGEBRA (Mathlib)
+################################################################################
+
+lhd    for  ⊲   U+22B2  Normal Subgroup Of                                    [DEFINE]
+rhd    for  ⊳   U+22B3  Contains As Normal Subgroup                           [DEFINE]
+unlhd  for  ⊴   U+22B4  Normal Subgroup Of Or Equal To                        [DEFINE]
+unrhd  for  ⊵   U+22B5  Contains As Normal Subgroup Or Equal To               [DEFINE]
+[+]    for  ⊞   U+229E  Squared Plus                                          [DEFINE]
+[x]    for  ⊠   U+22A0  Squared Times                                         [DEFINE]
+[.]    for  ⊡   U+22A1  Squared Dot                                           [DEFINE]
+[<     for  ⊏   U+228F  Square Image Of                                       [DEFINE]
+>]     for  ⊐   U+2290  Square Original Of                                    [DEFINE]
+[<=    for  ⊑   U+2291  Square Image Of Or Equal To                           [DEFINE]
+>=]    for  ⊒   U+2292  Square Original Of Or Equal To                        [DEFINE]
+
+################################################################################
+# 13. CALCULUS & ANALYSIS
+################################################################################
+
+partial  for  ∂   U+2202  Partial Differential                                [DEFINE]
+nabla    for  ∇   U+2207  Nabla (gradient)                                    [DEFINE]
+integral for  ∫   U+222B  Integral                                            [DEFINE]
+ell      for  ℓ   U+2113  Script Small L                                      [DEFINE]
+aleph    for  ℵ   U+2135  Alef Symbol                                         [DEFINE]
+sharp    for  ♯   U+266F  Sharp (coercions in Mathlib)                        [DEFINE]
+flat     for  ♭   U+266D  Flat (forget functors)                              [DEFINE]
+natural  for  ♮   U+266E  Natural                                             [DEFINE]
+angle    for  ∠   U+2220  Angle                                               [DEFINE]
+
+################################################################################
+# 14. DOTS & ELLIPSES
+################################################################################
+
+...    for  ⋯   U+22EF  Midline Horizontal Ellipsis                           [BUILTIN]
+
+################################################################################
+# 15. GREEK LETTERS (for identifiers)
+################################################################################
+
+# Lowercase — use these as identifier suffixes/prefixes in ASCII
+# Convention: spell out the name or use a standard abbreviation
+
+alpha    for  α   U+03B1      [IDENT]
+beta     for  β   U+03B2      [IDENT]
+gamma    for  γ   U+03B3      [IDENT]
+delta    for  δ   U+03B4      [IDENT]
+epsilon  for  ε   U+03B5      [IDENT]
+zeta     for  ζ   U+03B6      [IDENT]
+eta      for  η   U+03B7      [IDENT]
+theta    for  θ   U+03B8      [IDENT]
+iota     for  ι   U+03B9      [IDENT]
+kappa    for  κ   U+03BA      [IDENT]
+# lambda = fun                [BUILTIN]
+mu       for  μ   U+03BC      [IDENT]
+nu       for  ν   U+03BD      [IDENT]
+xi       for  ξ   U+03BE      [IDENT]
+pi_      for  π   U+03C0      [IDENT]  (pi conflicts with Pi type)
+rho      for  ρ   U+03C1      [IDENT]
+sigma    for  σ   U+03C3      [IDENT]
+tau      for  τ   U+03C4      [IDENT]
+upsilon  for  υ   U+03C5      [IDENT]
+phi      for  φ   U+03C6      [IDENT]
+chi      for  χ   U+03C7      [IDENT]
+psi      for  ψ   U+03C8      [IDENT]
+omega    for  ω   U+03C9      [IDENT]
+
+# Uppercase
+Alpha    for  Α   U+0391      [IDENT]
+Beta     for  Β   U+0392      [IDENT]
+Gamma    for  Γ   U+0393      [IDENT]
+Delta    for  Δ   U+0394      [IDENT]
+Theta    for  Θ   U+0398      [IDENT]
+Lambda   for  Λ   U+039B      [IDENT]
+Xi       for  Ξ   U+039E      [IDENT]
+Pi_      for  Π   U+03A0      [IDENT]
+Sigma_   for  Σ   U+03A3      [IDENT]
+Phi      for  Φ   U+03A6      [IDENT]
+Psi      for  Ψ   U+03A8      [IDENT]
+Omega    for  Ω   U+03A9      [IDENT]
+
+# Variants
+varphi     for  ϕ   U+03D5    [IDENT]
+varepsilon for  ϵ   U+03F5    [IDENT]
+vartheta   for  ϑ   U+03D1    [IDENT]
+varrho     for  ϱ   U+03F1    [IDENT]
+
+################################################################################
+# 16. SUBSCRIPTS (for identifiers)
+################################################################################
+
+# Convention: use _0, _1, etc. instead of ₀, ₁
+# Lean allows both; ASCII version is always valid in identifiers
+
+_0  for  ₀   U+2080      [IDENT]
+_1  for  ₁   U+2081      [IDENT]
+_2  for  ₂   U+2082      [IDENT]
+_3  for  ₃   U+2083      [IDENT]
+_4  for  ₄   U+2084      [IDENT]
+_5  for  ₅   U+2085      [IDENT]
+_6  for  ₆   U+2086      [IDENT]
+_7  for  ₇   U+2087      [IDENT]
+_8  for  ₈   U+2088      [IDENT]
+_9  for  ₉   U+2089      [IDENT]
+
+# Subscript letters
+_a  for  ₐ   U+2090      [IDENT]
+_e  for  ₑ   U+2091      [IDENT]
+_h  for  ₕ   U+2095      [IDENT]
+_i  for  ᵢ   U+1D62      [IDENT]
+_j  for  ⱼ   U+2C7C      [IDENT]
+_k  for  ₖ   U+2096      [IDENT]
+_l  for  ₗ   U+2097      [IDENT]
+_m  for  ₘ   U+2098      [IDENT]
+_n  for  ₙ   U+2099      [IDENT]
+_o  for  ₒ   U+2092      [IDENT]
+_p  for  ₚ   U+209A      [IDENT]
+_r  for  ᵣ   U+1D63      [IDENT]
+_s  for  ₛ   U+209B      [IDENT]
+_t  for  ₜ   U+209C      [IDENT]
+_u  for  ᵤ   U+1D64      [IDENT]
+_v  for  ᵥ   U+1D65      [IDENT]
+_x  for  ₓ   U+2093      [IDENT]
+
+################################################################################
+# 17. SUPERSCRIPTS (for identifiers)
+################################################################################
+
+# Convention: use ^0, ^1, etc. or just spell out
+
+^0  for  ⁰   U+2070      [IDENT]
+^1  for  ¹   U+00B9      [IDENT]
+^2  for  ²   U+00B2      [IDENT]
+^3  for  ³   U+00B3      [IDENT]
+^4  for  ⁴   U+2074      [IDENT]
+^5  for  ⁵   U+2075      [IDENT]
+^6  for  ⁶   U+2076      [IDENT]
+^7  for  ⁷   U+2077      [IDENT]
+^8  for  ⁸   U+2078      [IDENT]
+^9  for  ⁹   U+2079      [IDENT]
+^n  for  ⁿ   U+207F      [IDENT]
+^-  for  ⁻   U+207B      [IDENT]
+^+  for  ⁺   U+207A      [IDENT]
+
+################################################################################
+# 18. MATHLIB TOPOLOGY & MEASURE THEORY
+################################################################################
+
+nhds        for  𝓝   U+1D4DD  Neighborhood filter                             [DEFINE]
+uniformity  for  𝓤   U+1D4E4  Uniformity                                      [DEFINE]
+Filter_     for  𝓕   U+1D4D5  Filter                                          [DEFINE]
+
+################################################################################
+# 19. SYNTAX QUOTATION
+################################################################################
+
+guilL  for  «   U+00AB  Left Guillemet (name escaping in Lean 4)              [BUILTIN]
+guilR  for  »   U+00BB  Right Guillemet                                       [BUILTIN]
+# Note: « » are used for escaping names with special chars: «my-name»
+
+################################################################################
+# IMPLEMENTATION NOTES
+################################################################################
+#
+# Priority for implementation:
+#
+# TIER 1 — Essential (blocks basic code generation):
+#   <. .>  for ⟨ ⟩  (anonymous constructors — used constantly)
+#   .      for ·    (tactic focusing — used in every proof)
+#   up     for ↑    (coercions — used in every Nat/Int interaction)
+#   comp   for ∘    (function composition)
+#   ><     for ×    (product types)
+#
+# TIER 2 — Common in proofs:
+#   |-     for ⊢    (turnstile)
+#   ===    for ≡    (definitional equality)
+#   ~=     for ≈    (approx)
+#   ~-     for ≃    (equiv)
+#   ~==    for ≅    (iso)
+#   subst_arrow for ▸
+#
+# TIER 3 — Mathlib notation (only if using Mathlib):
+#   mem/!mem/cup/cap/subset/etc.
+#   sqcup/sqcap/iSup/iInf
+#   oplus/otimes
+#   lhd/rhd (normal subgroups)
+#
+# TIER 4 — Rare / domain-specific:
+#   partial/nabla/integral
+#   aleph/ell
+#   sharp/flat/natural
+#
+# Greek letters and subscripts are identifier-level and don't need macros —
+# just use the ASCII spelling (alpha, beta, _1, _2, etc.).
+#
+# Example Lean 4 macro for anonymous constructor brackets:
+#
+#   notation "<." xs ">" => (by exact ⟨xs⟩)    -- or use Lean macro system
+#
+# A more robust approach: patch the Lean parser to accept ASCII alternatives,
+# or use a preprocessing step that replaces ASCII tokens with Unicode before
+# feeding to Lean.
