@@ -147,3 +147,9 @@
 [submodule "pretext"]
 	path = pretext
 	url = https://github.com/chenglou/pretext.git
+[submodule "lingbot-map-webui"]
+	path = lingbot-map-webui
+	url = https://github.com/Phylliida/lingbot-map-webui.git
+[submodule "ai-kialo"]
+	path = ai-kialo
+	url = https://github.com/Phylliida/ai-kialo.git
