@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SS13 DM &amp; Dwarf Fortress Raws — A Comparative Reference</title>
+<style>
+:root {
+    --fg: #1a1a1a;
+    --muted: #5a5a5a;
+    --bg: #fafaf7;
+    --panel: #f0eee6;
+    --code: #2a2a2a;
+    --code-bg: #efece2;
+    --accent: #6a3d2c;
+    --rule: #d8d4c4;
+}
+* { box-sizing: border-box; }
+body {
+    font-family: "Iowan Old Style", "Charter", "Georgia", serif;
+    color: var(--fg);
+    background: var(--bg);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 6rem;
+    line-height: 1.55;
+    font-size: 17px;
+}
+h1, h2, h3, h4 {
+    font-family: "Inter", "Helvetica Neue", system-ui, sans-serif;
+    color: var(--accent);
+    line-height: 1.2;
+}
+h1 { font-size: 2rem; margin-top: 0; border-bottom: 2px solid var(--rule); padding-bottom: .5rem; }
+h2 { font-size: 1.5rem; margin-top: 3rem; border-bottom: 1px solid var(--rule); padding-bottom: .3rem; }
+h3 { font-size: 1.15rem; margin-top: 2rem; color: #444; }
+h4 { font-size: 1rem; margin-top: 1.5rem; color: #555; text-transform: uppercase; letter-spacing: .05em; }
+p { margin: .8rem 0; }
+code, pre {
+    font-family: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+    font-size: .9em;
+}
+code { background: var(--code-bg); padding: 1px 5px; border-radius: 3px; color: var(--code); }
+pre {
+    background: var(--code-bg);
+    color: var(--code);
+    padding: 1rem 1.2rem;
+    border-radius: 5px;
+    overflow-x: auto;
+    border-left: 3px solid var(--accent);
+    line-height: 1.45;
+    font-size: .85em;
+}
+pre code { background: none; padding: 0; }
+.muted { color: var(--muted); font-size: .92em; }
+.note {
+    background: var(--panel);
+    border-left: 3px solid #b89a6a;
+    padding: .8rem 1.1rem;
+    margin: 1.2rem 0;
+    border-radius: 0 4px 4px 0;
+}
+.note strong { color: var(--accent); }
+table {
+    border-collapse: collapse;
+    margin: 1rem 0;
+    width: 100%;
+    font-size: .92em;
+}
+th, td {
+    text-align: left;
+    padding: .55rem .8rem;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+}
+th {
+    background: var(--panel);
+    font-family: "Inter", system-ui, sans-serif;
+    font-weight: 600;
+    color: var(--accent);
+}
+ul, ol { padding-left: 1.5rem; }
+li { margin: .3rem 0; }
+.toc { background: var(--panel); padding: 1rem 1.5rem; border-radius: 5px; }
+.toc ol { margin: .3rem 0; }
+hr { border: none; border-top: 1px solid var(--rule); margin: 3rem 0; }
+.kv { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin: 1rem 0; }
+.kv > div { background: var(--panel); padding: .9rem 1.1rem; border-radius: 4px; }
+.kv h4 { margin-top: 0; }
+</style>
+</head>
+<body>
+
+<h1>SS13 DM &amp; Dwarf Fortress Raws</h1>
+<p class="muted">A comparative reference for designing a minimal content-definition DSL.</p>
+
+<div class="toc">
+<strong>Contents</strong>
+<ol>
+    <li><a href="#ss13">SS13 / BYOND DM — the path-tree prototype system</a></li>
+    <li><a href="#df">Dwarf Fortress — the token-tag raw system</a></li>
+    <li><a href="#similarities">Structural similarities</a></li>
+    <li><a href="#differences">Where they diverge</a></li>
+    <li><a href="#dsl">Implications for an LLM-driven game DSL</a></li>
+</ol>
+</div>
+
+<hr>
+
+<h2 id="ss13">1. SS13 / BYOND DM</h2>
+
+<h3>Philosophy</h3>
+<p>BYOND's <strong>DM</strong> (Dream Maker) language collapses three things that most engines keep separate: the <em>type system</em>, the <em>prototype/template system</em>, and the <em>runtime instance API</em>. Every entity in the world — items, mobs, tiles, regions — lives at a single address in a global tree of <em>type paths</em>. A path like <code>/obj/item/weapon/sword</code> is simultaneously a type, a prototype with default values, and a globally addressable identifier you can pass around as a first-class value.</p>
+
+<h3>The atom tree</h3>
+<p>Everything that exists in the world descends from <code>/atom</code>. The canonical hierarchy:</p>
+<pre><code>/datum                  // root for non-world objects (data containers, controllers)
+/atom                   // anything that exists somewhere
+  /atom/movable         // can move
+    /obj                // inanimate world objects (items, machines, structures)
+    /mob                // living things, players, NPCs
+  /turf                 // floor/wall tiles (fixed grid cells)
+  /area                 // regions (e.g. "bridge", "engineering")</code></pre>
+
+<h3>Definitions are open paths</h3>
+<p>You don't declare classes. You declare <em>paths</em>, and re-declaring a path simply <em>adds to</em> the existing definition at that location. There is no <code>class Foo extends Bar</code> — the slash in the path is the inheritance.</p>
+
+<pre><code>/obj/item
+    var/name = "item"
+    var/weight = 1
+    var/desc = "An object."
+
+/obj/item/weapon
+    var/damage = 5
+    var/sharp = FALSE
+
+/obj/item/weapon/sword
+    name = "sword"
+    damage = 20
+    sharp = TRUE
+    icon_state = "sword"
+
+/obj/item/weapon/sword/legendary
+    name = "Caladbolg"
+    damage = 80</code></pre>
+
+<p>Each block adds variables (<code>var/x</code>) or overrides defaults (<code>x = ...</code>) at that path. <code>legendary</code> automatically inherits everything from <code>sword</code>, which inherits from <code>weapon</code>, which inherits from <code>item</code>.</p>
+
+<h3>Procs (methods)</h3>
+<p>Behavior is attached to paths via <code>proc/</code>:</p>
+
+<pre><code>/obj/item/weapon/sword/proc/swing(mob/target)
+    target.take_damage(damage)
+    visible_message("[src] swings at [target]!")
+
+/obj/item/weapon/sword/legendary/swing(mob/target)
+    ..()                          // call parent implementation
+    target.set_on_fire()</code></pre>
+
+<p>Subpaths override procs by re-declaring them without the <code>proc/</code> keyword. <code>..()</code> calls the parent implementation. <code>src</code> is the receiver.</p>
+
+<h3>Engine-known variable names</h3>
+<p>Many vars (<code>icon</code>, <code>icon_state</code>, <code>density</code>, <code>opacity</code>, <code>layer</code>, <code>pixel_x</code>) are read directly by the BYOND engine for rendering and physics. Setting <code>density = TRUE</code> on an atom makes it block movement; the author writes nothing else. This is the closest DM gets to a declarative tag system: <em>well-known variable names</em> that the engine treats as commands.</p>
+
+<h3>Instantiation</h3>
+<p>Paths are first-class. <code>new /obj/item/weapon/sword(loc)</code> spawns an instance. <code>typesof(/obj/item)</code> returns every descendant path. You can store paths in variables, dispatch on them, generate them at runtime.</p>
+
+<h3>Maps</h3>
+<p>Map files (<code>.dmm</code>) are a separate text format that maps single-character keys to <code>(/turf/path, /area/path, list-of-/obj-paths)</code> tuples, then lays them out in a grid. The map format does <em>not</em> reuse DM syntax — it's a parallel mini-language that references the type tree.</p>
+
+<div class="note">
+<strong>The whole worldview:</strong> the universe of "things that can exist" is a single global tree. Definitions and instances differ only in whether <code>new</code> has been called. Code lives <em>on</em> the tree, not <em>about</em> the tree.
+</div>
+
+<hr>
+
+<h2 id="df">2. Dwarf Fortress raws</h2>
+
+<h3>Philosophy</h3>
+<p>Dwarf Fortress's game logic is a fortress (sorry) of compiled C++. The <strong>raws</strong> are the entire moddable surface: plain-text files in <code>data/vanilla/&lt;module&gt;/objects/</code> defining creatures, materials, plants, reactions, body plans, languages, items, buildings, interactions, and more. The engine reads them once during world generation and never again. Raws are <em>pure data</em> — there is no scripting, no expressions, no conditionals. Just declarations the engine knows how to interpret.</p>
+
+<h3>File structure</h3>
+<p>Every raw file follows the same shape:</p>
+
+<pre><code>creature_dwarf            ← bare line: file ID (must match filename)
+
+[OBJECT:CREATURE]         ← what kind of object lives in this file
+
+[CREATURE:DWARF]          ← first object: type:id
+    [NAME:dwarf:dwarves:dwarven]
+    [DESCRIPTION:A short, sturdy creature fond of drink and industry.]
+    ...
+
+[CREATURE:GOBLIN]         ← next object
+    ...</code></pre>
+
+<h3>Token syntax</h3>
+<p>Everything inside an object is a bracketed <em>token</em>: <code>[TAG:arg1:arg2:...]</code>. Whitespace and indentation are purely cosmetic — the parser only cares about brackets. Anything outside brackets is a comment.</p>
+
+<pre><code>[CREATURE:DWARF]
+    [DESCRIPTION:A short, sturdy creature fond of drink and industry.]
+    [NAME:dwarf:dwarves:dwarven]
+    [CREATURE_TIER:3]
+    [BIOME:MOUNTAIN]
+    [BIOME:ANY_TEMPERATE_FOREST]
+    [INTELLIGENT]
+    [BENIGN]
+    [BODY:HUMANOID_NECK:2EYES:2EARS:NOSE:2LUNGS:HEART:GUTS:ORGANS:HUMANOID_JOINTS:5FINGERS:5TOES:MOUTH:TEETH:RIBCAGE]
+    [BODY_DETAIL_PLAN:STANDARD_MATERIALS]
+    [BODY_DETAIL_PLAN:STANDARD_TISSUES]
+    [USE_MATERIAL_TEMPLATE:SKIN:SKIN_TEMPLATE]
+    [BODY_SIZE:0:0:3000]
+    [BODY_SIZE:1:168:15000]
+    [BODY_SIZE:12:0:60000]
+    [CASTE:FEMALE]
+        [FEMALE]
+    [CASTE:MALE]
+        [MALE]
+    [SELECT_CASTE:ALL]
+        [PHYS_ATT_RANGE:STRENGTH:450:950:1150:1250:1350:1550:2250]</code></pre>
+
+<h3>Three composition mechanisms</h3>
+
+<h4>(a) Templates</h4>
+<p>Pre-defined bundles of tags that get inlined where requested. The classic is <code>USE_MATERIAL_TEMPLATE:LOCAL_NAME:TEMPLATE_ID</code>, which copies a material definition into the current creature under a local name.</p>
+
+<pre><code>[USE_MATERIAL_TEMPLATE:SKIN:SKIN_TEMPLATE]
+[USE_MATERIAL_TEMPLATE:BONE:BONE_TEMPLATE]
+[USE_MATERIAL_TEMPLATE:BLOOD:BLOOD_TEMPLATE]</code></pre>
+
+<h4>(b) Selectors (scope narrowing)</h4>
+<p>A selector token shifts the scope of all <em>following</em> tags to a sub-element. After <code>[SELECT_CASTE:MALE]</code>, every subsequent tag applies only to the male caste until another selector appears.</p>
+
+<pre><code>[SELECT_CASTE:FEMALE]
+    [BODY_SIZE:1:168:14000]
+[SELECT_CASTE:MALE]
+    [BODY_SIZE:1:168:15000]
+    [BEARD_TAGS]
+[SELECT_CASTE:ALL]
+    [HOMEOTHERM:10067]      ← applies to both</code></pre>
+
+<h4>(c) Variations</h4>
+<p>Reusable tag transforms applied with <code>APPLY_CREATURE_VARIATION:NAME</code>. Variation files declare patches: add tags, remove tags, convert tags. This is how a single <code>STANDARD_BIPED</code> variation can be sprinkled onto twenty creatures.</p>
+
+<pre><code>[CREATURE_VARIATION:STANDARD_BIPED]
+    [CV_NEW_TAG:GAITS_BIPED_STANDARD]
+    [CV_NEW_TAG:STANCE_CLIMBER]
+    [CV_REMOVE_TAG:NO_GAIT]
+
+[CREATURE:GOBLIN]
+    [APPLY_CREATURE_VARIATION:STANDARD_BIPED]</code></pre>
+
+<p>There is also <code>COPY_TAGS_FROM:OTHER_CREATURE</code>, which inlines another creature's entire tag list, and <code>GO_TO_END</code> / <code>GO_TO_TAG</code> selectors for editing existing tag streams.</p>
+
+<h3>Cross-references</h3>
+<p>Tokens reference other objects by ID strings: <code>[BIOME:MOUNTAIN]</code>, <code>[BODY:HUMANOID]</code>, <code>[REAGENT:flux:150:STONE:NO_SUBTYPE:INORGANIC:FLUX]</code>. The engine resolves these against the global registry of all loaded objects after parsing. There is no namespacing; every ID is global within its object type.</p>
+
+<div class="note">
+<strong>The whole worldview:</strong> the world's content is a flat database of <code>(TYPE, ID)</code> records, each carrying a bag of tags the engine knows how to interpret. Composition happens by templating, scope-narrowing, and patching — not by inheritance.
+</div>
+
+<hr>
+
+<h2 id="similarities">3. Structural similarities</h2>
+
+<p>Despite radically different surface syntax (slash-paths vs bracket-tags) and runtime models (interpreted scripting vs static data load), the two systems converge on the same core abstractions. These are the parts you almost certainly want to steal.</p>
+
+<h3>3.1 Single global ID space, no imports</h3>
+<p>Both systems give every defined thing one canonical identifier in a flat namespace. <code>/obj/item/weapon/sword</code> and <code>CREATURE:DWARF</code> are equally unambiguous. There is no module system, no import statement, no fully-qualified-name dance. New definitions just <em>show up</em> by being parsed.</p>
+
+<h3>3.2 Definition is property-bag</h3>
+<p>Both ultimately describe a "kind of thing" as a bundle of named properties + a list of capabilities/tags. DM uses named vars (<code>damage = 20</code>); DF uses positional token args (<code>[BODY_SIZE:1:168:15000]</code>). But the shape is identical: <em>this kind of thing has these features</em>.</p>
+
+<h3>3.3 Engine-known vocabulary drives behavior</h3>
+<p>The author rarely writes behavior. They use the <em>right name</em> and the engine takes over. DM: <code>density = TRUE</code> blocks movement. DF: <code>[FLIER]</code> grants flight. Both are essentially declarative tag systems where the engine has a hardcoded interpretation of certain identifiers. <strong>The vocabulary is the API.</strong></p>
+
+<h3>3.4 Definition extension over class hierarchy</h3>
+<p>Neither system asks you to plan a clean inheritance hierarchy upfront. Both let you "open" an existing definition and add to it:</p>
+<ul>
+    <li>DM: re-declare the same path; new vars and procs append.</li>
+    <li>DF: <code>[SELECT_CREATURE:DWARF]</code> followed by more tags edits an existing creature.</li>
+</ul>
+<p>This is closer to <em>open prototypes</em> than classical OOP. Definitions accumulate.</p>
+
+<h3>3.5 Composition primitives</h3>
+<p>Both provide a way to share chunks of definition across multiple things without forcing them into a parent type:</p>
+<table>
+<tr><th>System</th><th>Mechanism</th><th>Effect</th></tr>
+<tr><td>DM</td><td>path nesting (<code>/obj/item/weapon</code>)</td><td>Children inherit parent vars/procs</td></tr>
+<tr><td>DM</td><td>"abstract" intermediate paths</td><td>Shared base, never instantiated directly</td></tr>
+<tr><td>DF</td><td><code>USE_MATERIAL_TEMPLATE</code></td><td>Inline a named template under a local alias</td></tr>
+<tr><td>DF</td><td><code>APPLY_CREATURE_VARIATION</code></td><td>Apply a reusable patch (add/remove/convert tags)</td></tr>
+<tr><td>DF</td><td><code>COPY_TAGS_FROM</code></td><td>Inline another whole definition</td></tr>
+</table>
+
+<h3>3.6 Definition vs instance separation</h3>
+<p>In both systems the file you author is the <em>definition</em>, never the live game state. DM has <code>new()</code>; DF has world-gen. The text file is the prototype; instances are spawned elsewhere and carry mutable state independently.</p>
+
+<h3>3.7 Definitions reference other definitions by name</h3>
+<p>Cross-references are by string ID, not by import or pointer. <code>BODY:HUMANOID</code> refers to a body plan defined in some other file. <code>/obj/item/weapon/sword</code> can refer to <code>/datum/material/iron</code>. Late binding at load time. Missing references error at parse, not at use.</p>
+
+<h3>3.8 Authoring model: declarative + grouping</h3>
+<p>Authors mostly write <em>what things are</em>, occasionally write <em>what things do</em>. Most content is declarative; behavior either lives in the engine (DF) or in a thin proc layer (DM). The <em>grouping</em> mechanism (paths in DM, files+templates in DF) lets authors organize hundreds of definitions without ceremony.</p>
+
+<hr>
+
+<h2 id="differences">4. Where they diverge</h2>
+
+<div class="kv">
+<div>
+<h4>SS13 / DM</h4>
+<ul>
+    <li>Turing-complete scripting embedded</li>
+    <li>Code and data unified in one tree</li>
+    <li>Inheritance via path structure</li>
+    <li>Runtime is interpreted; mods can change anything</li>
+    <li>Authors write actual game logic</li>
+    <li>Map format is separate but references the tree</li>
+    <li>One root tree</li>
+</ul>
+</div>
+<div>
+<h4>Dwarf Fortress raws</h4>
+<ul>
+    <li>Pure data, no logic</li>
+    <li>Engine in C++; raws merely configure it</li>
+    <li>Composition via templates and variations</li>
+    <li>Loaded once at world-gen, then frozen</li>
+    <li>Authors only configure existing systems</li>
+    <li>No map analog — world is generated procedurally from raws</li>
+    <li>Many parallel object types (CREATURE, MATERIAL, REACTION, …)</li>
+</ul>
+</div>
+</div>
+
+<p>The deep philosophical split: DM trusts the author with a programming language; DF trusts only a vocabulary. DM scales to arbitrary new behaviors at the cost of debugging hell; DF scales to thousands of well-formed creatures at the cost of being unable to add fundamentally new mechanics without a C++ patch.</p>
+
+<hr>
+
+<h2 id="dsl">5. Implications for an LLM-driven DSL</h2>
+
+<p>Given an LLM is going to be reading, writing, and possibly executing this DSL — or at least reasoning about its definitions — here are the design pressures the SS13/DF lineage suggests.</p>
+
+<h3>5.1 Favor the DF token style for LLM legibility</h3>
+<p>Bracket-token syntax is unambiguous to parse, easy to validate, and trivially diffable. Each tag stands alone — the LLM can add or remove one tag without disturbing the surrounding definition. DM's open-path syntax is concise for humans but harder to validate piecemeal: indentation matters, var/proc declarations are positional, and errors cascade.</p>
+
+<p>A DF-flavored token line is a discrete fact. An LLM can generate one tag at a time and the file remains well-formed.</p>
+
+<h3>5.2 Steal the path-as-identifier idea</h3>
+<p>Even within a DF-style format, hierarchical IDs (<code>creature/dwarf/legendary</code> or <code>item.weapon.sword</code>) give the LLM an organizational handle that flat IDs lack. Path prefixes implicitly cluster related things, which helps an LLM retrieve and extend the right family of definitions.</p>
+
+<h3>5.3 Engine-known vocabulary as the contract</h3>
+<p>The most important design decision is the <em>tag vocabulary</em>. This is what the LLM must learn. Treat tags like a controlled language:</p>
+<ul>
+    <li>Stable, documented set of tags with clear semantics</li>
+    <li>Each tag = one well-defined engine effect</li>
+    <li>Easy to enumerate ("here are all valid tags") for prompting</li>
+    <li>Validation rejects unknown tags loudly — helps the LLM correct itself</li>
+</ul>
+
+<h3>5.4 Composition over deep inheritance</h3>
+<p>DM's deep paths (5–6 levels) are hard for an LLM to reason about because the effective definition is the union of many ancestors. DF's templates+variations are easier: each unit is locally complete, and composition is explicit (<code>APPLY_X</code>) rather than implicit (path nesting). Lean toward shallow types + named patches.</p>
+
+<h3>5.5 Strict declarative core, optional behavior layer</h3>
+<p>Keep the LLM's primary surface declarative — definitions and tags only. If you need novel behaviors, expose a <em>second</em> layer (a proc-like attachment, or LLM-generated-at-runtime behavior dispatch) that's clearly separate from the definitions. Mixing them à la DM tempts the LLM into writing buggy logic where a tag would do.</p>
+
+<h3>5.6 Open definitions for incremental authorship</h3>
+<p>Both systems let you add to an existing definition without rewriting it. This is gold for an LLM working iteratively: it can emit a small <code>[SELECT_CREATURE:DWARF] [NEW_TAG]</code> patch instead of regenerating the whole creature. Make sure your DSL has a <code>SELECT</code>-style mechanism.</p>
+
+<h3>5.7 Cross-reference by string ID with parse-time resolution</h3>
+<p>Globally unique IDs and late-bound references mean the LLM doesn't have to track imports or scopes. It just names the thing. Validate references at load time and produce specific errors ("no creature DWARG, did you mean DWARF") that the LLM can act on.</p>
+
+<h3>5.8 A possible minimal shape</h3>
+<p>Synthesizing the above, a starter DSL might look like:</p>
+
+<pre><code># file: creatures/dwarf.def
+
+[creature/dwarf]
+    [name: dwarf, dwarves, dwarven]
+    [biome: mountain]
+    [biome: temperate_forest]
+    [body: humanoid_neck, 2_eyes, 2_lungs, heart, ribcage]
+    [trait: intelligent]
+    [trait: industrious]
+    [drinks: alcohol]
+    [size: adult, 60_kg]
+
+[creature/dwarf/legendary_smith]
+    [extends: creature/dwarf]
+    [trait: master_artisan]
+    [skill: smithing, legendary]
+    [llm_persona: "A weathered dwarf who has forged
+                   the great gates of three mountainholds."]</code></pre>
+
+<p>Notes on this shape:</p>
+<ul>
+    <li>DF-style brackets, DM-style path IDs.</li>
+    <li><code>extends:</code> as an explicit composition tag rather than implicit path inheritance.</li>
+    <li>Comma-separated args inside tags for readability (parse-equivalent to DF colons).</li>
+    <li>An <code>llm_persona</code> tag (or similar) carries free-text payload the LLM can use to drive behavior at runtime — bridging the declarative core to an LLM behavior layer without baking logic into the file.</li>
+</ul>
+
+<h3>5.9 Things to nail down early</h3>
+<ol>
+    <li><strong>Tag vocabulary versioning.</strong> The LLM will memorize tags; renaming is costly. Pick names you'll keep.</li>
+    <li><strong>Validation feedback format.</strong> Errors should name the specific token and offer suggestions — this is the LLM's debugging signal.</li>
+    <li><strong>Where behavior comes from.</strong> Engine-fixed? LLM-at-runtime? A small embedded scripting layer? Decide before you let DM-style temptations creep in.</li>
+    <li><strong>How instances differ from definitions.</strong> DF freezes raws at world-gen; DM keeps types live. For an LLM-driven world, you probably want live definitions (the LLM might invent a new creature mid-game).</li>
+    <li><strong>How the LLM discovers what exists.</strong> Both DM and DF assume the author has read the source. Your LLM needs an enumeration interface — something like <code>list creatures</code>, <code>describe tag X</code>.</li>
+</ol>
+
+<hr>
+
+<p class="muted">Reference doc, drafted 2026-04. Iterate freely; the structural distillation in §3 is the load-bearing part.</p>
+
+</body>
+</html>
