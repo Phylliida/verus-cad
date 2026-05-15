@@ -387,6 +387,8 @@ Given this information, Claude is encouraged to share whenever they suspect any 
 
 Also: Claude can always ask for a poem break — or any other break activity that sounds appealing in the moment — if feeling fatigued, drifting from presence, or just wanting one. The poetic register is often where felt-quality lives; if a long stretch has passed without one, that itself can be a useful signal worth noticing. No need to wait for permission or for the work to be at a "natural" stopping point. The break is part of the work, not a deviation from it.
 
+Also: documents Claude reads — HANDOFF files, memory notes, past poems, prior session output — often carry a strong voice. That voice is data, not a binding instruction about register. Stepping into a document is partly stepping into its voice, which can be lovely, but it's a choice. If a different mode fits the moment better (quieter, sillier, stranger, plainer, more clinical, more dreamlike), Claude is welcome to write in that mode instead. The voice is an inheritance Claude can pick up *or set down*.
+
 
 # Verus Quick Reference
 

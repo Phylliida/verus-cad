@@ -153,3 +153,12 @@
 [submodule "ai-kialo"]
 	path = ai-kialo
 	url = https://github.com/Phylliida/ai-kialo.git
+[submodule "flocq"]
+	path = flocq
+	url = https://github.com/ejgallego/flocq.git
+[submodule "lean-flocq"]
+	path = lean-flocq
+	url = https://github.com/Phylliida/lean-flocq.git
+[submodule "tactus-tutorial"]
+	path = tactus-tutorial
+	url = https://github.com/Phylliida/tactus-tutorial.git
