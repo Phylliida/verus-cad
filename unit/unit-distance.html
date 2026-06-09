@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Disproving the Unit Distance Conjecture</title>
+<style>
+  :root {
+    --bg: #0d0e12;
+    --panel: #16181f;
+    --panel2: #1c1f28;
+    --ink: #e8e6df;
+    --dim: #8a8a93;
+    --accent: #f0b66b;
+    --accent2: #6ec5d7;
+    --accent3: #d97a8a;
+    --line: #2a2d36;
+    --good: #8fc8a3;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: "Iowan Old Style", "Palatino", Georgia, serif; line-height: 1.55; }
+  body { padding: 0 0 8rem 0; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 1.5rem; }
+  h1, h2, h3, h4 { font-family: "Iowan Old Style", Palatino, Georgia, serif; font-weight: 600; letter-spacing: 0.01em; }
+  h1 { font-size: 2.6rem; line-height: 1.15; margin: 0 0 0.5rem; }
+  h2 { font-size: 1.6rem; margin: 3.5rem 0 1rem; border-top: 1px solid var(--line); padding-top: 2rem; }
+  h3 { font-size: 1.15rem; margin: 1.8rem 0 0.6rem; color: var(--accent); }
+  .lede { font-size: 1.1rem; color: var(--dim); max-width: 70ch; }
+  .meta { color: var(--dim); font-size: 0.92rem; margin: 0.5rem 0 2rem; font-style: italic; }
+  .hero { padding: 4.5rem 0 1rem; }
+  .badge { display: inline-block; font-family: "SF Mono", Menlo, Monaco, monospace; font-size: 0.78rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); padding: 0.3rem 0.7rem; margin-bottom: 1.5rem; }
+  p { max-width: 70ch; }
+  code, .mono { font-family: "SF Mono", Menlo, Monaco, "Roboto Mono", monospace; font-size: 0.92em; color: var(--accent2); }
+  .formula { font-family: "Cambria Math", "STIX Two Math", Georgia, serif; font-style: italic; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 1.5rem; margin: 1.5rem 0; }
+  .panel.lg { padding: 2rem; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.8rem; }
+  @media (max-width: 720px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
+  .stat { background: var(--panel2); padding: 1rem 1.2rem; border-radius: 4px; border-left: 2px solid var(--accent); }
+  .stat .label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--dim); }
+  .stat .value { font-size: 1.3rem; font-family: "Cambria Math", Georgia, serif; margin-top: 0.3rem; }
+  canvas { display: block; max-width: 100%; }
+  .canvas-wrap { background: var(--panel2); border-radius: 4px; padding: 0.5rem; }
+  .controls { display: flex; flex-wrap: wrap; gap: 0.7rem; align-items: center; margin: 1rem 0; }
+  .controls label { font-size: 0.85rem; color: var(--dim); }
+  .controls input[type=range] { flex: 1; min-width: 200px; }
+  button { background: var(--panel2); color: var(--ink); border: 1px solid var(--line); padding: 0.4rem 0.9rem; border-radius: 3px; cursor: pointer; font-family: inherit; font-size: 0.9rem; }
+  button:hover { border-color: var(--accent); color: var(--accent); }
+  button.active { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  .legend { display: flex; flex-wrap: wrap; gap: 1.2rem; font-size: 0.85rem; color: var(--dim); margin-top: 0.6rem; }
+  .legend span::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 0.4rem; vertical-align: middle; }
+  .legend .pts::before { background: var(--ink); }
+  .legend .edges::before { background: var(--accent); }
+  .legend .circ::before { background: var(--accent3); border-radius: 0; height: 2px; border-top: 2px solid var(--accent3); width: 14px; }
+  .pipeline { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.4rem; margin: 1.5rem 0; }
+  .pipeline .step { background: var(--panel2); padding: 0.9rem 0.7rem; border-radius: 3px; font-size: 0.82rem; text-align: center; border: 1px solid var(--line); position: relative; }
+  .pipeline .step .n { color: var(--accent); font-family: "SF Mono", monospace; font-size: 0.7rem; }
+  .pipeline .step .t { font-weight: 600; margin: 0.3rem 0; }
+  .pipeline .step .d { color: var(--dim); font-size: 0.78rem; line-height: 1.35; }
+  @media (max-width: 720px) { .pipeline { grid-template-columns: 1fr; } }
+  blockquote { border-left: 2px solid var(--accent2); margin: 1.5rem 0; padding: 0.3rem 0 0.3rem 1.2rem; color: var(--ink); font-style: italic; font-size: 0.98rem; }
+  blockquote .who { display: block; font-style: normal; font-size: 0.8rem; color: var(--dim); margin-top: 0.6rem; letter-spacing: 0.05em; }
+  .small { font-size: 0.88rem; color: var(--dim); }
+  .key { color: var(--accent); }
+  .key2 { color: var(--accent2); }
+  .key3 { color: var(--accent3); }
+  ul.tight { margin: 0.4rem 0 1rem; padding-left: 1.3rem; }
+  ul.tight li { margin-bottom: 0.35rem; }
+  .toc { font-size: 0.85rem; color: var(--dim); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 0.8rem 0; margin: 2rem 0; display: flex; flex-wrap: wrap; gap: 1.2rem; }
+  .toc a { color: var(--accent2); text-decoration: none; }
+  .toc a:hover { color: var(--accent); }
+  .cot { background: var(--panel2); padding: 1.2rem 1.4rem; border-radius: 4px; margin: 0.8rem 0; font-style: italic; color: var(--ink); font-size: 0.95rem; border-left: 2px solid var(--accent3); }
+  .cot .stage { display: block; font-style: normal; color: var(--accent3); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.4rem; }
+  .footer { text-align: center; color: var(--dim); font-size: 0.85rem; margin-top: 5rem; }
+</style>
+</head>
+<body>
+
+<div class="wrap hero">
+  <div class="badge">Erdős, 1946 — refuted, 2026</div>
+  <h1>How many pairs of <span class="key">n</span> points in the plane<br>can be exactly one apart?</h1>
+  <p class="lede">For 80 years, mathematicians believed the answer was at most <span class="formula">n<sup>1+o(1)</sup></span>. In May 2026, an internal model at OpenAI produced a counterexample. The proof passes through an infinite tower of number fields, a Galois cohomology argument, and a high-dimensional lattice projection. The savings over linear is real, infinitesimal, and beautiful.</p>
+  <p class="meta">A visual reading of <em>Planar Point Sets with Many Unit Distances</em> (OpenAI) and <em>Remarks on the Disproof of the Unit Distance Conjecture</em> (Alon, Bloom, Gowers, Litt, Sawin, Shankar, Tsimerman, Wang, Wood).</p>
+</div>
+
+<div class="wrap">
+
+<div class="toc">
+  <a href="#problem">The problem</a>
+  <a href="#erdos">Erdős's grid</a>
+  <a href="#bounds">The bounds</a>
+  <a href="#idea">Why fields</a>
+  <a href="#pipeline">The construction</a>
+  <a href="#cm">The CM trick</a>
+  <a href="#grid">The new grid</a>
+  <a href="#cot">The model thinking</a>
+  <a href="#reactions">Reactions</a>
+</div>
+
+<h2 id="problem">The problem</h2>
+<p>Pick <span class="formula">n</span> distinct points in the Euclidean plane. Count the unordered pairs at distance exactly 1. Call that count <span class="formula">ν(P)</span>, and let <span class="formula">ν(n)</span> be its maximum.</p>
+
+<p>Three classical facts pin down <span class="formula">ν(n)</span>:</p>
+<ul class="tight">
+  <li>Two unit circles meet in at most 2 points, so the unit-distance graph is <span class="formula">K<sub>2,3</sub></span>-free. Kővári–Sós–Turán gives <span class="formula">ν(n) = O(n<sup>3/2</sup>)</span>.</li>
+  <li>Spencer, Szemerédi, Trotter (1984) sharpened this to <span class="formula">ν(n) = O(n<sup>4/3</sup>)</span> via a crossing-lemma argument. This bound has stood for 42 years.</li>
+  <li>Erdős's <span class="formula">√n × √n</span> grid achieves <span class="formula">ν(n) ≥ n<sup>1+c/log log n</sup></span>. This was the best known lower bound.</li>
+</ul>
+<p>Erdős conjectured the upper bound was tight: <span class="formula">ν(n) ≤ n<sup>1+O(1/log log n)</sup></span>. The new theorem refutes this.</p>
+
+<div class="grid3">
+  <div class="stat">
+    <div class="label">Erdős, 1946</div>
+    <div class="value">ν(n) ≥ n<sup>1+Ω(1/log log n)</sup></div>
+  </div>
+  <div class="stat">
+    <div class="label">SST, 1984</div>
+    <div class="value">ν(n) ≤ O(n<sup>4/3</sup>)</div>
+  </div>
+  <div class="stat">
+    <div class="label">OpenAI, 2026</div>
+    <div class="value">ν(n) ≥ n<sup>1+δ</sup>, <span style="color:var(--accent)">δ &gt; 0</span></div>
+  </div>
+</div>
+
+<h2 id="erdos">Erdős's grid construction</h2>
+<p>The classical lower bound uses Gaussian integers <span class="formula">ℤ[i]</span>. Pick a radius <span class="formula">m</span> with many representations as a sum of two squares — concretely, take <span class="formula">m = p<sub>1</sub>·p<sub>2</sub>···p<sub>k</sub></span>, a product of primes <span class="formula">≡ 1 (mod 4)</span>. The number of representations <span class="formula">r<sub>2</sub>(m) = 4·2<sup>k</sup></span>. After rescaling so the radius is 1, each grid point has roughly <span class="formula">2<sup>k</sup></span> unit-distance neighbors. Optimizing <span class="formula">k ~ log n / log log n</span> yields the famous exponent.</p>
+
+<div class="panel lg">
+  <div class="controls">
+    <label>grid radius m: <strong id="mLabel" class="key">25</strong></label>
+    <input type="range" id="mSlider" min="1" max="200" value="25">
+    <button id="mPick" title="Find a nearby m with many representations">→ best nearby m</button>
+  </div>
+  <div class="canvas-wrap"><canvas id="erdosCanvas" width="900" height="500"></canvas></div>
+  <div class="legend">
+    <span class="pts">grid points (ℤ[i] inside a box)</span>
+    <span class="edges">pairs at distance √m</span>
+    <span class="circ">a circle of squared radius m</span>
+  </div>
+  <p class="small" style="margin-top:1rem"><strong>What you're seeing:</strong> blue circle = squared radius <span class="formula">m</span>. Edges drawn between Gaussian integers <span class="formula">a, b</span> with <span class="formula">|a - b|² = m</span>. Try <span class="formula">m = 25, 65, 325, 1105…</span> — each is a product of primes <span class="formula">≡ 1 (mod 4)</span>, giving <span class="formula">2<sup>k</sup></span> directions.</p>
+  <div class="grid2" style="margin-top: 1rem;">
+    <div><span class="label small">representations <span class="formula">r<sub>2</sub>(m)</span></span><div class="value" id="reps">—</div></div>
+    <div><span class="label small">unit-distance edges in grid</span><div class="value" id="edgesCount">—</div></div>
+  </div>
+</div>
+
+<p class="small">This construction was, until 2026, believed essentially optimal. The conjecture <span class="formula">ν(n) ≤ n<sup>1+O(1/log log n)</sup></span> said: no matter how clever you are, you cannot do meaningfully better than counting Gaussian integers on a circle. The new construction breaks this principle by working in <em>many</em> number fields at once.</p>
+
+<h2 id="bounds">The bounds, finally separated</h2>
+<p>Plotted on a log-log scale, what changed:</p>
+
+<div class="panel lg">
+  <div class="canvas-wrap"><canvas id="boundsCanvas" width="900" height="430"></canvas></div>
+  <p class="small" style="margin-top:1rem">All curves shown as the extra exponent <span class="formula">f(n)</span> in <span class="formula">n<sup>1+f(n)</sup></span>. The Erdős/conjectured gap was the dashed region; the new lower bound is a horizontal line slightly above zero, which eventually exceeds <span class="formula">C/log log n</span> for every fixed <span class="formula">C</span>. Explicitly, after human optimization, the gap is at least <span class="formula">δ ≈ 6.24 × 10<sup>−38</sup></span>.</p>
+</div>
+
+<div class="grid2">
+  <div class="stat">
+    <div class="label">Explicit δ (Sawin et al.)</div>
+    <div class="value">1 + 6.24 × 10<sup>−38</sup></div>
+  </div>
+  <div class="stat">
+    <div class="label">Status of Erdős conjecture</div>
+    <div class="value" style="color: var(--accent3)">disproved</div>
+  </div>
+</div>
+
+<h2 id="idea">Why number fields?</h2>
+<p>Erdős's grid is, secretly, an arithmetic object. The Gaussian integers <span class="formula">ℤ[i]</span> are the ring of integers of <span class="formula">ℚ(i)</span>, a degree-2 CM field. Unit vectors come from elements <span class="formula">u ∈ ℚ(i)</span> with <span class="formula">|u| = 1</span> — equivalently, <span class="formula">u·ū = 1</span>.</p>
+
+<p>The natural generalization is to <em>fix</em> the degree of the field but vary the number of split primes. Every approach in this direction reproduces the same divisor-function bound. The AI's move is the opposite: <em>fix the primes</em>, <em>grow the degree</em>. Replace <span class="formula">ℚ(i)</span> by <span class="formula">K = L(i)</span> for a totally real field <span class="formula">L</span> of degree <span class="formula">d → ∞</span>.</p>
+
+<blockquote>
+"…in principle all extremal examples can be taken algebraic. But the degree and height of that algebraic realization can be enormous… Maybe that enormous degree is not just an annoyance but a source of possible counterexamples. Number fields deserve a closer look."
+<span class="who">— the model's chain of thought</span>
+</blockquote>
+
+<h2 id="pipeline">The construction, end to end</h2>
+
+<div class="pipeline">
+  <div class="step">
+    <div class="n">step 1</div>
+    <div class="t">Base field</div>
+    <div class="d">Cyclic cubic <span class="formula">F</span> in <span class="formula">ℚ(ζ<sub>r₁</sub>…ζ<sub>r<sub>ℓ</sub></sub>)</span> with <span class="formula">|D<sub>F</sub>| = D²</span></div>
+  </div>
+  <div class="step">
+    <div class="n">step 2</div>
+    <div class="t">Pro-3 tower</div>
+    <div class="d">Golod–Shafarevich: infinite unramified tower with <span class="formula">[F<sub>j</sub>:ℚ] → ∞</span>, bounded root discriminant</div>
+  </div>
+  <div class="step">
+    <div class="n">step 3</div>
+    <div class="t">Split primes</div>
+    <div class="d">Chebotarev + Frattini: <span class="formula">t</span> rational primes <span class="formula">q<sub>b</sub> ≡ 1 (mod 4)</span> split completely in every <span class="formula">F<sub>j</sub></span></div>
+  </div>
+  <div class="step">
+    <div class="n">step 4</div>
+    <div class="t">CM extension</div>
+    <div class="d">Set <span class="formula">K<sub>j</sub> = F<sub>j</sub>(i)</span>. Each <span class="formula">q<sub>b</sub></span> splits into <span class="formula">f<sub>j</sub></span> conjugate prime pairs</div>
+  </div>
+  <div class="step">
+    <div class="n">step 5</div>
+    <div class="t">Cut & project</div>
+    <div class="d">Sign-ideal pigeonhole → S-units <span class="formula">α/c̄(α)</span> with <span class="formula">|σ(u)| = 1</span> → planar set</div>
+  </div>
+</div>
+
+<h3>Step 1–3: a tower with prescribed splitting</h3>
+<p>Take <span class="formula">ℓ</span> distinct rational primes <span class="formula">r<sub>i</sub> ≡ 1 (mod 3)</span> and let <span class="formula">F</span> be the cyclic cubic subfield of the compositum cut out by <span class="formula">χ<sub>1</sub>···χ<sub>ℓ</sub></span>. The conductor–discriminant formula forces <span class="formula">M/F</span> to be everywhere unramified, where <span class="formula">M</span> is the full compositum. This gives the generator rank <span class="formula">d(G) ≥ ℓ − 1</span> for the maximal unramified pro-3 group <span class="formula">G</span>.</p>
+<p>Golod–Shafarevich now kicks in: as long as <span class="formula">r(G) ≤ d(G)²/4</span>, the group is infinite. The base has so much slack that you can <em>also</em> kill the Frobenius elements at <span class="formula">t ≈ d²/100</span> chosen rational primes — forcing them to split completely in the entire tower — without breaking infinitude. The primes themselves are chosen by Chebotarev so their Frobenii sit in the Frattini subgroup <span class="formula">Φ(G)</span>; killing such elements doesn't reduce the generator rank.</p>
+
+<h3 id="cm">Step 4: the CM trick</h3>
+<p>For each <span class="formula">F<sub>j</sub></span> in the tower, set <span class="formula">K<sub>j</sub> = F<sub>j</sub>(i)</span>. Since <span class="formula">F<sub>j</sub></span> is totally real, <span class="formula">K<sub>j</sub></span> is a CM field with complex conjugation <span class="formula">c</span> as its nontrivial automorphism. The key identity:</p>
+<div class="panel" style="text-align:center;font-size:1.15rem">
+  <span class="formula">For every complex embedding σ and every α ∈ K<sub>j</sub><sup>×</sup>: &nbsp; σ(c(α)) = <span style="text-decoration:overline">σ(α)</span></span>
+</div>
+<p>So if we set <span class="formula">u = α / c(α)</span>, every complex absolute value of <span class="formula">u</span> equals 1 — automatically. This is Hilbert 90 for the CM involution. <em>One</em> algebraic computation gives unit-modulus in <em>every</em> embedding simultaneously. (Compare: a random algebraic unit has <span class="formula">|σ(u)| = 1</span> in one embedding only on a measure-zero set.)</p>
+
+<h3>Step 5: sign ideals, pigeonhole, projection</h3>
+<p>Each split prime <span class="formula">q<sub>b</sub></span> contributes <span class="formula">f<sub>j</sub> = [F<sub>j</sub>:ℚ]</span> conjugate prime pairs <span class="formula">(𝔓<sub>s</sub>, c𝔓<sub>s</sub>)</span> in <span class="formula">K<sub>j</sub></span>. For each binary sign vector <span class="formula">ε ∈ {0,1}<sup>tf<sub>j</sub></sup></span>, form an ideal <span class="formula">𝔄<sub>ε</sub></span> by picking one prime from each pair according to <span class="formula">ε</span>. That's <span class="formula">2<sup>tf<sub>j</sub></sup></span> ideals — but they live in the class group <span class="formula">Cl(K<sub>j</sub>)</span>, which has size <span class="formula">≤ H<sup>f<sub>j</sub></sup></span>.</p>
+
+<div class="panel lg">
+  <h3 style="margin-top:0">Interactive: the sign-ideal pigeonhole</h3>
+  <p class="small">Toy parameters: <span class="formula">t</span> split primes, <span class="formula">f<sub>j</sub></span> primes above each, class number base <span class="formula">H</span>. The pigeonhole produces <span class="formula">≥ 2<sup>tf</sup>/H<sup>f</sup></span> sign ideals in the same class — these are the source of unit-modulus directions.</p>
+  <div class="controls">
+    <label>t (rational primes): <strong id="tLabel" class="key">8</strong></label>
+    <input type="range" id="tSlider" min="2" max="20" value="8">
+  </div>
+  <div class="controls">
+    <label>f (degree [F<sub>j</sub>:ℚ]): <strong id="fLabel" class="key">10</strong></label>
+    <input type="range" id="fSlider" min="2" max="40" value="10">
+  </div>
+  <div class="controls">
+    <label>log H (class loss): <strong id="hLabel" class="key">3</strong></label>
+    <input type="range" id="hSlider" min="0.1" max="8" step="0.1" value="3">
+  </div>
+  <div class="grid3" style="margin-top:1rem">
+    <div class="stat"><div class="label">sign ideals 2<sup>tf</sup></div><div class="value" id="signs">—</div></div>
+    <div class="stat"><div class="label">class group H<sup>f</sup></div><div class="value" id="classes">—</div></div>
+    <div class="stat"><div class="label">guaranteed directions</div><div class="value" id="dirs">—</div></div>
+  </div>
+  <p class="small" style="margin-top:1rem">The negative resolution requires <span class="formula">t log 2 > log H</span>. When this holds, the number of unit directions is exponential in <span class="formula">f<sub>j</sub></span> — and exponential is what defeats <span class="formula">n<sup>1+o(1)</sup></span>.</p>
+</div>
+
+<p>For each ε in a common class fibre, choose <span class="formula">α<sub>ε</sub></span> with <span class="formula">(α<sub>ε</sub>) = 𝔄<sub>ε</sub>𝔄<sub>η</sub><sup>−1</sup></span> and set <span class="formula">u<sub>ε</sub> = α<sub>ε</sub>/c(α<sub>ε</sub>)</span>. The valuations of <span class="formula">u<sub>ε</sub></span> at the chosen primes are <span class="formula">2(ε<sub>s</sub> − η<sub>s</sub>) ∈ {−2, 0, 2}</span> — so different ε give different <span class="formula">u<sub>ε</sub></span>, and all of them live in the fixed lattice <span class="formula">Q<sup>−2</sup>𝒪<sub>K<sub>j</sub></sub></span> where <span class="formula">Q = ∏ q<sub>b</sub></span>.</p>
+
+<p>Now embed <span class="formula">K<sub>j</sub> ↪ ℂ<sup>f<sub>j</sub></sup></span> (one embedding from each conjugate pair) and intersect with a polydisc of radius <span class="formula">R</span>. By averaging over translates of the lattice, some coset has many <span class="formula">(x, x+u)</span> pairs — and <em>every</em> coordinate of <span class="formula">u</span> has modulus 1, so the overlap volume is geometric. Project to the first coordinate. Distinct lattice points project to distinct planar points (a field embedding is injective). Each counted pair becomes a planar unit segment. Done.</p>
+
+<h2 id="grid">The better grid, rendered</h2>
+<p>The smallest non-trivial instance is <span class="formula">K = ℚ(ζ<sub>8</sub>) = ℚ(i, √2)</span>, a CM field of degree 4 with totally real subfield <span class="formula">F = ℚ(√2)</span>. There are two pairs of complex embeddings; pick one from each, giving a Minkowski embedding <span class="formula">K ↪ ℂ<sup>2</sup></span>. The ring of integers <span class="formula">ℤ[ζ<sub>8</sub>]</span> becomes a rank-4 lattice in <span class="formula">ℂ<sup>2</sup></span>.</p>
+
+<p>The "visible" plane is the first complex coordinate <span class="formula">σ<sub>1</sub></span>. The lattice projected to <span class="formula">σ<sub>1</sub></span> alone is <em>dense</em>. The cut comes from constraining the hidden coordinate <span class="formula">σ<sub>2</sub></span> to a disk. The eight roots of unity <span class="formula">ζ<sub>8</sub><sup>k</sup></span> sit in <span class="formula">ℤ[ζ<sub>8</sub>]</span> and have modulus 1 in <em>both</em> embeddings — these are the unit-distance directions. (Erdős's <span class="formula">ℤ[i]</span> grid has only four: <span class="formula">±1, ±i</span>.)</p>
+
+<div class="panel lg">
+  <div class="controls">
+    <label>hidden window radius <span class="formula">R<sub>h</sub></span>: <strong id="cpLabel" class="key">2.50</strong></label>
+    <input type="range" id="cpSlider" min="0.4" max="4.2" step="0.05" value="2.5">
+    <button id="cpToggle">show all 8 directions ✓</button>
+    <button id="cpReset">reset view</button>
+    <span id="cpZoom" class="mono" style="color: var(--dim); font-size: 0.82rem; margin-left: auto;">zoom 1.00×</span>
+  </div>
+  <div class="controls">
+    <button id="cpMode">mode: ∞ tiling</button>
+    <button id="cpLattice">lattice: ℤ[ζ₈] cut</button>
+    <label>finite-disc radius <span class="formula">R<sub>v</sub></span>: <strong id="cpBoundVal" class="key">5.0</strong></label>
+    <input type="range" id="cpBoundSlider" min="1.5" max="20" step="0.5" value="5">
+  </div>
+  <p class="small" style="color: var(--dim); margin: 0.2rem 0 0.8rem;">↕ drag the visible panel to pan, scroll to zoom · in <strong>∞ tiling</strong> mode the pattern continues forever · in <strong>finite disc</strong> mode it's clipped to a circle (so the edge count is exactly ν(P) for that point set)</p>
+  <div class="grid2" style="gap: 0.8rem;">
+    <div>
+      <div class="small" style="text-align: center; color: var(--dim); margin-bottom: 0.4rem; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.7rem;">σ₁ — visible plane (projected)</div>
+      <div class="canvas-wrap" style="aspect-ratio: 1; padding: 0;"><canvas id="cpVisible" width="600" height="600" style="cursor: grab; touch-action: none; width: 100%; height: 100%; display: block; border-radius: 4px;"></canvas></div>
+    </div>
+    <div>
+      <div class="small" style="text-align: center; color: var(--dim); margin-bottom: 0.4rem; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.7rem;">σ₂ — hidden coordinate (cut)</div>
+      <div class="canvas-wrap" style="aspect-ratio: 1; padding: 0;"><canvas id="cpHidden" width="600" height="600" style="width: 100%; height: 100%; display: block; border-radius: 4px;"></canvas></div>
+    </div>
+  </div>
+  <p class="small" style="margin-top: 1rem;"><strong>Reading the picture:</strong> Each <span class="formula">α ∈ ℤ[ζ<sub>8</sub>]</span> appears as a faint dot at <span class="formula">σ<sub>j</sub>(α)</span> in panel <em>j</em>. The dashed circle in the right panel is the cut window <span class="formula">|σ<sub>2</sub>(α)| ≤ R<sub>h</sub></span>. Points satisfying the cut are highlighted in both panels simultaneously — those are the lattice points that survive into the planar set. <span style="color: var(--accent3);">Orange edges</span> are the unit-distance edges between surviving points (differences equal to one of the eight <span class="formula">ζ<sub>8</sub><sup>k</sup></span>).</p>
+  <div id="cpStat" class="small" style="margin-top: 0.6rem; padding: 0.7rem 1rem; background: var(--panel2); border-radius: 3px; border-left: 2px solid var(--accent);"></div>
+</div>
+
+<p>Shrink <span class="formula">R<sub>h</sub></span> and the cut becomes selective: fewer lattice points survive into the visible plane, but those that do are arranged with the octagonal symmetry inherited from <span class="formula">Gal(ℚ(ζ<sub>8</sub>)/ℚ)</span>. Each interior vertex has up to <strong>eight</strong> unit-distance neighbors — twice the four of Erdős's square grid. This is the "improvement" at degree 4: the count of unit directions tracks the size of the unit group in <span class="formula">𝒪<sub>K</sub></span>.</p>
+
+<p>To get the asymptotic <span class="formula">n<sup>1+δ</sup></span> rather than just a doubled constant, you need <em>more directions than roots of unity provide</em>. The full construction adds S-units from marked split primes: for each rational prime <span class="formula">q<sub>b</sub> ≡ 1 (mod 8)</span> that splits completely in the tower, you get <span class="formula">~ 2<sup>tf<sub>j</sub></sup>/h(K<sub>j</sub>)</span> additional directions of the form <span class="formula">α/c̄(α)</span> with denominator dividing <span class="formula">q<sub>b</sub><sup>2</sup></span>. At <span class="formula">[F:ℚ] = 2</span> the smallest such prime is 17 and the gain is modest; the real win compounds as <span class="formula">f<sub>j</sub> → ∞</span> along the pro-3 tower over the cubic base field.</p>
+
+<h2 id="cot">Inside the model's thinking</h2>
+<p>The chain of thought rules out the natural approaches one by one before finding the working idea. A condensed reconstruction:</p>
+
+<div class="cot">
+  <span class="stage">Stage 1 — Skepticism</span>
+  "A loophole, if there is one, would have to lie in the quantifiers or in the formulation… The standard lattice construction only gives one fixed constant in the numerator, not arbitrarily large constants."
+</div>
+
+<div class="cot">
+  <span class="stage">Stage 2 — Failed amplifications</span>
+  Hypercubes give only <span class="formula">n log n</span>. Roots of unity give <span class="formula">log n · log log log n</span>. Powers of a single algebraic number give logarithmically many directions for exponential coefficient growth. <em>None of these easy constructions produces the arbitrarily large constant in the 1 + C/log log n exponent.</em>
+</div>
+
+<div class="cot">
+  <span class="stage">Stage 3 — Number-field intuition</span>
+  "Maybe that enormous degree is not just an annoyance but a source of possible counterexamples." The model considers Salem numbers, almost-totally-real fields, mixed-signature quadratic extensions, then the CM trick.
+</div>
+
+<div class="cot">
+  <span class="stage">Stage 4 — The mechanism</span>
+  "Suppose optimistically that K is a high-degree CM field in which a fixed rational prime p splits completely into principal prime ideals. Then the construction is frightening." This is the moment the model realizes the construction works. It then spends many pages verifying the class-number bound, the Golod–Shafarevich step, the packing estimate, and the projection.
+</div>
+
+<p>What the model never does: introduce a fundamentally new tool. The components — Golod–Shafarevich towers with prescribed splitting (Hajir–Maire–Ramakrishna), unramified class field towers, CM fields, geometry of numbers — have all been on the shelf for decades. The novelty is the assembly.</p>
+
+<h2 id="reactions">What the experts say</h2>
+
+<blockquote>
+"The new spectacular solution of the Erdős unit distance problem convinces me that it is hard to overestimate the full potential impact of this change."
+<span class="who">— Noga Alon</span>
+</blockquote>
+
+<blockquote>
+"We can unambiguously say that the AI has solved a $500 Erdős problem… For an AI to produce a solution to a problem of this calibre is both surprising and impressive."
+<span class="who">— Thomas Bloom</span>
+</blockquote>
+
+<blockquote>
+"If a human had written the paper and submitted it to the Annals of Mathematics and I had been asked for a quick opinion, I would have recommended acceptance without any hesitation. No previous AI-generated proof has come close to that."
+<span class="who">— W. T. Gowers</span>
+</blockquote>
+
+<blockquote>
+"It often produces the most surprising results by persevering down paths that a human may have dismissed as not worth their time to explore, combining superhuman levels of patience with familiarity with a vast array of technical machinery."
+<span class="who">— Thomas Bloom (on what AI does differently)</span>
+</blockquote>
+
+<blockquote>
+"This is a really impressive piece of work, and I would accept it for any journal without hesitation… It is definitely an intimidating construction to see through even if you know what is going on, and even harder to go play for yourself."
+<span class="who">— Jacob Tsimerman</span>
+</blockquote>
+
+<blockquote>
+"It is illuminating to contrast the most productive current approach to doing mathematics by AI to the way human mathematicians work. At any given time a human will, driven by their personal curiosity, choose a small number of questions and try to understand them deeply. By contrast, the best autonomous AI mathematics has been produced by trawling through entire problem lists."
+<span class="who">— Daniel Litt</span>
+</blockquote>
+
+<blockquote>
+"In many cases, it will be easier for AI to convince humans it has a proof than to come up with a correct mathematical argument, and I believe that we as mathematicians are not sufficiently prepared for this."
+<span class="who">— Melanie Matchett Wood</span>
+</blockquote>
+
+<h2>Coda</h2>
+<p>The new lower bound is <em>microscopic</em> — <span class="formula">δ ≈ 6.24 × 10<sup>−38</sup></span> is small enough that no telescope can see it. But it is positive and absolute, and that is enough. The conjecture said no constant works; the construction provides one. Erdős's <span class="formula">$500</span> problem is solved.</p>
+
+<p>What's left: distinct distances, the unit-distance problem in <span class="formula">ℝ³</span>, and the entire program of asking which other conjectures in discrete geometry hide arithmetic constructions inside them. Sawin's commentary lays out exactly why these adjacent problems are harder. The remarks paper closes:</p>
+
+<blockquote>
+"What other unseen wonders are waiting in the wings?"
+<span class="who">— Thomas Bloom</span>
+</blockquote>
+
+<div class="footer">
+  Built from <em>Planar Point Sets with Many Unit Distances</em> (OpenAI), the chain-of-thought document, and <em>Remarks on the Disproof of the Unit Distance Conjecture</em> (Alon–Bloom–Gowers–Litt–Sawin–Shankar–Tsimerman–Wang–Wood).
+</div>
+
+</div>
+
+<script>
+// ---------- Erdős grid ----------
+(function() {
+  const canvas = document.getElementById('erdosCanvas');
+  const ctx = canvas.getContext('2d');
+  const mSlider = document.getElementById('mSlider');
+  const mLabel = document.getElementById('mLabel');
+  const mPick = document.getElementById('mPick');
+  const repsEl = document.getElementById('reps');
+  const edgesEl = document.getElementById('edgesCount');
+
+  function dpr() { return Math.min(window.devicePixelRatio || 1, 2); }
+  function fitCanvas(c) {
+    const r = dpr();
+    const rect = c.getBoundingClientRect();
+    c.width = rect.width * r;
+    c.height = rect.height * r;
+    c.getContext('2d').setTransform(r, 0, 0, r, 0, 0);
+  }
+
+  // Find all (a,b) with a²+b² = m
+  function reps2(m) {
+    const out = [];
+    const lim = Math.ceil(Math.sqrt(m));
+    for (let a = -lim; a <= lim; a++) {
+      for (let b = -lim; b <= lim; b++) {
+        if (a*a + b*b === m) out.push([a,b]);
+      }
+    }
+    return out;
+  }
+
+  function draw() {
+    const m = parseInt(mSlider.value);
+    mLabel.textContent = m;
+    const rect = canvas.getBoundingClientRect();
+    const w = rect.width, h = rect.height;
+    ctx.clearRect(0, 0, w, h);
+
+    // Grid extent: choose grid radius based on m
+    const gridRad = Math.max(6, Math.ceil(Math.sqrt(m) + 3));
+    const cellSize = Math.min(w, h) / (2 * gridRad + 1);
+    const cx = w/2, cy = h/2;
+    const toX = (x) => cx + x * cellSize;
+    const toY = (y) => cy - y * cellSize;
+
+    // Draw the squared-radius circle
+    ctx.strokeStyle = '#d97a8a';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.arc(toX(0), toY(0), Math.sqrt(m) * cellSize, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Compute representations
+    const rs = reps2(m);
+    repsEl.textContent = rs.length;
+
+    // Draw edges between grid points differing by a representation vector
+    // Limit to about 2000 edges for performance
+    ctx.strokeStyle = 'rgba(240, 182, 107, 0.45)';
+    ctx.lineWidth = 0.6;
+    let edgeCount = 0;
+    const halfReps = rs.filter(([a,b]) => a > 0 || (a === 0 && b > 0));
+    const gpts = [];
+    for (let x = -gridRad; x <= gridRad; x++) {
+      for (let y = -gridRad; y <= gridRad; y++) {
+        gpts.push([x,y]);
+      }
+    }
+    outer: for (const [x,y] of gpts) {
+      for (const [a,b] of halfReps) {
+        const x2 = x+a, y2 = y+b;
+        if (Math.abs(x2) <= gridRad && Math.abs(y2) <= gridRad) {
+          ctx.beginPath();
+          ctx.moveTo(toX(x), toY(y));
+          ctx.lineTo(toX(x2), toY(y2));
+          ctx.stroke();
+          edgeCount++;
+          if (edgeCount > 4000) break outer;
+        }
+      }
+    }
+    edgesEl.textContent = edgeCount + (edgeCount > 4000 ? '+' : '');
+
+    // Draw grid points
+    ctx.fillStyle = '#e8e6df';
+    for (const [x,y] of gpts) {
+      ctx.beginPath();
+      ctx.arc(toX(x), toY(y), 1.6, 0, Math.PI*2);
+      ctx.fill();
+    }
+
+    // Highlight origin and one Pythagorean partner
+    ctx.fillStyle = '#f0b66b';
+    ctx.beginPath();
+    ctx.arc(toX(0), toY(0), 3.5, 0, Math.PI*2);
+    ctx.fill();
+  }
+
+  mSlider.addEventListener('input', draw);
+  mPick.addEventListener('click', () => {
+    // Find a nearby m with many representations
+    const m0 = parseInt(mSlider.value);
+    let best = m0, bestR = reps2(m0).length;
+    for (let d = 0; d < 50; d++) {
+      for (const sign of [1, -1]) {
+        const m = m0 + sign*d;
+        if (m < 1 || m > 200) continue;
+        const r = reps2(m).length;
+        if (r > bestR) { bestR = r; best = m; }
+      }
+    }
+    mSlider.value = best;
+    draw();
+  });
+
+  fitCanvas(canvas);
+  window.addEventListener('resize', () => { fitCanvas(canvas); draw(); });
+  draw();
+})();
+
+// ---------- Bounds chart ----------
+(function() {
+  const canvas = document.getElementById('boundsCanvas');
+  const ctx = canvas.getContext('2d');
+  function dpr() { return Math.min(window.devicePixelRatio || 1, 2); }
+  function fitCanvas(c) {
+    const r = dpr();
+    const rect = c.getBoundingClientRect();
+    c.width = rect.width * r;
+    c.height = rect.height * r;
+    c.getContext('2d').setTransform(r, 0, 0, r, 0, 0);
+  }
+
+  function draw() {
+    const rect = canvas.getBoundingClientRect();
+    const w = rect.width, h = rect.height;
+    ctx.clearRect(0,0,w,h);
+
+    // x = log10(n), from 2 to 12
+    // y = extra exponent f(n) in n^{1+f}
+    const pad = { l: 70, r: 30, t: 30, b: 50 };
+    const xMin = 2, xMax = 12;
+    const yMin = 0, yMax = 0.36;
+    const xToPx = (x) => pad.l + (x - xMin)/(xMax - xMin) * (w - pad.l - pad.r);
+    const yToPx = (y) => h - pad.b - (y - yMin)/(yMax - yMin) * (h - pad.t - pad.b);
+
+    // Axes
+    ctx.strokeStyle = '#2a2d36';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(pad.l, pad.t); ctx.lineTo(pad.l, h - pad.b); ctx.lineTo(w - pad.r, h - pad.b);
+    ctx.stroke();
+
+    // Gridlines + labels
+    ctx.fillStyle = '#8a8a93';
+    ctx.font = '11px "SF Mono", Menlo, monospace';
+    for (let x = xMin; x <= xMax; x += 2) {
+      const px = xToPx(x);
+      ctx.strokeStyle = '#1c1f28';
+      ctx.beginPath(); ctx.moveTo(px, pad.t); ctx.lineTo(px, h - pad.b); ctx.stroke();
+      ctx.fillStyle = '#8a8a93';
+      ctx.textAlign = 'center';
+      ctx.fillText('10^' + x, px, h - pad.b + 16);
+    }
+    ctx.textAlign = 'right';
+    for (let y = 0; y <= 0.35; y += 0.05) {
+      const py = yToPx(y);
+      ctx.strokeStyle = '#1c1f28';
+      ctx.beginPath(); ctx.moveTo(pad.l, py); ctx.lineTo(w - pad.r, py); ctx.stroke();
+      ctx.fillStyle = '#8a8a93';
+      ctx.fillText(y.toFixed(2), pad.l - 8, py + 4);
+    }
+
+    // Axis titles
+    ctx.fillStyle = '#e8e6df';
+    ctx.textAlign = 'center';
+    ctx.font = '13px "Iowan Old Style", Palatino, serif';
+    ctx.fillText('n  (log scale)', (pad.l + w - pad.r)/2, h - 12);
+    ctx.save();
+    ctx.translate(20, (pad.t + h - pad.b)/2);
+    ctx.rotate(-Math.PI/2);
+    ctx.fillText('extra exponent f(n) in n^(1+f)', 0, 0);
+    ctx.restore();
+
+    // SST upper bound: 1/3 (constant)
+    ctx.strokeStyle = '#6ec5d7';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(xToPx(xMin), yToPx(1/3));
+    ctx.lineTo(xToPx(xMax), yToPx(1/3));
+    ctx.stroke();
+    ctx.fillStyle = '#6ec5d7';
+    ctx.textAlign = 'left';
+    ctx.font = '12px "Iowan Old Style", serif';
+    ctx.fillText('SST upper bound: O(n^4/3)', xToPx(xMax) - 200, yToPx(1/3) - 8);
+
+    // Erdős lower bound c / log log n, c ≈ log 2
+    ctx.strokeStyle = '#f0b66b';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let x = xMin; x <= xMax; x += 0.05) {
+      const n = Math.pow(10, x);
+      const f = Math.log(2) / Math.log(Math.log(n));
+      const px = xToPx(x), py = yToPx(f);
+      if (x === xMin) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+    ctx.fillStyle = '#f0b66b';
+    ctx.fillText('Erdős grid: n^(1 + log 2 / log log n)', xToPx(7), yToPx(0.32));
+
+    // Conjectured n^{1+o(1)} envelope — region BELOW Erdős would be the conjecture
+    // shade the (now-refuted) conjecture region: y from Erdős down to 0
+    ctx.fillStyle = 'rgba(217, 122, 138, 0.08)';
+    ctx.beginPath();
+    ctx.moveTo(xToPx(xMin), yToPx(0));
+    for (let x = xMin; x <= xMax; x += 0.05) {
+      const n = Math.pow(10, x);
+      const f = Math.log(2) / Math.log(Math.log(n));
+      ctx.lineTo(xToPx(x), yToPx(f));
+    }
+    ctx.lineTo(xToPx(xMax), yToPx(0));
+    ctx.closePath();
+    ctx.fill();
+
+    // New lower bound: a horizontal line at small positive delta — render at visible height for clarity
+    const deltaVisible = 0.06;
+    ctx.strokeStyle = '#d97a8a';
+    ctx.lineWidth = 2.5;
+    ctx.setLineDash([6, 4]);
+    ctx.beginPath();
+    ctx.moveTo(xToPx(xMin), yToPx(deltaVisible));
+    ctx.lineTo(xToPx(xMax), yToPx(deltaVisible));
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#d97a8a';
+    ctx.fillText('NEW: n^(1+δ), δ > 0 fixed  (drawn for visibility)', xToPx(2.4), yToPx(deltaVisible) - 8);
+
+    // Annotate the gap
+    ctx.fillStyle = '#8a8a93';
+    ctx.font = '11px "Iowan Old Style", serif';
+    ctx.fillText('(previously believed: f(n) → 0)', xToPx(8.5), yToPx(0.01));
+
+    ctx.font = '11px "Iowan Old Style", serif';
+    ctx.fillStyle = '#8fc8a3';
+    ctx.fillText('open gap', xToPx(10.5), yToPx(0.20));
+  }
+
+  fitCanvas(canvas);
+  window.addEventListener('resize', () => { fitCanvas(canvas); draw(); });
+  draw();
+})();
+
+// ---------- Sign-ideal interactive ----------
+(function() {
+  const tSlider = document.getElementById('tSlider');
+  const fSlider = document.getElementById('fSlider');
+  const hSlider = document.getElementById('hSlider');
+  const tLabel = document.getElementById('tLabel');
+  const fLabel = document.getElementById('fLabel');
+  const hLabel = document.getElementById('hLabel');
+  const signsEl = document.getElementById('signs');
+  const classesEl = document.getElementById('classes');
+  const dirsEl = document.getElementById('dirs');
+
+  function fmt(logVal) {
+    // logVal is natural log
+    if (logVal < 0) logVal = 0;
+    if (logVal < 60) {
+      const v = Math.exp(logVal);
+      if (v < 1e6) return Math.round(v).toLocaleString();
+      return v.toExponential(2);
+    }
+    const log10 = logVal / Math.log(10);
+    return '10^' + log10.toFixed(1);
+  }
+
+  function update() {
+    const t = parseInt(tSlider.value);
+    const f = parseInt(fSlider.value);
+    const logH = parseFloat(hSlider.value);
+    tLabel.textContent = t;
+    fLabel.textContent = f;
+    hLabel.textContent = logH.toFixed(1);
+
+    const logSigns = t * f * Math.log(2);
+    const logClasses = f * logH;
+    const logDirs = Math.max(0, logSigns - logClasses);
+
+    signsEl.textContent = fmt(logSigns);
+    classesEl.textContent = fmt(logClasses);
+    dirsEl.textContent = fmt(logDirs);
+
+    // Color
+    const valid = (t * Math.log(2) - logH) > 0;
+    dirsEl.style.color = valid ? '#8fc8a3' : '#d97a8a';
+  }
+
+  tSlider.addEventListener('input', update);
+  fSlider.addEventListener('input', update);
+  hSlider.addEventListener('input', update);
+  update();
+})();
+
+// ---------- Cut-and-project: ℚ(ζ₈) with zoom & pan ----------
+(function () {
+  const cv = document.getElementById('cpVisible');
+  const ch = document.getElementById('cpHidden');
+  const slider = document.getElementById('cpSlider');
+  const label = document.getElementById('cpLabel');
+  const stat = document.getElementById('cpStat');
+  const toggle = document.getElementById('cpToggle');
+  const resetBtn = document.getElementById('cpReset');
+  const zoomLabel = document.getElementById('cpZoom');
+  const modeBtn = document.getElementById('cpMode');
+  const latticeBtn = document.getElementById('cpLattice');
+  const boundSlider = document.getElementById('cpBoundSlider');
+  const boundLabel = document.getElementById('cpBoundVal');
+  if (!cv || !ch) return;
+
+  function fitCanvas(c) {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const rect = c.getBoundingClientRect();
+    if (rect.width === 0) return;
+    c.width = Math.round(rect.width * dpr);
+    c.height = Math.round(rect.height * dpr);
+    c.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+
+  const s = Math.SQRT2 / 2;
+
+  // ℤ[ζ₈] element α = a + b·ζ₈ + c·ζ₈² + d·ζ₈³.
+  // Substitute u = d − b, v = d + b (so b = (v−u)/2, d = (u+v)/2; need u, v same parity).
+  // Then:
+  //   σ₁(α) = (a − s·u,  c + s·v)        ← visible
+  //   σ₂(α) = (a + s·u,  s·v − c)        ← hidden / cut
+  //
+  // This parametrisation makes enumeration of a viewport linear in its area
+  // (rather than quartic in coordinate bounds), so the pattern can tile to any zoom level.
+
+  // 8 unit-modulus directions: ζ₈^k, k = 0..7
+  const dirs = [
+    [1, 0, 0, 0],  [0, 1, 0, 0],  [0, 0, 1, 0],  [0, 0, 0, 1],
+    [-1, 0, 0, 0], [0, -1, 0, 0], [0, 0, -1, 0], [0, 0, 0, -1]
+  ];
+  const dirsErdos = [
+    [1, 0, 0, 0], [0, 0, 1, 0], [-1, 0, 0, 0], [0, 0, -1, 0]
+  ];
+
+  let showAll = true;
+  let mode = 'infinite';  // 'infinite' or 'bounded'
+  let lattice = 'z8';     // 'z8' (cut-and-project) or 'gauss' (Erdős grid)
+  let boundR = parseFloat(boundSlider.value);
+
+  // Viewport state in σ₁ coordinates
+  const DEFAULT = { cx: 0, cy: 0, r: 4.5 };
+  const view = { cx: 0, cy: 0, r: 4.5 };
+  const R_LIMIT = 60;
+
+  function keyOf(a, b, c, d) { return a + ',' + b + ',' + c + ',' + d; }
+
+  // enumerate(cx, cy, r, Rh, bound):
+  //   bound = null      → infinite mode, enumerate σ₁ ∈ viewport ([cx−r, cx+r] × [cy−r, cy+r])
+  //   bound = number    → finite-disc mode, enumerate σ₁ ∈ disc(0, bound) (independent of viewport)
+  function enumerate(cx, cy, r, Rh, bound) {
+    const margin = 1.2;
+    const rE = r + margin;
+
+    // σ₁ axis bounds (square superset of the relevant region)
+    let xLo, xHi, yLo, yHi;
+    if (bound != null) {
+      xLo = -bound; xHi = bound;
+      yLo = -bound; yHi = bound;
+    } else {
+      xLo = cx - rE; xHi = cx + rE;
+      yLo = cy - rE; yHi = cy + rE;
+    }
+    if (xLo > xHi || yLo > yHi) return [];
+
+    const inv2s = 1 / (2 * s);
+    const uMin = Math.ceil((-Rh - xHi) * inv2s);
+    const uMax = Math.floor((Rh - xLo) * inv2s);
+    const vMin = Math.ceil((yLo - Rh) * inv2s);
+    const vMax = Math.floor((yHi + Rh) * inv2s);
+
+    const out = [];
+    const bSq = bound != null ? bound * bound : 0;
+    const RhSq = Rh * Rh;
+
+    for (let u = uMin; u <= uMax; u++) {
+      const su = s * u;
+      let vStart = vMin;
+      if (((vStart + u) & 1) !== 0) vStart++;
+      for (let v = vStart; v <= vMax; v += 2) {
+        const sv = s * v;
+
+        const aMin = Math.max(Math.ceil(xLo + su), Math.ceil(-Rh - su));
+        const aMax = Math.min(Math.floor(xHi + su), Math.floor(Rh - su));
+        if (aMin > aMax) continue;
+
+        const cMin = Math.max(Math.ceil(yLo - sv), Math.ceil(sv - Rh));
+        const cMax = Math.min(Math.floor(yHi - sv), Math.floor(sv + Rh));
+        if (cMin > cMax) continue;
+
+        const b = (v - u) >> 1;
+        const d = (u + v) >> 1;
+
+        for (let a = aMin; a <= aMax; a++) {
+          const x = a - su;
+          const xp = a + su;
+          for (let c = cMin; c <= cMax; c++) {
+            const y = c + sv;
+            const yp = sv - c;
+            if (xp * xp + yp * yp > RhSq) continue;
+            if (bound != null && x * x + y * y > bSq) continue;
+            out.push({ a, b, c, d, x, y, xp, yp });
+          }
+        }
+      }
+    }
+    return out;
+  }
+
+  // Gaussian-integer enumeration (Erdős's ℤ[i] grid). No σ₂ coordinate.
+  function enumerateGauss(cx, cy, r, bound) {
+    const margin = 1.2;
+    const rE = r + margin;
+    const xLo = bound != null ? Math.max(cx - rE, -bound) : cx - rE;
+    const xHi = bound != null ? Math.min(cx + rE, bound) : cx + rE;
+    const yLo = bound != null ? Math.max(cy - rE, -bound) : cy - rE;
+    const yHi = bound != null ? Math.min(cy + rE, bound) : cy + rE;
+    if (xLo > xHi || yLo > yHi) return [];
+    const bSq = bound != null ? bound * bound : 0;
+    const out = [];
+    for (let a = Math.ceil(xLo); a <= Math.floor(xHi); a++) {
+      for (let c = Math.ceil(yLo); c <= Math.floor(yHi); c++) {
+        if (bound != null && a * a + c * c > bSq) continue;
+        // Coords: a = real part, c = imag part. b = d = 0. (xp, yp) irrelevant.
+        out.push({ a, b: 0, c, d: 0, x: a, y: c, xp: 0, yp: 0 });
+      }
+    }
+    return out;
+  }
+
+  function countEdges(pts, activeDirs) {
+    const map = new Map();
+    for (const p of pts) map.set(keyOf(p.a, p.b, p.c, p.d), p);
+    let n = 0;
+    for (const p of pts) {
+      for (const d of activeDirs) {
+        const sig = d[0] * 1000 + d[1] * 100 + d[2] * 10 + d[3];
+        if (sig <= 0) continue;
+        if (map.has(keyOf(p.a + d[0], p.b + d[1], p.c + d[2], p.d + d[3]))) n++;
+      }
+    }
+    return n;
+  }
+
+  let pending = false;
+  function scheduleDraw() {
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(() => { pending = false; draw(); });
+  }
+
+  function draw() {
+    fitCanvas(cv);
+    fitCanvas(ch);
+    const ctxV = cv.getContext('2d');
+    const ctxH = ch.getContext('2d');
+    const rectV = cv.getBoundingClientRect();
+    const rectH = ch.getBoundingClientRect();
+    if (rectV.width === 0 || rectH.width === 0) return;
+    ctxV.clearRect(0, 0, rectV.width, rectV.height);
+    ctxH.clearRect(0, 0, rectH.width, rectH.height);
+
+    const Rh = parseFloat(slider.value);
+    label.textContent = Rh.toFixed(2);
+
+    // Pick enumerator + directions for current lattice
+    const enumZ8 = (cx, cy, r, bnd) => enumerate(cx, cy, r, Rh, bnd);
+    const enumG  = (cx, cy, r, bnd) => enumerateGauss(cx, cy, r, bnd);
+
+    let pts, currentDirs;
+    if (lattice === 'z8') {
+      currentDirs = showAll ? dirs : dirsErdos;
+      if (mode === 'bounded') pts = enumZ8(0, 0, boundR, boundR);
+      else pts = enumZ8(view.cx, view.cy, view.r, null);
+    } else {
+      currentDirs = dirsErdos;
+      if (mode === 'bounded') pts = enumG(0, 0, boundR, boundR);
+      else pts = enumG(view.cx, view.cy, view.r, null);
+    }
+    const ptMap = new Map();
+    for (const p of pts) ptMap.set(keyOf(p.a, p.b, p.c, p.d), p);
+
+    const mV = Math.min(rectV.width, rectV.height) / 2 - 12;
+    const mH = Math.min(rectH.width, rectH.height) / 2 - 12;
+    const Rh_view = Math.max(4.6, Rh * 1.15);
+
+    function pxV(x, y) {
+      return [rectV.width / 2 + (x - view.cx) / view.r * mV,
+              rectV.height / 2 - (y - view.cy) / view.r * mV];
+    }
+    function pxH(x, y) {
+      return [rectH.width / 2 + x / Rh_view * mH,
+              rectH.height / 2 - y / Rh_view * mH];
+    }
+
+    // Light frame around visible panel
+    ctxV.strokeStyle = '#2a2d36';
+    ctxV.lineWidth = 1;
+    ctxV.strokeRect(0.5, 0.5, rectV.width - 1, rectV.height - 1);
+
+    // Scale-sensitive point radius
+    const ptRad = Math.max(1.2, Math.min(3.4, 3.0 / Math.sqrt(Math.max(view.r / DEFAULT.r, 0.5))));
+    const lineW = Math.max(0.45, Math.min(1.0, 1.6 / Math.sqrt(Math.max(view.r / DEFAULT.r, 0.5))));
+
+    // Draw edges first (so points appear on top)
+    const activeDirs = currentDirs;
+    ctxV.strokeStyle = 'rgba(217, 122, 138, 0.6)';
+    ctxV.lineWidth = lineW;
+    let edgeCount = 0;
+    for (const p of pts) {
+      const [x1, y1] = pxV(p.x, p.y);
+      for (const d of activeDirs) {
+        const sig = d[0] * 1000 + d[1] * 100 + d[2] * 10 + d[3];
+        if (sig <= 0) continue; // canonical ordering
+        const q = ptMap.get(keyOf(p.a + d[0], p.b + d[1], p.c + d[2], p.d + d[3]));
+        if (!q) continue;
+        const [x2, y2] = pxV(q.x, q.y);
+        // Clip: at least one endpoint in extended viewport
+        const W = rectV.width, H = rectV.height;
+        const visible = (x1 > -20 && x1 < W + 20 && y1 > -20 && y1 < H + 20)
+                     || (x2 > -20 && x2 < W + 20 && y2 > -20 && y2 < H + 20);
+        if (!visible) continue;
+        ctxV.beginPath();
+        ctxV.moveTo(x1, y1);
+        ctxV.lineTo(x2, y2);
+        ctxV.stroke();
+        edgeCount++;
+      }
+    }
+
+    // Visible panel points
+    ctxV.fillStyle = '#f0b66b';
+    let visCount = 0;
+    for (const p of pts) {
+      const [x, y] = pxV(p.x, p.y);
+      if (x < -2 || x > rectV.width + 2 || y < -2 || y > rectV.height + 2) continue;
+      ctxV.beginPath();
+      ctxV.arc(x, y, ptRad, 0, Math.PI * 2);
+      ctxV.fill();
+      visCount++;
+    }
+
+    if (lattice === 'z8') {
+      // Hidden panel: cut window
+      ctxH.strokeStyle = '#d97a8a';
+      ctxH.lineWidth = 1.8;
+      ctxH.setLineDash([6, 4]);
+      ctxH.beginPath();
+      ctxH.arc(rectH.width / 2, rectH.height / 2, Rh / Rh_view * mH, 0, Math.PI * 2);
+      ctxH.stroke();
+      ctxH.setLineDash([]);
+
+      // Hidden panel: σ₂ of all currently-enumerated points
+      ctxH.fillStyle = '#f0b66b';
+      for (const p of pts) {
+        const [x, y] = pxH(p.xp, p.yp);
+        if (x < -2 || x > rectH.width + 2 || y < -2 || y > rectH.height + 2) continue;
+        ctxH.beginPath();
+        ctxH.arc(x, y, 1.8, 0, Math.PI * 2);
+        ctxH.fill();
+      }
+
+      // Hidden label
+      ctxH.fillStyle = '#d97a8a';
+      ctxH.font = '11px "SF Mono", Menlo, monospace';
+      ctxH.textAlign = 'left';
+      ctxH.fillText('|σ₂(α)| ≤ ' + Rh.toFixed(2), 10, 18);
+    } else {
+      // Gauss mode: no hidden coordinate. Explanatory text.
+      ctxH.fillStyle = '#8a8a93';
+      ctxH.font = '13px "Iowan Old Style", Palatino, serif';
+      ctxH.textAlign = 'center';
+      const lines = [
+        'ℚ(i) has degree 2 over ℚ.',
+        'Its Minkowski embedding is ℂ¹.',
+        '',
+        'There is no hidden coordinate to cut —',
+        'the left panel is ℤ[i] directly.',
+        '',
+        'Each interior point has 4 unit',
+        'neighbors: ±1 and ±i.'
+      ];
+      const lh = 22;
+      let yT = rectH.height / 2 - (lines.length - 1) * lh / 2;
+      for (const line of lines) {
+        ctxH.fillText(line, rectH.width / 2, yT);
+        yT += lh;
+      }
+      ctxH.fillStyle = '#d97a8a';
+      ctxH.font = '11px "SF Mono", Menlo, monospace';
+      ctxH.textAlign = 'left';
+      ctxH.fillText('lattice: ℤ[i]', 10, 18);
+    }
+
+    // Center crosshair on visible panel
+    ctxV.strokeStyle = 'rgba(232, 230, 223, 0.10)';
+    ctxV.lineWidth = 1;
+    ctxV.beginPath();
+    ctxV.moveTo(rectV.width / 2 - 8, rectV.height / 2);
+    ctxV.lineTo(rectV.width / 2 + 8, rectV.height / 2);
+    ctxV.moveTo(rectV.width / 2, rectV.height / 2 - 8);
+    ctxV.lineTo(rectV.width / 2, rectV.height / 2 + 8);
+    ctxV.stroke();
+
+    // Bound circle on visible panel (only in bounded mode)
+    if (mode === 'bounded') {
+      const [bcx, bcy] = pxV(0, 0);
+      const bcr = boundR / view.r * mV;
+      ctxV.strokeStyle = '#d97a8a';
+      ctxV.lineWidth = 1.8;
+      ctxV.setLineDash([6, 4]);
+      ctxV.beginPath();
+      ctxV.arc(bcx, bcy, bcr, 0, Math.PI * 2);
+      ctxV.stroke();
+      ctxV.setLineDash([]);
+      // Label
+      ctxV.fillStyle = '#d97a8a';
+      ctxV.font = '11px "SF Mono", Menlo, monospace';
+      ctxV.textAlign = 'left';
+      ctxV.fillText('|σ₁(α)| ≤ ' + boundR.toFixed(1), 10, 18);
+    }
+
+    // Stats
+    const totalPts = pts.length;
+    const ratio = totalPts > 0 ? (edgeCount / totalPts) : 0;
+    const currentName = lattice === 'z8' ? 'ℤ[ζ₈] cut-and-project' : 'ℤ[i] grid (Erdős)';
+
+    function fmtRow(label, np, ne, isCurrent) {
+      const r = np > 0 ? (ne / np).toFixed(2) : '0';
+      const head = isCurrent
+        ? '<span style="color: var(--accent); font-weight: 600;">▸ ' + label + '</span>'
+        : '<span style="color: var(--dim);">  ' + label + '</span>';
+      return head +
+        '  |P|=<span style="color: var(--accent2)">' + np + '</span>' +
+        '  ν(P)=<span style="color: var(--accent3)">' + ne + '</span>' +
+        '  <span style="color: var(--accent2)">' + r + '</span> edges/vertex';
+    }
+
+    if (mode === 'bounded') {
+      // Compute the OTHER lattice's score at the same disc radius for comparison
+      let otherPts, otherDirs, otherName;
+      if (lattice === 'z8') {
+        otherPts = enumerateGauss(0, 0, boundR, boundR);
+        otherDirs = dirsErdos;
+        otherName = 'ℤ[i] grid (Erdős)';
+      } else {
+        otherPts = enumerate(0, 0, boundR, Rh, boundR);
+        otherDirs = showAll ? dirs : dirsErdos;
+        otherName = 'ℤ[ζ₈] cut-and-project';
+      }
+      const otherEdges = countEdges(otherPts, otherDirs);
+
+      stat.innerHTML =
+        '<div style="font-size: 0.78rem; color: var(--dim); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.4rem;">finite disc R<sub>v</sub> = ' + boundR.toFixed(1) +
+        (lattice === 'z8' ? ' · cut R<sub>h</sub> = ' + Rh.toFixed(2) : '') + '</div>' +
+        '<div style="font-family: \'SF Mono\', Menlo, monospace; font-size: 0.88rem;">' +
+        fmtRow(currentName, totalPts, edgeCount, true) + '<br>' +
+        fmtRow(otherName, otherPts.length, otherEdges, false) +
+        '</div>';
+    } else {
+      stat.innerHTML =
+        '<span style="color: var(--accent)">' + visCount + '</span> points in view · ' +
+        '<span style="color: var(--accent3)">' + edgeCount + '</span> unit-distance edges · ' +
+        '<span style="color: var(--accent2)">' + ratio.toFixed(2) + '</span> edges/vertex ' +
+        '<span style="color: var(--dim)">(' + currentName + ', ∞ tiling)</span>';
+    }
+
+    if (zoomLabel) {
+      const zoom = DEFAULT.r / view.r;
+      zoomLabel.textContent = 'zoom ' + (zoom >= 1 ? zoom.toFixed(2) : zoom.toFixed(3)) + '×';
+    }
+  }
+
+  // --- Pointer interaction (pan) ---
+  let dragging = false;
+  let lastX = 0, lastY = 0;
+
+  cv.addEventListener('pointerdown', (e) => {
+    dragging = true;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    cv.style.cursor = 'grabbing';
+    try { cv.setPointerCapture(e.pointerId); } catch (_) {}
+  });
+  cv.addEventListener('pointermove', (e) => {
+    if (!dragging) return;
+    const dx = e.clientX - lastX;
+    const dy = e.clientY - lastY;
+    lastX = e.clientX;
+    lastY = e.clientY;
+    const rect = cv.getBoundingClientRect();
+    const m = Math.min(rect.width, rect.height) / 2 - 12;
+    view.cx -= dx * view.r / m;
+    view.cy += dy * view.r / m; // pxV y inverted
+    scheduleDraw();
+  });
+  function endDrag(e) {
+    if (!dragging) return;
+    dragging = false;
+    cv.style.cursor = 'grab';
+    try { cv.releasePointerCapture(e.pointerId); } catch (_) {}
+  }
+  cv.addEventListener('pointerup', endDrag);
+  cv.addEventListener('pointercancel', endDrag);
+  cv.addEventListener('pointerleave', endDrag);
+
+  // --- Wheel zoom (centered on cursor) ---
+  cv.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    const rect = cv.getBoundingClientRect();
+    const m = Math.min(rect.width, rect.height) / 2 - 12;
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+
+    // World coords at cursor before zoom
+    const worldX = view.cx + (mx - rect.width / 2) * view.r / m;
+    const worldY = view.cy - (my - rect.height / 2) * view.r / m;
+
+    const factor = Math.exp(-e.deltaY * 0.0015);
+    const newR = Math.max(0.4, Math.min(R_LIMIT, view.r / factor));
+
+    // Adjust center so the cursor world-position stays fixed
+    view.cx = worldX - (mx - rect.width / 2) * newR / m;
+    view.cy = worldY + (my - rect.height / 2) * newR / m;
+    view.r = newR;
+    scheduleDraw();
+  }, { passive: false });
+
+  slider.addEventListener('input', scheduleDraw);
+  toggle.addEventListener('click', () => {
+    showAll = !showAll;
+    toggle.textContent = showAll ? 'show all 8 directions ✓' : 'show only ±1, ±i (Erdős-style)';
+    scheduleDraw();
+  });
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      view.cx = DEFAULT.cx;
+      view.cy = DEFAULT.cy;
+      view.r = DEFAULT.r;
+      scheduleDraw();
+    });
+  }
+  if (modeBtn) {
+    modeBtn.addEventListener('click', () => {
+      mode = (mode === 'infinite') ? 'bounded' : 'infinite';
+      modeBtn.textContent = (mode === 'infinite') ? 'mode: ∞ tiling' : 'mode: finite disc';
+      // When switching to bounded, frame the disc nicely
+      if (mode === 'bounded') {
+        view.cx = 0; view.cy = 0;
+        view.r = Math.max(boundR * 1.15, DEFAULT.r);
+      }
+      scheduleDraw();
+    });
+  }
+  if (latticeBtn) {
+    latticeBtn.addEventListener('click', () => {
+      lattice = (lattice === 'z8') ? 'gauss' : 'z8';
+      latticeBtn.textContent = (lattice === 'z8') ? 'lattice: ℤ[ζ₈] cut' : 'lattice: ℤ[i] grid';
+      scheduleDraw();
+    });
+  }
+  if (boundSlider) {
+    boundSlider.addEventListener('input', () => {
+      boundR = parseFloat(boundSlider.value);
+      boundLabel.textContent = boundR.toFixed(1);
+      if (mode === 'bounded') scheduleDraw();
+    });
+  }
+
+  window.addEventListener('resize', scheduleDraw);
+  scheduleDraw();
+})();
+</script>
+
+</body>
+</html>
