@@ -1,0 +1,11 @@
+{
+  "name": "quadext-lean-comparison",
+  "created": 1780678255,
+  "last_used": 1780678316,
+  "items": [
+    "dts_nonneg_fuel",
+    "dts_nonneg",
+    "lemma_dts_nonneg_add_closed_fuel",
+    "lemma_dts_nonneg_add_remaining"
+  ]
+}

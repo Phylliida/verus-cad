@@ -162,3 +162,24 @@
 [submodule "tactus-tutorial"]
 	path = tactus-tutorial
 	url = https://github.com/Phylliida/tactus-tutorial.git
+[submodule "synthetic-sylvaculture"]
+	path = synthetic-sylvaculture
+	url = https://github.com/Phylliida/synthetic-sylvaculture.git
+[submodule "vscode-tactus-lean4"]
+	path = vscode-tactus-lean4
+	url = https://github.com/Phylliida/vscode-tactus-lean4.git
+[submodule "lean-quadratic-extension"]
+	path = lean-quadratic-extension
+	url = https://github.com/Phylliida/lean-quadratic-extension.git
+[submodule "ai-fortress"]
+	path = ai-fortress
+	url = https://github.com/Phylliida/ai-fortress.git
+[submodule "llama.cpp"]
+	path = llama.cpp
+	url = https://github.com/ggml-org/llama.cpp.git
+[submodule "tactus-group-theory"]
+	path = tactus-group-theory
+	url = https://github.com/Phylliida/tactus-group-theory.git
+[submodule "tactus-computability-theory"]
+	path = tactus-computability-theory
+	url = https://github.com/Phylliida/tactus-computability-theory.git
