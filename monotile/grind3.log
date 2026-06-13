@@ -1,0 +1,63 @@
+[19:14:24] lex-leader: 8676 clauses for 47 symmetries
+[19:14:24] frontier CNF: 666020 clauses, 4929 vars, 33 patterns (256 conjugates), build 1s
+[19:14:24] 1024 cubes on split vars [4, 13, 22, 31, 40, 49, 0, 2, 6, 8], 24 workers
+[19:14:24] round 1: 1024 cubes, budget 3,000,000 conflicts
+[19:14:25]   round 1: 100/1024 done, 100 unsat, 0 deferred, 1s
+[19:18:56] lex-leader: 8676 clauses for 47 symmetries
+[19:18:56] frontier CNF: 666020 clauses, 4929 vars, 33 patterns (256 conjugates), build 1s
+[19:18:56] 1024 cubes on [4, 13, 22, 31, 40, 49, 0, 2, 6, 8], extension pool 44 vars, 40 workers
+[19:18:57] depth 0: 1024 cubes, budget 200,000
+[19:18:59]   depth 0: 200/1024 done, 200 unsat, 0 deferred, 2s
+[19:20:17]   depth 0: 400/1024 done, 379 unsat, 21 deferred, 80s
+[19:21:27]   depth 0: 600/1024 done, 543 unsat, 57 deferred, 150s
+[19:22:32]   depth 0: 800/1024 done, 712 unsat, 88 deferred, 215s
+[19:23:55]   depth 0: 1000/1024 done, 864 unsat, 136 deferred, 299s
+[19:24:07]   depth 0: 1024/1024 done, 864 unsat, 160 deferred, 310s
+[19:24:07] depth 1: 2560 cubes, budget 600,000
+[19:29:15] lex-leader: 8676 clauses
+[19:29:15] frontier CNF: 666020 clauses, 4929 vars, 33 patterns, build 1s
+[19:29:20] preprocess: 666020 -> 656825 clauses [5s]
+[19:29:21] 1024 cubes on [4, 13, 22, 31, 40, 49, 0, 2, 6, 8], ext pool 44, 36 workers (Cadical/Glucose42 by pid)
+[19:29:22] depth 0: 1024 cubes, budget 200,000
+[19:29:47]   depth 0: 200/1024 done, 198 unsat, 2 deferred, 26s
+[19:30:22]   depth 0: 400/1024 done, 375 unsat, 25 deferred, 60s
+[19:31:00]   depth 0: 600/1024 done, 539 unsat, 61 deferred, 98s
+[19:31:50]   depth 0: 800/1024 done, 709 unsat, 91 deferred, 148s
+[19:32:56]   depth 0: 1000/1024 done, 864 unsat, 136 deferred, 214s
+[19:33:12]   depth 0: 1024/1024 done, 864 unsat, 160 deferred, 230s
+[19:33:12] depth 1: 2560 cubes, budget 600,000
+[19:37:00]   depth 1: 200/2560 done, 198 unsat, 2 deferred, 228s
+[19:40:23]   depth 1: 400/2560 done, 390 unsat, 10 deferred, 431s
+[19:44:25]   depth 1: 600/2560 done, 590 unsat, 10 deferred, 673s
+[19:49:07]   depth 1: 800/2560 done, 782 unsat, 18 deferred, 955s
+[19:53:13]   depth 1: 1000/2560 done, 977 unsat, 23 deferred, 1201s
+[19:58:07]   depth 1: 1200/2560 done, 1170 unsat, 30 deferred, 1495s
+[20:02:47]   depth 1: 1400/2560 done, 1365 unsat, 35 deferred, 1775s
+[20:07:10]   depth 1: 1600/2560 done, 1559 unsat, 41 deferred, 2038s
+[20:11:02]   depth 1: 1800/2560 done, 1756 unsat, 44 deferred, 2270s
+[20:15:26]   depth 1: 2000/2560 done, 1953 unsat, 47 deferred, 2534s
+[20:21:00]   depth 1: 2200/2560 done, 2151 unsat, 49 deferred, 2868s
+[20:27:09]   depth 1: 2400/2560 done, 2343 unsat, 57 deferred, 3237s
+[20:33:02]   depth 1: 2560/2560 done, 2495 unsat, 65 deferred, 3590s
+[20:33:02] depth 2: 1040 cubes, budget 2,000,000
+[20:35:42]   depth 2: 200/1040 done, 200 unsat, 0 deferred, 160s
+[20:42:44]   depth 2: 400/1040 done, 400 unsat, 0 deferred, 581s
+[20:48:19]   depth 2: 600/1040 done, 600 unsat, 0 deferred, 917s
+[20:56:18]   depth 2: 800/1040 done, 800 unsat, 0 deferred, 1396s
+[21:08:44]   depth 2: 1000/1040 done, 998 unsat, 2 deferred, 2141s
+[21:25:55]   depth 2: 1040/1040 done, 1020 unsat, 20 deferred, 3172s
+[21:25:55] depth 3: 320 cubes, budget 6,000,000
+[21:26:32]   depth 3: 200/320 done, 200 unsat, 0 deferred, 37s
+[23:14:42]   depth 3: 320/320 done, 300 unsat, 20 deferred, 6528s
+[23:14:42] depth 4: 320 cubes, budget 20,000,000
+[23:15:30]   depth 4: 200/320 done, 200 unsat, 0 deferred, 47s
+[04:22:35]   depth 4: 320/320 done, 320 unsat, 0 deferred, 18473s
+[04:22:36] ERROR: cubes left after final wave?!
+[post-hoc 2026-06-10 verification] The 04:22:36 ERROR line is an
+inverted end-guard (fixed in cube_conquer3.py): the loop exited via
+the zero-deferred break, leaving the stale wave list non-empty. The
+actual result, per the depth records above and grind3_results.jsonl
+(0 SAT events): depth-4 finished 320/320 UNSAT, 0 deferred ==
+ALL CUBES UNSAT. Every balanced K=3 binary cube tiling a 4^3 box
+realizes a blocked periodic pattern. With Lemma A: NO STRONGLY
+APERIODIC K=3 BINARY WANG CUBE EXISTS. ARENA 2 CLOSED.

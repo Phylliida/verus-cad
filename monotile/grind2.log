@@ -1,0 +1,9 @@
+[19:00:32] [cadical] building synth, library: 33 patterns / 256 conjugates, 0 points
+[19:01:53] [cadical] absorbed 30 cached kills in 79s -- starting unbounded grind
+[03:50:50] [cadical] =======================================================
+[03:50:50] [cadical] SYNTHESIZER UNSAT after 80.82h:
+[03:50:50] [cadical] every balanced K=3 binary cube tiling a 4^3 box
+[03:50:50] [cadical] realizes a blocked periodic pattern. With Lemma A:
+[03:50:50] [cadical] NO STRONGLY APERIODIC K=3 BINARY WANG CUBE EXISTS.
+[03:50:50] [cadical] ARENA 2 CLOSED.
+[03:50:50] [cadical] =======================================================

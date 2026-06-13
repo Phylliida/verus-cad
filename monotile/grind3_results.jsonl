@@ -1,0 +1,10 @@
+{"depth": 0, "cubes": 64, "unsat": 56, "deferred": 8, "secs": 5.9}
+{"depth": 0, "cubes": 1024, "unsat": 864, "deferred": 160, "secs": 309.8}
+{"depth": 0, "cubes": 64, "unsat": 0, "deferred": 64, "secs": 70.3}
+{"depth": 0, "cubes": 64, "unsat": 56, "deferred": 8, "secs": 21.2}
+{"depth": 0, "cubes": 1024, "unsat": 864, "deferred": 160, "secs": 230.2}
+{"depth": 1, "cubes": 2560, "unsat": 2495, "deferred": 65, "secs": 3590.3}
+{"depth": 2, "cubes": 1040, "unsat": 1020, "deferred": 20, "secs": 3172.2}
+{"depth": 3, "cubes": 320, "unsat": 300, "deferred": 20, "secs": 6527.6}
+{"depth": 4, "cubes": 320, "unsat": 320, "deferred": 0, "secs": 18473.1}
+{"event": "UNSAT-ALL-CUBES", "verified_posthoc": "2026-06-10, inverted end-guard; 0 SAT events, depth4 320/320 unsat 0 deferred", "total_unsat_by_depth": [864, 2495, 1020, 300, 320]}
