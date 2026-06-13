@@ -183,3 +183,6 @@
 [submodule "tactus-computability-theory"]
 	path = tactus-computability-theory
 	url = https://github.com/Phylliida/tactus-computability-theory.git
+[submodule "mandelbrot"]
+	path = mandelbrot
+	url = https://github.com/Phylliida/mandelbrot.git
