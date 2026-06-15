@@ -24,9 +24,29 @@ import sys
 import time
 from multiprocessing import Pool
 
+import ast
+
 from arena2 import PATTERN_FILE
 from saturate import enumerate_class, conjugates, stamp
 from skew import lattice_classes
+
+DONE_FILE = "saturation_done.txt"   # checkpoint: one completed-class
+                                    # B-repr per line, appended live, so
+                                    # a multi-week run survives reboots
+
+
+def load_done():
+    done = set()
+    try:
+        with open(DONE_FILE) as fh:
+            for line in fh:
+                line = line.strip()
+                if line:
+                    done.add(tuple(tuple(r) for r in
+                                   ast.literal_eval(line)))
+    except FileNotFoundError:
+        pass
+    return done
 
 WLOG = None
 
@@ -59,14 +79,38 @@ def main():
     blocked = set()
     for S in existing:
         blocked.update(conjugates(S))
-    classes = sorted((B for B in lattice_classes(max_index)
-                      if B[0][0] * B[1][1] * B[2][2] > min_index),
-                     key=lambda B: B[0][0] * B[1][1] * B[2][2])
+    # resume robustness: also pre-block every pattern ever emitted to
+    # the results log, so a novel pattern found before a crash (not yet
+    # merged into PATTERN_FILE) is not re-derived and stays blocked for
+    # later classes' completeness
+    nseed = 0
+    try:
+        with open("saturation_results.jsonl") as fh:
+            for line in fh:
+                rec = json.loads(line)
+                if "pattern" in rec:
+                    S = frozenset((min(p, q), max(p, q))
+                                  for p, q in rec["pattern"])
+                    if not any(c in blocked for c in conjugates(S)):
+                        nseed += 1
+                    blocked.update(conjugates(S))
+    except FileNotFoundError:
+        pass
+    if nseed:
+        print(f"[{stamp()}] resume: seeded {nseed} extra patterns from "
+              f"results log", flush=True)
+    done = load_done()
+    all_classes = sorted((B for B in lattice_classes(max_index)
+                          if B[0][0] * B[1][1] * B[2][2] > min_index),
+                         key=lambda B: B[0][0] * B[1][1] * B[2][2])
+    classes = [B for B in all_classes if B not in done]
     print(f"[{stamp()}] parallel saturation to {max_index} "
-          f"(skipping <= {min_index}): {len(classes)} classes, "
+          f"(skipping <= {min_index}): {len(all_classes)} classes, "
+          f"{len(done)} already done (resumed), {len(classes)} to do, "
           f"{workers} workers, {len(existing)} patterns pre-blocked",
           flush=True)
 
+    donef = open(DONE_FILE, "a")
     all_novel = []
     incomplete = []
     ndone = 0
@@ -85,7 +129,12 @@ def main():
                     if not any(Sg in blocked for Sg in conjugates(S)):
                         all_novel.append(S)
                     blocked.update(conjugates(S))
-                if not complete:
+                if complete:
+                    # checkpoint: only COMPLETE classes are skippable on
+                    # resume; CAPPED ones must be retried
+                    donef.write(repr(B) + "\n")
+                    donef.flush()
+                else:
                     incomplete.append(B)
                 print(f"[{stamp()}] class {ndone}/{len(classes)} {B} "
                       f"idx {ix}: {len(novel)} novel, "
