@@ -189,3 +189,6 @@
 [submodule "tactus-leafgen"]
 	path = tactus-leafgen
 	url = https://github.com/Phylliida/tactus-leafgen.git
+[submodule "anki"]
+	path = anki
+	url = https://github.com/Phylliida/anki.git
