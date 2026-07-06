@@ -192,3 +192,12 @@
 [submodule "anki"]
 	path = anki
 	url = https://github.com/Phylliida/anki.git
+[submodule "material-synthesis"]
+	path = material-synthesis
+	url = https://github.com/Phylliida/material-synthesis.git
+[submodule "fractal"]
+	path = fractal
+	url = https://github.com/Phylliida/fractal.git
+[submodule "hashtorio"]
+	path = hashtorio
+	url = https://github.com/Phylliida/hashtorio.git

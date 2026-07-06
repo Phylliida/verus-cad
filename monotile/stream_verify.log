@@ -1,0 +1,83 @@
+[10:26:43] ok=25 solved=0 skip=23 freed=0G  df=89G
+[10:29:53] ok=50 solved=0 skip=23 freed=2G  df=90G
+[10:34:38] ok=75 solved=0 skip=23 freed=4G  df=93G
+[10:38:45] ok=100 solved=0 skip=23 freed=6G  df=95G
+[10:41:12] ok=125 solved=0 skip=23 freed=7G  df=96G
+[10:44:43] ok=150 solved=0 skip=23 freed=8G  df=97G
+[10:49:05] ok=175 solved=0 skip=23 freed=10G  df=99G
+[10:52:29] ok=200 solved=0 skip=23 freed=12G  df=101G
+[10:55:06] ok=225 solved=0 skip=23 freed=13G  df=102G
+[10:59:29] ok=250 solved=0 skip=23 freed=15G  df=104G
+[11:03:32] ok=275 solved=0 skip=23 freed=17G  df=106G
+[11:06:01] ok=300 solved=0 skip=23 freed=18G  df=107G
+[11:10:08] ok=325 solved=0 skip=23 freed=20G  df=108G
+[11:14:21] ok=350 solved=0 skip=23 freed=22G  df=110G
+[11:17:51] ok=375 solved=0 skip=23 freed=23G  df=112G
+[11:22:02] ok=400 solved=0 skip=23 freed=25G  df=114G
+[11:25:21] ok=425 solved=0 skip=23 freed=27G  df=115G
+[11:28:34] ok=450 solved=0 skip=23 freed=28G  df=117G
+[11:32:54] ok=475 solved=0 skip=23 freed=30G  df=119G
+[11:36:06] ok=500 solved=0 skip=23 freed=32G  df=120G
+[11:39:37] ok=525 solved=0 skip=23 freed=33G  df=122G
+[11:43:25] ok=550 solved=0 skip=23 freed=35G  df=124G
+[11:47:14] ok=575 solved=0 skip=23 freed=37G  df=126G
+[11:49:53] ok=600 solved=0 skip=23 freed=38G  df=127G
+[11:54:16] ok=625 solved=0 skip=23 freed=40G  df=129G
+[11:57:34] ok=650 solved=0 skip=23 freed=42G  df=130G
+[12:00:45] ok=675 solved=0 skip=23 freed=43G  df=132G
+[12:04:54] ok=700 solved=0 skip=23 freed=45G  df=134G
+[12:08:54] ok=725 solved=0 skip=23 freed=47G  df=136G
+[12:12:54] ok=750 solved=0 skip=23 freed=49G  df=137G
+[12:16:49] ok=775 solved=0 skip=23 freed=51G  df=139G
+[12:20:32] ok=800 solved=0 skip=23 freed=52G  df=141G
+[12:23:06] ok=825 solved=0 skip=23 freed=53G  df=142G
+[12:27:22] ok=850 solved=0 skip=23 freed=55G  df=144G
+[12:30:19] ok=875 solved=0 skip=23 freed=57G  df=145G
+[12:34:05] ok=900 solved=0 skip=23 freed=58G  df=147G
+[12:37:48] ok=925 solved=0 skip=23 freed=60G  df=149G
+FAIL e51e9e5d398905c7 d=18: 
+[12:41:56] ok=950 solved=0 skip=23 freed=62G  df=151G
+RESOLVE e51e9e5d398905c7 d=18: cake_lpr rejected cert (); re-solving
+HARD FAIL e51e9e5d398905c7 d=18: freshly re-solved cert ALSO rejected -- STOPPING
+RESOLVE e51e9e5d398905c7 d=18: cake_lpr rejected existing cert; re-solving
+SPLIT e51e9e5d398905c7 d=18: hard cube (cadical timeout at 60s), splitting
+SPLIT d2819b97a7c08adf d=19: hard cube (cadical timeout at 60s), splitting
+SPLIT d83a2219cf84ad40 d=20: hard cube (cadical timeout at 60s), splitting
+SPLIT 85cdfaa8fc8c1181 d=21: hard cube (cadical timeout at 60s), splitting
+SPLIT 44dc5634c43f5c2e d=22: hard cube (cadical timeout at 60s), splitting
+SPLIT 7db1c7d2c5628320 d=23: hard cube (cadical timeout at 60s), splitting
+SPLIT 59bf3ed38f8d4d57 d=24: hard cube (cadical timeout at 60s), splitting
+SPLIT 0dc76c544a73fc2a d=25: hard cube (cadical timeout at 60s), splitting
+SPLIT bd4a546ff554a804 d=26: hard cube (cadical timeout at 60s), splitting
+SPLIT 49ca9cb3741f7b6a d=27: hard cube (cadical timeout at 60s), splitting
+SPLIT 6106828261bfb7b4 d=28: hard cube (cadical timeout at 60s), splitting
+SPLIT a42764aa92225c7d d=29: hard cube (cadical timeout at 60s), splitting
+SPLIT efca0469226498ea d=30: hard cube (cadical timeout at 60s), splitting
+SPLIT 6a0088e5590e5c22 d=31: hard cube (cadical timeout at 60s), splitting
+SPLIT 167aa16b04b43719 d=32: hard cube (cadical timeout at 60s), splitting
+SPLIT 7ef01926c7777c0b d=33: hard cube (cadical timeout at 60s), splitting
+SPLIT 77cde420184c404f d=34: hard cube (cadical timeout at 60s), splitting
+SPLIT aa9b9cd83b95b6d0 d=33: hard cube (cadical timeout at 60s), splitting
+SPLIT e651e5218bf403bc d=34: hard cube (cadical timeout at 60s), splitting
+[13:29:31] ok=5 solved=20 resolved=0 skip=985 freed=1G df=151G
+[13:32:13] ok=30 solved=20 resolved=0 skip=985 freed=2G df=152G
+[13:36:19] ok=55 solved=20 resolved=0 skip=985 freed=4G df=154G
+[13:39:51] ok=80 solved=20 resolved=0 skip=985 freed=5G df=156G
+[13:43:44] ok=105 solved=20 resolved=0 skip=985 freed=7G df=158G
+[13:46:16] ok=130 solved=20 resolved=0 skip=985 freed=8G df=159G
+[13:49:49] ok=155 solved=20 resolved=0 skip=985 freed=10G df=160G
+[13:54:13] ok=180 solved=20 resolved=0 skip=985 freed=12G df=162G
+[13:57:03] ok=205 solved=20 resolved=0 skip=985 freed=13G df=163G
+[14:00:59] ok=230 solved=20 resolved=0 skip=985 freed=14G df=165G
+[14:05:19] ok=255 solved=20 resolved=0 skip=985 freed=17G df=167G
+[14:07:33] ok=280 solved=20 resolved=0 skip=985 freed=17G df=168G
+[14:11:58] ok=305 solved=20 resolved=0 skip=985 freed=19G df=170G
+[14:16:11] ok=330 solved=20 resolved=0 skip=985 freed=21G df=172G
+[14:18:44] ok=355 solved=20 resolved=0 skip=985 freed=22G df=173G
+[14:22:39] ok=380 solved=20 resolved=0 skip=985 freed=24G df=175G
+[14:26:45] ok=405 solved=20 resolved=0 skip=985 freed=26G df=176G
+[14:30:12] ok=430 solved=20 resolved=0 skip=985 freed=27G df=178G
+
+== DONE ok=452 solved=20 resolved=0 skip=985 in 5284s; freed 28G; df=178G ==
+== COVER: COMPLETE - 1457 leaves cover all assignments ==
+== manifest: 1457 leaf cubes, all cake_lpr-VERIFIED UNSAT ==
