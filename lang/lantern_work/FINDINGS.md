@@ -240,6 +240,34 @@ cross-valley broadcast), in a REGISTER (intimate `5R1` vs public
 whispered litanies, on a five-night ceremonial week with fixed offices,
 verbatim reruns, and hand-me-down program slots.
 
+## Part 7: Statistical cleanup — what survived scrutiny
+
+- **Demoted: productive case morphology.** Departure farewells do NOT
+  inflect the speaker's own stem (4.8% match vs 4.5% null, p=0.62):
+  speakers whose whole night is 5-stems part with `8i`/`9i` — the same
+  two words that fill the whisper-litanies. So the i-series is a small
+  fixed vocabulary of parting words, not an inflection that applies to
+  arbitrary stems. Likewise the D-series is entangled with house-style
+  (F renders four as `4D` 82% — its habitual voice), though the
+  contextual evidence for D-as-summons (day-0 concentration; F's 2010
+  `7D` season for a member last farewelled in 2005) still stands.
+- **Confirmed: farewell-speech predicts disappearance.** Cluster-year
+  i-share vs labeled-beacon attrition (never seen in any later year):
+  Spearman rho = 0.298, n = 19, permutation p ≈ 0.012. Top of the
+  table: F-2005 (5703's dying season) and **A-2014 at 20.8% i-share
+  with 100% attrition — the pair's last year at home was spent in
+  parting words.** (Caveat: attrition is censored by observation gaps
+  and record end; direction and case-studies align.)
+- **Inconclusive, honestly:** the parting number as a promised absence
+  duration ("back in seven") — one exact hit (a 12 followed by 12
+  nights away) and one near (7 → 6 nights) against several misses,
+  n≈11. Not established. `2+3`'s specific meaning: unresolved (a
+  southern (V/S) five-form; rare).
+- **The free slot:** nights 19/24 match office-nights on every metric
+  (vocabulary sharing, dialogue rate, participation) — they are simply
+  unscripted. The lantern week = four nights of fixed offices + one
+  night of ordinary conversation.
+
 ## Open questions
 - Exact referents of individual songs (which families, what occasions).
 - Whether the N-041/42 closer's s2/s4 count patterns carry additional
