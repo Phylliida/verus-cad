@@ -1,0 +1,3984 @@
+{
+ "lexicon": {
+  "remaka": {
+   "pos": "NOUN",
+   "stem": "rema",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "ros": {
+   "pos": "PART",
+   "stem": "ros",
+   "suffixes": []
+  },
+  "tovo": {
+   "pos": "ADJ",
+   "stem": "tovo",
+   "suffixes": []
+  },
+  "ratezasu": {
+   "pos": "NOUN",
+   "stem": "rateza",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "nu": {
+   "pos": "DEM",
+   "stem": "nu",
+   "suffixes": []
+  },
+  "lerone": {
+   "pos": "NOUN",
+   "stem": "lero",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "milatuhiku": {
+   "pos": "VERB",
+   "stem": "milatu",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "loros": {
+   "pos": "TEMP",
+   "stem": "loros",
+   "suffixes": []
+  },
+  "ketur": {
+   "pos": "NOUN",
+   "stem": "ketur",
+   "suffixes": []
+  },
+  "perlu": {
+   "pos": "ADJ",
+   "stem": "perlu",
+   "suffixes": []
+  },
+  "mavonesu": {
+   "pos": "NOUN",
+   "stem": "mavo",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "nepiroku": {
+   "pos": "VERB",
+   "stem": "nepi",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "nosa": {
+   "pos": "NOUN",
+   "stem": "nosa",
+   "suffixes": []
+  },
+  "vilahi": {
+   "pos": "VERB",
+   "stem": "vila",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "rakon": {
+   "pos": "NUM",
+   "stem": "rakon",
+   "suffixes": []
+  },
+  "nukamirka": {
+   "pos": "NOUN",
+   "stem": "nukamir",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "kotur": {
+   "pos": "NOUN",
+   "stem": "kotur",
+   "suffixes": []
+  },
+  "milaturo": {
+   "pos": "VERB",
+   "stem": "milatu",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "lela": {
+   "pos": "TEMP",
+   "stem": "lela",
+   "suffixes": []
+  },
+  "taser": {
+   "pos": "NUM",
+   "stem": "taser",
+   "suffixes": []
+  },
+  "larnu": {
+   "pos": "NOUN",
+   "stem": "larnu",
+   "suffixes": []
+  },
+  "tetasu": {
+   "pos": "NOUN",
+   "stem": "teta",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "vilahiku": {
+   "pos": "VERB",
+   "stem": "vila",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "mavezoroku": {
+   "pos": "VERB",
+   "stem": "mavezo",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "piri": {
+   "pos": "NUM",
+   "stem": "piri",
+   "suffixes": []
+  },
+  "zola": {
+   "pos": "NOUN",
+   "stem": "zola",
+   "suffixes": []
+  },
+  "tisraro": {
+   "pos": "VERB",
+   "stem": "tisra",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "ratezaka": {
+   "pos": "NOUN",
+   "stem": "rateza",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "tilasu": {
+   "pos": "NOUN",
+   "stem": "tila",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "kupone": {
+   "pos": "NOUN",
+   "stem": "kupo",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "salunro": {
+   "pos": "VERB",
+   "stem": "salun",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "monla": {
+   "pos": "TEMP",
+   "stem": "monla",
+   "suffixes": []
+  },
+  "kanesika": {
+   "pos": "NAME",
+   "stem": "kanesi",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "vesrane": {
+   "pos": "NOUN",
+   "stem": "vesra",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "nomaroku": {
+   "pos": "VERB",
+   "stem": "noma",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "ro": {
+   "pos": "NUM",
+   "stem": "ro",
+   "suffixes": []
+  },
+  "tarze": {
+   "pos": "ADJ",
+   "stem": "tarze",
+   "suffixes": []
+  },
+  "tilane": {
+   "pos": "NOUN",
+   "stem": "tila",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "kuzazenhi": {
+   "pos": "VERB",
+   "stem": "kuzazen",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "korinesu": {
+   "pos": "NOUN",
+   "stem": "kori",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "numuroku": {
+   "pos": "VERB",
+   "stem": "numu",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "nukamir": {
+   "pos": "NOUN",
+   "stem": "nukamir",
+   "suffixes": []
+  },
+  "mo": {
+   "pos": "PART",
+   "stem": "mo",
+   "suffixes": []
+  },
+  "nepiro": {
+   "pos": "VERB",
+   "stem": "nepi",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "pennonka": {
+   "pos": "NOUN",
+   "stem": "pennon",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "semu": {
+   "pos": "ADJ",
+   "stem": "semu",
+   "suffixes": []
+  },
+  "namasihi": {
+   "pos": "VERB",
+   "stem": "namasi",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "kunmin": {
+   "pos": "NOUN",
+   "stem": "kunmin",
+   "suffixes": []
+  },
+  "linehi": {
+   "pos": "VERB",
+   "stem": "line",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "ripi": {
+   "pos": "ADJ",
+   "stem": "ripi",
+   "suffixes": []
+  },
+  "koturneka": {
+   "pos": "NOUN",
+   "stem": "kotur",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "tonpe": {
+   "pos": "ADJ",
+   "stem": "tonpe",
+   "suffixes": []
+  },
+  "nepihi": {
+   "pos": "VERB",
+   "stem": "nepi",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "sapine": {
+   "pos": "NOUN",
+   "stem": "sapi",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "kotursu": {
+   "pos": "NOUN",
+   "stem": "kotur",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "mavezoro": {
+   "pos": "VERB",
+   "stem": "mavezo",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "koturka": {
+   "pos": "NOUN",
+   "stem": "kotur",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "pinu": {
+   "pos": "ADJ",
+   "stem": "pinu",
+   "suffixes": []
+  },
+  "soslotesne": {
+   "pos": "NOUN",
+   "stem": "soslotes",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "lusi": {
+   "pos": "NOUN",
+   "stem": "lusi",
+   "suffixes": []
+  },
+  "koturmu": {
+   "pos": "NOUN",
+   "stem": "kotur",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "vikuro": {
+   "pos": "VERB",
+   "stem": "viku",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "rosruka": {
+   "pos": "NOUN",
+   "stem": "rosru",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "kupoka": {
+   "pos": "NOUN",
+   "stem": "kupo",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "kasti": {
+   "pos": "NUM",
+   "stem": "kasti",
+   "suffixes": []
+  },
+  "nisvine": {
+   "pos": "NOUN",
+   "stem": "nisvi",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "nupostehiku": {
+   "pos": "VERB",
+   "stem": "nuposte",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "sinmonlune": {
+   "pos": "NOUN",
+   "stem": "sinmonlu",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "lezervoro": {
+   "pos": "VERB",
+   "stem": "lezervo",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "tesvonrur": {
+   "pos": "NAME",
+   "stem": "tesvonrur",
+   "suffixes": []
+  },
+  "pinzi": {
+   "pos": "TEMP",
+   "stem": "pinzi",
+   "suffixes": []
+  },
+  "ra": {
+   "pos": "NUM",
+   "stem": "ra",
+   "suffixes": []
+  },
+  "kunminka": {
+   "pos": "NOUN",
+   "stem": "kunmin",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "nisvi": {
+   "pos": "NOUN",
+   "stem": "nisvi",
+   "suffixes": []
+  },
+  "mivenemu": {
+   "pos": "NOUN",
+   "stem": "mive",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "zalune": {
+   "pos": "NOUN",
+   "stem": "zalu",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "lezervohi": {
+   "pos": "VERB",
+   "stem": "lezervo",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "maku": {
+   "pos": "ADJ",
+   "stem": "maku",
+   "suffixes": []
+  },
+  "pennon": {
+   "pos": "NOUN",
+   "stem": "pennon",
+   "suffixes": []
+  },
+  "korika": {
+   "pos": "NOUN",
+   "stem": "kori",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "viti": {
+   "pos": "NOUN",
+   "stem": "viti",
+   "suffixes": []
+  },
+  "rori": {
+   "pos": "ADJ",
+   "stem": "rori",
+   "suffixes": []
+  },
+  "koturne": {
+   "pos": "NOUN",
+   "stem": "kotur",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "numuro": {
+   "pos": "VERB",
+   "stem": "numu",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "lesaneka": {
+   "pos": "NOUN",
+   "stem": "lesa",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "vepovurroku": {
+   "pos": "VERB",
+   "stem": "vepovur",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "pitohi": {
+   "pos": "VERB",
+   "stem": "pito",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "vesraneka": {
+   "pos": "NOUN",
+   "stem": "vesra",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "zalu": {
+   "pos": "NOUN",
+   "stem": "zalu",
+   "suffixes": []
+  },
+  "letovosu": {
+   "pos": "NOUN",
+   "stem": "letovo",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "pazi": {
+   "pos": "NOUN",
+   "stem": "pazi",
+   "suffixes": []
+  },
+  "vesraka": {
+   "pos": "NOUN",
+   "stem": "vesra",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "kenunri": {
+   "pos": "NAME",
+   "stem": "kenunri",
+   "suffixes": []
+  },
+  "pazika": {
+   "pos": "NOUN",
+   "stem": "pazi",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "zaretaka": {
+   "pos": "NAME",
+   "stem": "zareta",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "zirven": {
+   "pos": "ADJ",
+   "stem": "zirven",
+   "suffixes": []
+  },
+  "rurineka": {
+   "pos": "NOUN",
+   "stem": "ruri",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "kirika": {
+   "pos": "NOUN",
+   "stem": "kiri",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "kesinoro": {
+   "pos": "VERB",
+   "stem": "kesino",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "vesra": {
+   "pos": "NOUN",
+   "stem": "vesra",
+   "suffixes": []
+  },
+  "lokohiku": {
+   "pos": "VERB",
+   "stem": "loko",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "sursi": {
+   "pos": "TEMP",
+   "stem": "sursi",
+   "suffixes": []
+  },
+  "kapanneka": {
+   "pos": "NOUN",
+   "stem": "kapan",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "voraran": {
+   "pos": "NOUN",
+   "stem": "voraran",
+   "suffixes": []
+  },
+  "lonmarroku": {
+   "pos": "VERB",
+   "stem": "lonmar",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "numuhi": {
+   "pos": "VERB",
+   "stem": "numu",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "rateza": {
+   "pos": "NOUN",
+   "stem": "rateza",
+   "suffixes": []
+  },
+  "vesranemu": {
+   "pos": "NOUN",
+   "stem": "vesra",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "kulir": {
+   "pos": "NOUN",
+   "stem": "kulir",
+   "suffixes": []
+  },
+  "tinapiro": {
+   "pos": "VERB",
+   "stem": "tinapi",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "tetaka": {
+   "pos": "NOUN",
+   "stem": "teta",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "leroneka": {
+   "pos": "NOUN",
+   "stem": "lero",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "sinmonlu": {
+   "pos": "NOUN",
+   "stem": "sinmonlu",
+   "suffixes": []
+  },
+  "ratezane": {
+   "pos": "NOUN",
+   "stem": "rateza",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "numuhiku": {
+   "pos": "VERB",
+   "stem": "numu",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "lusineka": {
+   "pos": "NOUN",
+   "stem": "lusi",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "kapan": {
+   "pos": "NOUN",
+   "stem": "kapan",
+   "suffixes": []
+  },
+  "litakisneka": {
+   "pos": "NOUN",
+   "stem": "litakis",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "murno": {
+   "pos": "ADJ",
+   "stem": "murno",
+   "suffixes": []
+  },
+  "vutunnamu": {
+   "pos": "NOUN",
+   "stem": "vutunna",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "mopipeka": {
+   "pos": "NAME",
+   "stem": "mopipe",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "mavo": {
+   "pos": "NOUN",
+   "stem": "mavo",
+   "suffixes": []
+  },
+  "povuhi": {
+   "pos": "VERB",
+   "stem": "povu",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "rema": {
+   "pos": "NOUN",
+   "stem": "rema",
+   "suffixes": []
+  },
+  "tizine": {
+   "pos": "NAME",
+   "stem": "tizine",
+   "suffixes": []
+  },
+  "nepihiku": {
+   "pos": "VERB",
+   "stem": "nepi",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "mekoka": {
+   "pos": "NOUN",
+   "stem": "meko",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "nukamirneka": {
+   "pos": "NOUN",
+   "stem": "nukamir",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "lunlivu": {
+   "pos": "NOUN",
+   "stem": "lunlivu",
+   "suffixes": []
+  },
+  "milaturoku": {
+   "pos": "VERB",
+   "stem": "milatu",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "vesrasu": {
+   "pos": "NOUN",
+   "stem": "vesra",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "lusika": {
+   "pos": "NOUN",
+   "stem": "lusi",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "lutehiku": {
+   "pos": "VERB",
+   "stem": "lute",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "zaluka": {
+   "pos": "NOUN",
+   "stem": "zalu",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "lunlivune": {
+   "pos": "NOUN",
+   "stem": "lunlivu",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "ve": {
+   "pos": "NUM",
+   "stem": "ve",
+   "suffixes": []
+  },
+  "nossuka": {
+   "pos": "NOUN",
+   "stem": "nossu",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "kipinvu": {
+   "pos": "NOUN",
+   "stem": "kipinvu",
+   "suffixes": []
+  },
+  "litakis": {
+   "pos": "NOUN",
+   "stem": "litakis",
+   "suffixes": []
+  },
+  "rinlon": {
+   "pos": "ADJ",
+   "stem": "rinlon",
+   "suffixes": []
+  },
+  "litakiska": {
+   "pos": "NOUN",
+   "stem": "litakis",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "patu": {
+   "pos": "NOUN",
+   "stem": "patu",
+   "suffixes": []
+  },
+  "vistateska": {
+   "pos": "NAME",
+   "stem": "vistates",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "kesinoroku": {
+   "pos": "VERB",
+   "stem": "kesino",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "ratezaneka": {
+   "pos": "NOUN",
+   "stem": "rateza",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "vepovurhi": {
+   "pos": "VERB",
+   "stem": "vepovur",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "ruri": {
+   "pos": "NOUN",
+   "stem": "ruri",
+   "suffixes": []
+  },
+  "tinapihi": {
+   "pos": "VERB",
+   "stem": "tinapi",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "zolane": {
+   "pos": "NOUN",
+   "stem": "zola",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "misehi": {
+   "pos": "VERB",
+   "stem": "mise",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "zolaneka": {
+   "pos": "NOUN",
+   "stem": "zola",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "vikuhi": {
+   "pos": "VERB",
+   "stem": "viku",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "zanto": {
+   "pos": "TEMP",
+   "stem": "zanto",
+   "suffixes": []
+  },
+  "zolaka": {
+   "pos": "NOUN",
+   "stem": "zola",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "pennonne": {
+   "pos": "NOUN",
+   "stem": "pennon",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "pennonmu": {
+   "pos": "NOUN",
+   "stem": "pennon",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "kuponeka": {
+   "pos": "NOUN",
+   "stem": "kupo",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "sinmonluka": {
+   "pos": "NOUN",
+   "stem": "sinmonlu",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "memesa": {
+   "pos": "NOUN",
+   "stem": "memesa",
+   "suffixes": []
+  },
+  "kanesi": {
+   "pos": "NAME",
+   "stem": "kanesi",
+   "suffixes": []
+  },
+  "titekimu": {
+   "pos": "NOUN",
+   "stem": "titeki",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "vepovurro": {
+   "pos": "VERB",
+   "stem": "vepovur",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "lusisu": {
+   "pos": "NOUN",
+   "stem": "lusi",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "kori": {
+   "pos": "NOUN",
+   "stem": "kori",
+   "suffixes": []
+  },
+  "narposroku": {
+   "pos": "VERB",
+   "stem": "narpos",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "namolonhi": {
+   "pos": "VERB",
+   "stem": "namolon",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "rasmi": {
+   "pos": "NUM",
+   "stem": "rasmi",
+   "suffixes": []
+  },
+  "menmerka": {
+   "pos": "NOUN",
+   "stem": "menmer",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "kunminneka": {
+   "pos": "NOUN",
+   "stem": "kunmin",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "nirlun": {
+   "pos": "ADJ",
+   "stem": "nirlun",
+   "suffixes": []
+  },
+  "salunhi": {
+   "pos": "VERB",
+   "stem": "salun",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "sezero": {
+   "pos": "VERB",
+   "stem": "seze",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "rovesaroku": {
+   "pos": "VERB",
+   "stem": "rovesa",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "kuzazenro": {
+   "pos": "VERB",
+   "stem": "kuzazen",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "salunroku": {
+   "pos": "VERB",
+   "stem": "salun",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "nokurseneka": {
+   "pos": "NOUN",
+   "stem": "nokurse",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "meko": {
+   "pos": "NOUN",
+   "stem": "meko",
+   "suffixes": []
+  },
+  "lokoro": {
+   "pos": "VERB",
+   "stem": "loko",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "rotenpene": {
+   "pos": "NOUN",
+   "stem": "rotenpe",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "tizineka": {
+   "pos": "NAME",
+   "stem": "tizine",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "pazineka": {
+   "pos": "NOUN",
+   "stem": "pazi",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "kurpoza": {
+   "pos": "NOUN",
+   "stem": "kurpoza",
+   "suffixes": []
+  },
+  "voraransu": {
+   "pos": "NOUN",
+   "stem": "voraran",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "linero": {
+   "pos": "VERB",
+   "stem": "line",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "namasiroku": {
+   "pos": "VERB",
+   "stem": "namasi",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "soslotesmu": {
+   "pos": "NOUN",
+   "stem": "soslotes",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "rovesahi": {
+   "pos": "VERB",
+   "stem": "rovesa",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "nokurseka": {
+   "pos": "NOUN",
+   "stem": "nokurse",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "menmer": {
+   "pos": "NOUN",
+   "stem": "menmer",
+   "suffixes": []
+  },
+  "lokoroku": {
+   "pos": "VERB",
+   "stem": "loko",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "noluvika": {
+   "pos": "NOUN",
+   "stem": "noluvi",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "nuposteroku": {
+   "pos": "VERB",
+   "stem": "nuposte",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "larnuka": {
+   "pos": "NOUN",
+   "stem": "larnu",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "rosru": {
+   "pos": "NOUN",
+   "stem": "rosru",
+   "suffixes": []
+  },
+  "ratezamu": {
+   "pos": "NOUN",
+   "stem": "rateza",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "sosloteska": {
+   "pos": "NOUN",
+   "stem": "soslotes",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "namolonhiku": {
+   "pos": "VERB",
+   "stem": "namolon",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "zareta": {
+   "pos": "NAME",
+   "stem": "zareta",
+   "suffixes": []
+  },
+  "salunhiku": {
+   "pos": "VERB",
+   "stem": "salun",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "vutotaka": {
+   "pos": "NAME",
+   "stem": "vutota",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "pennonsu": {
+   "pos": "NOUN",
+   "stem": "pennon",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "pennonneka": {
+   "pos": "NOUN",
+   "stem": "pennon",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "nisvinesu": {
+   "pos": "NOUN",
+   "stem": "nisvi",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "nokurse": {
+   "pos": "NOUN",
+   "stem": "nokurse",
+   "suffixes": []
+  },
+  "misero": {
+   "pos": "VERB",
+   "stem": "mise",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "voraranka": {
+   "pos": "NOUN",
+   "stem": "voraran",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "lirso": {
+   "pos": "NOUN",
+   "stem": "lirso",
+   "suffixes": []
+  },
+  "vesineka": {
+   "pos": "NOUN",
+   "stem": "vesi",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "titekika": {
+   "pos": "NOUN",
+   "stem": "titeki",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "nosaneka": {
+   "pos": "NOUN",
+   "stem": "nosa",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "koturnesu": {
+   "pos": "NOUN",
+   "stem": "kotur",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "kapanka": {
+   "pos": "NOUN",
+   "stem": "kapan",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "kunminne": {
+   "pos": "NOUN",
+   "stem": "kunmin",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "mornakin": {
+   "pos": "NOUN",
+   "stem": "mornakin",
+   "suffixes": []
+  },
+  "pozi": {
+   "pos": "NOUN",
+   "stem": "pozi",
+   "suffixes": []
+  },
+  "narposro": {
+   "pos": "VERB",
+   "stem": "narpos",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "kirimu": {
+   "pos": "NOUN",
+   "stem": "kiri",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "kipinvuka": {
+   "pos": "NOUN",
+   "stem": "kipinvu",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "nupostero": {
+   "pos": "VERB",
+   "stem": "nuposte",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "nomahi": {
+   "pos": "VERB",
+   "stem": "noma",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "nosaka": {
+   "pos": "NOUN",
+   "stem": "nosa",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "titeki": {
+   "pos": "NOUN",
+   "stem": "titeki",
+   "suffixes": []
+  },
+  "sosva": {
+   "pos": "ADJ",
+   "stem": "sosva",
+   "suffixes": []
+  },
+  "litakisne": {
+   "pos": "NOUN",
+   "stem": "litakis",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "narposhi": {
+   "pos": "VERB",
+   "stem": "narpos",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "kesinohi": {
+   "pos": "VERB",
+   "stem": "kesino",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "sezehi": {
+   "pos": "VERB",
+   "stem": "seze",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "mive": {
+   "pos": "NOUN",
+   "stem": "mive",
+   "suffixes": []
+  },
+  "morahi": {
+   "pos": "VERB",
+   "stem": "mora",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "pazisu": {
+   "pos": "NOUN",
+   "stem": "pazi",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "vutunna": {
+   "pos": "NOUN",
+   "stem": "vutunna",
+   "suffixes": []
+  },
+  "namasiro": {
+   "pos": "VERB",
+   "stem": "namasi",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "muluhi": {
+   "pos": "VERB",
+   "stem": "mulu",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "nomaro": {
+   "pos": "VERB",
+   "stem": "noma",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "koturnemu": {
+   "pos": "NOUN",
+   "stem": "kotur",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "menmerne": {
+   "pos": "NOUN",
+   "stem": "menmer",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "zaluneka": {
+   "pos": "NOUN",
+   "stem": "zalu",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "milatuhi": {
+   "pos": "VERB",
+   "stem": "milatu",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "kurpozaneka": {
+   "pos": "NOUN",
+   "stem": "kurpoza",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "nukamirne": {
+   "pos": "NOUN",
+   "stem": "nukamir",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "larnusu": {
+   "pos": "NOUN",
+   "stem": "larnu",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "luteroku": {
+   "pos": "VERB",
+   "stem": "lute",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "nokursene": {
+   "pos": "NOUN",
+   "stem": "nokurse",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "vusako": {
+   "pos": "NOUN",
+   "stem": "vusako",
+   "suffixes": []
+  },
+  "vepovurhiku": {
+   "pos": "VERB",
+   "stem": "vepovur",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "mekonesu": {
+   "pos": "NOUN",
+   "stem": "meko",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "nosamu": {
+   "pos": "NOUN",
+   "stem": "nosa",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "lezervohiku": {
+   "pos": "VERB",
+   "stem": "lezervo",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "vilaro": {
+   "pos": "VERB",
+   "stem": "vila",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "patuka": {
+   "pos": "NOUN",
+   "stem": "patu",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "pokiro": {
+   "pos": "VERB",
+   "stem": "poki",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "nisvineka": {
+   "pos": "NOUN",
+   "stem": "nisvi",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "sevi": {
+   "pos": "NOUN",
+   "stem": "sevi",
+   "suffixes": []
+  },
+  "larnune": {
+   "pos": "NOUN",
+   "stem": "larnu",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "tenonoka": {
+   "pos": "NAME",
+   "stem": "tenono",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "sinmonlunemu": {
+   "pos": "NOUN",
+   "stem": "sinmonlu",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "teta": {
+   "pos": "NOUN",
+   "stem": "teta",
+   "suffixes": []
+  },
+  "vesramu": {
+   "pos": "NOUN",
+   "stem": "vesra",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "rurine": {
+   "pos": "NOUN",
+   "stem": "ruri",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "pizuka": {
+   "pos": "NOUN",
+   "stem": "pizu",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "noluvine": {
+   "pos": "NOUN",
+   "stem": "noluvi",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "zesuluka": {
+   "pos": "NAME",
+   "stem": "zesulu",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "vistates": {
+   "pos": "NAME",
+   "stem": "vistates",
+   "suffixes": []
+  },
+  "kuzazenhiku": {
+   "pos": "VERB",
+   "stem": "kuzazen",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "rosruneka": {
+   "pos": "NOUN",
+   "stem": "rosru",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "menmermu": {
+   "pos": "NOUN",
+   "stem": "menmer",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "nupostehi": {
+   "pos": "VERB",
+   "stem": "nuposte",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "mavone": {
+   "pos": "NOUN",
+   "stem": "mavo",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "lonmarro": {
+   "pos": "VERB",
+   "stem": "lonmar",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "mavoneka": {
+   "pos": "NOUN",
+   "stem": "mavo",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "rurika": {
+   "pos": "NOUN",
+   "stem": "ruri",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "keturne": {
+   "pos": "NOUN",
+   "stem": "ketur",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "pennonnemu": {
+   "pos": "NOUN",
+   "stem": "pennon",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "mornakinne": {
+   "pos": "NOUN",
+   "stem": "mornakin",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "larnunemu": {
+   "pos": "NOUN",
+   "stem": "larnu",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "rotenpeka": {
+   "pos": "NOUN",
+   "stem": "rotenpe",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "lokohi": {
+   "pos": "VERB",
+   "stem": "loko",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "sapi": {
+   "pos": "NOUN",
+   "stem": "sapi",
+   "suffixes": []
+  },
+  "lesa": {
+   "pos": "NOUN",
+   "stem": "lesa",
+   "suffixes": []
+  },
+  "ratezanemu": {
+   "pos": "NOUN",
+   "stem": "rateza",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "kupo": {
+   "pos": "NOUN",
+   "stem": "kupo",
+   "suffixes": []
+  },
+  "vitineka": {
+   "pos": "NOUN",
+   "stem": "viti",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "kunminsu": {
+   "pos": "NOUN",
+   "stem": "kunmin",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "zalusu": {
+   "pos": "NOUN",
+   "stem": "zalu",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "nosasu": {
+   "pos": "NOUN",
+   "stem": "nosa",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "vutota": {
+   "pos": "NAME",
+   "stem": "vutota",
+   "suffixes": []
+  },
+  "vitika": {
+   "pos": "NOUN",
+   "stem": "viti",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "soslotes": {
+   "pos": "NOUN",
+   "stem": "soslotes",
+   "suffixes": []
+  },
+  "mavoka": {
+   "pos": "NOUN",
+   "stem": "mavo",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "voraranne": {
+   "pos": "NOUN",
+   "stem": "voraran",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "lirsomu": {
+   "pos": "NOUN",
+   "stem": "lirso",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "povuroku": {
+   "pos": "VERB",
+   "stem": "povu",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "letovo": {
+   "pos": "NOUN",
+   "stem": "letovo",
+   "suffixes": []
+  },
+  "lezervoroku": {
+   "pos": "VERB",
+   "stem": "lezervo",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "pozine": {
+   "pos": "NOUN",
+   "stem": "pozi",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "vikuhiku": {
+   "pos": "VERB",
+   "stem": "viku",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "pazisinka": {
+   "pos": "NAME",
+   "stem": "pazisin",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "posato": {
+   "pos": "NOUN",
+   "stem": "posato",
+   "suffixes": []
+  },
+  "memesaneka": {
+   "pos": "NOUN",
+   "stem": "memesa",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "vutunnaka": {
+   "pos": "NOUN",
+   "stem": "vutunna",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "linehiku": {
+   "pos": "VERB",
+   "stem": "line",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "mavezohiku": {
+   "pos": "VERB",
+   "stem": "mavezo",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "kuzazenroku": {
+   "pos": "VERB",
+   "stem": "kuzazen",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "lirsone": {
+   "pos": "NOUN",
+   "stem": "lirso",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "nukamirsu": {
+   "pos": "NOUN",
+   "stem": "nukamir",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "tinapiroku": {
+   "pos": "VERB",
+   "stem": "tinapi",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "vesi": {
+   "pos": "NOUN",
+   "stem": "vesi",
+   "suffixes": []
+  },
+  "nisvika": {
+   "pos": "NOUN",
+   "stem": "nisvi",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "tisrahi": {
+   "pos": "VERB",
+   "stem": "tisra",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "mopipe": {
+   "pos": "NAME",
+   "stem": "mopipe",
+   "suffixes": []
+  },
+  "narposhiku": {
+   "pos": "VERB",
+   "stem": "narpos",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "remanesu": {
+   "pos": "NOUN",
+   "stem": "rema",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "kenunrika": {
+   "pos": "NAME",
+   "stem": "kenunri",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "namolonro": {
+   "pos": "VERB",
+   "stem": "namolon",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "memesaka": {
+   "pos": "NOUN",
+   "stem": "memesa",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "vikuroku": {
+   "pos": "VERB",
+   "stem": "viku",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "kirisu": {
+   "pos": "NOUN",
+   "stem": "kiri",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "tisraroku": {
+   "pos": "VERB",
+   "stem": "tisra",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "rosrune": {
+   "pos": "NOUN",
+   "stem": "rosru",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "vitimu": {
+   "pos": "NOUN",
+   "stem": "viti",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "maleka": {
+   "pos": "NOUN",
+   "stem": "male",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "mavosu": {
+   "pos": "NOUN",
+   "stem": "mavo",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "nossu": {
+   "pos": "NOUN",
+   "stem": "nossu",
+   "suffixes": []
+  },
+  "tila": {
+   "pos": "NOUN",
+   "stem": "tila",
+   "suffixes": []
+  },
+  "mime": {
+   "pos": "ADJ",
+   "stem": "mime",
+   "suffixes": []
+  },
+  "keturneka": {
+   "pos": "NOUN",
+   "stem": "ketur",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "lirsonemu": {
+   "pos": "NOUN",
+   "stem": "lirso",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "lunlivuka": {
+   "pos": "NOUN",
+   "stem": "lunlivu",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "lirsosu": {
+   "pos": "NOUN",
+   "stem": "lirso",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "titekine": {
+   "pos": "NOUN",
+   "stem": "titeki",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "rotenpeneka": {
+   "pos": "NOUN",
+   "stem": "rotenpe",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "larnumu": {
+   "pos": "NOUN",
+   "stem": "larnu",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "rotenpe": {
+   "pos": "NOUN",
+   "stem": "rotenpe",
+   "suffixes": []
+  },
+  "nossune": {
+   "pos": "NOUN",
+   "stem": "nossu",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "kulirka": {
+   "pos": "NOUN",
+   "stem": "kulir",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "mavezohi": {
+   "pos": "VERB",
+   "stem": "mavezo",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "lunlivuneka": {
+   "pos": "NOUN",
+   "stem": "lunlivu",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "mavomu": {
+   "pos": "NOUN",
+   "stem": "mavo",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "vesine": {
+   "pos": "NOUN",
+   "stem": "vesi",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "pitohiku": {
+   "pos": "VERB",
+   "stem": "pito",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "zalunemu": {
+   "pos": "NOUN",
+   "stem": "zalu",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "lutehi": {
+   "pos": "VERB",
+   "stem": "lute",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "rosrusu": {
+   "pos": "NOUN",
+   "stem": "rosru",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "tilamu": {
+   "pos": "NOUN",
+   "stem": "tila",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "lineroku": {
+   "pos": "VERB",
+   "stem": "line",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "litakissu": {
+   "pos": "NOUN",
+   "stem": "litakis",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "mivemu": {
+   "pos": "NOUN",
+   "stem": "mive",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "kesinohiku": {
+   "pos": "VERB",
+   "stem": "kesino",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "pazisin": {
+   "pos": "NAME",
+   "stem": "pazisin",
+   "suffixes": []
+  },
+  "nosane": {
+   "pos": "NOUN",
+   "stem": "nosa",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "vutunnane": {
+   "pos": "NOUN",
+   "stem": "vutunna",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "sevika": {
+   "pos": "NOUN",
+   "stem": "sevi",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "kirineka": {
+   "pos": "NOUN",
+   "stem": "kiri",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "memesane": {
+   "pos": "NOUN",
+   "stem": "memesa",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "lero": {
+   "pos": "NOUN",
+   "stem": "lero",
+   "suffixes": []
+  },
+  "vusakoka": {
+   "pos": "NOUN",
+   "stem": "vusako",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "muluro": {
+   "pos": "VERB",
+   "stem": "mulu",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "kurpozane": {
+   "pos": "NOUN",
+   "stem": "kurpoza",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "pazine": {
+   "pos": "NOUN",
+   "stem": "pazi",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "nukamirnesu": {
+   "pos": "NOUN",
+   "stem": "nukamir",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "soslotesneka": {
+   "pos": "NOUN",
+   "stem": "soslotes",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "lusimu": {
+   "pos": "NOUN",
+   "stem": "lusi",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "tetamu": {
+   "pos": "NOUN",
+   "stem": "teta",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "karnonka": {
+   "pos": "NOUN",
+   "stem": "karnon",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "letovoneka": {
+   "pos": "NOUN",
+   "stem": "letovo",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "riputeka": {
+   "pos": "NOUN",
+   "stem": "ripute",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "zalumu": {
+   "pos": "NOUN",
+   "stem": "zalu",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "tilaka": {
+   "pos": "NOUN",
+   "stem": "tila",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "rununa": {
+   "pos": "NOUN",
+   "stem": "rununa",
+   "suffixes": []
+  },
+  "lusine": {
+   "pos": "NOUN",
+   "stem": "lusi",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "mornakinka": {
+   "pos": "NOUN",
+   "stem": "mornakin",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "pokiroku": {
+   "pos": "VERB",
+   "stem": "poki",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "miseroku": {
+   "pos": "VERB",
+   "stem": "mise",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "rurisu": {
+   "pos": "NOUN",
+   "stem": "ruri",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "titekinemu": {
+   "pos": "NOUN",
+   "stem": "titeki",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "lirsoka": {
+   "pos": "NOUN",
+   "stem": "lirso",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "pazimu": {
+   "pos": "NOUN",
+   "stem": "pazi",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "nisvimu": {
+   "pos": "NOUN",
+   "stem": "nisvi",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "malene": {
+   "pos": "NOUN",
+   "stem": "male",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "patumu": {
+   "pos": "NOUN",
+   "stem": "patu",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "lutero": {
+   "pos": "VERB",
+   "stem": "lute",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "povuro": {
+   "pos": "VERB",
+   "stem": "povu",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "vitinesu": {
+   "pos": "NOUN",
+   "stem": "viti",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "mornakinneka": {
+   "pos": "NOUN",
+   "stem": "mornakin",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "kurpozaka": {
+   "pos": "NOUN",
+   "stem": "kurpoza",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "zolamu": {
+   "pos": "NOUN",
+   "stem": "zola",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "vesika": {
+   "pos": "NOUN",
+   "stem": "vesi",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "vesimu": {
+   "pos": "NOUN",
+   "stem": "vesi",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "lonmarhiku": {
+   "pos": "VERB",
+   "stem": "lonmar",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "riputeneka": {
+   "pos": "NOUN",
+   "stem": "ripute",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "pokihi": {
+   "pos": "VERB",
+   "stem": "poki",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "male": {
+   "pos": "NOUN",
+   "stem": "male",
+   "suffixes": []
+  },
+  "vesranesu": {
+   "pos": "NOUN",
+   "stem": "vesra",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "soslotessu": {
+   "pos": "NOUN",
+   "stem": "soslotes",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "mornakinmu": {
+   "pos": "NOUN",
+   "stem": "mornakin",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "lunlivusu": {
+   "pos": "NOUN",
+   "stem": "lunlivu",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "posatoka": {
+   "pos": "NOUN",
+   "stem": "posato",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "moraro": {
+   "pos": "VERB",
+   "stem": "mora",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "pitoroku": {
+   "pos": "VERB",
+   "stem": "pito",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "malesu": {
+   "pos": "NOUN",
+   "stem": "male",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "rununane": {
+   "pos": "NOUN",
+   "stem": "rununa",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "nukamirmu": {
+   "pos": "NOUN",
+   "stem": "nukamir",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "menmerneka": {
+   "pos": "NOUN",
+   "stem": "menmer",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "sezehiku": {
+   "pos": "VERB",
+   "stem": "seze",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "letovoka": {
+   "pos": "NOUN",
+   "stem": "letovo",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "kulirneka": {
+   "pos": "NOUN",
+   "stem": "kulir",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "rununaneka": {
+   "pos": "NOUN",
+   "stem": "rununa",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "posatoneka": {
+   "pos": "NOUN",
+   "stem": "posato",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "namariska": {
+   "pos": "NAME",
+   "stem": "namaris",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "rurinemu": {
+   "pos": "NOUN",
+   "stem": "ruri",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "riputesu": {
+   "pos": "NOUN",
+   "stem": "ripute",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "kiri": {
+   "pos": "NOUN",
+   "stem": "kiri",
+   "suffixes": []
+  },
+  "noluvi": {
+   "pos": "NOUN",
+   "stem": "noluvi",
+   "suffixes": []
+  },
+  "rurinesu": {
+   "pos": "NOUN",
+   "stem": "ruri",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "karnon": {
+   "pos": "NOUN",
+   "stem": "karnon",
+   "suffixes": []
+  },
+  "muluroku": {
+   "pos": "VERB",
+   "stem": "mulu",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "nossuneka": {
+   "pos": "NOUN",
+   "stem": "nossu",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "kirine": {
+   "pos": "NOUN",
+   "stem": "kiri",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "kulirne": {
+   "pos": "NOUN",
+   "stem": "kulir",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "titekisu": {
+   "pos": "NOUN",
+   "stem": "titeki",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "lesane": {
+   "pos": "NOUN",
+   "stem": "lesa",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "voraranneka": {
+   "pos": "NOUN",
+   "stem": "voraran",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "tenono": {
+   "pos": "NAME",
+   "stem": "tenono",
+   "suffixes": []
+  },
+  "tesvonrurka": {
+   "pos": "NAME",
+   "stem": "tesvonrur",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "vilaroku": {
+   "pos": "VERB",
+   "stem": "vila",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "remasu": {
+   "pos": "NOUN",
+   "stem": "rema",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "mekoneka": {
+   "pos": "NOUN",
+   "stem": "meko",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "mornakinnesu": {
+   "pos": "NOUN",
+   "stem": "mornakin",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "tinapihiku": {
+   "pos": "VERB",
+   "stem": "tinapi",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "ripute": {
+   "pos": "NOUN",
+   "stem": "ripute",
+   "suffixes": []
+  },
+  "nomahiku": {
+   "pos": "VERB",
+   "stem": "noma",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "zesulu": {
+   "pos": "NAME",
+   "stem": "zesulu",
+   "suffixes": []
+  },
+  "nisvisu": {
+   "pos": "NOUN",
+   "stem": "nisvi",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "memesanesu": {
+   "pos": "NOUN",
+   "stem": "memesa",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "namolonroku": {
+   "pos": "VERB",
+   "stem": "namolon",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "sezeroku": {
+   "pos": "VERB",
+   "stem": "seze",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "sapika": {
+   "pos": "NOUN",
+   "stem": "sapi",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "korine": {
+   "pos": "NOUN",
+   "stem": "kori",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "patune": {
+   "pos": "NOUN",
+   "stem": "patu",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "vitinemu": {
+   "pos": "NOUN",
+   "stem": "viti",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "kupomu": {
+   "pos": "NOUN",
+   "stem": "kupo",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "pozineka": {
+   "pos": "NOUN",
+   "stem": "pozi",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "pozika": {
+   "pos": "NOUN",
+   "stem": "pozi",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "menmernemu": {
+   "pos": "NOUN",
+   "stem": "menmer",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "rovesaro": {
+   "pos": "VERB",
+   "stem": "rovesa",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "tetane": {
+   "pos": "NOUN",
+   "stem": "teta",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "leroka": {
+   "pos": "NOUN",
+   "stem": "lero",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "kirinesu": {
+   "pos": "NOUN",
+   "stem": "kiri",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "noluvimu": {
+   "pos": "NOUN",
+   "stem": "noluvi",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "nokursemu": {
+   "pos": "NOUN",
+   "stem": "nokurse",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "sevineka": {
+   "pos": "NOUN",
+   "stem": "sevi",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "namaris": {
+   "pos": "NAME",
+   "stem": "namaris",
+   "suffixes": []
+  },
+  "mivene": {
+   "pos": "NOUN",
+   "stem": "mive",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "pennonnesu": {
+   "pos": "NOUN",
+   "stem": "pennon",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "litakisnesu": {
+   "pos": "NOUN",
+   "stem": "litakis",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "misehiku": {
+   "pos": "VERB",
+   "stem": "mise",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "riputene": {
+   "pos": "NOUN",
+   "stem": "ripute",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "korineka": {
+   "pos": "NOUN",
+   "stem": "kori",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "pizuneka": {
+   "pos": "NOUN",
+   "stem": "pizu",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "vusakomu": {
+   "pos": "NOUN",
+   "stem": "vusako",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "mekone": {
+   "pos": "NOUN",
+   "stem": "meko",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "lesaka": {
+   "pos": "NOUN",
+   "stem": "lesa",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "vitine": {
+   "pos": "NOUN",
+   "stem": "viti",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "titekineka": {
+   "pos": "NOUN",
+   "stem": "titeki",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "litakisnemu": {
+   "pos": "NOUN",
+   "stem": "litakis",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "lonmarhi": {
+   "pos": "VERB",
+   "stem": "lonmar",
+   "suffixes": [
+    "hi"
+   ]
+  },
+  "vorarannesu": {
+   "pos": "NOUN",
+   "stem": "voraran",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "patusu": {
+   "pos": "NOUN",
+   "stem": "patu",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "pizu": {
+   "pos": "NOUN",
+   "stem": "pizu",
+   "suffixes": []
+  },
+  "ratezanesu": {
+   "pos": "NOUN",
+   "stem": "rateza",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "zolanesu": {
+   "pos": "NOUN",
+   "stem": "zola",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "namasihiku": {
+   "pos": "VERB",
+   "stem": "namasi",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "kurpozanemu": {
+   "pos": "NOUN",
+   "stem": "kurpoza",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "posatone": {
+   "pos": "NOUN",
+   "stem": "posato",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "kulirmu": {
+   "pos": "NOUN",
+   "stem": "kulir",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "moraroku": {
+   "pos": "VERB",
+   "stem": "mora",
+   "suffixes": [
+    "ro",
+    "ku"
+   ]
+  },
+  "menmernesu": {
+   "pos": "NOUN",
+   "stem": "menmer",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "vesisu": {
+   "pos": "NOUN",
+   "stem": "vesi",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "tisrahiku": {
+   "pos": "VERB",
+   "stem": "tisra",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "kipinvuneka": {
+   "pos": "NOUN",
+   "stem": "kipinvu",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "mavonemu": {
+   "pos": "NOUN",
+   "stem": "mavo",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "litakismu": {
+   "pos": "NOUN",
+   "stem": "litakis",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "pitoro": {
+   "pos": "VERB",
+   "stem": "pito",
+   "suffixes": [
+    "ro"
+   ]
+  },
+  "patuneka": {
+   "pos": "NOUN",
+   "stem": "patu",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "lirsoneka": {
+   "pos": "NOUN",
+   "stem": "lirso",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "morahiku": {
+   "pos": "VERB",
+   "stem": "mora",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "kunminnesu": {
+   "pos": "NOUN",
+   "stem": "kunmin",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "mekomu": {
+   "pos": "NOUN",
+   "stem": "meko",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "malenesu": {
+   "pos": "NOUN",
+   "stem": "male",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "leronemu": {
+   "pos": "NOUN",
+   "stem": "lero",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "nokursesu": {
+   "pos": "NOUN",
+   "stem": "nokurse",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "rosrunesu": {
+   "pos": "NOUN",
+   "stem": "rosru",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "pokihiku": {
+   "pos": "VERB",
+   "stem": "poki",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "kapanne": {
+   "pos": "NOUN",
+   "stem": "kapan",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "keturka": {
+   "pos": "NOUN",
+   "stem": "ketur",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "tilaneka": {
+   "pos": "NOUN",
+   "stem": "tila",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "kuposu": {
+   "pos": "NOUN",
+   "stem": "kupo",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "miveneka": {
+   "pos": "NOUN",
+   "stem": "mive",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "vitisu": {
+   "pos": "NOUN",
+   "stem": "viti",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "sevimu": {
+   "pos": "NOUN",
+   "stem": "sevi",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "lusinesu": {
+   "pos": "NOUN",
+   "stem": "lusi",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "zolasu": {
+   "pos": "NOUN",
+   "stem": "zola",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "noluvisu": {
+   "pos": "NOUN",
+   "stem": "noluvi",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "letovonemu": {
+   "pos": "NOUN",
+   "stem": "letovo",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "sinmonlusu": {
+   "pos": "NOUN",
+   "stem": "sinmonlu",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "leromu": {
+   "pos": "NOUN",
+   "stem": "lero",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "nokursenemu": {
+   "pos": "NOUN",
+   "stem": "nokurse",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "sapisu": {
+   "pos": "NOUN",
+   "stem": "sapi",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "sevine": {
+   "pos": "NOUN",
+   "stem": "sevi",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "sapimu": {
+   "pos": "NOUN",
+   "stem": "sapi",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "rotenpesu": {
+   "pos": "NOUN",
+   "stem": "rotenpe",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "larnuneka": {
+   "pos": "NOUN",
+   "stem": "larnu",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "pizunesu": {
+   "pos": "NOUN",
+   "stem": "pizu",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "karnonne": {
+   "pos": "NOUN",
+   "stem": "karnon",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "nossusu": {
+   "pos": "NOUN",
+   "stem": "nossu",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "kuponesu": {
+   "pos": "NOUN",
+   "stem": "kupo",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "kunminmu": {
+   "pos": "NOUN",
+   "stem": "kunmin",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "pizumu": {
+   "pos": "NOUN",
+   "stem": "pizu",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "letovone": {
+   "pos": "NOUN",
+   "stem": "letovo",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "remane": {
+   "pos": "NOUN",
+   "stem": "rema",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "lesamu": {
+   "pos": "NOUN",
+   "stem": "lesa",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "remanemu": {
+   "pos": "NOUN",
+   "stem": "rema",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "posatomu": {
+   "pos": "NOUN",
+   "stem": "posato",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "kipinvunesu": {
+   "pos": "NOUN",
+   "stem": "kipinvu",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "sapineka": {
+   "pos": "NOUN",
+   "stem": "sapi",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "nosanesu": {
+   "pos": "NOUN",
+   "stem": "nosa",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "zalunesu": {
+   "pos": "NOUN",
+   "stem": "zalu",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "rovesahiku": {
+   "pos": "VERB",
+   "stem": "rovesa",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "lusinemu": {
+   "pos": "NOUN",
+   "stem": "lusi",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "kapannemu": {
+   "pos": "NOUN",
+   "stem": "kapan",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "vesinesu": {
+   "pos": "NOUN",
+   "stem": "vesi",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "vorarannemu": {
+   "pos": "NOUN",
+   "stem": "voraran",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "maleneka": {
+   "pos": "NOUN",
+   "stem": "male",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "kuponemu": {
+   "pos": "NOUN",
+   "stem": "kupo",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "menmersu": {
+   "pos": "NOUN",
+   "stem": "menmer",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "rosrunemu": {
+   "pos": "NOUN",
+   "stem": "rosru",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "memesasu": {
+   "pos": "NOUN",
+   "stem": "memesa",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "kapanmu": {
+   "pos": "NOUN",
+   "stem": "kapan",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "sinmonluneka": {
+   "pos": "NOUN",
+   "stem": "sinmonlu",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "kulirnemu": {
+   "pos": "NOUN",
+   "stem": "kulir",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "sinmonlumu": {
+   "pos": "NOUN",
+   "stem": "sinmonlu",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "miveka": {
+   "pos": "NOUN",
+   "stem": "mive",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "vusakosu": {
+   "pos": "NOUN",
+   "stem": "vusako",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "pazinesu": {
+   "pos": "NOUN",
+   "stem": "pazi",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "vusakoneka": {
+   "pos": "NOUN",
+   "stem": "vusako",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "lunlivumu": {
+   "pos": "NOUN",
+   "stem": "lunlivu",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "kipinvusu": {
+   "pos": "NOUN",
+   "stem": "kipinvu",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "muluhiku": {
+   "pos": "VERB",
+   "stem": "mulu",
+   "suffixes": [
+    "hi",
+    "ku"
+   ]
+  },
+  "rununaka": {
+   "pos": "NOUN",
+   "stem": "rununa",
+   "suffixes": [
+    "ka"
+   ]
+  },
+  "keturmu": {
+   "pos": "NOUN",
+   "stem": "ketur",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "vusakone": {
+   "pos": "NOUN",
+   "stem": "vusako",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "kunminnemu": {
+   "pos": "NOUN",
+   "stem": "kunmin",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "kurpozanesu": {
+   "pos": "NOUN",
+   "stem": "kurpoza",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "noluvineka": {
+   "pos": "NOUN",
+   "stem": "noluvi",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "sapinesu": {
+   "pos": "NOUN",
+   "stem": "sapi",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "rotenpemu": {
+   "pos": "NOUN",
+   "stem": "rotenpe",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "ketursu": {
+   "pos": "NOUN",
+   "stem": "ketur",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "kipinvune": {
+   "pos": "NOUN",
+   "stem": "kipinvu",
+   "suffixes": [
+    "ne"
+   ]
+  },
+  "lerosu": {
+   "pos": "NOUN",
+   "stem": "lero",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "lesanesu": {
+   "pos": "NOUN",
+   "stem": "lesa",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "kulirsu": {
+   "pos": "NOUN",
+   "stem": "kulir",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "kipinvumu": {
+   "pos": "NOUN",
+   "stem": "kipinvu",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "tetaneka": {
+   "pos": "NOUN",
+   "stem": "teta",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "letovonesu": {
+   "pos": "NOUN",
+   "stem": "letovo",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "rurimu": {
+   "pos": "NOUN",
+   "stem": "ruri",
+   "suffixes": [
+    "mu"
+   ]
+  },
+  "remaneka": {
+   "pos": "NOUN",
+   "stem": "rema",
+   "suffixes": [
+    "ne",
+    "ka"
+   ]
+  },
+  "soslotesnesu": {
+   "pos": "NOUN",
+   "stem": "soslotes",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  },
+  "rununasu": {
+   "pos": "NOUN",
+   "stem": "rununa",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "kurpozasu": {
+   "pos": "NOUN",
+   "stem": "kurpoza",
+   "suffixes": [
+    "su"
+   ]
+  },
+  "pozinemu": {
+   "pos": "NOUN",
+   "stem": "pozi",
+   "suffixes": [
+    "ne",
+    "mu"
+   ]
+  },
+  "keturnesu": {
+   "pos": "NOUN",
+   "stem": "ketur",
+   "suffixes": [
+    "ne",
+    "su"
+   ]
+  }
+ },
+ "true_suffixes": [
+  "hi",
+  "ka",
+  "ku",
+  "mu",
+  "ne",
+  "ro",
+  "su"
+ ],
+ "order": "SOV, ergative-absolutive, suffixing"
+}

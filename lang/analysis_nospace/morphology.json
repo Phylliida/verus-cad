@@ -1,0 +1,567 @@
+{
+ "direction": "predominantly suffixing",
+ "suffix": {
+  "affixes": [
+   [
+    "hi",
+    30
+   ],
+   [
+    "ro",
+    29
+   ],
+   [
+    "o",
+    15
+   ],
+   [
+    "i",
+    13
+   ],
+   [
+    "a",
+    13
+   ],
+   [
+    "ne",
+    12
+   ],
+   [
+    "ku",
+    10
+   ],
+   [
+    "ka",
+    10
+   ],
+   [
+    "u",
+    7
+   ],
+   [
+    "ros",
+    6
+   ],
+   [
+    "oku",
+    5
+   ],
+   [
+    "roku",
+    5
+   ],
+   [
+    "oro",
+    5
+   ],
+   [
+    "ahi",
+    5
+   ],
+   [
+    "ero",
+    5
+   ],
+   [
+    "uro",
+    5
+   ],
+   [
+    "aro",
+    5
+   ],
+   [
+    "ohi",
+    5
+   ],
+   [
+    "iku",
+    5
+   ],
+   [
+    "hiku",
+    5
+   ],
+   [
+    "aros",
+    5
+   ],
+   [
+    "uhi",
+    5
+   ],
+   [
+    "ehi",
+    5
+   ],
+   [
+    "aka",
+    4
+   ],
+   [
+    "iro",
+    4
+   ],
+   [
+    "ine",
+    4
+   ],
+   [
+    "ihi",
+    4
+   ],
+   [
+    "ika",
+    3
+   ],
+   [
+    "nro",
+    3
+   ],
+   [
+    "n",
+    3
+   ],
+   [
+    "on",
+    3
+   ],
+   [
+    "ane",
+    3
+   ],
+   [
+    "nhi",
+    3
+   ],
+   [
+    "su",
+    3
+   ],
+   [
+    "karos",
+    3
+   ]
+  ],
+  "signatures": [
+   {
+    "affixes": [
+     "hi",
+     "ro"
+    ],
+    "stems": [
+     "kuzazen",
+     "line",
+     "loko",
+     "lute",
+     "milatu",
+     "mora",
+     "noma",
+     "nuposte",
+     "poki",
+     "povu",
+     "salun",
+     "seze",
+     "tinapi",
+     "vepovur",
+     "viku",
+     "vila"
+    ],
+    "n_stems": 16,
+    "robustness": 138
+   },
+   {
+    "affixes": [
+     "hi",
+     "hiku",
+     "ro",
+     "roku"
+    ],
+    "stems": [
+     "lezervo",
+     "mavezo",
+     "narpos",
+     "nepi",
+     "numu"
+    ],
+    "n_stems": 5,
+    "robustness": 129
+   },
+   {
+    "affixes": [
+     "hi",
+     "ro",
+     "∅"
+    ],
+    "stems": [
+     "kesino",
+     "mise",
+     "mulu",
+     "namasi",
+     "namolon",
+     "pito",
+     "rovesa",
+     "tisra"
+    ],
+    "n_stems": 8,
+    "robustness": 112
+   },
+   {
+    "affixes": [
+     "ku",
+     "∅"
+    ],
+    "stems": [
+     "lezervohi",
+     "lezervoro",
+     "mavezohi",
+     "mavezoro",
+     "narposhi",
+     "narposro",
+     "nepihi",
+     "nepiro",
+     "numuhi",
+     "numuro"
+    ],
+    "n_stems": 10,
+    "robustness": 92
+   },
+   {
+    "affixes": [
+     "ka",
+     "karos",
+     "ne",
+     "ros",
+     "su",
+     "∅"
+    ],
+    "stems": [
+     "kotur",
+     "vesra"
+    ],
+    "n_stems": 2,
+    "robustness": 64
+   },
+   {
+    "affixes": [
+     "o",
+     "oku"
+    ],
+    "stems": [
+     "lezervor",
+     "mavezor",
+     "narposr",
+     "nepir",
+     "numur"
+    ],
+    "n_stems": 5,
+    "robustness": 48
+   },
+   {
+    "affixes": [
+     "i",
+     "iku"
+    ],
+    "stems": [
+     "lezervoh",
+     "mavezoh",
+     "narposh",
+     "nepih",
+     "numuh"
+    ],
+    "n_stems": 5,
+    "robustness": 48
+   },
+   {
+    "affixes": [
+     "ne",
+     "∅"
+    ],
+    "stems": [
+     "kupo",
+     "kurpoza",
+     "mavo",
+     "nisvi",
+     "ruri",
+     "vesi",
+     "zalu"
+    ],
+    "n_stems": 7,
+    "robustness": 44
+   },
+   {
+    "affixes": [
+     "ehi",
+     "ero"
+    ],
+    "stems": [
+     "lin",
+     "lut",
+     "mis",
+     "nupost",
+     "sez"
+    ],
+    "n_stems": 5,
+    "robustness": 42
+   },
+   {
+    "affixes": [
+     "ka",
+     "ne",
+     "∅"
+    ],
+    "stems": [
+     "lusi",
+     "pennon",
+     "rateza"
+    ],
+    "n_stems": 3,
+    "robustness": 40
+   },
+   {
+    "affixes": [
+     "a",
+     "aros"
+    ],
+    "stems": [
+     "kanesik",
+     "koturk",
+     "nek",
+     "vesrak"
+    ],
+    "n_stems": 4,
+    "robustness": 37
+   },
+   {
+    "affixes": [
+     "ros",
+     "∅"
+    ],
+    "stems": [
+     "kanesika",
+     "koturka",
+     "neka",
+     "vesraka"
+    ],
+    "n_stems": 4,
+    "robustness": 35
+   },
+   {
+    "affixes": [
+     "uhi",
+     "uro"
+    ],
+    "stems": [
+     "milat",
+     "num",
+     "pov",
+     "vik"
+    ],
+    "n_stems": 4,
+    "robustness": 32
+   },
+   {
+    "affixes": [
+     "ka",
+     "∅"
+    ],
+    "stems": [
+     "koturne",
+     "pazi",
+     "vutota",
+     "zareta"
+    ],
+    "n_stems": 4,
+    "robustness": 29
+   },
+   {
+    "affixes": [
+     "ohi",
+     "oro"
+    ],
+    "stems": [
+     "lezerv",
+     "lok",
+     "mavez"
+    ],
+    "n_stems": 3,
+    "robustness": 26
+   },
+   {
+    "affixes": [
+     "a",
+     "ahi",
+     "aro"
+    ],
+    "stems": [
+     "roves",
+     "tisr"
+    ],
+    "n_stems": 2,
+    "robustness": 25
+   },
+   {
+    "affixes": [
+     "o",
+     "ohi",
+     "oro"
+    ],
+    "stems": [
+     "kesin",
+     "pit"
+    ],
+    "n_stems": 2,
+    "robustness": 23
+   },
+   {
+    "affixes": [
+     "ihi",
+     "iro"
+    ],
+    "stems": [
+     "nep",
+     "pok",
+     "tinap"
+    ],
+    "n_stems": 3,
+    "robustness": 23
+   },
+   {
+    "affixes": [
+     "ahi",
+     "aro"
+    ],
+    "stems": [
+     "mor",
+     "nom",
+     "vil"
+    ],
+    "n_stems": 3,
+    "robustness": 21
+   },
+   {
+    "affixes": [
+     "o",
+     "∅"
+    ],
+    "stems": [
+     "ler",
+     "lirs",
+     "posat",
+     "tenon"
+    ],
+    "n_stems": 4,
+    "robustness": 20
+   },
+   {
+    "affixes": [
+     "nhi",
+     "nro"
+    ],
+    "stems": [
+     "kuzaze",
+     "salu"
+    ],
+    "n_stems": 2,
+    "robustness": 16
+   },
+   {
+    "affixes": [
+     "a",
+     "aka"
+    ],
+    "stems": [
+     "vutot",
+     "zaret"
+    ],
+    "n_stems": 2,
+    "robustness": 14
+   },
+   {
+    "affixes": [
+     "i",
+     "ika"
+    ],
+    "stems": [
+     "kanes",
+     "paz"
+    ],
+    "n_stems": 2,
+    "robustness": 12
+   },
+   {
+    "affixes": [
+     "o",
+     "u"
+    ],
+    "stems": [
+     "koturm",
+     "nem"
+    ],
+    "n_stems": 2,
+    "robustness": 11
+   },
+   {
+    "affixes": [
+     "i",
+     "ine"
+    ],
+    "stems": [
+     "nisv",
+     "ves"
+    ],
+    "n_stems": 2,
+    "robustness": 11
+   }
+  ],
+  "total_evidence": 250
+ },
+ "prefix": {
+  "affixes": [
+   [
+    "ne",
+    5
+   ],
+   [
+    "lu",
+    4
+   ],
+   [
+    "l",
+    3
+   ],
+   [
+    "vesr",
+    3
+   ],
+   [
+    "k",
+    3
+   ],
+   [
+    "n",
+    3
+   ],
+   [
+    "kotur",
+    3
+   ]
+  ],
+  "signatures": [
+   {
+    "affixes": [
+     "ne",
+     "kotur",
+     "∅"
+    ],
+    "stems": [
+     "karos",
+     "ros"
+    ],
+    "n_stems": 2,
+    "robustness": 23
+   }
+  ],
+  "total_evidence": 24
+ }
+}

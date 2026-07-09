@@ -1,0 +1,702 @@
+{
+ "clusters": [
+  {
+   "id": 6,
+   "n_types": 68,
+   "n_tokens": 2872,
+   "token_share": 0.18712535835287986,
+   "tokens_per_type": 42.23529411764706,
+   "mean_norm_position": 0.9825348088927476,
+   "p_sentence_initial": 0.0,
+   "p_sentence_final": 0.9258356545961003,
+   "mean_word_length": 7.411764705882353,
+   "members": [
+    "nepiro",
+    "nepihi",
+    "numuro",
+    "numuhi",
+    "nepiroku",
+    "narposro",
+    "nepihiku",
+    "mavezoro",
+    "kuzazenro",
+    "lezervoro",
+    "narposhi",
+    "kuzazenhi",
+    "numuroku",
+    "vepovurro",
+    "mavezohi",
+    "lezervohi",
+    "namasiro",
+    "salunhi",
+    "salunro",
+    "linehi",
+    "vepovurhi",
+    "vilaro",
+    "linero",
+    "numuhiku",
+    "milaturo",
+    "mavezoroku",
+    "morahi",
+    "namasihi",
+    "nupostero",
+    "moraro",
+    "narposroku",
+    "nomaro",
+    "narposhiku",
+    "nupostehi",
+    "lokohi",
+    "tinapiro",
+    "lezervoroku",
+    "lokoro",
+    "vilahi",
+    "mavezohiku",
+    "nomahi",
+    "povuro",
+    "misero",
+    "vikuro",
+    "lezervohiku",
+    "tisraro",
+    "lutehi",
+    "milatuhi",
+    "namolonro",
+    "vikuhi",
+    "pokiro",
+    "povuhi",
+    "rovesahi",
+    "sezehi",
+    "tisrahi",
+    "namolonhi",
+    "misehi",
+    "pokihi",
+    "kesinoro",
+    "pitohi",
+    "rovesaro",
+    "sezero",
+    "lutero",
+    "kesinohi",
+    "lonmarhi",
+    "muluro",
+    "muluhi",
+    "pitoro"
+   ]
+  },
+  {
+   "id": 7,
+   "n_types": 22,
+   "n_tokens": 1207,
+   "token_share": 0.07864216836069846,
+   "tokens_per_type": 54.86363636363637,
+   "mean_norm_position": 0.4473141881592585,
+   "p_sentence_initial": 0.15658657829328915,
+   "p_sentence_final": 0.0,
+   "mean_word_length": 5.136363636363637,
+   "members": [
+    "rateza",
+    "litakis",
+    "lusi",
+    "pazi",
+    "ruri",
+    "titeki",
+    "viti",
+    "kapan",
+    "kiri",
+    "lirso",
+    "vutunna",
+    "noluvi",
+    "ketur",
+    "lero",
+    "sapi",
+    "vesrasu",
+    "pizu",
+    "pozi",
+    "kori",
+    "mive",
+    "rununa",
+    "kurpozane"
+   ]
+  },
+  {
+   "id": 1,
+   "n_types": 5,
+   "n_tokens": 1181,
+   "token_share": 0.07694813656502476,
+   "tokens_per_type": 236.2,
+   "mean_norm_position": 0.39341659610499585,
+   "p_sentence_initial": 0.000846740050804403,
+   "p_sentence_final": 0.0,
+   "mean_word_length": 3.4,
+   "members": [
+    "ka",
+    "karos",
+    "su",
+    "kanu",
+    "kara"
+   ]
+  },
+  {
+   "id": 15,
+   "n_types": 17,
+   "n_tokens": 1160,
+   "token_share": 0.07557988011467293,
+   "tokens_per_type": 68.23529411764706,
+   "mean_norm_position": 0.42291763074090666,
+   "p_sentence_initial": 0.1939655172413793,
+   "p_sentence_final": 0.0,
+   "mean_word_length": 5.764705882352941,
+   "members": [
+    "pennon",
+    "zalu",
+    "vesrane",
+    "mavo",
+    "kunmin",
+    "rosru",
+    "voraran",
+    "soslotes",
+    "patu",
+    "lesa",
+    "lunlivu",
+    "kipinvu",
+    "posato",
+    "vesi",
+    "kurpoza",
+    "kupone",
+    "karnon"
+   ]
+  },
+  {
+   "id": 2,
+   "n_types": 12,
+   "n_tokens": 1140,
+   "token_share": 0.07427677873338545,
+   "tokens_per_type": 95.0,
+   "mean_norm_position": 0.3092297346902609,
+   "p_sentence_initial": 0.27982456140350875,
+   "p_sentence_final": 0.0,
+   "mean_word_length": 4.916666666666667,
+   "members": [
+    "zirven",
+    "tovo",
+    "tonpe",
+    "tarze",
+    "pinu",
+    "kasti",
+    "semu",
+    "murno",
+    "rinlon",
+    "sosva",
+    "nirlun",
+    "mime"
+   ]
+  },
+  {
+   "id": 14,
+   "n_types": 22,
+   "n_tokens": 1075,
+   "token_share": 0.0700416992442012,
+   "tokens_per_type": 48.86363636363637,
+   "mean_norm_position": 0.40900684586731095,
+   "p_sentence_initial": 0.17953488372093024,
+   "p_sentence_final": 0.0,
+   "mean_word_length": 5.5,
+   "members": [
+    "nukamir",
+    "zola",
+    "larnu",
+    "nosa",
+    "menmer",
+    "kupo",
+    "memesa",
+    "nokurse",
+    "kulir",
+    "sinmonlu",
+    "sevi",
+    "rema",
+    "tila",
+    "male",
+    "teta",
+    "rotenpe",
+    "vusako",
+    "mornakin",
+    "letovo",
+    "ripute",
+    "nisvine",
+    "nossu"
+   ]
+  },
+  {
+   "id": 3,
+   "n_types": 7,
+   "n_tokens": 956,
+   "token_share": 0.06228824602554079,
+   "tokens_per_type": 136.57142857142858,
+   "mean_norm_position": 0.26121827962832156,
+   "p_sentence_initial": 0.37656903765690375,
+   "p_sentence_final": 0.012552301255230125,
+   "mean_word_length": 3.5714285714285716,
+   "members": [
+    "rakon",
+    "ro",
+    "ra",
+    "taser",
+    "piri",
+    "rasmi",
+    "ve"
+   ]
+  },
+  {
+   "id": 5,
+   "n_types": 14,
+   "n_tokens": 904,
+   "token_share": 0.05890018243419338,
+   "tokens_per_type": 64.57142857142857,
+   "mean_norm_position": 0.5614837933698554,
+   "p_sentence_initial": 0.11061946902654868,
+   "p_sentence_final": 0.0,
+   "mean_word_length": 6.285714285714286,
+   "members": [
+    "kotur",
+    "koturne",
+    "koturmu",
+    "koturmo",
+    "koturros",
+    "ratezane",
+    "pennonne",
+    "vesramu",
+    "meko",
+    "lusine",
+    "mavone",
+    "rurine",
+    "oros",
+    "rurim"
+   ]
+  },
+  {
+   "id": 0,
+   "n_types": 6,
+   "n_tokens": 776,
+   "token_share": 0.05056033359395361,
+   "tokens_per_type": 129.33333333333334,
+   "mean_norm_position": 0.21789117240148165,
+   "p_sentence_initial": 0.4690721649484536,
+   "p_sentence_final": 0.0,
+   "mean_word_length": 5.833333333333333,
+   "members": [
+    "nu",
+    "kanesika",
+    "kotursu",
+    "zaretaka",
+    "vutotaka",
+    "lu"
+   ]
+  },
+  {
+   "id": 13,
+   "n_types": 10,
+   "n_tokens": 696,
+   "token_share": 0.04534792806880375,
+   "tokens_per_type": 69.6,
+   "mean_norm_position": 0.1798401191720157,
+   "p_sentence_initial": 0.40804597701149425,
+   "p_sentence_final": 0.0,
+   "mean_word_length": 8.2,
+   "members": [
+    "koturka",
+    "koturkaros",
+    "vesraka",
+    "ratezaka",
+    "pennonka",
+    "vesrakaros",
+    "koturneka",
+    "lusika",
+    "kanesikaros",
+    "pazika"
+   ]
+  },
+  {
+   "id": 17,
+   "n_types": 7,
+   "n_tokens": 606,
+   "token_share": 0.03948397185301016,
+   "tokens_per_type": 86.57142857142857,
+   "mean_norm_position": 0.5169135365917543,
+   "p_sentence_initial": 0.0,
+   "p_sentence_final": 0.06435643564356436,
+   "mean_word_length": 4.857142857142857,
+   "members": [
+    "neka",
+    "mu",
+    "nekaros",
+    "nemu",
+    "nesu",
+    "nenepihi",
+    "inesu"
+   ]
+  },
+  {
+   "id": 10,
+   "n_types": 6,
+   "n_tokens": 579,
+   "token_share": 0.037724784988272086,
+   "tokens_per_type": 96.5,
+   "mean_norm_position": 0.0,
+   "p_sentence_initial": 1.0,
+   "p_sentence_final": 0.0,
+   "mean_word_length": 4.833333333333333,
+   "members": [
+    "lela",
+    "monla",
+    "pinzi",
+    "sursi",
+    "loros",
+    "zanto"
+   ]
+  },
+  {
+   "id": 9,
+   "n_types": 4,
+   "n_tokens": 561,
+   "token_share": 0.03655199374511337,
+   "tokens_per_type": 140.25,
+   "mean_norm_position": 0.3022243700051187,
+   "p_sentence_initial": 0.2994652406417112,
+   "p_sentence_final": 0.0,
+   "mean_word_length": 4.25,
+   "members": [
+    "rori",
+    "perlu",
+    "maku",
+    "ripi"
+   ]
+  },
+  {
+   "id": 8,
+   "n_types": 5,
+   "n_tokens": 536,
+   "token_share": 0.03492311701850404,
+   "tokens_per_type": 107.2,
+   "mean_norm_position": 0.6474515948396551,
+   "p_sentence_initial": 0.022388059701492536,
+   "p_sentence_final": 0.0,
+   "mean_word_length": 4.0,
+   "members": [
+    "mo",
+    "ros",
+    "neros",
+    "nemo",
+    "mopipe"
+   ]
+  },
+  {
+   "id": 19,
+   "n_types": 5,
+   "n_tokens": 327,
+   "token_share": 0.021305707584050038,
+   "tokens_per_type": 65.4,
+   "mean_norm_position": 0.4968108344255132,
+   "p_sentence_initial": 0.21100917431192662,
+   "p_sentence_final": 0.0,
+   "mean_word_length": 6.0,
+   "members": [
+    "vesra",
+    "nisvi",
+    "kanesi",
+    "vesraros",
+    "zalune"
+   ]
+  },
+  {
+   "id": 12,
+   "n_types": 1,
+   "n_tokens": 217,
+   "token_share": 0.014138649986968985,
+   "tokens_per_type": 217.0,
+   "mean_norm_position": 0.9969278033794162,
+   "p_sentence_initial": 0.0,
+   "p_sentence_final": 0.9953917050691244,
+   "mean_word_length": 2.0,
+   "members": [
+    "ku"
+   ]
+  },
+  {
+   "id": 18,
+   "n_types": 1,
+   "n_tokens": 195,
+   "token_share": 0.012705238467552775,
+   "tokens_per_type": 195.0,
+   "mean_norm_position": 0.7446756946756947,
+   "p_sentence_initial": 0.0,
+   "p_sentence_final": 0.0,
+   "mean_word_length": 2.0,
+   "members": [
+    "ne"
+   ]
+  },
+  {
+   "id": 11,
+   "n_types": 11,
+   "n_tokens": 183,
+   "token_share": 0.011923377638780297,
+   "tokens_per_type": 16.636363636363637,
+   "mean_norm_position": 0.08597666753404458,
+   "p_sentence_initial": 0.73224043715847,
+   "p_sentence_final": 0.0,
+   "mean_word_length": 6.7272727272727275,
+   "members": [
+    "tizine",
+    "vistates",
+    "zareta",
+    "pazisin",
+    "kenunri",
+    "namaris",
+    "zesulu",
+    "tesvonrur",
+    "vesine",
+    "tenono",
+    "vutota"
+   ]
+  },
+  {
+   "id": 4,
+   "n_types": 4,
+   "n_tokens": 92,
+   "token_share": 0.005994266353922335,
+   "tokens_per_type": 23.0,
+   "mean_norm_position": 0.8973214285714286,
+   "p_sentence_initial": 0.0,
+   "p_sentence_final": 0.8043478260869565,
+   "mean_word_length": 5.0,
+   "members": [
+    "roku",
+    "hiku",
+    "kave",
+    "tinapihi"
+   ]
+  },
+  {
+   "id": 16,
+   "n_types": 9,
+   "n_tokens": 72,
+   "token_share": 0.004691164972634871,
+   "tokens_per_type": 8.0,
+   "mean_norm_position": 0.7800981040564374,
+   "p_sentence_initial": 0.0,
+   "p_sentence_final": 0.0,
+   "mean_word_length": 5.444444444444445,
+   "members": [
+    "lonmar",
+    "nesalun",
+    "kesino",
+    "tisra",
+    "mise",
+    "rovesa",
+    "namolon",
+    "pito",
+    "mulu"
+   ]
+  }
+ ],
+ "substitution_grid": [
+  {
+   "cosine": 0.889,
+   "a": "roku",
+   "b": "hiku"
+  },
+  {
+   "cosine": 0.732,
+   "a": "ka",
+   "b": "karos"
+  },
+  {
+   "cosine": 0.717,
+   "a": "kesino",
+   "b": "tisra"
+  },
+  {
+   "cosine": 0.715,
+   "a": "kesino",
+   "b": "rovesa"
+  },
+  {
+   "cosine": 0.69,
+   "a": "zirven",
+   "b": "rori"
+  },
+  {
+   "cosine": 0.675,
+   "a": "rori",
+   "b": "perlu"
+  },
+  {
+   "cosine": 0.67,
+   "a": "vepovurro",
+   "b": "namasiro"
+  },
+  {
+   "cosine": 0.665,
+   "a": "mo",
+   "b": "ne"
+  },
+  {
+   "cosine": 0.654,
+   "a": "namolon",
+   "b": "mulu"
+  },
+  {
+   "cosine": 0.652,
+   "a": "zirven",
+   "b": "perlu"
+  },
+  {
+   "cosine": 0.645,
+   "a": "mise",
+   "b": "mulu"
+  },
+  {
+   "cosine": 0.645,
+   "a": "kesino",
+   "b": "mulu"
+  },
+  {
+   "cosine": 0.641,
+   "a": "kesino",
+   "b": "pito"
+  },
+  {
+   "cosine": 0.635,
+   "a": "kotur",
+   "b": "vesra"
+  },
+  {
+   "cosine": 0.634,
+   "a": "rovesa",
+   "b": "mulu"
+  },
+  {
+   "cosine": 0.631,
+   "a": "nepiro",
+   "b": "mavezoro"
+  },
+  {
+   "cosine": 0.63,
+   "a": "kesino",
+   "b": "namolon"
+  },
+  {
+   "cosine": 0.629,
+   "a": "mise",
+   "b": "namolon"
+  },
+  {
+   "cosine": 0.629,
+   "a": "ka",
+   "b": "kanu"
+  },
+  {
+   "cosine": 0.626,
+   "a": "kesino",
+   "b": "mise"
+  },
+  {
+   "cosine": 0.622,
+   "a": "tizine",
+   "b": "vistates"
+  },
+  {
+   "cosine": 0.619,
+   "a": "zirven",
+   "b": "rakon"
+  },
+  {
+   "cosine": 0.619,
+   "a": "pito",
+   "b": "mulu"
+  },
+  {
+   "cosine": 0.617,
+   "a": "zirven",
+   "b": "tovo"
+  },
+  {
+   "cosine": 0.613,
+   "a": "zirven",
+   "b": "tonpe"
+  },
+  {
+   "cosine": 0.612,
+   "a": "rori",
+   "b": "tovo"
+  },
+  {
+   "cosine": 0.61,
+   "a": "namolon",
+   "b": "pito"
+  },
+  {
+   "cosine": 0.609,
+   "a": "rakon",
+   "b": "perlu"
+  },
+  {
+   "cosine": 0.605,
+   "a": "tisra",
+   "b": "mise"
+  },
+  {
+   "cosine": 0.605,
+   "a": "kotur",
+   "b": "rateza"
+  },
+  {
+   "cosine": 0.604,
+   "a": "rateza",
+   "b": "lusi"
+  },
+  {
+   "cosine": 0.603,
+   "a": "tisra",
+   "b": "namolon"
+  },
+  {
+   "cosine": 0.602,
+   "a": "ka",
+   "b": "neka"
+  },
+  {
+   "cosine": 0.598,
+   "a": "perlu",
+   "b": "tonpe"
+  },
+  {
+   "cosine": 0.594,
+   "a": "kotur",
+   "b": "koturne"
+  },
+  {
+   "cosine": 0.593,
+   "a": "nepiro",
+   "b": "numuro"
+  },
+  {
+   "cosine": 0.588,
+   "a": "neka",
+   "b": "nekaros"
+  },
+  {
+   "cosine": 0.586,
+   "a": "rakon",
+   "b": "rori"
+  },
+  {
+   "cosine": 0.582,
+   "a": "rori",
+   "b": "maku"
+  },
+  {
+   "cosine": 0.582,
+   "a": "tisra",
+   "b": "rovesa"
+  }
+ ]
+}

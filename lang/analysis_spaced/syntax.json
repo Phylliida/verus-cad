@@ -1,0 +1,889 @@
+{
+ "edge_profile": [
+  {
+   "id": 2,
+   "n_types": 12,
+   "token_share": 0.138,
+   "class_type": "closed",
+   "position_habit": "early in sentence",
+   "examples": [
+    "nu",
+    "zirven",
+    "perlu",
+    "maku",
+    "tonpe",
+    "piri",
+    "tarze",
+    "pinu"
+   ]
+  },
+  {
+   "id": 4,
+   "n_types": 51,
+   "token_share": 0.094,
+   "class_type": "open",
+   "position_habit": "medial",
+   "examples": [
+    "kotur",
+    "pennon",
+    "lusi",
+    "vesrane",
+    "ratezane",
+    "zola",
+    "pazi",
+    "ruri"
+   ]
+  },
+  {
+   "id": 7,
+   "n_types": 64,
+   "token_share": 0.092,
+   "class_type": "open",
+   "position_habit": "early in sentence",
+   "examples": [
+    "koturka",
+    "ratezaka",
+    "koturneka",
+    "kanesika",
+    "pennonka",
+    "nukamirka",
+    "lusika",
+    "ratezaneka"
+   ]
+  },
+  {
+   "id": 9,
+   "n_types": 35,
+   "token_share": 0.09,
+   "class_type": "open",
+   "position_habit": "strongly sentence-final",
+   "examples": [
+    "nepihi",
+    "numuhi",
+    "nepiroku",
+    "narposro",
+    "nepihiku",
+    "lezervoro",
+    "numuroku",
+    "kuzazenhi"
+   ]
+  },
+  {
+   "id": 0,
+   "n_types": 16,
+   "token_share": 0.075,
+   "class_type": "small",
+   "position_habit": "medial",
+   "examples": [
+    "ros",
+    "koturmu",
+    "ratezamu",
+    "vesranesu",
+    "nukamirsu",
+    "kunminsu",
+    "litakismu",
+    "menmermu"
+   ]
+  },
+  {
+   "id": 11,
+   "n_types": 42,
+   "token_share": 0.073,
+   "class_type": "open",
+   "position_habit": "medial",
+   "examples": [
+    "vesra",
+    "nukamir",
+    "litakis",
+    "mavo",
+    "pennonne",
+    "kunmin",
+    "kanesi",
+    "rosru"
+   ]
+  },
+  {
+   "id": 6,
+   "n_types": 43,
+   "token_share": 0.073,
+   "class_type": "open",
+   "position_habit": "strongly sentence-final",
+   "examples": [
+    "nepiro",
+    "mavezoro",
+    "kuzazenro",
+    "mavezohi",
+    "lezervohi",
+    "vepovurro",
+    "vilaro",
+    "milaturo"
+   ]
+  },
+  {
+   "id": 17,
+   "n_types": 73,
+   "token_share": 0.061,
+   "class_type": "open",
+   "position_habit": "early in sentence",
+   "examples": [
+    "vesraka",
+    "vesraneka",
+    "zaluka",
+    "mavoka",
+    "zaretaka",
+    "pazika",
+    "vesramu",
+    "kunminka"
+   ]
+  },
+  {
+   "id": 15,
+   "n_types": 36,
+   "token_share": 0.048,
+   "class_type": "open",
+   "position_habit": "strongly sentence-final",
+   "examples": [
+    "numuro",
+    "narposhi",
+    "salunhi",
+    "morahi",
+    "narposhiku",
+    "linero",
+    "namasihi",
+    "nomaro"
+   ]
+  },
+  {
+   "id": 10,
+   "n_types": 8,
+   "token_share": 0.042,
+   "class_type": "closed",
+   "position_habit": "strongly sentence-initial",
+   "examples": [
+    "lela",
+    "monla",
+    "pinzi",
+    "sursi",
+    "loros",
+    "zanto",
+    "tesvonrurka",
+    "kipinvusu"
+   ]
+  },
+  {
+   "id": 3,
+   "n_types": 4,
+   "token_share": 0.041,
+   "class_type": "closed",
+   "position_habit": "early in sentence",
+   "examples": [
+    "rakon",
+    "taser",
+    "ve",
+    "vutunnaka"
+   ]
+  },
+  {
+   "id": 12,
+   "n_types": 36,
+   "token_share": 0.041,
+   "class_type": "open",
+   "position_habit": "medial",
+   "examples": [
+    "rateza",
+    "zalu",
+    "kotursu",
+    "vesrasu",
+    "soslotes",
+    "vutunna",
+    "litakisne",
+    "koturnesu"
+   ]
+  },
+  {
+   "id": 5,
+   "n_types": 7,
+   "token_share": 0.028,
+   "class_type": "closed",
+   "position_habit": "late in sentence",
+   "examples": [
+    "mo",
+    "tinapihi",
+    "nupostehiku",
+    "lutehiku",
+    "mopipe",
+    "vilahiku",
+    "povuroku"
+   ]
+  },
+  {
+   "id": 8,
+   "n_types": 8,
+   "token_share": 0.025,
+   "class_type": "closed",
+   "position_habit": "medial",
+   "examples": [
+    "rori",
+    "murno",
+    "mime",
+    "larnuneka",
+    "nisvinesu",
+    "kipinvuneka",
+    "korinesu",
+    "lunlivusu"
+   ]
+  },
+  {
+   "id": 19,
+   "n_types": 17,
+   "token_share": 0.021,
+   "class_type": "small",
+   "position_habit": "medial",
+   "examples": [
+    "ro",
+    "rasmi",
+    "ripi",
+    "ratezasu",
+    "vusakoka",
+    "litakissu",
+    "pazisu",
+    "rurisu"
+   ]
+  },
+  {
+   "id": 16,
+   "n_types": 18,
+   "token_share": 0.015,
+   "class_type": "small",
+   "position_habit": "medial",
+   "examples": [
+    "koturne",
+    "letovo",
+    "lunlivune",
+    "ratezanemu",
+    "mavomu",
+    "mekone",
+    "kipinvune",
+    "vesine"
+   ]
+  },
+  {
+   "id": 18,
+   "n_types": 8,
+   "token_share": 0.014,
+   "class_type": "closed",
+   "position_habit": "medial",
+   "examples": [
+    "tovo",
+    "rinlon",
+    "nokurseka",
+    "lerone",
+    "letovoka",
+    "sapimu",
+    "tetane",
+    "tetasu"
+   ]
+  },
+  {
+   "id": 14,
+   "n_types": 5,
+   "token_share": 0.013,
+   "class_type": "closed",
+   "position_habit": "early in sentence",
+   "examples": [
+    "ra",
+    "nisvineka",
+    "nossuka",
+    "mavosu",
+    "rununaka"
+   ]
+  },
+  {
+   "id": 13,
+   "n_types": 7,
+   "token_share": 0.006,
+   "class_type": "small",
+   "position_habit": "early in sentence",
+   "examples": [
+    "semu",
+    "sinmonluka",
+    "nosaneka",
+    "kapanmu",
+    "lusinemu",
+    "kurpozasu",
+    "lesamu"
+   ]
+  },
+  {
+   "id": 1,
+   "n_types": 10,
+   "token_share": 0.004,
+   "class_type": "small",
+   "position_habit": "medial",
+   "examples": [
+    "lusisu",
+    "rosruneka",
+    "remaka",
+    "sevika",
+    "pennonsu",
+    "lusinesu",
+    "mavonemu",
+    "mornakinneka"
+   ]
+  }
+ ],
+ "transitions": [
+  {
+   "from": 9,
+   "to": "</s>",
+   "count": 1266,
+   "p": 1.0
+  },
+  {
+   "from": 6,
+   "to": "</s>",
+   "count": 1029,
+   "p": 1.0
+  },
+  {
+   "from": 15,
+   "to": "</s>",
+   "count": 669,
+   "p": 0.997
+  },
+  {
+   "from": "<s>",
+   "to": 2,
+   "count": 628,
+   "p": 0.21
+  },
+  {
+   "from": "<s>",
+   "to": 10,
+   "count": 582,
+   "p": 0.194
+  },
+  {
+   "from": "<s>",
+   "to": 7,
+   "count": 539,
+   "p": 0.18
+  },
+  {
+   "from": 4,
+   "to": 9,
+   "count": 461,
+   "p": 0.352
+  },
+  {
+   "from": 7,
+   "to": 0,
+   "count": 414,
+   "p": 0.322
+  },
+  {
+   "from": 2,
+   "to": 4,
+   "count": 396,
+   "p": 0.206
+  },
+  {
+   "from": 2,
+   "to": 7,
+   "count": 356,
+   "p": 0.185
+  },
+  {
+   "from": "<s>",
+   "to": 17,
+   "count": 334,
+   "p": 0.112
+  },
+  {
+   "from": 11,
+   "to": 9,
+   "count": 304,
+   "p": 0.295
+  },
+  {
+   "from": 11,
+   "to": 6,
+   "count": 296,
+   "p": 0.288
+  },
+  {
+   "from": 4,
+   "to": 6,
+   "count": 291,
+   "p": 0.222
+  },
+  {
+   "from": 2,
+   "to": 11,
+   "count": 291,
+   "p": 0.151
+  },
+  {
+   "from": 7,
+   "to": 2,
+   "count": 276,
+   "p": 0.215
+  },
+  {
+   "from": 0,
+   "to": 2,
+   "count": 262,
+   "p": 0.25
+  },
+  {
+   "from": 17,
+   "to": 0,
+   "count": 238,
+   "p": 0.28
+  },
+  {
+   "from": 4,
+   "to": 15,
+   "count": 218,
+   "p": 0.166
+  },
+  {
+   "from": "<s>",
+   "to": 3,
+   "count": 209,
+   "p": 0.07
+  },
+  {
+   "from": 2,
+   "to": 17,
+   "count": 202,
+   "p": 0.105
+  },
+  {
+   "from": 4,
+   "to": 5,
+   "count": 176,
+   "p": 0.134
+  },
+  {
+   "from": 2,
+   "to": 12,
+   "count": 174,
+   "p": 0.091
+  },
+  {
+   "from": 12,
+   "to": 9,
+   "count": 171,
+   "p": 0.296
+  },
+  {
+   "from": 17,
+   "to": 2,
+   "count": 165,
+   "p": 0.194
+  },
+  {
+   "from": 11,
+   "to": 15,
+   "count": 164,
+   "p": 0.159
+  },
+  {
+   "from": 12,
+   "to": 6,
+   "count": 158,
+   "p": 0.273
+  },
+  {
+   "from": 10,
+   "to": 2,
+   "count": 154,
+   "p": 0.263
+  },
+  {
+   "from": 2,
+   "to": 2,
+   "count": 147,
+   "p": 0.077
+  },
+  {
+   "from": 7,
+   "to": 4,
+   "count": 143,
+   "p": 0.111
+  },
+  {
+   "from": 5,
+   "to": 9,
+   "count": 141,
+   "p": 0.358
+  },
+  {
+   "from": 0,
+   "to": 4,
+   "count": 133,
+   "p": 0.127
+  },
+  {
+   "from": 5,
+   "to": 6,
+   "count": 130,
+   "p": 0.33
+  },
+  {
+   "from": 10,
+   "to": 7,
+   "count": 126,
+   "p": 0.215
+  },
+  {
+   "from": 7,
+   "to": 11,
+   "count": 126,
+   "p": 0.098
+  },
+  {
+   "from": 4,
+   "to": 0,
+   "count": 123,
+   "p": 0.094
+  },
+  {
+   "from": 11,
+   "to": 0,
+   "count": 116,
+   "p": 0.113
+  },
+  {
+   "from": 3,
+   "to": 4,
+   "count": 115,
+   "p": 0.2
+  },
+  {
+   "from": 17,
+   "to": 4,
+   "count": 105,
+   "p": 0.124
+  },
+  {
+   "from": 11,
+   "to": 5,
+   "count": 97,
+   "p": 0.094
+  }
+ ],
+ "pmi_bigrams": [
+  {
+   "a": "tovo",
+   "b": "nukamirne",
+   "count": 5,
+   "pmi": 4.83
+  },
+  {
+   "a": "kotur",
+   "b": "rovesaro",
+   "count": 5,
+   "pmi": 4.26
+  },
+  {
+   "a": "ve",
+   "b": "maku",
+   "count": 5,
+   "pmi": 4.24
+  },
+  {
+   "a": "titeki",
+   "b": "nepiro",
+   "count": 5,
+   "pmi": 4.2
+  },
+  {
+   "a": "mo",
+   "b": "nomahi",
+   "count": 6,
+   "pmi": 3.92
+  },
+  {
+   "a": "mo",
+   "b": "nomaro",
+   "count": 7,
+   "pmi": 3.88
+  },
+  {
+   "a": "ruri",
+   "b": "mo",
+   "count": 8,
+   "pmi": 3.71
+  },
+  {
+   "a": "rosruneka",
+   "b": "ros",
+   "count": 6,
+   "pmi": 3.69
+  },
+  {
+   "a": "vitika",
+   "b": "ros",
+   "count": 6,
+   "pmi": 3.69
+  },
+  {
+   "a": "remaka",
+   "b": "ros",
+   "count": 5,
+   "pmi": 3.6
+  },
+  {
+   "a": "lesaka",
+   "b": "ros",
+   "count": 5,
+   "pmi": 3.6
+  },
+  {
+   "a": "mo",
+   "b": "salunhi",
+   "count": 9,
+   "pmi": 3.54
+  },
+  {
+   "a": "lela",
+   "b": "kanesi",
+   "count": 6,
+   "pmi": 3.51
+  },
+  {
+   "a": "koturne",
+   "b": "lezervoro",
+   "count": 7,
+   "pmi": 3.47
+  },
+  {
+   "a": "rosru",
+   "b": "mo",
+   "count": 8,
+   "pmi": 3.45
+  },
+  {
+   "a": "nukamir",
+   "b": "mavezoro",
+   "count": 5,
+   "pmi": 3.45
+  },
+  {
+   "a": "mo",
+   "b": "narposhiku",
+   "count": 6,
+   "pmi": 3.44
+  },
+  {
+   "a": "nukamirne",
+   "b": "mo",
+   "count": 5,
+   "pmi": 3.4
+  },
+  {
+   "a": "mo",
+   "b": "vepovurro",
+   "count": 9,
+   "pmi": 3.37
+  },
+  {
+   "a": "vesrane",
+   "b": "nepiroku",
+   "count": 5,
+   "pmi": 3.37
+  },
+  {
+   "a": "rakon",
+   "b": "nukamirneka",
+   "count": 5,
+   "pmi": 3.37
+  },
+  {
+   "a": "lusi",
+   "b": "nepiroku",
+   "count": 5,
+   "pmi": 3.37
+  },
+  {
+   "a": "zalune",
+   "b": "mo",
+   "count": 6,
+   "pmi": 3.34
+  },
+  {
+   "a": "mo",
+   "b": "linehi",
+   "count": 6,
+   "pmi": 3.29
+  },
+  {
+   "a": "tarze",
+   "b": "koturne",
+   "count": 6,
+   "pmi": 3.27
+  },
+  {
+   "a": "rateza",
+   "b": "lezervoro",
+   "count": 7,
+   "pmi": 3.25
+  },
+  {
+   "a": "mo",
+   "b": "namasihi",
+   "count": 5,
+   "pmi": 3.23
+  },
+  {
+   "a": "kotur",
+   "b": "linero",
+   "count": 6,
+   "pmi": 3.23
+  },
+  {
+   "a": "menmerka",
+   "b": "ros",
+   "count": 10,
+   "pmi": 3.2
+  },
+  {
+   "a": "pazi",
+   "b": "nepiro",
+   "count": 6,
+   "pmi": 3.2
+  }
+ ],
+ "formulae": [
+  {
+   "phrase": "koturka ros nu",
+   "count": 21
+  },
+  {
+   "phrase": "ros nu zirven",
+   "count": 12
+  },
+  {
+   "phrase": "nu koturka ros",
+   "count": 9
+  },
+  {
+   "phrase": "kotur mo nepihi",
+   "count": 7
+  },
+  {
+   "phrase": "ros nu kotur",
+   "count": 7
+  },
+  {
+   "phrase": "ros zirven kotur",
+   "count": 7
+  },
+  {
+   "phrase": "koturka ros rakon",
+   "count": 7
+  },
+  {
+   "phrase": "kotur mo nepiro",
+   "count": 6
+  },
+  {
+   "phrase": "nu kotur nepiro",
+   "count": 6
+  },
+  {
+   "phrase": "nu kotur ros",
+   "count": 6
+  },
+  {
+   "phrase": "vesraka ros nu",
+   "count": 6
+  },
+  {
+   "phrase": "rakon koturka ros",
+   "count": 6
+  },
+  {
+   "phrase": "koturka ros kotur",
+   "count": 6
+  },
+  {
+   "phrase": "nu rakon kotur",
+   "count": 6
+  },
+  {
+   "phrase": "ros nu rakon",
+   "count": 6
+  },
+  {
+   "phrase": "ros kotur nepihi",
+   "count": 5
+  },
+  {
+   "phrase": "ros kotur mo",
+   "count": 5
+  },
+  {
+   "phrase": "ro koturka ros",
+   "count": 5
+  },
+  {
+   "phrase": "nu zirven kotur",
+   "count": 5
+  },
+  {
+   "phrase": "zirven kotur nepihi",
+   "count": 5
+  }
+ ],
+ "anchors": {
+  "numeral_like_clusters": [
+   {
+    "cluster": 5,
+    "members": [
+     "mo",
+     "tinapihi",
+     "nupostehiku",
+     "lutehiku",
+     "mopipe",
+     "vilahiku",
+     "povuroku"
+    ],
+    "open_adjacency": 0.92,
+    "self_adjacency": 0.01
+   },
+   {
+    "cluster": 18,
+    "members": [
+     "tovo",
+     "rinlon",
+     "nokurseka",
+     "lerone",
+     "letovoka",
+     "sapimu",
+     "tetane",
+     "tetasu"
+    ],
+    "open_adjacency": 0.62,
+    "self_adjacency": 0.0
+   },
+   {
+    "cluster": 8,
+    "members": [
+     "rori",
+     "murno",
+     "mime",
+     "larnuneka",
+     "nisvinesu",
+     "kipinvuneka",
+     "korinesu",
+     "lunlivusu"
+    ],
+    "open_adjacency": 0.62,
+    "self_adjacency": 0.0
+   }
+  ]
+ }
+}

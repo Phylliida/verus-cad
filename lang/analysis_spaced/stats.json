@@ -1,0 +1,151 @@
+{
+ "zipf": {
+  "slope": -1.367121902123847,
+  "r_squared": 0.9154683010587867,
+  "ranks_used": 571
+ },
+ "heaps": {
+  "beta": 0.30983805654503743,
+  "r_squared": 0.9490807179007859
+ },
+ "char": {
+  "alphabet_size": 17,
+  "unigram_entropy_bits": 3.8829292238533952,
+  "conditional_entropy_bits": 2.7101982358768986,
+  "entropy_drop": 1.1727309879764967
+ },
+ "token": {
+  "sentences": 3000,
+  "tokens": 14029,
+  "types": 571,
+  "type_token_ratio": 0.04070140423408654,
+  "hapax_fraction_of_types": 0.1243432574430823,
+  "unigram_entropy_bits": 7.309214026556204,
+  "conditional_entropy_bits": 4.348494797703668,
+  "mean_sentence_length": 4.676333333333333,
+  "sd_sentence_length": 1.530437809546304,
+  "mean_token_length": 5.7562192601040705
+ },
+ "top_words": [
+  [
+   "ros",
+   922
+  ],
+  [
+   "nu",
+   763
+  ],
+  [
+   "zirven",
+   463
+  ],
+  [
+   "rakon",
+   433
+  ],
+  [
+   "kotur",
+   423
+  ],
+  [
+   "mo",
+   353
+  ],
+  [
+   "nepiro",
+   324
+  ],
+  [
+   "koturka",
+   322
+  ],
+  [
+   "rori",
+   250
+  ],
+  [
+   "nepihi",
+   246
+  ],
+  [
+   "lela",
+   229
+  ],
+  [
+   "vesra",
+   211
+  ],
+  [
+   "rateza",
+   180
+  ],
+  [
+   "perlu",
+   175
+  ],
+  [
+   "ra",
+   173
+  ],
+  [
+   "numuro",
+   159
+  ],
+  [
+   "koturne",
+   154
+  ],
+  [
+   "vesraka",
+   150
+  ],
+  [
+   "tovo",
+   131
+  ],
+  [
+   "ro",
+   129
+  ],
+  [
+   "pennon",
+   123
+  ],
+  [
+   "numuhi",
+   122
+  ],
+  [
+   "monla",
+   116
+  ],
+  [
+   "nepiroku",
+   109
+  ],
+  [
+   "narposro",
+   102
+  ],
+  [
+   "ratezaka",
+   97
+  ],
+  [
+   "nukamir",
+   96
+  ],
+  [
+   "koturneka",
+   93
+  ],
+  [
+   "nepihiku",
+   93
+  ],
+  [
+   "maku",
+   91
+  ]
+ ]
+}

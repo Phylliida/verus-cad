@@ -1,0 +1,151 @@
+{
+ "zipf": {
+  "slope": -1.1430589313370452,
+  "r_squared": 0.7256472839317356,
+  "ranks_used": 249
+ },
+ "heaps": {
+  "beta": 0.09084165266102708,
+  "r_squared": 0.7746412083147272
+ },
+ "char": {
+  "alphabet_size": 17,
+  "unigram_entropy_bits": 3.870196985369988,
+  "conditional_entropy_bits": 2.6799475477491383,
+  "entropy_drop": 1.1902494376208494
+ },
+ "token": {
+  "sentences": 3000,
+  "tokens": 15348,
+  "types": 249,
+  "type_token_ratio": 0.01622361219702893,
+  "hapax_fraction_of_types": 0.05220883534136546,
+  "unigram_entropy_bits": 7.082761501349075,
+  "conditional_entropy_bits": 4.50206209480297,
+  "mean_sentence_length": 5.116,
+  "sd_sentence_length": 1.807911502258891,
+  "mean_token_length": 5.261532447224394
+ },
+ "top_words": [
+  [
+   "nu",
+   634
+  ],
+  [
+   "ka",
+   466
+  ],
+  [
+   "zirven",
+   463
+  ],
+  [
+   "rakon",
+   433
+  ],
+  [
+   "karos",
+   367
+  ],
+  [
+   "kotur",
+   354
+  ],
+  [
+   "nepiro",
+   324
+  ],
+  [
+   "rateza",
+   299
+  ],
+  [
+   "mo",
+   258
+  ],
+  [
+   "rori",
+   250
+  ],
+  [
+   "lela",
+   229
+  ],
+  [
+   "koturne",
+   218
+  ],
+  [
+   "ku",
+   217
+  ],
+  [
+   "koturka",
+   216
+  ],
+  [
+   "nukamir",
+   215
+  ],
+  [
+   "pennon",
+   208
+  ],
+  [
+   "nepihi",
+   207
+  ],
+  [
+   "neka",
+   199
+  ],
+  [
+   "ne",
+   195
+  ],
+  [
+   "vesra",
+   191
+  ],
+  [
+   "perlu",
+   175
+  ],
+  [
+   "su",
+   174
+  ],
+  [
+   "ros",
+   168
+  ],
+  [
+   "numuro",
+   159
+  ],
+  [
+   "mu",
+   156
+  ],
+  [
+   "zalu",
+   153
+  ],
+  [
+   "vesrane",
+   149
+  ],
+  [
+   "ro",
+   141
+  ],
+  [
+   "litakis",
+   141
+  ],
+  [
+   "lusi",
+   140
+  ]
+ ]
+}
