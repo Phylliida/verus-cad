@@ -1,0 +1,15 @@
+{
+  "puzzle": "the-lanterns",
+  "flares": 12559,
+  "flashes": 67503,
+  "logs": {
+    "RIDGE": 8719,
+    "LAMP": 3840
+  },
+  "beacons_seen": 47,
+  "nights": 48,
+  "glyph_inventory": 35,
+  "shapes": 18,
+  "flares_stamp": "90790cd2e35ff9768589c7613c3525283f0f2c9089aba54a5aab0007c2749a04",
+  "catalog_stamp": "03db378419801b57e7b6f7b81c2b065a1a8ab4df4af9717a131fc43642ef0b28"
+}

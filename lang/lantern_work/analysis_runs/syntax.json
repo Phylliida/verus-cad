@@ -1,0 +1,662 @@
+{
+ "edge_profile": [
+  {
+   "id": 0,
+   "n_types": 6,
+   "token_share": 0.224,
+   "class_type": "closed",
+   "position_habit": "medial",
+   "examples": [
+    "2x1",
+    "0x2",
+    "10Fx1",
+    "2x6",
+    "2x8",
+    "4x9"
+   ]
+  },
+  {
+   "id": 1,
+   "n_types": 6,
+   "token_share": 0.139,
+   "class_type": "closed",
+   "position_habit": "medial",
+   "examples": [
+    "4x1",
+    "5x1",
+    "4x3",
+    "4x10",
+    "4x7",
+    "10x2"
+   ]
+  },
+  {
+   "id": 2,
+   "n_types": 5,
+   "token_share": 0.127,
+   "class_type": "closed",
+   "position_habit": "medial",
+   "examples": [
+    "0x1",
+    "16x1",
+    "15x1",
+    "12x1",
+    "4x6"
+   ]
+  },
+  {
+   "id": 4,
+   "n_types": 10,
+   "token_share": 0.12,
+   "class_type": "small",
+   "position_habit": "medial",
+   "examples": [
+    "17x1",
+    "4x2",
+    "6x1",
+    "17x2",
+    "2Fx1",
+    "11Fx1",
+    "4x4",
+    "4x8"
+   ]
+  },
+  {
+   "id": 6,
+   "n_types": 19,
+   "token_share": 0.101,
+   "class_type": "small",
+   "position_habit": "medial",
+   "examples": [
+    "2x3",
+    "2x4",
+    "2x5",
+    "2x12",
+    "2x9",
+    "7Fx1",
+    "0x3",
+    "5x2"
+   ]
+  },
+  {
+   "id": 3,
+   "n_types": 5,
+   "token_share": 0.076,
+   "class_type": "closed",
+   "position_habit": "medial",
+   "examples": [
+    "2x2",
+    "2x7",
+    "4Fx1",
+    "2x20",
+    "2x21"
+   ]
+  },
+  {
+   "id": 8,
+   "n_types": 16,
+   "token_share": 0.065,
+   "class_type": "small",
+   "position_habit": "medial",
+   "examples": [
+    "13x1",
+    "8x1",
+    "10x1",
+    "8x2",
+    "14x1",
+    "13Fx1",
+    "13x3",
+    "11x2"
+   ]
+  },
+  {
+   "id": 9,
+   "n_types": 8,
+   "token_share": 0.051,
+   "class_type": "small",
+   "position_habit": "medial",
+   "examples": [
+    "9x1",
+    "11x1",
+    "17Fx1",
+    "2x11",
+    "9Fx1",
+    "2x19",
+    "3x1",
+    "17x5"
+   ]
+  },
+  {
+   "id": 5,
+   "n_types": 3,
+   "token_share": 0.045,
+   "class_type": "closed",
+   "position_habit": "medial",
+   "examples": [
+    "16Fx1",
+    "1x1",
+    "16x2"
+   ]
+  },
+  {
+   "id": 7,
+   "n_types": 2,
+   "token_share": 0.033,
+   "class_type": "closed",
+   "position_habit": "medial",
+   "examples": [
+    "7x1",
+    "0x4"
+   ]
+  }
+ ],
+ "transitions": [
+  {
+   "from": 2,
+   "to": 0,
+   "count": 84,
+   "p": 0.467
+  },
+  {
+   "from": 1,
+   "to": 0,
+   "count": 79,
+   "p": 0.399
+  },
+  {
+   "from": 0,
+   "to": 2,
+   "count": 78,
+   "p": 0.247
+  },
+  {
+   "from": 0,
+   "to": 1,
+   "count": 72,
+   "p": 0.228
+  },
+  {
+   "from": 0,
+   "to": 4,
+   "count": 53,
+   "p": 0.168
+  },
+  {
+   "from": 4,
+   "to": 0,
+   "count": 46,
+   "p": 0.271
+  },
+  {
+   "from": 1,
+   "to": 6,
+   "count": 36,
+   "p": 0.182
+  },
+  {
+   "from": 0,
+   "to": 0,
+   "count": 34,
+   "p": 0.108
+  },
+  {
+   "from": 6,
+   "to": 1,
+   "count": 29,
+   "p": 0.203
+  },
+  {
+   "from": 6,
+   "to": "</s>",
+   "count": 27,
+   "p": 0.189
+  },
+  {
+   "from": 3,
+   "to": 1,
+   "count": 25,
+   "p": 0.231
+  },
+  {
+   "from": 4,
+   "to": 3,
+   "count": 25,
+   "p": 0.147
+  },
+  {
+   "from": 4,
+   "to": 2,
+   "count": 23,
+   "p": 0.135
+  },
+  {
+   "from": 9,
+   "to": 4,
+   "count": 22,
+   "p": 0.297
+  },
+  {
+   "from": 1,
+   "to": 3,
+   "count": 22,
+   "p": 0.111
+  },
+  {
+   "from": "<s>",
+   "to": 6,
+   "count": 21,
+   "p": 0.194
+  },
+  {
+   "from": 6,
+   "to": 5,
+   "count": 21,
+   "p": 0.147
+  },
+  {
+   "from": 4,
+   "to": 8,
+   "count": 20,
+   "p": 0.118
+  },
+  {
+   "from": 5,
+   "to": 6,
+   "count": 19,
+   "p": 0.306
+  },
+  {
+   "from": 3,
+   "to": 4,
+   "count": 19,
+   "p": 0.176
+  },
+  {
+   "from": "<s>",
+   "to": 8,
+   "count": 19,
+   "p": 0.176
+  },
+  {
+   "from": 2,
+   "to": 3,
+   "count": 19,
+   "p": 0.106
+  },
+  {
+   "from": 8,
+   "to": 8,
+   "count": 18,
+   "p": 0.196
+  },
+  {
+   "from": 3,
+   "to": 2,
+   "count": 18,
+   "p": 0.167
+  },
+  {
+   "from": "<s>",
+   "to": 4,
+   "count": 17,
+   "p": 0.157
+  },
+  {
+   "from": 2,
+   "to": 4,
+   "count": 17,
+   "p": 0.094
+  },
+  {
+   "from": 1,
+   "to": 2,
+   "count": 17,
+   "p": 0.086
+  },
+  {
+   "from": 8,
+   "to": 1,
+   "count": 16,
+   "p": 0.174
+  },
+  {
+   "from": 1,
+   "to": 1,
+   "count": 16,
+   "p": 0.081
+  },
+  {
+   "from": 7,
+   "to": 0,
+   "count": 16,
+   "p": 0.34
+  },
+  {
+   "from": 2,
+   "to": 1,
+   "count": 15,
+   "p": 0.083
+  },
+  {
+   "from": 5,
+   "to": 0,
+   "count": 15,
+   "p": 0.242
+  },
+  {
+   "from": 4,
+   "to": 6,
+   "count": 15,
+   "p": 0.088
+  },
+  {
+   "from": 6,
+   "to": 2,
+   "count": 15,
+   "p": 0.105
+  },
+  {
+   "from": 6,
+   "to": 4,
+   "count": 14,
+   "p": 0.098
+  },
+  {
+   "from": 8,
+   "to": 9,
+   "count": 14,
+   "p": 0.152
+  },
+  {
+   "from": 2,
+   "to": 6,
+   "count": 14,
+   "p": 0.078
+  },
+  {
+   "from": 3,
+   "to": "</s>",
+   "count": 13,
+   "p": 0.12
+  },
+  {
+   "from": 9,
+   "to": 0,
+   "count": 12,
+   "p": 0.162
+  },
+  {
+   "from": "<s>",
+   "to": 9,
+   "count": 12,
+   "p": 0.111
+  }
+ ],
+ "pmi_bigrams": [
+  {
+   "a": "4x1",
+   "b": "2x8",
+   "count": 5,
+   "pmi": 2.51
+  },
+  {
+   "a": "4x1",
+   "b": "5x1",
+   "count": 9,
+   "pmi": 2.2
+  },
+  {
+   "a": "4x1",
+   "b": "2x5",
+   "count": 5,
+   "pmi": 2.09
+  },
+  {
+   "a": "9x1",
+   "b": "2x2",
+   "count": 6,
+   "pmi": 2.09
+  },
+  {
+   "a": "2x2",
+   "b": "4x2",
+   "count": 5,
+   "pmi": 2.08
+  },
+  {
+   "a": "5x1",
+   "b": "4x1",
+   "count": 7,
+   "pmi": 1.84
+  },
+  {
+   "a": "4x1",
+   "b": "2x4",
+   "count": 7,
+   "pmi": 1.64
+  },
+  {
+   "a": "2x1",
+   "b": "0x1",
+   "count": 63,
+   "pmi": 1.45
+  },
+  {
+   "a": "2x3",
+   "b": "4x1",
+   "count": 12,
+   "pmi": 1.45
+  },
+  {
+   "a": "2x1",
+   "b": "4x3",
+   "count": 8,
+   "pmi": 1.44
+  },
+  {
+   "a": "0x1",
+   "b": "2x1",
+   "count": 61,
+   "pmi": 1.41
+  },
+  {
+   "a": "2x2",
+   "b": "7x1",
+   "count": 6,
+   "pmi": 1.38
+  },
+  {
+   "a": "2x2",
+   "b": "17x1",
+   "count": 12,
+   "pmi": 1.36
+  },
+  {
+   "a": "2x1",
+   "b": "0x2",
+   "count": 10,
+   "pmi": 1.34
+  },
+  {
+   "a": "4x1",
+   "b": "2x3",
+   "count": 11,
+   "pmi": 1.32
+  },
+  {
+   "a": "2x1",
+   "b": "10Fx1",
+   "count": 8,
+   "pmi": 1.28
+  },
+  {
+   "a": "0x1",
+   "b": "16x1",
+   "count": 5,
+   "pmi": 1.28
+  },
+  {
+   "a": "17x1",
+   "b": "2x2",
+   "count": 11,
+   "pmi": 1.24
+  },
+  {
+   "a": "0x2",
+   "b": "2x1",
+   "count": 9,
+   "pmi": 1.19
+  },
+  {
+   "a": "2x2",
+   "b": "4x1",
+   "count": 19,
+   "pmi": 1.14
+  },
+  {
+   "a": "7x1",
+   "b": "2x2",
+   "count": 5,
+   "pmi": 1.12
+  },
+  {
+   "a": "4x1",
+   "b": "2x1",
+   "count": 54,
+   "pmi": 1.1
+  },
+  {
+   "a": "5x1",
+   "b": "2x1",
+   "count": 7,
+   "pmi": 1.09
+  },
+  {
+   "a": "16x1",
+   "b": "2x1",
+   "count": 8,
+   "pmi": 1.08
+  },
+  {
+   "a": "7x1",
+   "b": "2x1",
+   "count": 13,
+   "pmi": 0.95
+  },
+  {
+   "a": "2x1",
+   "b": "4x1",
+   "count": 47,
+   "pmi": 0.9
+  },
+  {
+   "a": "4x1",
+   "b": "2x2",
+   "count": 15,
+   "pmi": 0.8
+  },
+  {
+   "a": "2x1",
+   "b": "4x2",
+   "count": 6,
+   "pmi": 0.8
+  },
+  {
+   "a": "2x1",
+   "b": "5x1",
+   "count": 5,
+   "pmi": 0.61
+  },
+  {
+   "a": "10Fx1",
+   "b": "2x1",
+   "count": 5,
+   "pmi": 0.61
+  }
+ ],
+ "formulae": [
+  {
+   "phrase": "2x1 0x1 2x1",
+   "count": 41
+  },
+  {
+   "phrase": "0x1 2x1 0x1",
+   "count": 38
+  },
+  {
+   "phrase": "2x1 0x1 2x1 0x1",
+   "count": 29
+  },
+  {
+   "phrase": "4x1 2x1 4x1",
+   "count": 27
+  },
+  {
+   "phrase": "0x1 2x1 0x1 2x1",
+   "count": 23
+  },
+  {
+   "phrase": "2x1 4x1 2x1",
+   "count": 19
+  },
+  {
+   "phrase": "2x1 0x1 2x1 0x1 2x1",
+   "count": 18
+  },
+  {
+   "phrase": "0x1 2x1 0x1 2x1 0x1",
+   "count": 15
+  },
+  {
+   "phrase": "2x2 4x1 2x1",
+   "count": 12
+  },
+  {
+   "phrase": "4x1 2x1 4x1 2x1",
+   "count": 11
+  },
+  {
+   "phrase": "2x2 4x1 2x1 4x1",
+   "count": 9
+  },
+  {
+   "phrase": "0x1 2x1 0x2",
+   "count": 8
+  },
+  {
+   "phrase": "2x1 17x1 2x1",
+   "count": 8
+  },
+  {
+   "phrase": "2x1 4x1 2x2",
+   "count": 8
+  },
+  {
+   "phrase": "4x1 2x2 4x1",
+   "count": 8
+  },
+  {
+   "phrase": "17x1 2x2 17x1",
+   "count": 7
+  },
+  {
+   "phrase": "4x1 2x2 4x1 2x1",
+   "count": 6
+  },
+  {
+   "phrase": "2x1 4x1 2x1 4x1",
+   "count": 6
+  },
+  {
+   "phrase": "0x1 17x1 0x1",
+   "count": 6
+  },
+  {
+   "phrase": "4x1 5x1 4x1",
+   "count": 6
+  }
+ ],
+ "anchors": {
+  "numeral_like_clusters": []
+ }
+}
