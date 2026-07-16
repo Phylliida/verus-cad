@@ -195,6 +195,24 @@ orbits (34 parallelogram-forced orbits).
   blocker, likely infeasible. K5 pair (they share a pentagon wall): initial
   Horn rms 1.8, all attempts diverged — hard, status open-leaning-no.
 
+## 2026-07-16 (final): stretch goal — congruence + exact C2 in one model
+
+- **12 shapes + exact C2: YES, machine precision** (`c2_congruent_stage1.json`,
+  `figure_c2_congruent.tex`, `c2_congruent_out/`): the two TRANSLATE pairs
+  coexist perfectly with the C2 hard projection (planar 1e-10, products
+  0.0000 deg, 14/14 convex, C2 error exactly 0, tiling 1e-9). Bonus: the
+  lmin=0.3 guard fattened the C2 model's sliver edge 0.21 -> 0.30.
+- **10 shapes + C2: NO (empirically)** — the two ROTATED pairs never converge
+  inside the C2 basin: 2x5000-iter attempts oscillate (congruence ~3e-3,
+  length mismatch 0.25->0.43, convexity degrading). Same collapse signature
+  as every other attempt to drag the C2 basin. Without C2: 10 shapes
+  (congruent_stage3). Model menu now:
+  | model | shapes | symmetry | ref-dist | file |
+  | typical_look        | 14 | -        | 10.3% | typical_look_coords.json |
+  | congruent_stage3    | 10 | -        | 12.1% | congruent_stage3_coords.json |
+  | c2_congruent_stage1 | 12 | exact C2 | ~16%  | c2_congruent_stage1.json |
+- `gift_card.tex` = one-pager for Bergeron (duality theorem + kit notes).
+
 ## OLD RESULT (superseded above): convex+products YES, symmetric+products NO (with proof)
 
 The user's intuition was right on the first half and I had been wrong to doubt it:
