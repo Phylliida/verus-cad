@@ -167,6 +167,34 @@ metric products is impossible (order ≥ 3 theorem above). How close can we get?
   (15 class directions + parallelogram-orbit lengths, corners linear in
   lengths, per-face closure+planarity) — would tell whether ~10% is optimal.
 
+## 2026-07-16 (later still): congruent pieces — 14 -> 10 distinct shapes
+
+Question: maximize identical-shaped pieces preserving the structure.
+Analysis (`cell_congruence.py`): per-cell direction-class profiles + length
+orbits (34 parallelogram-forced orbits).
+- Translate candidates (same class set): cube pair (321-0,432-111) — stacked,
+  ONE length equality (orbit2==orbit5); prism pair (421-1,532-211) — stacked
+  sharing their pentagon, SAME single equality; prism pairs (431-11,542-221)
+  and (521-3,632-411) — side-by-side, same laterals already.
+- THEOREM-LET: (431-11,542-221) and (521-3,632-411) can NEVER be exact
+  translates: no class+Hasse-orientation-preserving cell iso exists, and a
+  class-mixing correspondence would force cube classes parallel (degenerate).
+  Hasse-sign-consistency strikes again. They CAN be congruent by rotation.
+- `congruent_pieces.py` staged ladder (translate constraints: refit offset T
+  per iter; rotated: per-pair Horn transform, SMOOTHED 0.9/0.1 blend —
+  unsmoothed free Horn fits let cells swing through each other; min-edge
+  guard lmin=0.6): stage 3 = 4 pairs converges to MACHINE PRECISION.
+- **RESULT: `congruent_stage3_coords.json` = 10 distinct shapes** (4 congruent
+  pairs: 1 cube pair as translates, 1 prism pair as translates, 2 prism pairs
+  by rotation; 6 unique), 14/14 convex, products exact, tiling exact, min
+  edge 7.6% of span, affine-rms to Bergeron ref 12.09% (vs 10.30%
+  unconstrained — cheap!). Audit: `count_shapes.py` (pairwise Horn over cell
+  isos). Render: `congruent_pieces.png` (colored by shape class).
+- 9 shapes: pair (631-51,641-43) solo converges congruence EXACTLY but only
+  NON-CONVEX (pentagons flip concave, 9.8% violation) — convexity is the
+  blocker, likely infeasible. K5 pair (they share a pentagon wall): initial
+  Horn rms 1.8, all attempts diverged — hard, status open-leaning-no.
+
 ## OLD RESULT (superseded above): convex+products YES, symmetric+products NO (with proof)
 
 The user's intuition was right on the first half and I had been wrong to doubt it:
