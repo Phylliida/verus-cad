@@ -105,7 +105,8 @@ def main():
     iters = int(sys.argv[2]) if len(sys.argv) > 2 else 2500
     start = sys.argv[3] if len(sys.argv) > 3 else "typical_look_coords.json"
     out = sys.argv[4] if len(sys.argv) > 4 else f"congruent_stage{stage}_coords.json"
-    w_face, w_par, w_facet, w_cong = 1.0, 2.0, 12.0, 4.0
+    use_c2 = len(sys.argv) > 5 and sys.argv[5] == "c2"
+    w_face, w_par, w_facet, w_cong, w_sym = 1.0, 2.0, 12.0, 4.0, 30.0
 
     cells_all, kinds, class_id, orbit_id = build_structures()
     cells = cells_all
@@ -125,6 +126,18 @@ def main():
 
     tpairs, rpairs = STAGES[stage]
     tpairs, rpairs = list(tpairs), list(rpairs)
+
+    g2 = None
+    if use_c2:
+        from symmetric_metric_feasibility import (graph_automorphisms,
+                                                  perm_order)
+        edges21 = [tuple(sorted((p[0], p[-1]))) for p in paths]
+        autos = graph_automorphisms(corners, edges21)
+        ident = {v: v for v in corners}
+        invs = [gg for gg in autos if gg != ident
+                and perm_order(gg, corners) == 2]
+        g2 = invs[6]
+        print("C2 mode: inv#6 hard projection active")
 
     tcorr = []
     for A, B in list(tpairs):
@@ -208,7 +221,7 @@ def main():
         return errs
 
     rstate = {}
-    lmin = 0.6
+    lmin = 0.3 if use_c2 else 0.6
     for it in range(iters):
         wc = w_cong * min(1.0, it / 1000)
 
@@ -294,11 +307,17 @@ def main():
                     duv = unit(sub(pos[v], pos[u]))
                     add_point(tuple(pos[u][k] + lmin * duv[k]
                                     for k in range(3)), 4.0)
+            if g2 is not None and v in g2:
+                from symmetric_metric_optimize import sym_image
+                add_point(sym_image(pos[g2[v]], "C2"), w_sym)
             add_point(pos[v], 0.05)
 
             s = solve3(A, b)
             newpos[v] = s if s is not None else pos[v]
         pos = newpos
+        if g2 is not None:
+            from symmetric_metric_optimize import project_symmetry
+            project_symmetry(pos, g2, corners, "C2")
         fix_scale(pos)
 
         if it % 250 == 0 or it == iters - 1:
@@ -311,8 +330,8 @@ def main():
 
     # final: keep congruence on, no decay (it's part of the spec now);
     # extended joint polish already happened; report
-    dummy_g = {c: c for c in corners}
-    stats = report(pos, cells_raw, faces, classes, fgroups, dummy_g,
+    rep_g = g2 if g2 is not None else {c: c for c in corners}
+    stats = report(pos, cells_raw, faces, classes, fgroups, rep_g,
                    corners, "C2", kinds)
     errs = congruence_error(pos)
     print(f"\nfinal congruence errors: {['%.5f' % e for e in errs]}")
