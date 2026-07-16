@@ -1,0 +1,278 @@
+\documentclass{standalone}
+\usepackage{amssymb}
+\usepackage{amsmath}
+ \usepackage[usenames,dvipsnames]{color}
+\usepackage[kerning=true]{microtype}
+\usepackage[page]{appendix}
+\usepackage[all,cmtip]{xy}
+\usepackage{pgf,tikz}
+\usepackage{ifthen}
+\usepackage{wrapfig}
+\usepackage{colortbl}
+\usetikzlibrary{decorations.markings,shadows}
+\usetikzlibrary{arrows,shapes,positioning,calc,shadows}
+\usetikzlibrary{arrows.meta}
+\tikzstyle arrowstyle=[scale=1]
+\tikzstyle directed=[postaction={decorate,decoration={markings,
+    mark=at position .5 with {\arrow[arrowstyle]{stealth}}}}]
+\usetikzlibrary{shapes.geometric}
+\usepackage{fullpage}
+\usepackage{amsthm}
+
+\usepgflibrary{shadings}
+
+\usepackage{mathabx}
+\definecolor{azure}{rgb}{0.,0.5,1.0}
+\definecolor{green}{rgb}{0.,0.6,0.}
+\definecolor{darkgreen}{rgb}{0.,0.6,0.}
+
+\newcommand\Noeud[1]{\shade[ball color=yellow] (#1) circle (0.2);  \node at (#1) {$\mathbf{#1}$};}
+
+\newcommand\Carre[5]{
+	\draw[line width=1pt,fill=#5,opacity=1] (#1) -- (#2)  -- (#3) -- (#4) -- cycle;
+	\Noeud{#1}\Noeud{#2}\Noeud{#3}\Noeud{#4}}
+
+\newcommand\Pentagone[6]{
+	\draw[line width=1pt,fill=#6,opacity=1] (#1) -- (#2)  -- (#3) -- (#4) -- (#5)-- cycle;
+	\Noeud{#1}\Noeud{#2}\Noeud{#3}\Noeud{#4}\Noeud{#5}}
+
+\newcommand\Cube[9]{
+\Carre{#5}{#6}{#7}{#8}{#9}
+\Carre{#2}{#6}{#7}{#3}{#9}
+\Carre{#4}{#3}{#7}{#8}{#9}
+\Carre{#1}{#2}{#6}{#5}{#9}
+\Carre{#1}{#4}{#8}{#5}{#9}
+\Carre{#1}{#2}{#3}{#4}{#9}
+}
+
+
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%
+%%%%% DESSIN
+%%%%%%%%%%%%%%%%%%%%%
+\begin{tiny}
+ \begin{tikzpicture}[
+ 	x={(2.000000cm, 0.500000cm)},
+	y={(-0.600000cm, 2.000000cm)},
+	z={(.800000cm, 0.000000cm)},
+	scale=.5]
+
+\coordinate (0) at    (4.192068, -4.678249, -4.113836) ;
+\coordinate (1) at    (4.883864, -3.373780, -2.874690) ;
+\coordinate (11) at    (1.968440, -2.518932, -5.063683) ;
+\coordinate (111) at    (1.371036, -6.329996, -0.785183) ;
+\coordinate (2) at    (5.780931, -1.682248, -1.267862) ;
+\coordinate (21) at    (2.660236, -1.214464, -3.824536) ;
+\coordinate (211) at    (2.062832, -5.025527, 0.453963) ;
+\coordinate (22) at    (-0.409358, -0.209906, -6.079384) ;
+\coordinate (221) at    (-0.852593, -4.170679, -1.735030) ;
+\coordinate (222) at    (-0.494043, -7.422020, 1.415499) ;
+\coordinate (3) at    (5.504581, 0.047469, -0.688128) ;
+\coordinate (31) at    (3.618632, 0.445944, -2.177936) ;
+\coordinate (311) at    (2.959899, -3.333994, 2.060791) ;
+\coordinate (32) at    (0.282439, 1.094563, -4.840237) ;
+\coordinate (321) at    (-0.160796, -2.866210, -0.495883) ;
+\coordinate (322) at    (0.197754, -6.117551, 2.654646) ;
+\coordinate (33) at    (-2.885952, -0.039199, -4.830524) ;
+\coordinate (331) at    (-2.479193, -1.902560, -3.140756) ;
+\coordinate (332) at    (-2.717671, -5.262703, 0.465653) ;
+\coordinate (4) at    (5.022895, 3.062403, 0.322362) ;
+\coordinate (41) at    (3.136947, 3.460878, -1.167446) ;
+\coordinate (411) at    (2.683548, -1.604278, 2.640525) ;
+\coordinate (42) at    (1.698537, 3.764795, -2.303720) ;
+\coordinate (421) at    (0.797600, -1.205802, 1.150717) ;
+\coordinate (422) at    (1.094821, -4.426019, 4.261474) ;
+\coordinate (43) at    (-2.194156, 1.265270, -3.591378) ;
+\coordinate (431) at    (-1.787397, -0.598092, -1.901610) ;
+\coordinate (432) at    (-2.025875, -3.958235, 1.704799) ;
+\coordinate (44) at    (-6.079878, 0.180952, -3.219940) ;
+\coordinate (441) at    (-5.673119, -1.682409, -1.530172) ;
+\coordinate (442) at    (-5.476349, -2.583812, -0.712745) ;
+\coordinate (5) at    (4.364798, 3.590710, 1.221399) ;
+\coordinate (51) at    (2.478849, 3.989185, -0.268409) ;
+\coordinate (511) at    (2.599572, -0.091506, 2.949072) ;
+\coordinate (52) at    (1.040439, 4.293102, -1.404683) ;
+\coordinate (521) at    (0.713623, 0.306970, 1.459264) ;
+\coordinate (522) at    (0.818470, -2.696302, 4.841208) ;
+\coordinate (53) at    (-1.217428, 3.073089, -1.881703) ;
+\coordinate (531) at    (-0.810669, 1.209727, -0.191935) ;
+\coordinate (532) at    (-1.067478, -2.297827, 3.351400) ;
+\coordinate (54) at    (-5.388082, 1.485421, -1.980793) ;
+\coordinate (541) at    (-4.981323, -0.377941, -0.291025) ;
+\coordinate (542) at    (-4.784553, -1.279343, 0.526401) ;
+\coordinate (6) at    (2.865584, 4.794247, 3.269496) ;
+\coordinate (61) at    (0.979635, 5.192723, 1.779688) ;
+\coordinate (611) at    (1.100358, 1.112032, 4.997169) ;
+\coordinate (62) at    (-0.458775, 5.496639, 0.643414) ;
+\coordinate (621) at    (-0.785591, 1.510507, 3.507361) ;
+\coordinate (622) at    (0.432577, -0.280942, 5.650744) ;
+\coordinate (63) at    (-2.716642, 4.276626, 0.166394) ;
+\coordinate (631) at    (-2.309883, 2.413265, 1.856162) ;
+\coordinate (632) at    (-1.453372, 0.117533, 4.160936) ;
+\coordinate (64) at    (-4.386270, 3.374462, -0.186348) ;
+\coordinate (641) at    (-3.979511, 1.511100, 1.503420) ;
+\coordinate (642) at    (-3.782742, 0.609697, 2.320846) ;
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%   Piece 432 - 111
+\Carre{332}{222}{322}{432}{yellow}
+\Carre{322}{222}{111}{211}{yellow}
+\Carre{332}{222}{111}{221}{yellow}
+\Carre{321}{221}{111}{211}{yellow}
+\Carre{432}{321}{211}{322}{yellow}
+\Carre{321}{221}{332}{432}{yellow}
+%%%%%%%%%%%
+
+
+%%%%%%%%%%   Piece 542 -221
+\Pentagone{221}{331}{441}{442}{332}{green}
+\Carre{332}{432}{542}{442}{green}
+\Carre{221}{321}{432}{332}{green}
+\Carre{442}{542}{541}{441}{green}
+\Carre{221}{321}{431}{331}{green}
+\Carre{331}{431}{541}{441}{green}
+\Pentagone{321}{431}{541}{542}{432}{green}
+ %%%%%%%%%%%
+
+
+%%%%%%%%%%   532 - 211
+\Pentagone{432}{322}{422}{522}{532}{green}
+\Carre{211}{322}{422}{311}{green}
+\Carre{311}{422}{522}{411}{green}
+\Carre{411}{522}{532}{421}{green}
+\Carre{421}{532}{432}{321}{green}
+\Carre{321}{432}{322}{211}{green}
+\Pentagone{321}{211}{311}{411}{421}{green}
+%%%%%%%%%
+
+% %%%%%%%%%   Piece 632 - 411
+\Pentagone{411}{511}{611}{622}{522}{red}
+\Carre{522}{622}{632}{532}{red}
+\Carre{421}{532}{522}{411}{red}
+\Carre{511}{611}{621}{521}{red}
+\Carre{411}{421}{521}{511}{red}
+\Carre{622}{632}{621}{611}{red}
+\Pentagone{421}{521}{621}{632}{532}{red}
+% %%%%%%%%%
+
+%%%%%%%%%%   Piece 642 -321
+\Pentagone{642}{542}{432}{532}{632}{violet}
+\Carre{642}{641}{541}{542}{violet}
+\Carre{321}{421}{532}{432}{violet}
+\Pentagone{321}{431}{541}{542}{432}{violet}
+\Pentagone{421}{521}{621}{632}{532}{violet}
+\Pentagone{321}{421}{521}{531}{431}{violet}
+\Carre{521}{621}{631}{531}{violet}
+\Pentagone{431}{531}{631}{641}{541}{violet}
+\Pentagone{642}{632}{621}{631}{641}{violet}
+ %%%%%%%%%%%%
+
+
+ %%%%%%%%%%%%   Piece 321 - 0
+\Carre{221}{111}{211}{321}{yellow}
+\Carre{0}{1}{211}{111}{yellow}
+\Carre{0}{11}{221}{111}{yellow}
+\Carre{1}{21}{321}{211}{yellow}
+\Carre{11}{21}{321}{221}{yellow}
+\Carre{0}{1}{21}{11}{yellow}
+%%%%%%%%%%%
+
+ %%%%%%%%%%    Piece 431 - 11
+\Pentagone{11}{22}{33}{331}{221}{green}
+\Carre{221}{321}{431}{331}{green}
+\Carre{331}{431}{43}{33}{green}
+\Carre{11}{221}{321}{21}{green}
+\Carre{22}{32}{21}{11}{green}
+\Carre{33}{43}{32}{22}{green}
+\Pentagone{21}{32}{43}{431}{321}{green}
+ %%%%%%%%%%%
+
+%%%%%%%%%%%%% Piece 541 - 33
+   \Carre{441}{331}{431}{541}{yellow}
+  \Carre{44}{441}{541}{54}{yellow}
+   \Carre{33}{331}{431}{43}{yellow}
+ \Carre{44}{33}{331}{441}{yellow}
+  \Carre{44}{54}{43}{33}{yellow}
+   \Carre{54}{43}{431}{541}{yellow}
+% %%%%%%%%%%%
+
+ %%%%%%%%%%%%   Piece 421 - 1
+\Pentagone{211}{311}{411}{421}{321}{green}
+\Carre{1}{211}{311}{2}{green}
+\Carre{2}{311}{411}{3}{green}
+\Carre{3}{411}{421}{31}{green}
+\Carre{31}{421}{321}{21}{green}
+\Carre{21}{321}{211}{1}{green}
+\Pentagone{1}{2}{3}{31}{21}{green}
+ %%%%%%%%%%
+
+%%%%%%%%%%%   Piece 521 - 3
+\Pentagone{3}{4}{5}{511}{411}{red}
+\Carre{411}{511}{521}{421}{red}
+\Carre{3}{31}{421}{411}{red}
+\Carre{5}{51}{521}{511}{red}
+\Carre{3}{4}{41}{31}{red}
+\Carre{4}{5}{51}{41}{red}
+\Pentagone{31}{41}{51}{521}{421}{red}
+
+%%%%%%%%
+
+  %%%%%%%%%%%   Piece 531 - 21
+\Pentagone{321}{421}{521}{531}{431}{azure}
+\Carre{43}{53}{531}{431}{azure}
+\Carre{21}{321}{421}{31}{azure}
+\Pentagone{31}{41}{51}{521}{421}{azure}
+\Pentagone{51}{52}{53}{531}{521}{azure}
+\Pentagone{21}{32}{43}{431}{321}{azure}
+\Carre{41}{51}{52}{42}{azure}
+\Pentagone{21}{31}{41}{42}{32}{azure}
+\Pentagone{32}{42}{52}{53}{43}{azure}
+%%%%%%%%%%%
+
+%%%%%%%%%%   Piece 641 - 43
+ \Pentagone{431}{531}{631}{641}{541}{red}
+   \Carre{54}{64}{641}{541}{red}
+ \Carre{43}{54}{541}{431}{red}
+   \Carre{63}{64}{641}{631}{red}
+  \Carre{431}{531}{53}{43}{red}
+     \Carre{53}{63}{631}{531}{red}
+   \Pentagone{43}{53}{63}{64}{54}{red}
+%%%%%%%%%%%%%
+
+%%%%%%%%%%   Piece 621 - 5
+\Carre{5}{511}{611}{6}{yellow}
+\Carre{511}{521}{621}{611}{yellow}
+\Carre{511}{521}{51}{5}{yellow}
+\Carre{621}{521}{51}{61}{yellow}
+\Carre{6}{61}{621}{611}{yellow}
+\Carre{5}{51}{61}{6}{yellow}
+%%%%%%%%
+
+ %%%%%%%%%%%   Piece 631 - 51
+\Pentagone{51}{52}{53}{531}{521}{green}
+\Carre{51}{61}{621}{521}{green}
+\Carre{521}{621}{631}{531}{green}
+\Carre{531}{631}{63}{53}{green}
+\Carre{53}{63}{62}{52}{green}
+\Carre{51}{61}{62}{52}{green}
+\Pentagone{61}{62}{63}{631}{621}{green}
+%%%%%%%%%
+
+
+
+
+
+
+
+\end{tikzpicture}
+\end{tiny}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% FIN DESSIN
+%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
