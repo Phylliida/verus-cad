@@ -137,6 +137,36 @@ leaning infeasible.
   polytope but it can mask functional feasibility — always test the cone
   with the TRUE Hasse orientation from tamari2_order, not a proxy axis).
 
+## 2026-07-16 (later): matching the "typical associahedron" (associahedron.fbx)
+
+Goal: make the model resemble the classic textbook associahedron (gift for
+F. Bergeron). `associahedron.fbx` = binary FBX (parser: `fbx_parse.py`) →
+14 verts / 9 facets, full **D3d order-12** isometry group → exact match with
+metric products is impossible (order ≥ 3 theorem above). How close can we get?
+
+- `ref_match.py`: 12 combinatorial isos (all equivalent — ref fully symmetric);
+  our C2 inv#6 IS one of the ref's three C2 rotations (rms 0). Horn machinery
+  (jacobiN + quaternion) lives here.
+- KEY INSIGHT: the metric-products variety is **GL(3)-invariant** (planarity,
+  parallelism, translates, convexity, tiling are all affine-invariant), so
+  gauge = AFFINE, not similarity. `affine_pin.py` pins in affine gauge.
+- Pin-flow attempts (pin_to_reference.py: continuation + stiffening;
+  project_from_ref.py: relax from ref shape) all land 16.5–19% from ref when
+  the C2 constraint is kept — the C2 basin resists. Dynamics note: penalty
+  flows here find the basin's natural point, NOT the constrained optimum.
+- **Best result: drop hard C2, start from convex_product** →
+  `affine_pin.py convex_product_coords.json 0 ...` → **10.30% of ref span**
+  (affine rms), fully valid: 14/14 convex, products to 0.0000°, watertight,
+  min edge 1.23 = 9.5% of span (vs 0.21 for the C2 model — much more
+  printable), min cell volume 17.5, TRUE-Hasse functional margin 0.078.
+- Deliverables: `typical_look_coords.json` (affine-mapped INTO the ref frame
+  — valid because affine-invariance), `figure_typical_look.tex`,
+  `typical_look_out/` STLs, `bergeron_gift_options.png` (ref vs typical-look
+  vs C2-exact).
+- OPEN follow-up: true constrained optimum via reduced parameterization
+  (15 class directions + parallelogram-orbit lengths, corners linear in
+  lengths, per-face closure+planarity) — would tell whether ~10% is optimal.
+
 ## OLD RESULT (superseded above): convex+products YES, symmetric+products NO (with proof)
 
 The user's intuition was right on the first half and I had been wrong to doubt it:
