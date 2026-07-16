@@ -201,3 +201,9 @@
 [submodule "hashtorio"]
 	path = hashtorio
 	url = https://github.com/Phylliida/hashtorio.git
+[submodule "tactus-quadratic-extension"]
+	path = tactus-quadratic-extension
+	url = https://github.com/Phylliida/tactus-quadratic-extension.git
+[submodule "tactus-algebra"]
+	path = tactus-algebra
+	url = https://github.com/Phylliida/tactus-algebra.git
