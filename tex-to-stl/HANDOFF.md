@@ -69,7 +69,75 @@ BUT: Bergeron's *coarse 3D decomposition* (14 product cells) is a different, gen
 - [~] **outer = SYMMETRIC associahedron** — impossible *with* metric products (proof below), but
       ACHIEVED *with combinatorial* products → `symmetric_combo_out/` (the user's chosen tradeoff).
 
-## RESULT: convex+products YES, symmetric+products NO (with proof)
+## 2026-07-16 CORRECTION: symmetric+products is PARTLY POSSIBLE (C2 built!)
+
+Danielle suspected the impossibility proof was sus. She was right. The old proof
+(§ below) compared the forced parallel classes against ONE FIXED shape (the
+secondary polytope of the regular hexagon). That only rules out that exact
+polytope — parallel classes are not combinatorial invariants, and "symmetric"
+should quantify over ALL symmetric realizations. Corrected analysis
+(`symmetric_metric_feasibility.py`):
+
+**Realization-independent classification** (join argument): if a realization
+has a geometric symmetry realizing a subgroup G <= Aut(K5-skeleton) (order 12),
+its parallel partition must refine-contain P* = join_{g in G} g(P), where
+P = forced partition (sizes [1,1,1,2,2,2,2,2,3,5], re-derived + verified).
+- **|G| >= 3 is IMPOSSIBLE** (this part of the old conclusion survives, now
+  realization-independently): C3 join = three classes of 7 containing
+  adjacent parallel edges (degenerate vertex) + 3 parallel edges in one
+  pentagon facet. Order-6 elements collapse all 21 edges. ALL V4s fail.
+  So the max possible symmetry order is 2.
+- **Three involutions pass all necessary conditions**: inv#0, inv#2
+  (4 resp. 6 fixed corners => must be mirrors; both orientation-reversing OK)
+  and inv#6 (no fixed corners, fixed edge (222,442) with swapped endpoints
+  => must be a C2 rotation; orientation-preserving OK).
+
+**inv#6 (C2 rotation) is REALIZED** — `symmetric_metric_optimize.py 6 600 2400`
+=> `symmetric_metric_inv6_coords.json`, `figure_symmetric_metric.tex`,
+`symmetric_metric_out/` (STLs, watertight, 14 closed pieces),
+`symmetric_metric_compare.png`:
+- outer shell EXACTLY C2-symmetric (corner error 0 by hard projection;
+  facet flatness 9e-12, poke-out 8e-12); convex K5 with 9 facets
+  (3 opposite pairs parallel-with-offset — benign, prism-like)
+- 14/14 cells convex, exact tiling (shell vol == sum cell vol to 5e-9),
+  genuine metric products (parallelism 0.0000 deg, parallelogram length
+  mismatch 8e-11), min cell volume 8.2, min edge 0.21
+- The C2 involution REVERSES all 21 outer path ascents — it is the
+  geometric realization of the Tamari lattice's self-duality. Its axis is
+  perpendicular to the fixed edge (222,442), which crosses it.
+- residuals decay geometrically to 1e-10 at fixed weights => the constraint
+  system is consistent (true solution, not a near-miss).
+
+**Mirrors (inv#0, inv#2) resist realization**: same optimizer fails —
+inv#0 stuck badly non-convex; inv#2 converges planarity but a parallelogram
+collapses to zero width (length mismatch -> 1), suggesting a LENGTH
+obstruction invisible to the direction-level necessary conditions. OPEN,
+leaning infeasible.
+
+**2-Tamari ground truth now implemented** (`tamari2_order.py`):
+- labels decode as f-vectors: digits (f4 f3 f2) trimmed, f_i = #E before
+  i-th N; 642 = (NEE)^4 = lattice MIN, 0 = N^4E^8 = MAX.
+- the complex's 110 primitive edges == the 110 covering relations EXACTLY;
+  14/14 cells are exactly the 2-Tamari intervals of their piece labels
+  (piece label = "bottom-top").
+- CORRECTION of an old claim: convex_product's x-axis is NOT a global
+  Hasse functional (16/110 covers violated) — the old checklist item was
+  the weaker per-cell unique-min/max property. BUT a strict global Hasse
+  functional EXISTS for every realization (cone/extreme-ray test):
+  original figure margin 0.025, convex_product c=(0.72,-0.35,0.60)
+  margin 0.14, C2-symmetric c=(-0.31,0.95,0.00) margin 0.078. The
+  symmetric one's functional is perpendicular to the C2 axis — forced,
+  because the C2 reverses the order (rot-pi negates horizontal vectors).
+- directed union-find confirms: all 15 forced parallel classes are
+  Hasse-SIGN-consistent (parallelogram chains never force a cover up and
+  another down along the same direction) — so metric products never
+  combinatorially obstruct a poset drawing.
+- gotcha: unsigned parallelism terms let DISTINCT classes accidentally
+  align antiparallel in a converged solution (observed; harmless for the
+  polytope but it can mask functional feasibility — always test the cone
+  with the TRUE Hasse orientation from tamari2_order, not a proxy axis).
+
+## OLD RESULT (superseded above): convex+products YES, symmetric+products NO (with proof)
 
 The user's intuition was right on the first half and I had been wrong to doubt it:
 
