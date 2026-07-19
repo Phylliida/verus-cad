@@ -37,6 +37,24 @@ Two spacing sets are provided; within each, four strut widths.
 
 Previews: `prev_iso.png`, `prev_top.png` (1.04), `prev_ex1.02_iso.png` (1.02).
 
+## Hull-core variant — `blownup_hullcore.stl`
+
+A different way to hold the cluster together: instead of struts, the exploded
+pieces (explode 1.04) are unioned with a convex hull of themselves scaled to
+0.96 about the centroid. The 0.96 core fills the interior right up to ~4% below
+the surface, so the pieces read as a **solid faceted associahedron with the 12
+Tamari cells just barely embossed** — a cut-nugget / paperweight look rather
+than separated pieces. (Unioning with a convex hull necessarily fills the
+concavities between cells, so this construction is inherently subtle; the hull
+scale — not the explode — is what controls how much the cells emerge. Lower it
+toward ~0.85 for deeper grooves.) One watertight manifold (CGAL union).
+
+Regenerate / retune:
+
+    python3 ../blowup_hullcore.py <out.stl> <explode> <hull> [in_dir]   # needs openscad
+
+Previews: `prev_hullcore_iso.png`, `prev_hullcore_top.png`.
+
 ## Regenerate / retune
 
     python3 ../blowup_pieces.py ../c2_congruent_out <out.stl> <explode> <shrink> <pen>
