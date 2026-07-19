@@ -19,7 +19,7 @@ Usage:
     python3 blowup_pieces.py [in_dir] [out.stl] [explode] [shrink] [pen]
 
 Defaults: in_dir=c2_congruent_out  out=c2_blownup_out/blownup.stl
-          explode=1.10  shrink=0.85  pen=0.45
+          explode=1.04  shrink=0.85  pen=0.45
 """
 import glob
 import math
@@ -142,7 +142,7 @@ def loft(ringA, ringB):
 def main():
     in_dir = sys.argv[1] if len(sys.argv) > 1 else "c2_congruent_out"
     out_path = sys.argv[2] if len(sys.argv) > 2 else "c2_blownup_out/blownup.stl"
-    EXPLODE = float(sys.argv[3]) if len(sys.argv) > 3 else 1.10
+    EXPLODE = float(sys.argv[3]) if len(sys.argv) > 3 else 1.04
     SHRINK = float(sys.argv[4]) if len(sys.argv) > 4 else 0.85
     PEN = float(sys.argv[5]) if len(sys.argv) > 5 else 0.45
 
