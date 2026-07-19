@@ -14,7 +14,7 @@ watertight mesh, and each strut overlaps the two cells it joins. Any slicer
 prints as **one connected object**. Verified for every file below: 14/14 cells
 and 28/28 struts watertight, union graph fully connected.
 
-## Files (all at explode 1.10 — gaps ≈ 0.19–0.49, mean 0.34, ~1/10 of a piece)
+## Files (all at explode 1.04 — gaps ≈ 0.08–0.20, mean 0.14 (very tight, just barely apart))
 
 | file                  | strut width (fraction of shared face) | look |
 |-----------------------|---------------------------------------|------|
@@ -30,7 +30,7 @@ Previews: `prev_iso.png`, `prev_top.png` (of `blownup.stl`).
 
     python3 ../blowup_pieces.py ../c2_congruent_out <out.stl> <explode> <shrink> <pen>
 
-- `explode` (default 1.10) — radial spread. 1.08 ≈ hairline gaps, 1.25 ≈ 1/10
+- `explode` (default 1.04) — radial spread. 1.08 ≈ hairline gaps, 1.25 ≈ 1/10
   of the bbox-diagonal (clearly separated blocks).
 - `shrink`  (default 0.85) — strut cross-section as a fraction of the shared
   face. Higher = thicker struts, closer to the piece width.
