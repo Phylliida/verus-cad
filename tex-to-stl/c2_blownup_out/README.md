@@ -14,7 +14,9 @@ watertight mesh, and each strut overlaps the two cells it joins. Any slicer
 prints as **one connected object**. Verified for every file below: 14/14 cells
 and 28/28 struts watertight, union graph fully connected.
 
-## Files (all at explode 1.04 — gaps ≈ 0.08–0.20, mean 0.14 (very tight, just barely apart))
+Two spacing sets are provided; within each, four strut widths.
+
+### explode 1.04 — gaps ≈ 0.08–0.20, mean 0.14 (very tight)
 
 | file                  | strut width (fraction of shared face) | look |
 |-----------------------|---------------------------------------|------|
@@ -24,7 +26,16 @@ and 28/28 struts watertight, union graph fully connected.
 | `blownup_sh0.95.stl`  | 0.95 | struts almost face-width; hairline seams |
 | `blownup.stl`         | 0.85 | default copy |
 
-Previews: `prev_iso.png`, `prev_top.png` (of `blownup.stl`).
+### explode 1.02 — gaps ≈ 0.04–0.10, mean 0.07 (barely apart, faint etched seams)
+
+| file                          | strut width |
+|-------------------------------|-------------|
+| `blownup_ex1.02_sh0.80.stl`   | 0.80 |
+| `blownup_ex1.02_sh0.85.stl`   | 0.85 |
+| `blownup_ex1.02_sh0.90.stl`   | 0.90 |
+| `blownup_ex1.02_sh0.95.stl`   | 0.95 |
+
+Previews: `prev_iso.png`, `prev_top.png` (1.04), `prev_ex1.02_iso.png` (1.02).
 
 ## Regenerate / retune
 
