@@ -25,6 +25,21 @@ Remaining: the `le_`/mul-congruence half of 2, item 4 (distributes,
 2 divmod whnf timeouts. Full mechanism notes: N3 design doc lessons
 13–17.*
 
+***Update 2026-07-20 (pm).** State: **112 verified / 76 errors**.
+Items 2 (full congruence family) and 4 (distributes) LANDED, under
+the transparency/predictability law (compute certificates, never
+menu for them): the menu sketched under item 2 was replaced by the
+quotient derivation (multiset-diff of goal vs kernel monomials),
+the R3/R4 le-multipliers (shape-derived positivity proofs,
+complement rule for two-sided congruence), the partial hoist
+(Bool-lets as goal-position residue lets — distributes' anonymous
+requires), and the denom-injectivity arm (`.den` equalities from
+`denom` equations). Two emission-bug classes found and fixed:
+by-haves swallowing `;`-chains (`:= by tac;` → `(by tac)`), and
+application-precedence on bare pp-atoms as function args
+(`mul_self_nonneg (…)`). Remaining: item 5 (recip family, 3), item 6
+(pmul family, ~60), divmod timeouts. N3 design doc lessons 18–23.*
+
 The remaining 102 errors fall into six shapes, each with a known
 mechanism. Ordered by yield-per-risk; every item names the files and
 the failure mode it retires.
