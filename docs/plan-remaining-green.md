@@ -7,6 +7,24 @@ fully green (`axiom_eqv_transitive`, `axiom_le_transitive`,
 72% of the corpus (627/874 theorems) script-authored. Tracker:
 `tactus-quadratic-extension/board/cad-15-lean-gate-blocker.md`.*
 
+***Update 2026-07-20.** State: **107 verified / 86 errors**. Items 1
+(apply-guard + den-small), 3 (one_ne_zero), and the Eq half of 2
+(congruence) LANDED — via four mechanisms rather than the two
+sketched: the eliminator apply-guard (item 1a as planned), the
+trait-impl body-refs closure (1b turned out to be the projection
+unfolding stranding `from_int_spec`, not the rung), form G
+(goal-only collapse for trait-projection heads — the den-small
+postconditions were maxRecDepth loops, not unfold gaps), and the
+NONLIN-scope hoist + rewrite-ladder (item 2: the cancel
+generalization that actually landed is `rw` of definition hyps +
+kernel×monomial, NOT a smarter `cancel_target`; mul_congruence and
+the `le_*` half remain — their certificates need num-atom monomials
+and inequality kernels). recip_congruence 5→4 as a side effect.
+Remaining: the `le_`/mul-congruence half of 2, item 4 (distributes,
+2), item 5 (recip family, now 4+1), item 6 (pmul family, ~60), and
+2 divmod whnf timeouts. Full mechanism notes: N3 design doc lessons
+13–17.*
+
 The remaining 102 errors fall into six shapes, each with a known
 mechanism. Ordered by yield-per-risk; every item names the files and
 the failure mode it retires.
