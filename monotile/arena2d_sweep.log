@@ -1,0 +1,14 @@
+=== K=1 ===
+self-test OK (K=1, NPTS=4, orbits=1, balance unions=[4])
+K=1: 16 decorations, 4 canonical reps [0s]
+{"K": 1, "reps": 4, "counts": {"unbalanced": 2, "periodic": 2}, "indices": {"1": 1, "2": 1}, "suspicious": [], "secs": 0.0}
+=== K=2 ===
+self-test OK (K=2, NPTS=8, orbits=2, balance unions=[8])
+K=2: 256 decorations, 38 canonical reps [0s]
+{"K": 2, "reps": 38, "counts": {"unbalanced": 25, "periodic": 11, "untileable6": 2}, "indices": {"1": 4, "2": 5, "4": 2}, "suspicious": [], "secs": 0.0}
+=== K=3 ===
+self-test OK (K=3, NPTS=12, orbits=3, balance unions=[8, 4])
+K=3: 4096 decorations, 532 canonical reps [0s]
+  200/532 {'unbalanced': 189, 'untileable6': 6, 'periodic': 5} [0s]
+  400/532 {'unbalanced': 363, 'untileable6': 25, 'periodic': 12} [0s]
+{"K": 3, "reps": 532, "counts": {"unbalanced": 468, "untileable6": 38, "periodic": 26}, "indices": {"1": 10, "2": 3, "4": 13}, "suspicious": [], "secs": 0.2}

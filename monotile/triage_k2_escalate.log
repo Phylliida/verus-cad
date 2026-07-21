@@ -1,0 +1,5 @@
+escalation targets: 3
+{"stage": "escalated-verdict", "i": 0, "dec": [1, 1, -1, -1, -1, -1, 1, 1, -1, -1, 1, 1, -1, 1, -1, 1, 1, -1, 1, -1, 1, 1, -1, -1], "verdict": "untileable5", "secs": 305.3, "t": 305.4}
+{"stage": "escalated-verdict", "i": 1, "dec": [1, -1, 1, -1, -1, -1, 1, 1, -1, -1, 1, 1, 1, 1, -1, -1, 1, -1, 1, -1, -1, -1, 1, 1], "verdict": "untileable5", "secs": 264.4, "t": 570.0}
+{"stage": "escalated-verdict", "i": 2, "dec": [1, -1, 1, -1, -1, -1, 1, 1, -1, -1, 1, 1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1], "verdict": "untileable5", "secs": 79.5, "t": 649.5}
+{"stage": "done", "t": 649.5}

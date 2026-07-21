@@ -1,0 +1,19 @@
+[test] equivariance at K=2: OK
+building synthesizer (4, 4, 4), K=2 ...
+  base clauses 316625, vars 2125, build 0s
+  library: 77 saved patterns (713 conjugates), 11 point blocks from arena2_patterns_K2.json
+  iter 10: 1s kills={'cached': 10} indices={}
+  iter 20: 1s kills={'cached': 20} indices={}
+  iter 30: 1s kills={'cached': 30} indices={}
+  iter 40: 1s kills={'cached': 40} indices={}
+  iter 50: 2s kills={'cached': 50} indices={}
+  iter 60: 2s kills={'cached': 60} indices={}
+  iter 70: 8s kills={'cached': 70} indices={}
+  iter 71: SLOW verdict=untileable8 35s phases={'sheet': 0.0, 'sel4': 7.7, 'confirm4': 0.0, 'build6': 0.5, 'sel6': 2.5, 'box5': 2.2, 'box8': 22.2} dec=(1, -1, 1, -1, -1, -1, 1, 1, 1, 1, -1, -1, 1, 1, -1, -1, -1, -1, 1, 1, -1, 1, -1, 1)
+
+synthesizer conflict budget exceeded at iter 73
+
+status: SYNTH_BUDGET | iterations: 72
+verdicts: {'cached': 71, 'untileable8': 1}
+confirmed period indices: {}
+survivors: 0 suspicious: 0

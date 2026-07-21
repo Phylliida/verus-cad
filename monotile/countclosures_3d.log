@@ -1,0 +1,18 @@
+gain group order 16; subgroups 35, even-feasible 18
+  class size 1: max profiles 4
+  class size 2: max profiles 23
+  class size 3: max profiles 175
+  class size 4: max profiles 1481
+  class size 5: max profiles 14029
+  class size 6: max profiles 153923
+  partitions 25: running distinct 580412
+  partitions 50: running distinct 783047
+  partitions 75: running distinct 1035586
+  partitions 100: running distinct 1192666
+  partitions 125: running distinct 1344897
+  partitions 150: running distinct 1400185
+  partitions 175: running distinct 1444377
+  partitions 200: running distinct 1445865
+partitions: 203
+DISTINCT ACHIEVABLE PROFILES (3d): 1445865
+wrote anyk3d_profiles.json

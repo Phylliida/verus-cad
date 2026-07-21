@@ -1,0 +1,5 @@
+lattice classes: 65 @8, 1634 @32
+  250/5000 {'periodic8': 34, 'empty3': 215, 'empty4': 1, 'periodic32': 0, 'STALL': 0} [276s]
+  STALL: profile 688415 (held size 13)
+  500/5000 {'periodic8': 62, 'empty3': 435, 'empty4': 1, 'periodic32': 1, 'STALL': 1} [645s]
+  STALL: profile 685445 (held size 10)

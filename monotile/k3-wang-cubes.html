@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What is a K=3 Wang cube?</title>
+<script>
+MathJax = { tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
+<style>
+  :root { --ink:#1a1a1a; --mut:#5a5a5a; --line:#e2e2e2; --accent:#7a3b2e; --box:#f6f3ee; }
+  html { -webkit-text-size-adjust:100%; }
+  body {
+    color:var(--ink); background:#fcfbf9; margin:0;
+    font:18px/1.62 Georgia,'Iowan Old Style',Cambria,serif;
+  }
+  .wrap { max-width:720px; margin:0 auto; padding:56px 24px 96px; }
+  h1 { font-family:-apple-system,'Segoe UI',Roboto,sans-serif; font-weight:700;
+       font-size:2.15rem; line-height:1.15; letter-spacing:-.02em; margin:0 0 .3em; }
+  .sub { font-family:-apple-system,'Segoe UI',Roboto,sans-serif; color:var(--mut);
+         font-size:1.05rem; margin:0 0 2.4em; }
+  h2 { font-family:-apple-system,'Segoe UI',Roboto,sans-serif; font-weight:650;
+       font-size:1.3rem; letter-spacing:-.01em; margin:2.4em 0 .2em;
+       padding-top:1.2em; border-top:1px solid var(--line); }
+  h2 .n { color:var(--accent); font-variant-numeric:tabular-nums; margin-right:.5em; }
+  p { margin:.9em 0; }
+  em { color:#333; }
+  strong { font-weight:700; }
+  a { color:var(--accent); }
+  .def { background:var(--box); border-left:3px solid var(--accent);
+         padding:.9em 1.1em; margin:1.4em 0; border-radius:0 6px 6px 0; font-size:.97em; }
+  .def b { font-family:-apple-system,'Segoe UI',Roboto,sans-serif; }
+  figure { margin:1.8em 0; text-align:center; }
+  figcaption { font-size:.85rem; color:var(--mut); margin-top:.7em;
+               font-family:-apple-system,'Segoe UI',Roboto,sans-serif; }
+  .grid3 { display:inline-grid; grid-template-columns:repeat(3,34px); grid-template-rows:repeat(3,34px);
+           gap:4px; vertical-align:middle; }
+  .cell { border-radius:5px; }
+  .bump { background:var(--accent); box-shadow:inset 0 -3px 0 rgba(0,0,0,.15); }
+  .dent { background:#e7ddd2; box-shadow:inset 0 3px 5px rgba(0,0,0,.18); }
+  .pair { display:flex; gap:38px; align-items:center; justify-content:center; flex-wrap:wrap; }
+  .arrow { font-size:1.6rem; color:var(--mut); }
+  .lab { font-family:-apple-system,'Segoe UI',Roboto,sans-serif; font-size:.8rem; color:var(--mut);
+         display:block; margin-top:.5em; }
+  .foot { margin-top:3em; padding-top:1.4em; border-top:1px solid var(--line);
+          font-size:.9rem; color:var(--mut); }
+  code { background:var(--box); padding:.08em .35em; border-radius:4px; font-size:.9em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>What is a K=3 Wang cube?</h1>
+<p class="sub">A precise account of one small, symbolic corner of the three-dimensional
+<em>einstein</em> problem — for readers comfortable with groups and lattices but new to tiling theory.</p>
+
+<h2><span class="n">1</span>The problem it belongs to</h2>
+<p>Call a shape a <strong>space-filler</strong> if congruent copies of it can be packed to fill
+\(\mathbb{R}^n\) with no gaps or overlaps. A tiling is <strong>periodic</strong> if it is left
+unchanged by some full-rank lattice of translations — informally, it has a repeating
+fundamental block that recurs in \(n\) independent directions.</p>
+<p>Almost every space-filler you can picture also admits a periodic packing. The subtle question,
+open for decades, is whether a <strong>single</strong> tile can be forced to be aperiodic:</p>
+<div class="def"><b>The einstein problem.</b> Does there exist one tile that tiles space, but such
+that <em>no</em> tiling of it is periodic? (German <em>ein Stein</em>, "one stone.")</div>
+<p>In the plane this was open until 2023, when the "hat" and "spectre" tiles settled it: yes.
+In <strong>three dimensions it is open.</strong> The object below is a deliberately restricted,
+fully combinatorial 3-D family in which the question becomes finite and decidable — and, as it
+turns out, answerable.</p>
+
+<h2><span class="n">2</span>Wang tiles: turning geometry into matching rules</h2>
+<p>The classical device (Hao Wang, 1961) replaces geometry with <em>edge-matching</em>. A
+<strong>Wang tile</strong> is a unit square whose four edges carry labels; copies may be placed
+edge-to-edge exactly when touching edges agree. This converts "does this tile fill space?" into a
+purely local, symbolic constraint-satisfaction problem — which is what makes such tiles amenable
+to exhaustive search and to proof.</p>
+<p>Our object is the three-dimensional analogue, with two deliberate design choices that keep it
+finite and physical:</p>
+<ul>
+<li><strong>A cube in place of a square</strong>, so the six faces carry the matching data.</li>
+<li><strong>Bump/dent relief in place of colors.</strong> Each face carries a small grid of raised
+bumps and sunken dents; two faces interlock exactly when they are <em>complementary</em> — every
+bump meets a dent and every dent meets a bump. (This is why a face matches itself only through its
+mirror partner — the natural rule for a physical interlocking block.)</li>
+</ul>
+
+<h2><span class="n">3</span>The K=3 cube, precisely</h2>
+<p>Fix a resolution \(K\). Each of the cube's 6 faces carries a \(K\times K\) grid, and each grid
+cell is either a <strong>bump</strong> or a <strong>dent</strong> — one bit. At \(K=3\):</p>
+<div class="def"><b>The tile.</b> A <b>decoration</b> is a function
+\(\mathrm{dec}:\{0,1,\dots,53\}\to\{\text{bump},\text{dent}\}\), one bit for each of the
+\(6\times 3\times 3 = 54\) face cells. A single decoration <em>is</em> the tile. There are
+\(2^{54}\approx 1.8\times 10^{16}\) of them.</div>
+
+<figure>
+<div class="pair">
+  <div>
+    <div class="grid3">
+      <div class="cell bump"></div><div class="cell dent"></div><div class="cell bump"></div>
+      <div class="cell dent"></div><div class="cell dent"></div><div class="cell bump"></div>
+      <div class="cell bump"></div><div class="cell bump"></div><div class="cell dent"></div>
+    </div>
+    <span class="lab">a face of cube A</span>
+  </div>
+  <div class="arrow">⇄</div>
+  <div>
+    <div class="grid3">
+      <div class="cell dent"></div><div class="cell bump"></div><div class="cell dent"></div>
+      <div class="cell bump"></div><div class="cell bump"></div><div class="cell dent"></div>
+      <div class="cell dent"></div><div class="cell dent"></div><div class="cell bump"></div>
+    </div>
+    <span class="lab">the mating face of cube B</span>
+  </div>
+</div>
+<figcaption>Two faces interlock iff they are cell-by-cell complementary: bump ↔ dent everywhere.
+The \(3\times3\) grid is the "\(K=3\)".</figcaption>
+</figure>
+
+<p>Two further ingredients complete the model.</p>
+<div class="def"><b>Orientations.</b> A cube has a rotation group of order 24 (isomorphic to
+\(S_4\)). A copy of the tile may be placed in any of these 24 rotations, which permutes where its
+54 decorated cells point.</div>
+<div class="def"><b>Tiling \(\mathbb{Z}^3\).</b> An <b>orientation field</b>
+\(o:\mathbb{Z}^3\to\{24\text{ rotations}\}\) is a <b>tiling</b> by the decoration \(\mathrm{dec}\)
+if, for every pair of adjacent cells, the two faces meeting across their shared boundary — the
+same \(\mathrm{dec}\), read through the two chosen rotations — are complementary.</div>
+<p>Note what is <em>and isn't</em> free: there is one fixed tile (the 54 bits), and the only freedom
+in building a tiling is choosing a rotation for each lattice cell. That is exactly the "single tile"
+spirit of the einstein problem.</p>
+
+<h2><span class="n">4</span>Periodic, aperiodic, einstein</h2>
+<p>An orientation field \(o\) is <strong>periodic</strong> if it is invariant under a full-rank
+sublattice \(L\subseteq\mathbb{Z}^3\): there are three independent translations \(\ell\) with
+\(o(p+\ell)=o(p)\) for all \(p\). The tile is an <strong>aperiodic einstein</strong> if it tiles
+\(\mathbb{Z}^3\) but <em>no</em> tiling of it is periodic in this sense. The precise question:</p>
+<div class="def"><b>The K=3 question.</b> Is there a decoration \(\mathrm{dec}\in\{0,1\}^{54}\) that
+tiles \(\mathbb{Z}^3\), yet admits no periodic tiling?</div>
+<p>Because everything is finite and local, this is <em>decidable</em> — unlike the general 3-D
+einstein problem, this restricted version can, in principle, be settled by computation. It was.</p>
+
+<h2><span class="n">5</span>The answer</h2>
+<div class="def"><b>Theorem (machine-checked).</b> No. Every \(K=3\) Wang cube that tiles
+\(\mathbb{Z}^3\) admits a fully periodic tiling — in fact one with a fundamental domain of at most
+864 cells. There is no aperiodic einstein in this family.</div>
+<p>The proof reduces the geometric statement, through a chain of formally verified steps, to a
+single Boolean unsatisfiability claim about a formula with 785,686 clauses, which was discharged by
+splitting it into 1457 sub-problems and having each machine-checked by a
+<em>formally verified</em> SAT-proof checker. Crucially the SAT solver itself is not trusted — only
+its certificates, re-checked independently. So the result rests on the logical kernel plus that
+one external, re-verified input, and <strong>not</strong> on the correctness of any search program.</p>
+
+<h2><span class="n">6</span>Why it is true: you can't screw irrationally with a finite group</h2>
+<p>The verification is more than a brute-force "we checked everything": the configurations it rules
+out have a clean shape. Every way a \(K=3\) cube can tile turns out to contain a <strong>screw</strong>
+— along some direction the cube <em>rotates as it translates</em>, cycling through a sequence of
+orientations before the pattern repeats.</p>
+<p>Here is the punchline. The cube's orientations form a <em>finite</em> group of order 24. So any
+screw the tiling attempts <strong>must close</strong>: after finitely many steps the accumulated
+rotation returns to the identity — and a closed screw is exactly a translation period. A finite
+rotation group has no room for a screw that never repeats. In one sentence:</p>
+<div class="def" style="font-size:1.05em"><b>You cannot build an irrational screw out of a finite
+group.</b> The cube tiles by screws; its screws all close because 24 rotations is finite; a closed
+screw is a period; so every tiling is periodic.</div>
+<p>This is precisely the loophole a genuine 3-D einstein would need. The <em>Schmitt–Conway–Danzer</em>
+tile — the closest classical object — forces aperiodicity through a screw by an <em>irrational</em>
+angle, which never closes. A symbolic cube, confined to the rational rotations of a finite group,
+can only screw in ways that eventually come home. That finiteness is the whole obstruction.</p>
+
+<h2><span class="n">7</span>What this does and doesn't settle</h2>
+<p>This resolves one honest, well-defined family: single Wang cubes at face-resolution \(K=3\), with
+binary bump/dent matching and the 24-rotation orientation group, tiling \(\mathbb{Z}^3\). Refinement
+(copying each bit into a finer block) shows \(K=3\) already subsumes \(K=1\); the same machinery
+applies to other \(K\) and other matching rules, and the screw argument suggests the answer stays
+"no" wherever the orientation group is finite. It does <strong>not</strong> touch the general 3-D
+einstein problem, where the tile is an arbitrary solid and the symmetry group is the full continuous
+group of rigid motions — there, an irrational screw is back on the table, and the question remains
+open.</p>
+
+<p class="foot">This page describes a completed, formally verified result in Lean 4. Companion
+notes: the result and its trust base, a full account of the screw structure, and the SAT/verification
+details live alongside this file.</p>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,7 @@
+lattice classes <=64: 10076
+
+=== raw profile 688415 (held 13: [4, 5, 12, 13, 20, 21, 36, 37, 44, 64, 65, 76, 77]) ===
+  no torus <=64 (0 budget-outs) [3647s]
+  box (4, 4, 4): SAT (tiles it) [0s]
+  box (5, 5, 5): UNSAT -> EMPTY [1s]
+  verdict: EMPTY

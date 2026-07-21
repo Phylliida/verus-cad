@@ -1,0 +1,5 @@
+raw candidates: empty 75054, periodic 5150 [1s]
+raw maximal-empty: 26452 [83s]
+raw minimal-periodic: 870 [85s]
+raw profiles: 1445865
+sample coverage: 10000/10000 covered [121s]
