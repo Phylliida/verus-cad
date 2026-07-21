@@ -220,6 +220,37 @@ modulo the 2 known pre-existing state_machines failures), and the
 lean_verify unit suite. The N4 census line must never lose script
 share (the ratchet).
 
+**Infra debt (from the 2026-07-20 transparency/predictability
+review; for eventual looking into — noted as not ideal):**
+1. ~~The R2 congrArg pool~~ — RESOLVED (same day): the
+   `TACTUS_NONLIN_NO_POOL=1` corpus experiment shows it is the
+   workhorse, not debt — 132 obligations across ~45 fns fail without
+   it, including obligations in every fn the computed R-arms
+   greened. The right framing: the pool arm is ONE deterministic
+   `nlinarith` invocation with a fixed, visible, computed fact set —
+   the internal search lives inside nlinarith (same genus as omega's
+   internal search), which is the requested kind. The deleted MENU
+   was different: 8 enumerated branches tried in hope — that was the
+   unpredictability. What remains to do: document the rule and its
+   caps (≤8 multiplier atoms, ≤12 haves, emission order) as part of
+   the ladder's statable contract, and keep the R-arms as the
+   cap-free computed backstop behind it. The env flag stays as a
+   documented attribution tool.
+2. Hidden caps: `take(3)` on `structural_rung`'s cases targets —
+   bounded but silent; should be documented at the emission site
+   and noted in the census when it truncates, or the mysterious
+   failure when a 4th scrutinee matters will cost someone an hour.
+3. Failure legibility for default-scope obligations: AssertQuery
+   failures get the explicit `fail` arm with the `proof {}` remedy;
+   default-scope failures just report the last arm's raw Lean error
+   ("omega could not prove the goal"). Add a trailing `fail` arm to
+   the derived chain with the same remedy text.
+4. Broadcast haves in every theorem (13 seq axioms, consumed by
+   `simp_all` rewrite search): works and is bounded, but it's the
+   least predictable component by nature. Watch item — if it
+   misbehaves, the direction is more goal-directed application
+   (the guarded elim arms).
+
 **Success metric:** 102 → ≤ 30 errors, ≥ 105 verified fns, all 24
 Rational impls green. The pmul family is the long tail; everything
 else is known shapes.
