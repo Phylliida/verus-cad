@@ -169,7 +169,7 @@ Status of that formal work:
 | 2D, every K ("no aperiodic bumpy square") | **fully machine-checked theorem** — the checker re-verifies all certificates itself; no external tool is trusted |
 | 3D, K=3 | machine-checked (one standard, verified-checker step for the giant search) |
 | 3D, K ≤ 2 | closing now (same pipeline) |
-| 3D, every K | all computations finished (the table above); formal proof under construction — the geometry, the algebra of relations, and the rulebook census are already done in Lean, and Lean *re-derives the census itself* rather than trusting our programs |
+| 3D, every K | **machine-checked theorem** (`no_aperiodic_wang_cube_anyK`): Lean re-derives the census of 1,445,865 rulebooks itself, re-checks the coverage of every rulebook by the 3,745-element frontier, validates all 340 periodic certificates, and the 3,405 emptiness facts are backed by 3,758 certificates re-checked by a formally verified proof checker (the K=3 trust profile — the SAT solver itself is never trusted) |
 
 ## 8. What is NOT claimed
 
