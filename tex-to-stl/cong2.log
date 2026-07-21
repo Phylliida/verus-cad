@@ -1,0 +1,29 @@
+translate 321-0 -> 432-111: 1 isos, offset variance 0.000
+translate 421-1 -> 532-211: 1 isos, offset variance 0.000
+rotated 431-11 -> 542-221: 20 isos, best DIRECT Horn rms 0.541 (with mirror allowed: 0.541)
+  it    0 planar=5.30e-11 congruence errs=['0.0000', '0.0000', '0.5411']
+  it  250 planar=1.96e-01 congruence errs=['0.0573', '0.0593', '0.2715']
+  it  500 planar=2.13e-01 congruence errs=['0.0716', '0.0758', '0.2319']
+  it  750 planar=1.54e-01 congruence errs=['0.0666', '0.0866', '0.0725']
+  it 1000 planar=3.81e-02 congruence errs=['0.0102', '0.0094', '0.0280']
+  it 1250 planar=2.90e-02 congruence errs=['0.0039', '0.0036', '0.0062']
+  it 1500 planar=1.92e-02 congruence errs=['0.0021', '0.0020', '0.0028']
+  it 1750 planar=1.26e-02 congruence errs=['0.0013', '0.0012', '0.0017']
+  it 2000 planar=8.21e-03 congruence errs=['0.0008', '0.0008', '0.0011']
+  it 2250 planar=5.35e-03 congruence errs=['0.0005', '0.0005', '0.0007']
+  it 2500 planar=3.47e-03 congruence errs=['0.0003', '0.0003', '0.0005']
+  it 2750 planar=2.25e-03 congruence errs=['0.0002', '0.0002', '0.0003']
+  it 3000 planar=1.45e-03 congruence errs=['0.0001', '0.0001', '0.0002']
+  it 3250 planar=9.38e-04 congruence errs=['0.0001', '0.0001', '0.0001']
+  it 3499 planar=6.07e-04 congruence errs=['0.0001', '0.0001', '0.0001']
+
+=== verification (span 12.775) ===
+face planarity: max dev 6.07e-04 (4.75e-05 of span)
+metric products: max parallel deviation 0.0034 deg
+cells convex: 14/14
+outer shell: facet flatness 2.62e-05, max poke-out 2.62e-05 (2.05e-06 of span)
+outer symmetry (C2): max corner error 1.44e+01 (1.12e+00 of span)
+parallelogram opposite-side length mismatch: 4.66e-05
+
+final congruence errors: ['0.00006', '0.00006', '0.00008']
+wrote congruent_stage2_coords.json

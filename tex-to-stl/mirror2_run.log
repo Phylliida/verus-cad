@@ -1,0 +1,29 @@
+involution #2: kind=mirror, fixed corners=['2', '222', '4', '442', '62', '64']
+initial corner symmetry error after alignment: 3.7164 (span 12.934)
+70 faces, 15 parallel classes, 9 shell facets
+  it    0  w_sym=   0.5  planar=4.87e-01  parallel=63.7724deg
+  it  200  w_sym=  10.3  planar=1.00e-01  parallel=15.8928deg
+  it  400  w_sym=  20.2  planar=1.31e-01  parallel=29.1760deg
+  it  600  w_sym=  30.0  planar=1.28e-01  parallel=18.4922deg
+  it  800  w_sym=  30.0  planar=7.94e-02  parallel=82.0506deg
+  it 1000  w_sym=  30.0  planar=1.74e-02  parallel=16.9598deg
+  it 1200  w_sym=  30.0  planar=1.38e-02  parallel=11.8036deg
+  it 1400  w_sym=  30.0  planar=1.14e-03  parallel=61.8417deg
+  it 1600  w_sym=  30.0  planar=6.82e-04  parallel=54.0090deg
+  it 1800  w_sym=  30.0  planar=1.65e-04  parallel=47.7153deg
+  it 2000  w_sym=  30.0  planar=9.30e-05  parallel=32.5188deg
+  it 2200  w_sym=  30.0  planar=3.19e-05  parallel=9.6654deg
+  it 2400  w_sym=  30.0  planar=6.08e-06  parallel=43.4594deg
+  it 2600  w_sym=  30.0  planar=2.36e-06  parallel=30.3113deg
+  it 2800  w_sym=  30.0  planar=3.26e-06  parallel=7.9274deg
+  it 2999  w_sym=  30.0  planar=2.61e-07  parallel=47.9595deg
+
+=== verification (span 7.136) ===
+face planarity: max dev 2.61e-07 (3.66e-08 of span)
+metric products: max parallel deviation 47.9595 deg
+cells convex: 14/14
+outer shell: facet flatness 8.96e-08, max poke-out 6.60e-07 (9.24e-08 of span)
+outer symmetry (mirror): max corner error 0.00e+00 (0.00e+00 of span)
+parallelogram opposite-side length mismatch: 9.97e-01
+
+wrote symmetric_metric_inv2_coords.json

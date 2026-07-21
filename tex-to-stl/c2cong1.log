@@ -1,0 +1,27 @@
+C2 mode: inv#6 hard projection active
+translate 321-0 -> 432-111: 1 isos, offset variance 1.131
+translate 421-1 -> 532-211: 1 isos, offset variance 1.414
+  it    0 planar=9.02e-03 congruence errs=['0.3760', '0.3760']
+  it  250 planar=5.82e-03 congruence errs=['0.0008', '0.0015']
+  it  500 planar=1.20e-03 congruence errs=['0.0001', '0.0002']
+  it  750 planar=2.45e-04 congruence errs=['0.0000', '0.0000']
+  it 1000 planar=4.93e-05 congruence errs=['0.0000', '0.0000']
+  it 1250 planar=9.78e-06 congruence errs=['0.0000', '0.0000']
+  it 1500 planar=1.94e-06 congruence errs=['0.0000', '0.0000']
+  it 1750 planar=3.86e-07 congruence errs=['0.0000', '0.0000']
+  it 2000 planar=7.65e-08 congruence errs=['0.0000', '0.0000']
+  it 2250 planar=1.52e-08 congruence errs=['0.0000', '0.0000']
+  it 2500 planar=3.01e-09 congruence errs=['0.0000', '0.0000']
+  it 2750 planar=5.98e-10 congruence errs=['0.0000', '0.0000']
+  it 2999 planar=1.20e-10 congruence errs=['0.0000', '0.0000']
+
+=== verification (span 11.853) ===
+face planarity: max dev 1.20e-10 (1.01e-11 of span)
+metric products: max parallel deviation 0.0000 deg
+cells convex: 14/14
+outer shell: facet flatness 3.91e-12, max poke-out 3.63e-12 (3.06e-13 of span)
+outer symmetry (C2): max corner error 0.00e+00 (0.00e+00 of span)
+parallelogram opposite-side length mismatch: 1.34e-11
+
+final congruence errors: ['0.00000', '0.00000']
+wrote c2_congruent_stage1.json
