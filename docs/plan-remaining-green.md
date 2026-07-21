@@ -267,6 +267,13 @@ review; for eventual looking into — noted as not ideal):**
    least predictable component by nature. Watch item — if it
    misbehaves, the direction is more goal-directed application
    (the guarded elim arms).
+5. ~~Bare `simp_all` in legs~~ — RESOLVED (named-simp arc,
+   2026-07-20): every leg simp is now `simp_all only
+   [LEG_SIMP_LEMMAS]` (opaque AND version-unstable). Zero-delta
+   corpus. Remaining bare-simp debt: the two termination sites
+   (`decreasing_by all_goals (simp_all; omega)` in to_lean_fn.rs
+   and `simp [height] <;> omega` in link_discharge.rs) — a
+   different consumer, for a dedicated pass.
 
 **Success metric:** 102 → ≤ 30 errors, ≥ 105 verified fns, all 24
 Rational impls green. The pmul family is the long tail; everything
