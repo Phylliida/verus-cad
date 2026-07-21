@@ -40,6 +40,23 @@ application-precedence on bare pp-atoms as function args
 (`mul_self_nonneg (…)`). Remaining: item 5 (recip family, 3), item 6
 (pmul family, ~60), divmod timeouts. N3 design doc lessons 18–23.*
 
+***Update 2026-07-20 (eve).** State: **114 verified / 72 errors**.
+Item 5 (recip sign-split family) LANDED — all 24 Rational impls now
+green. Mechanisms: the False-elim arm (`cases h` on `LitBool(false)`
+binders — `assert(false)` makes a branch's downstream obligations
+vacuous) and the targeted ite-collapse leg (`simp_all only [if_pos,
+if_neg, if_true, if_false] <;> omega` as BACKSTOP behind the wild
+`simp_all`). The arc cost four regression-chase cycles: `if_pos`/
+`if_neg` in a spine set collapses the ites `split` needs,
+`ofNat_toNat` rewrites subrange's forms out from under divmod's
+legs, the full unfold set in a leg whnf-times-out, and `+zetaDelta`
+on big contexts is substitution blowup. divmod (4), pmul_padd_right
+(4), pmul_pad (1), pmul_singleton_right (1) all came along as
+side-effects. Remaining: item 6 (pmul family, ~60) and the
+budget-edge flake class (pmul_push 223:16 — byte-identical theorem
+that closes standalone; whnf/heartbeat edge under corpus load).
+N3 design doc lessons 25–28.*
+
 The remaining 102 errors fall into six shapes, each with a known
 mechanism. Ordered by yield-per-risk; every item names the files and
 the failure mode it retires.
