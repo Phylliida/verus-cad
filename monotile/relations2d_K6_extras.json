@@ -1,0 +1,70 @@
+{
+ "71942178": {
+  "class": "empty",
+  "via": "box6"
+ },
+ "160432332": {
+  "class": "empty",
+  "via": "box6"
+ },
+ "160702668": {
+  "class": "empty",
+  "via": "box6"
+ },
+ "232644846": {
+  "class": "empty",
+  "via": "box6"
+ },
+ "608813346": {
+  "class": "empty",
+  "via": "box6"
+ },
+ "697303500": {
+  "class": "empty",
+  "via": "box6"
+ },
+ "697573836": {
+  "class": "periodic",
+  "index": 2
+ },
+ "769516014": {
+  "class": "periodic",
+  "index": 2
+ },
+ "1145819682": {
+  "class": "empty",
+  "via": "box6"
+ },
+ "1234309836": {
+  "class": "periodic",
+  "index": 4
+ },
+ "1771451340": {
+  "class": "periodic",
+  "index": 2
+ },
+ "2451573777": {
+  "class": "empty",
+  "via": "box6"
+ },
+ "2451844113": {
+  "class": "empty",
+  "via": "box6"
+ },
+ "2523515955": {
+  "class": "periodic",
+  "index": 1
+ },
+ "3148877277": {
+  "class": "empty",
+  "via": "box6"
+ },
+ "3149147613": {
+  "class": "periodic",
+  "index": 2
+ },
+ "3525451281": {
+  "class": "empty",
+  "via": "box6"
+ }
+}

@@ -28,7 +28,8 @@ import numpy as np
 from pysat.solvers import Glucose3
 from pysat.card import CardEnc, EncType
 
-K = 3
+K = int(os.environ.get("ARENA_K", 3))
+KSUF = "" if K == 3 else f"_K{K}"
 NPTS = 6 * K * K
 
 # ---------------------------------------------------------------- geometry
@@ -514,6 +515,7 @@ def pattern_pairs_lattice(B, grid):
 SEL4_CONF = 10_000      # selector solve at the 4^3 detector
 SEL6_CONF = 25_000      # selector solve at the 6^3 detector
 BOX5_CONF = 50_000      # 5^3 tileability check
+BOX8_CONF = 5_000_000   # 8^3 tileability backstop (looser matchings, K<3)
 TORUS_CONF = 10_000     # quotient-torus solve per candidate lattice
 VERDICT_TIME_CAP = 240.0  # wall-clock safety net per candidate
 
@@ -682,6 +684,14 @@ class Verifier:
         if sat is None:
             unresolved.append(("box5", None))
         if suspicious or unresolved:
+            # bigger-box tileability first: at looser matchings (K<3) a
+            # non-tiler can pass 5^3 yet fail 8^3 -- cheap, decisive UNSAT
+            # that the 5^3 check (which even times out here) never sees.
+            t = time.time()
+            s8, _ = box_sat((8, 8, 8), self.bad, conf_budget=BOX8_CONF)
+            self.phase["box8"] += time.time() - t
+            if s8 is False:
+                return ("untileable8", None, None)
             # decisive backstop: brute-sweep every lattice class <= 32
             # before conceding a suspicious verdict
             t = time.time()
@@ -839,7 +849,10 @@ def self_test():
     dec = tuple(int(x) for x in rng.choice((-1, 1), NPTS))
     compat = compat_tables(placed_vectors(dec))
     assert check_equivariance(compat)
-    print("[test] equivariance at K=3: OK")
+    print(f"[test] equivariance at K={K}: OK")
+
+    if K != 3:
+        return  # the stacker-control test below is tuned to K=3 coordinates
 
     dec_p = []
     for p in PTS:
@@ -865,7 +878,7 @@ def self_test():
 
 # ---------------------------------------------------------------- loop
 
-PATTERN_FILE = "arena2_patterns.json"
+PATTERN_FILE = f"arena2_patterns{KSUF}.json"
 
 def save_blocks(patterns, points):
     # atomic: a kill mid-write must never truncate the library
@@ -926,7 +939,7 @@ def run(time_budget):
     seen_patterns = set()
     survivors, sus = [], []
     patterns, points, library, libseen = load_blocks(syn, seen_patterns)
-    logf = open("arena2_progress.jsonl", "a")
+    logf = open(f"arena2_progress{KSUF}.jsonl", "a")
     it = 0
     while time.time() - t0 < time_budget:
         it += 1
@@ -1041,7 +1054,7 @@ if __name__ == "__main__":
     print("verdicts:", dict(kills))
     print("confirmed period indices:", dict(sorted(idxh.items())))
     print("survivors:", len(survivors), "suspicious:", len(sus))
-    with open("arena2_log.json", "w") as f:
+    with open(f"arena2_log{KSUF}.json", "w") as f:
         json.dump({"status": status, "iters": iters,
                    "kills": {str(k): v for k, v in kills.items()},
                    "indices": {str(k): v for k, v in idxh.items()},

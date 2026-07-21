@@ -1,0 +1,7 @@
+{"stage": "validation", "tries": 69, "in_loop": "periodic", "in_loop_index": 4, "deep": "periodic-deep", "deep_secs": 10.4, "t": 34.6}
+{"stage": "suspicious", "i": 0, "dec": [1, 1, -1, -1, -1, -1, 1, 1, -1, -1, 1, 1, -1, 1, -1, 1, 1, -1, 1, -1, 1, 1, -1, -1], "deep": "ext-timeout", "secs": 137.5, "t": 172.3}
+{"stage": "suspicious", "i": 1, "dec": [1, -1, 1, -1, 1, 1, -1, -1, 1, 1, -1, -1, 1, -1, 1, -1, -1, 1, -1, 1, -1, 1, -1, 1], "deep": "untileable8", "secs": 388.2, "t": 560.6}
+{"stage": "suspicious", "i": 2, "dec": [1, -1, 1, -1, -1, -1, 1, 1, -1, -1, 1, 1, 1, 1, -1, -1, 1, -1, 1, -1, -1, -1, 1, 1], "deep": "ext-timeout", "secs": 169.1, "t": 729.8}
+{"stage": "suspicious", "i": 3, "dec": [1, -1, 1, -1, -1, -1, 1, 1, -1, -1, 1, 1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1], "deep": "ext-timeout", "secs": 329.3, "t": 1059.5}
+{"stage": "untileable8-audit", "dec": [1, -1, -1, 1, -1, -1, 1, 1, -1, -1, 1, 1, 1, -1, 1, -1, 1, -1, -1, 1, -1, -1, 1, 1], "box8": "unsat-confirmed", "secs": 1.7, "t": 1061.2}
+{"stage": "done", "t": 1061.2}

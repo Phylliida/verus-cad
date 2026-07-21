@@ -1,0 +1,146 @@
+stragglers: 34 (budget 200000, workers 24)
+checkpoint: 1 cubes done
+[268 empty5] box (5, 5, 5): 3625 vars, 181625 clauses
+  [268 empty5] unsat=1 splits=0 [1s]
+[268 empty5] DONE unsat=1 splits=0 [1s total]
+[542 empty5] box (5, 5, 5): 3625 vars, 181625 clauses
+  [542 empty5] unsat=1 splits=0 [3s]
+[542 empty5] DONE unsat=1 splits=0 [4s total]
+[1668 empty4] box (4, 4, 4): 1856 vars, 87616 clauses
+[1668 empty4] DONE unsat=0 splits=0 [4s total]
+[1915 empty4] box (4, 4, 4): 1856 vars, 88768 clauses
+  [1915 empty4] unsat=1 splits=0 [2s]
+[1915 empty4] DONE unsat=1 splits=0 [6s total]
+[1987 empty4] box (4, 4, 4): 1856 vars, 88768 clauses
+  [1987 empty4] unsat=1 splits=0 [2s]
+[1987 empty4] DONE unsat=1 splits=0 [8s total]
+[6585 empty6] box (6, 6, 6): 6264 vars, 344952 clauses
+  [6585 empty6] unsat=1 splits=0 [1s]
+[6585 empty6] DONE unsat=1 splits=0 [10s total]
+[6586 empty4] box (4, 4, 4): 1856 vars, 94528 clauses
+  [6586 empty4] unsat=1 splits=0 [0s]
+[6586 empty4] DONE unsat=1 splits=0 [10s total]
+[6600 empty4] box (4, 4, 4): 1856 vars, 94528 clauses
+  [6600 empty4] unsat=1 splits=0 [0s]
+[6600 empty4] DONE unsat=1 splits=0 [10s total]
+[6664 empty4] box (4, 4, 4): 1856 vars, 94528 clauses
+  [6664 empty4] unsat=1 splits=0 [0s]
+[6664 empty4] DONE unsat=1 splits=0 [11s total]
+[6671 empty4] box (4, 4, 4): 1856 vars, 94528 clauses
+  [6671 empty4] unsat=1 splits=0 [0s]
+[6671 empty4] DONE unsat=1 splits=0 [11s total]
+[6679 empty6] box (6, 6, 6): 6264 vars, 344952 clauses
+  [6679 empty6] unsat=1 splits=0 [1s]
+[6679 empty6] DONE unsat=1 splits=0 [13s total]
+[9572 empty4] box (4, 4, 4): 1856 vars, 92800 clauses
+  [9572 empty4] unsat=1 splits=0 [1s]
+[9572 empty4] DONE unsat=1 splits=0 [14s total]
+[9656 empty4] box (4, 4, 4): 1856 vars, 92800 clauses
+  [9656 empty4] unsat=1 splits=0 [1s]
+[9656 empty4] DONE unsat=1 splits=0 [15s total]
+[16141 empty4] box (4, 4, 4): 1856 vars, 79552 clauses
+  [16141 empty4] unsat=0 splits=1 [11s]
+  [16141 empty4] unsat=1 splits=2 [22s]
+  [16141 empty4] unsat=2 splits=3 [33s]
+  [16141 empty4] unsat=3 splits=4 [44s]
+  [16141 empty4] unsat=5 splits=4 [65s]
+[16141 empty4] DONE unsat=5 splits=4 [79s total]
+[16170 empty6] box (6, 6, 6): 6264 vars, 288792 clauses
+  [16170 empty6] unsat=0 splits=1 [22s]
+  [16170 empty6] unsat=0 splits=3 [45s]
+  [16170 empty6] unsat=0 splits=7 [64s]
+  [16170 empty6] unsat=0 splits=15 [81s]
+  [16170 empty6] unsat=0 splits=31 [104s]
+  [16170 empty6] unsat=8 splits=55 [133s]
+  [16170 empty6] unsat=15 splits=96 [193s]
+  [16170 empty6] unsat=45 splits=148 [302s]
+  [16170 empty6] unsat=110 splits=187 [494s]
+  [16170 empty6] unsat=161 splits=214 [589s]
+  [16170 empty6] unsat=192 splits=237 [684s]
+  [16170 empty6] unsat=224 splits=251 [784s]
+  [16170 empty6] unsat=244 splits=259 [845s]
+  [16170 empty6] unsat=256 splits=263 [902s]
+  [16170 empty6] unsat=262 splits=265 [945s]
+  [16170 empty6] unsat=266 splits=265 [984s]
+[16170 empty6] DONE unsat=266 splits=265 [1064s total]
+[16221 empty5] box (5, 5, 5): 3625 vars, 196025 clauses
+  [16221 empty5] unsat=1 splits=0 [0s]
+[16221 empty5] DONE unsat=1 splits=0 [1065s total]
+[16228 empty5] box (5, 5, 5): 3625 vars, 196025 clauses
+  [16228 empty5] unsat=1 splits=0 [0s]
+[16228 empty5] DONE unsat=1 splits=0 [1066s total]
+[16818 empty5] box (5, 5, 5): 3625 vars, 191225 clauses
+  [16818 empty5] unsat=1 splits=0 [1s]
+[16818 empty5] DONE unsat=1 splits=0 [1067s total]
+[24647 empty5] box (5, 5, 5): 3625 vars, 179225 clauses
+  [24647 empty5] unsat=0 splits=1 [13s]
+  [24647 empty5] unsat=0 splits=3 [27s]
+  [24647 empty5] unsat=2 splits=5 [42s]
+  [24647 empty5] unsat=6 splits=5 [54s]
+[24647 empty5] DONE unsat=6 splits=5 [1120s total]
+[24730 empty5] box (5, 5, 5): 3625 vars, 179225 clauses
+  [24730 empty5] unsat=0 splits=1 [14s]
+  [24730 empty5] unsat=0 splits=3 [28s]
+  [24730 empty5] unsat=0 splits=7 [41s]
+  [24730 empty5] unsat=8 splits=7 [54s]
+[24730 empty5] DONE unsat=8 splits=7 [1175s total]
+[28077 empty5] box (5, 5, 5): 3625 vars, 179225 clauses
+  [28077 empty5] unsat=0 splits=1 [14s]
+  [28077 empty5] unsat=0 splits=3 [29s]
+  [28077 empty5] unsat=0 splits=7 [44s]
+  [28077 empty5] unsat=2 splits=13 [62s]
+  [28077 empty5] unsat=14 splits=13 [78s]
+[28077 empty5] DONE unsat=14 splits=13 [1253s total]
+[28111 empty5] box (5, 5, 5): 3625 vars, 179225 clauses
+  [28111 empty5] unsat=0 splits=1 [15s]
+  [28111 empty5] unsat=0 splits=3 [29s]
+  [28111 empty5] unsat=0 splits=7 [45s]
+  [28111 empty5] unsat=2 splits=13 [62s]
+  [28111 empty5] unsat=12 splits=15 [89s]
+  [28111 empty5] unsat=16 splits=15 [95s]
+[28111 empty5] DONE unsat=16 splits=15 [1349s total]
+[29085 empty5] box (5, 5, 5): 3625 vars, 192425 clauses
+  [29085 empty5] unsat=1 splits=0 [0s]
+[29085 empty5] DONE unsat=1 splits=0 [1350s total]
+[29086 empty5] box (5, 5, 5): 3625 vars, 192425 clauses
+  [29086 empty5] unsat=1 splits=0 [1s]
+[29086 empty5] DONE unsat=1 splits=0 [1350s total]
+[29948 empty5] box (5, 5, 5): 3625 vars, 197225 clauses
+  [29948 empty5] unsat=1 splits=0 [0s]
+[29948 empty5] DONE unsat=1 splits=0 [1351s total]
+[30535 empty4] box (4, 4, 4): 1856 vars, 93376 clauses
+  [30535 empty4] unsat=1 splits=0 [0s]
+[30535 empty4] DONE unsat=1 splits=0 [1351s total]
+[30950 empty4] box (4, 4, 4): 1856 vars, 93376 clauses
+  [30950 empty4] unsat=1 splits=0 [0s]
+[30950 empty4] DONE unsat=1 splits=0 [1351s total]
+[40995 empty4] box (4, 4, 4): 1856 vars, 87616 clauses
+  [40995 empty4] unsat=1 splits=0 [0s]
+[40995 empty4] DONE unsat=1 splits=0 [1352s total]
+[43275 empty4] box (4, 4, 4): 1856 vars, 87616 clauses
+  [43275 empty4] unsat=1 splits=0 [0s]
+[43275 empty4] DONE unsat=1 splits=0 [1352s total]
+[48285 empty4] box (4, 4, 4): 1856 vars, 80128 clauses
+  [48285 empty4] unsat=1 splits=0 [2s]
+[48285 empty4] DONE unsat=1 splits=0 [1354s total]
+[48311 empty5] box (5, 5, 5): 3625 vars, 163625 clauses
+  [48311 empty5] unsat=1 splits=0 [6s]
+[48311 empty5] DONE unsat=1 splits=0 [1360s total]
+[56936 empty4] box (4, 4, 4): 1856 vars, 71488 clauses
+  [56936 empty4] unsat=0 splits=1 [7s]
+  [56936 empty4] unsat=0 splits=3 [14s]
+  [56936 empty4] unsat=0 splits=7 [22s]
+  [56936 empty4] unsat=0 splits=15 [29s]
+  [56936 empty4] unsat=3 splits=28 [41s]
+  [56936 empty4] unsat=21 splits=36 [52s]
+  [56936 empty4] unsat=32 splits=41 [62s]
+  [56936 empty4] unsat=39 splits=44 [73s]
+  [56936 empty4] unsat=45 splits=44 [75s]
+[56936 empty4] DONE unsat=45 splits=44 [1435s total]
+[56969 empty4] box (4, 4, 4): 1856 vars, 88768 clauses
+  [56969 empty4] unsat=1 splits=0 [0s]
+[56969 empty4] DONE unsat=1 splits=0 [1435s total]
+[56979 empty4] box (4, 4, 4): 1856 vars, 88768 clauses
+  [56979 empty4] unsat=1 splits=0 [0s]
+[56979 empty4] DONE unsat=1 splits=0 [1436s total]
+RESULT: all stragglers CLOSED [1436s]

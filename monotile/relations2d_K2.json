@@ -1,0 +1,491 @@
+{
+ "K": 2,
+ "n_relations": 24,
+ "n_empty": 15,
+ "n_periodic": 9,
+ "n_suspicious": 0,
+ "consistency_violations": 0,
+ "relations": {
+  "0": {
+   "count": 1,
+   "verdicts": {
+    "unbalanced": 1
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1
+   ]
+  },
+  "16777344": {
+   "count": 2,
+   "verdicts": {
+    "unbalanced": 2
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    1,
+    -1
+   ]
+  },
+  "17047680": {
+   "count": 1,
+   "verdicts": {
+    "unbalanced": 1
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    -1
+   ]
+  },
+  "84254880": {
+   "count": 2,
+   "verdicts": {
+    "unbalanced": 2
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    1,
+    -1,
+    -1,
+    -1,
+    1,
+    -1
+   ]
+  },
+  "437528664": {
+   "count": 2,
+   "verdicts": {
+    "unbalanced": 2
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    1,
+    -1,
+    -1,
+    -1,
+    1,
+    1
+   ]
+  },
+  "504465528": {
+   "count": 1,
+   "verdicts": {
+    "unbalanced": 1
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    1,
+    1
+   ]
+  },
+  "553648512": {
+   "count": 2,
+   "verdicts": {
+    "unbalanced": 2
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    1,
+    1,
+    -1
+   ]
+  },
+  "621126048": {
+   "count": 2,
+   "verdicts": {
+    "unbalanced": 2
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    1,
+    -1
+   ]
+  },
+  "672407880": {
+   "count": 2,
+   "verdicts": {
+    "untileable6": 2
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    1,
+    1,
+    -1,
+    1,
+    1
+   ]
+  },
+  "739344744": {
+   "count": 2,
+   "verdicts": {
+    "unbalanced": 2
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    1
+   ]
+  },
+  "855640464": {
+   "count": 2,
+   "verdicts": {
+    "unbalanced": 2
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    -1
+   ]
+  },
+  "855910800": {
+   "count": 2,
+   "verdicts": {
+    "unbalanced": 2
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    1,
+    1,
+    -1,
+    1,
+    -1
+   ]
+  },
+  "869034390": {
+   "count": 1,
+   "verdicts": {
+    "periodic": 1
+   },
+   "class": {
+    "class": "periodic",
+    "index": 2
+   },
+   "sample_dec": [
+    -1,
+    1,
+    -1,
+    1,
+    1,
+    -1,
+    1,
+    -1
+   ]
+  },
+  "1515870810": {
+   "count": 1,
+   "verdicts": {
+    "periodic": 1
+   },
+   "class": {
+    "class": "periodic",
+    "index": 2
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    1,
+    1,
+    -1,
+    -1,
+    1,
+    1
+   ]
+  },
+  "1627796352": {
+   "count": 2,
+   "verdicts": {
+    "unbalanced": 2
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    1,
+    -1
+   ]
+  },
+  "1746285384": {
+   "count": 2,
+   "verdicts": {
+    "periodic": 2
+   },
+   "class": {
+    "class": "periodic",
+    "index": 4
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    1,
+    1
+   ]
+  },
+  "1996995504": {
+   "count": 2,
+   "verdicts": {
+    "unbalanced": 2
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    1,
+    -1
+   ]
+  },
+  "2166629505": {
+   "count": 2,
+   "verdicts": {
+    "periodic": 2
+   },
+   "class": {
+    "class": "periodic",
+    "index": 2
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    1,
+    1,
+    1,
+    1,
+    -1
+   ]
+  },
+  "2233836705": {
+   "count": 1,
+   "verdicts": {
+    "periodic": 1
+   },
+   "class": {
+    "class": "periodic",
+    "index": 1
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    1,
+    1,
+    1,
+    -1,
+    1
+   ]
+  },
+  "2779096485": {
+   "count": 1,
+   "verdicts": {
+    "periodic": 1
+   },
+   "class": {
+    "class": "periodic",
+    "index": 1
+   },
+   "sample_dec": [
+    -1,
+    1,
+    1,
+    -1,
+    -1,
+    1,
+    1,
+    -1
+   ]
+  },
+  "3240236673": {
+   "count": 2,
+   "verdicts": {
+    "unbalanced": 2
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    -1,
+    1,
+    1,
+    1,
+    -1
+   ]
+  },
+  "3425932905": {
+   "count": 1,
+   "verdicts": {
+    "periodic": 1
+   },
+   "class": {
+    "class": "periodic",
+    "index": 1
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    -1,
+    1,
+    1,
+    1,
+    1
+   ]
+  },
+  "3790501767": {
+   "count": 1,
+   "verdicts": {
+    "periodic": 1
+   },
+   "class": {
+    "class": "periodic",
+    "index": 2
+   },
+   "sample_dec": [
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    1,
+    1,
+    -1
+   ]
+  },
+  "4294967295": {
+   "count": 1,
+   "verdicts": {
+    "periodic": 1
+   },
+   "class": {
+    "class": "periodic",
+    "index": 1
+   },
+   "sample_dec": [
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    1
+   ]
+  }
+ },
+ "secs": 0.0
+}

@@ -1,0 +1,16 @@
+{
+ "K": 7,
+ "reps": 33558592,
+ "counts": {
+  "unbalanced": 33299208,
+  "untileable6": 253208,
+  "periodic": 6176
+ },
+ "indices": {
+  "1": 2080,
+  "2": 36,
+  "4": 4060
+ },
+ "suspicious": [],
+ "secs": 10912.1
+}

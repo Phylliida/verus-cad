@@ -1,0 +1,598 @@
+{
+ "K": 3,
+ "n_relations": 24,
+ "n_empty": 19,
+ "n_periodic": 5,
+ "n_suspicious": 0,
+ "consistency_violations": 0,
+ "relations": {
+  "0": {
+   "count": 246,
+   "verdicts": {
+    "unbalanced": 230,
+    "untileable6": 16
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1
+   ]
+  },
+  "4734978": {
+   "count": 10,
+   "verdicts": {
+    "unbalanced": 10
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    1,
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    -1
+   ]
+  },
+  "67207200": {
+   "count": 35,
+   "verdicts": {
+    "unbalanced": 33,
+    "untileable6": 2
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    1,
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    -1
+   ]
+  },
+  "135266376": {
+   "count": 42,
+   "verdicts": {
+    "unbalanced": 36,
+    "untileable6": 6
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    1
+   ]
+  },
+  "140001354": {
+   "count": 4,
+   "verdicts": {
+    "untileable6": 1,
+    "unbalanced": 3
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    1,
+    1,
+    -1,
+    -1,
+    -1,
+    1,
+    1
+   ]
+  },
+  "202473576": {
+   "count": 12,
+   "verdicts": {
+    "unbalanced": 11,
+    "untileable6": 1
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    1
+   ]
+  },
+  "301991952": {
+   "count": 39,
+   "verdicts": {
+    "unbalanced": 39
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    -1,
+    1,
+    1,
+    -1,
+    1,
+    -1,
+    -1
+   ]
+  },
+  "306726930": {
+   "count": 4,
+   "verdicts": {
+    "periodic": 4
+   },
+   "class": {
+    "class": "periodic",
+    "index": 4
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    1,
+    1,
+    1,
+    -1,
+    1,
+    -1,
+    -1
+   ]
+  },
+  "369199152": {
+   "count": 9,
+   "verdicts": {
+    "unbalanced": 9
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    1,
+    1,
+    -1,
+    1,
+    1,
+    -1,
+    1,
+    -1,
+    -1
+   ]
+  },
+  "437258328": {
+   "count": 9,
+   "verdicts": {
+    "unbalanced": 9
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    1
+   ]
+  },
+  "504465528": {
+   "count": 3,
+   "verdicts": {
+    "unbalanced": 3
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    1
+   ]
+  },
+  "1073877504": {
+   "count": 29,
+   "verdicts": {
+    "unbalanced": 27,
+    "untileable6": 2
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    -1
+   ]
+  },
+  "1078612482": {
+   "count": 3,
+   "verdicts": {
+    "unbalanced": 2,
+    "untileable6": 1
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    1,
+    -1,
+    -1,
+    1,
+    1,
+    -1,
+    -1
+   ]
+  },
+  "1141084704": {
+   "count": 8,
+   "verdicts": {
+    "unbalanced": 8
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    1,
+    1,
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    -1
+   ]
+  },
+  "1209143880": {
+   "count": 9,
+   "verdicts": {
+    "periodic": 9
+   },
+   "class": {
+    "class": "periodic",
+    "index": 4
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    1,
+    1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    1
+   ]
+  },
+  "1375869456": {
+   "count": 8,
+   "verdicts": {
+    "unbalanced": 8
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    1,
+    -1,
+    1,
+    -1,
+    -1
+   ]
+  },
+  "1515870810": {
+   "count": 3,
+   "verdicts": {
+    "periodic": 3
+   },
+   "class": {
+    "class": "periodic",
+    "index": 2
+   },
+   "sample_dec": [
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    1
+   ]
+  },
+  "2149581825": {
+   "count": 29,
+   "verdicts": {
+    "untileable6": 6,
+    "unbalanced": 23
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    1,
+    1,
+    -1,
+    1,
+    1,
+    -1,
+    -1
+   ]
+  },
+  "2154316803": {
+   "count": 4,
+   "verdicts": {
+    "untileable6": 1,
+    "unbalanced": 3
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    1,
+    -1,
+    1,
+    1,
+    1,
+    -1,
+    -1
+   ]
+  },
+  "2216789025": {
+   "count": 7,
+   "verdicts": {
+    "periodic": 7
+   },
+   "class": {
+    "class": "periodic",
+    "index": 1
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    1,
+    1,
+    -1,
+    1,
+    -1,
+    1,
+    1,
+    -1,
+    1,
+    -1
+   ]
+  },
+  "2284848201": {
+   "count": 3,
+   "verdicts": {
+    "untileable6": 1,
+    "unbalanced": 2
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    1,
+    1,
+    -1,
+    -1,
+    -1,
+    1,
+    1,
+    -1,
+    1,
+    1
+   ]
+  },
+  "2289583179": {
+   "count": 1,
+   "verdicts": {
+    "unbalanced": 1
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    1,
+    -1,
+    1,
+    1,
+    -1,
+    1,
+    1
+   ]
+  },
+  "3223459329": {
+   "count": 12,
+   "verdicts": {
+    "unbalanced": 11,
+    "untileable6": 1
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    1,
+    1,
+    -1,
+    -1
+   ]
+  },
+  "3425932905": {
+   "count": 3,
+   "verdicts": {
+    "periodic": 3
+   },
+   "class": {
+    "class": "periodic",
+    "index": 1
+   },
+   "sample_dec": [
+    -1,
+    1,
+    -1,
+    -1,
+    1,
+    -1,
+    1,
+    -1,
+    1,
+    1,
+    -1,
+    1
+   ]
+  }
+ },
+ "secs": 0.2
+}

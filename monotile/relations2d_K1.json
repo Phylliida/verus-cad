@@ -1,0 +1,75 @@
+{
+ "K": 1,
+ "n_relations": 4,
+ "n_empty": 2,
+ "n_periodic": 2,
+ "n_suspicious": 0,
+ "consistency_violations": 0,
+ "relations": {
+  "0": {
+   "count": 1,
+   "verdicts": {
+    "unbalanced": 1
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    -1
+   ]
+  },
+  "504465528": {
+   "count": 1,
+   "verdicts": {
+    "unbalanced": 1
+   },
+   "class": {
+    "class": "empty",
+    "via": "box6"
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    -1,
+    1
+   ]
+  },
+  "1515870810": {
+   "count": 1,
+   "verdicts": {
+    "periodic": 1
+   },
+   "class": {
+    "class": "periodic",
+    "index": 2
+   },
+   "sample_dec": [
+    -1,
+    1,
+    -1,
+    1
+   ]
+  },
+  "3425932905": {
+   "count": 1,
+   "verdicts": {
+    "periodic": 1
+   },
+   "class": {
+    "class": "periodic",
+    "index": 1
+   },
+   "sample_dec": [
+    -1,
+    -1,
+    1,
+    1
+   ]
+  }
+ },
+ "secs": 0.0
+}
