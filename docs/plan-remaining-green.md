@@ -270,10 +270,15 @@ review; for eventual looking into — noted as not ideal):**
 5. ~~Bare `simp_all` in legs~~ — RESOLVED (named-simp arc,
    2026-07-20): every leg simp is now `simp_all only
    [LEG_SIMP_LEMMAS]` (opaque AND version-unstable). Zero-delta
-   corpus. Remaining bare-simp debt: the two termination sites
-   (`decreasing_by all_goals (simp_all; omega)` in to_lean_fn.rs
-   and `simp [height] <;> omega` in link_discharge.rs) — a
-   different consumer, for a dedicated pass.
+   corpus.
+6. ~~Bare `simp_all`/`simp [X]` in termination sites~~ — RESOLVED
+   (termination pass, 2026-07-20 night): the datatype-height
+   `simp_all`, WF-height `simp [height]`, the DecreasingKind ladder
+   family, and the mono-companion theorem all use
+   TERM_SIMP_LEMMAS (LEG + `Int.natCast_sub`). e2e 138/140
+   (recursive-datatype gate), algebra 114/72. Bare simp is extinct
+   in emitted tactic text outside the legacy `tactus_auto`
+   discover-mode path.
 
 **Success metric:** 102 → ≤ 30 errors, ≥ 105 verified fns, all 24
 Rational impls green. The pmul family is the long tail; everything
