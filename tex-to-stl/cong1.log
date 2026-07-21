@@ -1,0 +1,26 @@
+translate 321-0 -> 432-111: 1 isos, offset variance 4.999
+translate 421-1 -> 532-211: 1 isos, offset variance 6.249
+  it    0 planar=2.54e-07 congruence errs=['0.7905', '0.7905']
+  it  250 planar=2.46e-02 congruence errs=['0.0019', '0.0056']
+  it  500 planar=3.93e-03 congruence errs=['0.0004', '0.0006']
+  it  750 planar=6.50e-04 congruence errs=['0.0001', '0.0001']
+  it 1000 planar=1.07e-04 congruence errs=['0.0000', '0.0000']
+  it 1250 planar=1.75e-05 congruence errs=['0.0000', '0.0000']
+  it 1500 planar=2.86e-06 congruence errs=['0.0000', '0.0000']
+  it 1750 planar=4.68e-07 congruence errs=['0.0000', '0.0000']
+  it 2000 planar=7.65e-08 congruence errs=['0.0000', '0.0000']
+  it 2250 planar=1.25e-08 congruence errs=['0.0000', '0.0000']
+  it 2500 planar=2.04e-09 congruence errs=['0.0000', '0.0000']
+  it 2750 planar=3.34e-10 congruence errs=['0.0000', '0.0000']
+  it 2999 planar=5.50e-11 congruence errs=['0.0000', '0.0000']
+
+=== verification (span 13.049) ===
+face planarity: max dev 5.50e-11 (4.21e-12 of span)
+metric products: max parallel deviation 0.0000 deg
+cells convex: 14/14
+outer shell: facet flatness 1.71e-12, max poke-out 1.67e-12 (1.28e-13 of span)
+outer symmetry (C2): max corner error 1.51e+01 (1.16e+00 of span)
+parallelogram opposite-side length mismatch: 2.65e-12
+
+final congruence errors: ['0.00000', '0.00000']
+wrote congruent_stage1_coords.json

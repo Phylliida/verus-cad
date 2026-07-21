@@ -3,7 +3,7 @@
 //   explode = 1.0  -> original watertight tiling (no gaps)
 //   explode > 1.0  -> cells fly apart from the common centre
 
-explode = 1.6;   // <-- spacing knob
+explode = 1.05;   // <-- spacing knob
 
 G = [-0.04126, 0.10202, -0.35364];   // common centre
 

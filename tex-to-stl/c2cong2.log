@@ -1,0 +1,40 @@
+C2 mode: inv#6 hard projection active
+translate 321-0 -> 432-111: 1 isos, offset variance 0.000
+translate 421-1 -> 532-211: 1 isos, offset variance 0.000
+rotated 431-11 -> 542-221: 20 isos, best DIRECT Horn rms 0.970 (with mirror allowed: 0.970)
+  it    0 planar=1.15e-10 congruence errs=['0.0000', '0.0000', '0.9697']
+  it  250 planar=5.35e-02 congruence errs=['0.1051', '0.0809', '0.4503']
+  it  500 planar=5.11e-02 congruence errs=['0.1122', '0.1007', '0.3062']
+  it  750 planar=4.84e-02 congruence errs=['0.2176', '0.2226', '0.1680']
+  it 1000 planar=3.56e-02 congruence errs=['0.1011', '0.1198', '0.0598']
+  it 1250 planar=2.83e-02 congruence errs=['0.0517', '0.0667', '0.0256']
+  it 1500 planar=2.39e-02 congruence errs=['0.0350', '0.0458', '0.0152']
+  it 1750 planar=2.11e-02 congruence errs=['0.0257', '0.0340', '0.0106']
+  it 2000 planar=2.06e-02 congruence errs=['0.0432', '0.0571', '0.0167']
+  it 2250 planar=1.72e-02 congruence errs=['0.0209', '0.0274', '0.0086']
+  it 2500 planar=1.52e-01 congruence errs=['0.0676', '0.0554', '0.0264']
+  it 2750 planar=1.07e-01 congruence errs=['0.0370', '0.0297', '0.0164']
+  it 3000 planar=1.89e-01 congruence errs=['0.0138', '0.0184', '0.0267']
+  it 3250 planar=1.34e-01 congruence errs=['0.0052', '0.0072', '0.0138']
+  it 3500 planar=8.80e-02 congruence errs=['0.0062', '0.0078', '0.0104']
+  it 3750 planar=7.63e-02 congruence errs=['0.0071', '0.0095', '0.0111']
+  it 4000 planar=6.82e-02 congruence errs=['0.0117', '0.0152', '0.0153']
+  it 4250 planar=4.41e-02 congruence errs=['0.0121', '0.0056', '0.0049']
+  it 4500 planar=4.35e-02 congruence errs=['0.0114', '0.0028', '0.0045']
+  it 4750 planar=6.15e-02 congruence errs=['0.0165', '0.0113', '0.0130']
+  it 4999 planar=4.50e-02 congruence errs=['0.0023', '0.0034', '0.0018']
+
+=== verification (span 14.498) ===
+face planarity: max dev 4.50e-02 (3.10e-03 of span)
+metric products: max parallel deviation 0.3481 deg
+  cell 532-211: convex=False closed=True violation depth 1.73e-03 (1.19e-04 of span)
+  cell 632-411: convex=False closed=True violation depth 2.00e-03 (1.38e-04 of span)
+  cell 642-321: convex=False closed=True violation depth 3.44e-02 (2.38e-03 of span)
+  cell 531-21: convex=False closed=True violation depth 4.50e-02 (3.10e-03 of span)
+cells convex: 10/14
+outer shell: facet flatness 8.26e-04, max poke-out 8.26e-04 (5.70e-05 of span)
+outer symmetry (C2): max corner error 0.00e+00 (0.00e+00 of span)
+parallelogram opposite-side length mismatch: 2.49e-01
+
+final congruence errors: ['0.00227', '0.00342', '0.00175']
+wrote c2_congruent_stage2.json

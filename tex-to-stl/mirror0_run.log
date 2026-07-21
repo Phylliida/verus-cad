@@ -1,0 +1,43 @@
+involution #0: kind=mirror, fixed corners=['0', '22', '422', '622']
+initial corner symmetry error after alignment: 3.6713 (span 11.469)
+70 faces, 15 parallel classes, 9 shell facets
+  it    0  w_sym=   0.5  planar=4.40e-01  parallel=45.6783deg
+  it  200  w_sym=  10.3  planar=1.97e-01  parallel=4.9440deg
+  it  400  w_sym=  20.2  planar=1.21e-01  parallel=3.3485deg
+  it  600  w_sym=  30.0  planar=8.27e-02  parallel=20.4966deg
+  it  800  w_sym=  30.0  planar=4.24e-02  parallel=36.5100deg
+  it 1000  w_sym=  30.0  planar=2.59e-02  parallel=40.2497deg
+  it 1200  w_sym=  30.0  planar=1.87e-02  parallel=41.4354deg
+  it 1400  w_sym=  30.0  planar=1.49e-02  parallel=41.1863deg
+  it 1600  w_sym=  30.0  planar=1.46e-02  parallel=40.0587deg
+  it 1800  w_sym=  30.0  planar=1.40e-02  parallel=38.5036deg
+  it 2000  w_sym=  30.0  planar=1.31e-02  parallel=36.9927deg
+  it 2200  w_sym=  30.0  planar=1.22e-02  parallel=35.6767deg
+  it 2400  w_sym=  30.0  planar=1.12e-02  parallel=34.1698deg
+  it 2600  w_sym=  30.0  planar=1.02e-02  parallel=32.4156deg
+  it 2800  w_sym=  30.0  planar=9.60e-03  parallel=32.5275deg
+  it 2999  w_sym=  30.0  planar=1.98e-02  parallel=3.8739deg
+
+=== verification (span 14.998) ===
+face planarity: max dev 1.98e-02 (1.32e-03 of span)
+metric products: max parallel deviation 3.8739 deg
+  cell 432-111: convex=False closed=True violation depth 4.30e-03 (2.87e-04 of span)
+  cell 542-221: convex=False closed=True violation depth 5.35e-03 (3.56e-04 of span)
+  cell 532-211: convex=False closed=True violation depth 7.57e-03 (5.05e-04 of span)
+  cell 632-411: convex=False closed=True violation depth 1.43e-01 (9.50e-03 of span)
+  cell 642-321: convex=False closed=True violation depth 1.92e+00 (1.28e-01 of span)
+  cell 321-0: convex=False closed=True violation depth 1.98e-02 (1.32e-03 of span)
+  cell 431-11: convex=False closed=True violation depth 1.88e-02 (1.26e-03 of span)
+  cell 541-33: convex=False closed=True violation depth 2.88e-03 (1.92e-04 of span)
+  cell 421-1: convex=False closed=True violation depth 8.54e-03 (5.70e-04 of span)
+  cell 521-3: convex=False closed=True violation depth 1.11e-02 (7.37e-04 of span)
+  cell 531-21: convex=False closed=True violation depth 1.03e-02 (6.86e-04 of span)
+  cell 641-43: convex=False closed=True violation depth 1.84e-03 (1.23e-04 of span)
+  cell 621-5: convex=False closed=True violation depth 2.52e-03 (1.68e-04 of span)
+  cell 631-51: convex=False closed=True violation depth 2.52e-03 (1.68e-04 of span)
+cells convex: 0/14
+outer shell: facet flatness 4.07e-02, max poke-out 1.80e+00 (1.20e-01 of span)
+outer symmetry (mirror): max corner error 0.00e+00 (0.00e+00 of span)
+parallelogram opposite-side length mismatch: 9.66e-02
+
+wrote symmetric_metric_inv0_coords.json

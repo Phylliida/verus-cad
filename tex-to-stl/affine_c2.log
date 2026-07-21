@@ -1,0 +1,37 @@
+start: affine rms to ref 1.9878 (15.51% of ref span), c2=True
+  it    0 wp=0.50 affine-rms=1.9683 (15.36%) planar=1.08e-02
+  it  250 wp=0.50 affine-rms=1.2914 (10.08%) planar=4.93e-02
+  it  500 wp=0.50 affine-rms=1.2506 (9.76%) planar=4.40e-02
+  it  750 wp=0.50 affine-rms=1.2488 (9.74%) planar=4.03e-02
+  it 1000 wp=0.50 affine-rms=1.2860 (10.04%) planar=4.17e-02
+  it 1250 wp=0.50 affine-rms=1.3891 (10.84%) planar=6.53e-02
+  it 1500 wp=0.50 affine-rms=1.4718 (11.49%) planar=6.05e-02
+  it 1750 wp=0.50 affine-rms=1.5046 (11.74%) planar=5.55e-02
+  it 2000 wp=0.00 affine-rms=1.5347 (11.98%) planar=5.48e-02
+  it 2250 wp=0.00 affine-rms=2.5742 (20.09%) planar=8.04e-02
+  it 2499 wp=0.00 affine-rms=2.6861 (20.96%) planar=7.22e-02
+
+=== verification (span 13.844) ===
+face planarity: max dev 7.22e-02 (5.21e-03 of span)
+metric products: max parallel deviation 16.2274 deg
+  cell 432-111: convex=False closed=True violation depth 4.59e-03 (3.32e-04 of span)
+  cell 542-221: convex=False closed=True violation depth 5.49e-03 (3.97e-04 of span)
+  cell 532-211: convex=False closed=True violation depth 5.52e-03 (3.99e-04 of span)
+  cell 632-411: convex=False closed=True violation depth 4.51e-03 (3.26e-04 of span)
+  cell 642-321: convex=False closed=True violation depth 3.01e-02 (2.17e-03 of span)
+  cell 321-0: convex=False closed=True violation depth 5.08e-03 (3.67e-04 of span)
+  cell 431-11: convex=False closed=True violation depth 1.42e-02 (1.03e-03 of span)
+  cell 541-33: convex=False closed=True violation depth 1.65e-03 (1.20e-04 of span)
+  cell 421-1: convex=False closed=True violation depth 7.28e-03 (5.26e-04 of span)
+  cell 521-3: convex=False closed=True violation depth 7.04e-02 (5.09e-03 of span)
+  cell 531-21: convex=False closed=True violation depth 3.54e-02 (2.56e-03 of span)
+  cell 641-43: convex=False closed=True violation depth 3.87e-03 (2.79e-04 of span)
+  cell 621-5: convex=False closed=True violation depth 5.38e-03 (3.88e-04 of span)
+  cell 631-51: convex=False closed=True violation depth 1.31e-02 (9.47e-04 of span)
+cells convex: 0/14
+outer shell: facet flatness 2.27e-02, max poke-out 4.96e-02 (3.58e-03 of span)
+outer symmetry (C2): max corner error 0.00e+00 (0.00e+00 of span)
+parallelogram opposite-side length mismatch: 6.49e-01
+
+FINAL affine rms to ref: 2.6861 (20.96% of ref span)
+wrote affine_pin_c2_coords.json

@@ -1,0 +1,23 @@
+start: affine rms to ref 1.3851 (10.81% of ref span), c2=False
+  it    0 wp=0.50 affine-rms=1.3437 (10.49%) planar=2.54e-02
+  it  250 wp=0.50 affine-rms=1.1230 (8.76%) planar=2.30e-02
+  it  500 wp=0.50 affine-rms=1.1215 (8.75%) planar=2.31e-02
+  it  750 wp=0.50 affine-rms=1.1204 (8.74%) planar=2.34e-02
+  it 1000 wp=0.50 affine-rms=1.1193 (8.73%) planar=2.34e-02
+  it 1250 wp=0.50 affine-rms=1.1183 (8.73%) planar=2.33e-02
+  it 1500 wp=0.50 affine-rms=1.1173 (8.72%) planar=2.31e-02
+  it 1750 wp=0.50 affine-rms=1.1164 (8.71%) planar=2.26e-02
+  it 2000 wp=0.00 affine-rms=1.1487 (8.96%) planar=2.21e-02
+  it 2250 wp=0.00 affine-rms=1.3195 (10.30%) planar=9.77e-04
+  it 2499 wp=0.00 affine-rms=1.3196 (10.30%) planar=8.44e-05
+
+=== verification (span 11.326) ===
+face planarity: max dev 8.44e-05 (7.45e-06 of span)
+metric products: max parallel deviation 0.0004 deg
+cells convex: 14/14
+outer shell: facet flatness 1.39e-06, max poke-out 9.96e-07 (8.79e-08 of span)
+outer symmetry (C2): max corner error 2.04e+01 (1.80e+00 of span)
+parallelogram opposite-side length mismatch: 1.94e-05
+
+FINAL affine rms to ref: 1.3196 (10.30% of ref span)
+wrote affine_pin_noc2_coords.json

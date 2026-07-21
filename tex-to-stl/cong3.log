@@ -1,0 +1,30 @@
+translate 321-0 -> 432-111: 1 isos, offset variance 0.000
+translate 421-1 -> 532-211: 1 isos, offset variance 0.000
+rotated 431-11 -> 542-221: 20 isos, best DIRECT Horn rms 0.000 (with mirror allowed: 0.000)
+rotated 521-3 -> 632-411: 20 isos, best DIRECT Horn rms 0.301 (with mirror allowed: 0.301)
+  it    0 planar=5.90e-04 congruence errs=['0.0001', '0.0001', '0.0001', '0.3008']
+  it  250 planar=1.08e-02 congruence errs=['0.0038', '0.0107', '0.0133', '0.0236']
+  it  500 planar=5.00e-03 congruence errs=['0.0010', '0.0022', '0.0069', '0.0039']
+  it  750 planar=5.21e-03 congruence errs=['0.0007', '0.0010', '0.0029', '0.0008']
+  it 1000 planar=2.89e-03 congruence errs=['0.0003', '0.0004', '0.0010', '0.0002']
+  it 1250 planar=1.22e-03 congruence errs=['0.0001', '0.0002', '0.0004', '0.0001']
+  it 1500 planar=4.70e-04 congruence errs=['0.0000', '0.0001', '0.0001', '0.0000']
+  it 1750 planar=1.75e-04 congruence errs=['0.0000', '0.0000', '0.0000', '0.0000']
+  it 2000 planar=6.44e-05 congruence errs=['0.0000', '0.0000', '0.0000', '0.0000']
+  it 2250 planar=2.35e-05 congruence errs=['0.0000', '0.0000', '0.0000', '0.0000']
+  it 2500 planar=8.56e-06 congruence errs=['0.0000', '0.0000', '0.0000', '0.0000']
+  it 2750 planar=3.11e-06 congruence errs=['0.0000', '0.0000', '0.0000', '0.0000']
+  it 3000 planar=1.13e-06 congruence errs=['0.0000', '0.0000', '0.0000', '0.0000']
+  it 3250 planar=4.11e-07 congruence errs=['0.0000', '0.0000', '0.0000', '0.0000']
+  it 3499 planar=1.50e-07 congruence errs=['0.0000', '0.0000', '0.0000', '0.0000']
+
+=== verification (span 12.846) ===
+face planarity: max dev 1.50e-07 (1.17e-08 of span)
+metric products: max parallel deviation 0.0000 deg
+cells convex: 14/14
+outer shell: facet flatness 6.18e-09, max poke-out 4.34e-09 (3.38e-10 of span)
+outer symmetry (C2): max corner error 1.44e+01 (1.12e+00 of span)
+parallelogram opposite-side length mismatch: 2.06e-08
+
+final congruence errors: ['0.00000', '0.00000', '0.00000', '0.00000']
+wrote congruent_stage3_coords.json

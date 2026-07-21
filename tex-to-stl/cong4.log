@@ -1,0 +1,44 @@
+translate 321-0 -> 432-111: 1 isos, offset variance 0.000
+translate 421-1 -> 532-211: 1 isos, offset variance 0.000
+rotated 431-11 -> 542-221: 20 isos, best DIRECT Horn rms 0.000 (with mirror allowed: 0.000)
+rotated 521-3 -> 632-411: 20 isos, best DIRECT Horn rms 0.000 (with mirror allowed: 0.000)
+rotated 631-51 -> 641-43: 20 isos, best DIRECT Horn rms 0.507 (with mirror allowed: 0.507)
+  it    0 planar=1.47e-07 congruence errs=['0.0000', '0.0000', '0.0000', '0.0000', '0.5070']
+  it  250 planar=4.34e-02 congruence errs=['0.0151', '0.0352', '0.1693', '0.0740', '0.2589']
+  it  500 planar=1.27e-01 congruence errs=['0.2047', '0.2123', '0.2192', '0.1418', '0.2006']
+  it  750 planar=1.90e-01 congruence errs=['0.2576', '0.1658', '0.3329', '0.1659', '0.4010']
+  it 1000 planar=3.72e-01 congruence errs=['0.2531', '0.2231', '0.6369', '0.2051', '0.5014']
+  it 1250 planar=4.27e-01 congruence errs=['0.3612', '0.1451', '0.7500', '0.3095', '0.4353']
+  it 1500 planar=1.67e-01 congruence errs=['0.1910', '0.2136', '0.3020', '0.1370', '0.2596']
+  it 1750 planar=8.65e-02 congruence errs=['0.0479', '0.0528', '0.1555', '0.0557', '0.1857']
+  it 2000 planar=1.46e-01 congruence errs=['0.0229', '0.0693', '0.0986', '0.0596', '0.1880']
+  it 2250 planar=3.11e-01 congruence errs=['0.0674', '0.0730', '0.4126', '0.0988', '0.2072']
+  it 2500 planar=5.29e-02 congruence errs=['0.0463', '0.1107', '0.3769', '0.0727', '0.0970']
+  it 2750 planar=1.60e-01 congruence errs=['0.0937', '0.1658', '0.3810', '0.0336', '0.0762']
+  it 3000 planar=1.79e-01 congruence errs=['0.0737', '0.1405', '0.3484', '0.0423', '0.1135']
+  it 3250 planar=1.47e-01 congruence errs=['0.0740', '0.1397', '0.3594', '0.0422', '0.0993']
+  it 3499 planar=6.45e-02 congruence errs=['0.0408', '0.1078', '0.3639', '0.0457', '0.0858']
+
+=== verification (span 24.789) ===
+face planarity: max dev 6.45e-02 (2.60e-03 of span)
+metric products: max parallel deviation 27.9389 deg
+  cell 432-111: convex=False closed=True violation depth 2.52e-03 (1.02e-04 of span)
+  cell 542-221: convex=False closed=True violation depth 1.00e-02 (4.05e-04 of span)
+  cell 532-211: convex=False closed=True violation depth 1.88e-02 (7.59e-04 of span)
+  cell 632-411: convex=False closed=True violation depth 1.82e-02 (7.33e-04 of span)
+  cell 642-321: convex=False closed=True violation depth 9.98e-02 (4.02e-03 of span)
+  cell 431-11: convex=False closed=True violation depth 2.33e-01 (9.40e-03 of span)
+  cell 541-33: convex=False closed=True violation depth 4.88e-02 (1.97e-03 of span)
+  cell 421-1: convex=False closed=True violation depth 4.16e-02 (1.68e-03 of span)
+  cell 521-3: convex=False closed=True violation depth 2.23e-02 (8.98e-04 of span)
+  cell 531-21: convex=False closed=True violation depth 1.99e-01 (8.03e-03 of span)
+  cell 641-43: convex=False closed=True violation depth 5.95e-02 (2.40e-03 of span)
+  cell 621-5: convex=False closed=True violation depth 2.77e-03 (1.12e-04 of span)
+  cell 631-51: convex=False closed=True violation depth 4.83e-02 (1.95e-03 of span)
+cells convex: 1/14
+outer shell: facet flatness 4.44e-02, max poke-out 2.82e-01 (1.14e-02 of span)
+outer symmetry (C2): max corner error 3.58e+00 (1.44e-01 of span)
+parallelogram opposite-side length mismatch: 8.44e-01
+
+final congruence errors: ['0.04079', '0.10784', '0.36390', '0.04569', '0.08584']
+wrote congruent_stage4_coords.json
