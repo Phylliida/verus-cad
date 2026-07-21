@@ -38,9 +38,8 @@ def load_jobs():
 
 def run_cadical(cnf_path, lrat_path):
     """Returns (verdict, size). verdict: UNSAT / SAT / OTHER."""
-    with open(lrat_path, "w") as lf:
-        r = subprocess.run([CAD, "--lrat", cnf_path],
-                           stdout=lf, stderr=subprocess.DEVNULL)
+    r = subprocess.run([CAD, "--lrat", cnf_path, lrat_path],
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     if r.returncode == 20:
         return ("UNSAT", os.path.getsize(lrat_path))
     if r.returncode == 10:
@@ -63,6 +62,9 @@ def do_leaf(arg):
     if os.path.exists(leaf_lrat):
         return (ci, leaf_id, "cached", 0)
     with open(out) as f, open(leaf_cnf, "w") as g:
+        header = f.readline()
+        pv, cv, nvars, ncls = header.split()
+        g.write(f"p cnf {nvars} {int(ncls) + len(cube)}\n")
         for line in f:
             g.write(line)
         for lit in cube:

@@ -1,5 +1,28 @@
 # DESIGN: the 3D any-K Lean endgame (M3b, M4, M5) — v1.0
 
+> **STATUS UPDATE 2026-07-20 (end of day).** Everything below is DONE
+> except the explicitly-marked tail:
+> - **M3b COMPLETE** (`census_complete` proven): B1-B2 bridge, B3 roots,
+>   B4 partition membership (with free class reordering — the naive
+>   ascending-heads order is NOT enumerator-realizable), B5 gains+tuple
+>   index, B6 stabilizer mask, B7 profile equality
+>   (`profileMask_eq_union`), B8 membership chain. Files:
+>   `AnyK3DBridge.lean`, `AnyK3DPart.lean`, `AnyK3DComplete.lean`.
+> - **M4 COMPLETE except cheap-mask discharge**: C1 monotonicity, C2
+>   periodic certs (340, native_decide-validated), C3 emptyCNF(X)
+>   encoder + encode_complete + empty_sound, cube-and-conquer on the 34
+>   stragglers CLOSED (387 UNSAT leaves; cadical LRAT certs generated,
+>   cake_lpr re-verification running), C4 transport (SIMPLIFIED — see
+>   the C4 note below) + coverage `native_decide` running.
+> - **M5 WRITTEN** (`AnyK3DMain.lean`): `no_aperiodic_wang_cube_anyK`
+>   assembled with ONE explicit trust-debt axiom `frontierEmptyFacts`
+>   (the 3,405 maximal-empty masks' emptiness: 34 proven via trees;
+>   3,371 pending in-Lean verifyCert chunking — probe running).
+> - Remaining: coverage build, cheap-mask verifyCert chunks, axiom
+>   audit, K=2/K=3 reconciliation.
+
+# Original design (v1.0)
+
 Status snapshot (2026-07-17): M1 (`AnyK3D.lean` + generated `AnyK3DGeom.lean`),
 M2 (`AnyK3DGain.lean`, pure kernel), M3-core (`AnyK3DCensusFast.lean`,
 `census_count_fast : censusFast.size = 1445865` by native_decide) all
