@@ -1,5 +1,21 @@
 # Plan — closing the remaining green gap in tactus-algebra
 
+***Update 2026-07-21.** State: **117 verified / 51 errors** (from
+114/72). The rung-only seq family LANDED crate-side as inline
+`vstd::seq::axiom_*` calls (requires → omega obligation, ensures →
+ground rewrite hyp; recipes in `docs/handoff-2026-07-21-lean-gate.md`):
+pmul_push 8→2, pmul_one_left green, 9 recursion-termination sites
+green. Emitter: RefineExact parse fix (`refine ⟨h1, h2⟩`), form-C
+exact-match repairs (strip SpanMark+TypeAnnot wrappers; substitute
+hoists to a fixpoint — the ordering bug), named TACTUS_DEBUG_FORMC
+dumps (emission is parallel). Census formC 180→381. Remaining 51:
+form C+ chain search (~10, the plan's item 6), Seq::new `=~=` family
+(~8, needs a budget-shaped unfold+bc_4+split-omega leg — crate-side
+exhausted, shiftk_zero experiment reverted), let-wrapped guard
+conjunctions (~11), postcondition assemblies (~6), divmod (4),
+budget flakes (2).*
+
+
 *2026-07-19. State: **98 verified / 102 errors**, 8 Rational axioms
 fully green (`axiom_eqv_transitive`, `axiom_le_transitive`,
 `axiom_add_associative`, `axiom_mul_associative`, `lemma_add_parts`,
