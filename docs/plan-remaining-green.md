@@ -1,5 +1,17 @@
 # Plan — closing the remaining green gap in tactus-algebra
 
+***Update 2026-07-21 (pm).** State: **127 verified / 31 errors**
+(from 114/72). Item 6 — the form C+ chain search — LANDED CRATE-SIDE
+per Danielle's steer (no emitter machinery): every multi-hop peqv
+requires is spelled out as single-hop steps (lemma_peqv_of_eq for the
+== bridges, verbatim restatements, per-cong lifts). Recipes and the
+new Seq-Eq-explosion class (bc_8/9 rewrite Seq-Eq goals into
+len∧∀-index form in the plain simp legs; StructuralTail excludes
+them but only rides in form B) are in the 2026-07-21 handoff.
+Remaining 31: Seq::new index family (~12), let-wrapped guards (~7),
+pmul_pad (3), divmod (4), cons_as_padd:425, drop_last (4),
+2 budget flakes. Census: scripts 627→735 (formC 180→437).*
+
 ***Update 2026-07-21.** State: **117 verified / 51 errors** (from
 114/72). The rung-only seq family LANDED crate-side as inline
 `vstd::seq::axiom_*` calls (requires → omega obligation, ensures →
