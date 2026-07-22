@@ -1,18 +1,81 @@
 # Handoff — Lean-gate arc, 2026-07-21
 
 *For the next session. State on entry: **114 verified / 72 errors** in
-tactus-algebra. State now: **117 verified / 51 errors** (118 without
-`-V cache` — one budget-edge fn flaps). pmul_push
+tactus-algebra. State now: **127 verified / 31 errors**. pmul_push
 8→2 (both budget-class), pmul_one_left green, all 9 recursive-pmul
-termination obligations green, pmul_comm 890-class green. Census:
-scripts 627→648 (formC 180→381, formA 416→236) — the ratchet gained
-share. Gates: lean_verify unit 409/409; rust_verify_test 138/140
-(the 2 failures are the pre-existing state_machines ones —
-`examples_state_machines_tutorial_fifo`,
-`examples_state_machines_flat_combine` — Z3-path, not ours).
-Work is committed in both repos.*
+termination obligations green, pmul_comm 890-class green, the
+peqv-chain family (padd_right, pneg_right, scale_right,
+singleton_right, assoc, shiftk_right, psub_right, pmul_push:234)
+green crate-side via single-link steps. Census: scripts 627→735
+(formC 180→437, formA 416→255, formB 31→43) — the ratchet gained
+~10 points of share. Gates: lean_verify unit 409/409;
+rust_verify_test 138/140 (2 pre-existing state_machines failures —
+Z3-path, not ours). Work is committed in both repos.*
 
 ---
+
+## 0. Session 2 (2026-07-21 pm): form C+ done CRATE-SIDE
+
+The previous handoff left "form C+ chain search" as the big emitter
+item. Danielle's steer: **do it with inline proofs, not emitter
+machinery.** Done — the multi-hop peqv requires are now spelled out
+as single-hop steps in the crate; the emitter's form C (single-hyp
+match) closes every one. 51 → 31.
+
+### The recipes (all landed, all validated)
+
+- **`lemma_peqv_of_eq` (poly.rs)** — the == bridge:
+  `requires p == q, ensures peqv(p, q)` (one-line body:
+  `lemma_peqv_refl(p)`). Turns a definitional-unfold fact into a
+  peqv link with one named call.
+- **Decompose every multi-hop trans into single links**: for a
+  requires `peqv(A, B)` where `A == A'` (an assert fact) and
+  `peqv(A', B)` (a lemma ret-hyp), write
+  `lemma_peqv_of_eq(A, A'); lemma_peqv_trans(A, A', B);`. Every
+  requires then matches exactly ONE fact (ExactHyp/RefineExact).
+- **Arg order for `peqv_of_eq`**: put the RECURSIVE-headed side
+  (`pmul …`) in the requires-goal's LHS (form B fires: `rw [pmul]` +
+  Defeq). With `padd`/`scale`/`shiftk` on the LHS, the Seq-Eq goal
+  goes to the simp legs and the ext-equal broadcast haves (bc_8/9)
+  EXPLODE it into len∧∀-index form — the **Seq-Eq explosion class**.
+  If the == is needed the other way round, flip via `lemma_peqv_sym`.
+- **Verbatim-match rule**: `peqv_of_eq`'s requires must be textually
+  the assert's fact (ExactHyp) or a form-B recursive unfold. For
+  congruence closures (fact under `shiftk(·)`), don't state the ==
+  goal at all — lift the peqv through `lemma_shiftk_cong` /
+  `lemma_padd_cong` / `lemma_pmul_cong_left` instead.
+- **Base branches (`len p == 0`)**: assert `== empty` for BOTH
+  sides' products, then the postcondition rewrites to
+  `peqv empty empty` ≡ the `peqv_refl` ret-hyp.
+- **Symbolic restatement rule**: when restating a lemma's ensures
+  inside a branch, keep the bound variable SYMBOLIC
+  (`coeff(st, i).eqv(if i < 1 …)`), not instantiated — form C's
+  hoist substs can't rewrite branch equations like `i = 0`. Collapse
+  to the instantiated fact in a SECOND assert (the ite-arith one:
+  `assert((if 0 < 1 {zero} else {…}) == zero)`).
+- **The `(i-1)+1 ≡ i` bridge**: `assert((i - 1) + 1 == i);` (omega)
+  then the ret-hyp rewrites and the arith-hyp finishes it.
+
+### What session 2 confirmed about the remaining classes
+
+- **Seq-Eq explosion (new, root-caused)**: any goal `A = B` on Seq
+  with a NON-recursive head (padd/scale/shiftk/subrange/push) gets
+  rewritten by the ext-equal broadcast haves into `len ∧ ∀-index`
+  form in the plain simp_all legs, and the pieces usually don't
+  reassemble. The StructuralTail leg excludes bc_8/9 for exactly
+  this, but it only rides in form-B scripts. Budget-flake lookalike:
+  the same theorem closes standalone with `rw [h]` or even
+  `simp_all only []` — the bc haves are the poison, not the budget.
+- **The `0 < ↑1` wall**: literal ite guards (`if i < ↑1`) and bc_4
+  side conditions don't close by simp — but a `split` puts the guard
+  in context, and bc rewrites fire with side conditions matched
+  against it. Explicit axiom calls sidestep all of it (requires =
+  omega, ensures = ground rewrite).
+- **pmul_comm:1048, pmul_push:269**: genuine budget-edge flakes
+  (byte-identical theorem closes standalone; corpus heartbeat
+  variance, mechanism still unknown).
+
+## 1. What landed, arc by arc
 
 ## 1. What landed, arc by arc
 
@@ -114,7 +177,41 @@ DECLINE read as padd_right's). Off by default.
   source edits. (Probes from this session: /tmp/probe165.lean,
   probe2/3/4/5, decline890.txt, formc-named.txt.)
 
-## 3. The remaining 51, by class
+## 3. The remaining 31, by class
+
+- **Seq::new index family (~12)** — `scale/shiftk/pad/singleton`
+  index-level asserts needing bc_4 (new_index) with arithmetic side
+  conditions plus the ite collapse: singleton 792/794 (scale of
+  singleton, mul-comm forall), 813/814 (scale index/skip),
+  shift1_left 963/964, shiftk_zero 48, shiftk_compose 55,
+  compose_inner 501, pmul_pad 295, divmod 57/58. The inline path
+  (explicit `axiom_seq_new_index` calls with a source-level closure)
+  is probe-worthy but fragile (closure text must match the unfolded
+  def emission); the `split`-then-bc_4 route works when the guard is
+  in context — no closer currently sequences them.
+- **Let-wrapped guard conjunctions (~7)** — coeff_padd 138,
+  coeff_shiftk 188×2, coeff_pad 201 postconditions; shiftk_padd 126,
+  scale_shiftk 293, pneg_swap 725 preconditions (eqv-level chains
+  with the same wrapper disease). Emitter-side (the intro+subst legs
+  unwrap; the failing arms don't intro first).
+- **pmul_pad (3)** — 286 postcondition (base branch: `pad p k =~= p`
+  is Seq::new), 295 (pad =~= push·zero — Seq::new), 305 (the
+  287-chain precondition: peqv_of_eq congruence of 279's == — its
+  form-B unfold needs `pad p k` rewritten through BOTH pmul unfold
+  steps; close but unproven).
+- **divmod (4)** — 33 whnf timeout (budget class), 57/58 Seq::new
+  index of shiftk∘scale, 64 drop_last len.
+- **cons_as_padd 425** — the ite-arith assert's isTrue case; the
+  assembly chain above it needs the standalone iterate loop
+  (extract → fix → emit).
+- **drop_last_peqv 377×2/382/388** — the eqv-forall assembly;
+  `peqv p (drop_last p)` vs the assert-forall's `∀ i, True → …`
+  wrapper shape.
+- **Budget flakes (2)** — pmul_push 269, pmul_comm 1049 (both close
+  standalone; corpus heartbeat variance).
+
+*Older entries below are from the morning session; the classes above
+supersede them where they overlap.*
 
 - **Form C+ chain search (~10, the big one).** lemma-call
   preconditions whose requires need a 2–3 link transitivity chain,
@@ -161,7 +258,9 @@ DECLINE read as padd_right's). Off by default.
 ## 4. Session commits
 
 tactus-algebra: `ef41603` (inline seq-axiom family, 72→55),
-`5c5438d` (shiftk_zero revert, documented).
+`5c5438d` (shiftk_zero revert), `1f1f73a` (peqv chains +
+lemma_peqv_of_eq + base cases, 51→32), `ff7fe93` (symbolic
+restatement + shiftk_cong path + drop_last len, 32→31).
 tactus: `fe8ea4c` (RefineExact), `dd3c4e9` (strip_transparent),
 `5fb9624` (fixpoint subst), `7d9b75a` (named debug output).
 
