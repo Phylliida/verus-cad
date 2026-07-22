@@ -1,0 +1,43 @@
+jobs: 395 (201 stalls, 194 empty4)
+Traceback (most recent call last):
+  File "/home/bepis/prog/verus-cad/monotile/color_mopup.py", line 120, in <module>
+    main()
+  File "/home/bepis/prog/verus-cad/monotile/color_mopup.py", line 97, in main
+    for k, ((ci, kind), (ci2, verdict, idx)) in enumerate(
+                                                ^^^^^^^^^^
+  File "/nix/store/vxl8pzgkkw8vdb4agzwm58imrfclmfrx-python3-3.12.11/lib/python3.12/multiprocessing/pool.py", line 873, in next
+    raise value
+  File "/nix/store/vxl8pzgkkw8vdb4agzwm58imrfclmfrx-python3-3.12.11/lib/python3.12/multiprocessing/pool.py", line 540, in _handle_tasks
+    put(task)
+  File "/nix/store/vxl8pzgkkw8vdb4agzwm58imrfclmfrx-python3-3.12.11/lib/python3.12/multiprocessing/connection.py", line 206, in send
+    self._send_bytes(_ForkingPickler.dumps(obj))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/vxl8pzgkkw8vdb4agzwm58imrfclmfrx-python3-3.12.11/lib/python3.12/multiprocessing/reduction.py", line 51, in dumps
+    cls(buf, protocol).dump(obj)
+AttributeError: Can't get local object 'main.<locals>.<lambda>'
+jobs: 395 (201 stalls, 194 empty4)
+  *** DEEP-SURVIVOR 22387 (stall) ***
+  20/395 [6912s]
+  40/395 [7741s]
+  60/395 [13995s]
+  80/395 [14941s]
+  *** DEEP-SURVIVOR 87049 (stall) ***
+  100/395 [20503s]
+  120/395 [22545s]
+  140/395 [26623s]
+  160/395 [28848s]
+  180/395 [28869s]
+  200/395 [28885s]
+  220/395 [28902s]
+  240/395 [28923s]
+  260/395 [28960s]
+  280/395 [29009s]
+  300/395 [29046s]
+  320/395 [29069s]
+  340/395 [29093s]
+  360/395 [29761s]
+  *** DEEP-SURVIVOR 364115 (e4) ***
+  380/395 [31446s]
+  *** DEEP-SURVIVOR 396256 (e4) ***
+  *** DEEP-SURVIVOR 755 (e4) ***
+MOPUP DONE [59753s] survivors: [22387, 87049, 364115, 396256, 755]
