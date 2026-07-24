@@ -1,8 +1,10 @@
 # DESIGN: Formalized 2D Physics Engine with Working Gears
 
-Status: plan v1.2, 2026-07-24 (Fable + Danielle) — v1.1 adds weird-gear
+Status: plan v1.3, 2026-07-24 (Fable + Danielle) — v1.1 adds weird-gear
 generalization (D6/D7, phys-16..21, Lean G7/G8); v1.2 adds cams
-(D6/D7 extended, D8 follower-jump honesty, phys-22..25, Lean G9)
+(D6/D7 extended, D8 follower-jump honesty, phys-22..25, Lean G9);
+v1.3 adds elegance revisions E1..E6 (§3.5) + SPEC-phase1.md (precise
+implementation spec for phys-01..06 & 22) + Lean G0 + phys-10 split
 Board: phys-00 .. phys-25 (below)
 
 ## 1. Vision
@@ -177,6 +179,39 @@ Explicitly deferred: 3D-only types (helical, bevel, worm, hypoid; barrel and
 face cams) and flexible drives (belts, chains) — the latter need
 distance-constraint tech, noted as a future extension, not smuggled in.
 
+### §3.5 Elegance revisions (v1.3) — these OVERRIDE earlier text where they conflict
+
+- **E1. One constraint-row type.** Contacts, revolute/prismatic anchors,
+  gear/cam couplings, ratchets: all become rows {J, λ_lo, λ_hi, bias}.
+  Bounds encode the type (unilateral [0,∞), bilateral (−∞,∞), one-way).
+  One PGS update, ONE certificate-validation lemma. See SPEC §6.
+- **E2. Arctan-ledger integration.** Replace D2's "snap via cos/sin
+  enclosure": the step picks a rational tan-half t (untrusted truncated
+  series), builds the exact on-circle RotQ, and the certificate encloses the
+  applied angle 2·arctan(t) by alternating-series partial sums (rational,
+  self-bracketing) against the target ω·dt. Untrusted search, verified
+  check — inside the integrator. See SPEC §3.
+- **E3. No-reals discipline + Lean G0.** Verus specs never mention real
+  numbers: they maintain rational enclosures and prove ledger arithmetic.
+  A small Lean file (G0) anchors, once over ℝ: arctan partial-sum
+  bracketing, tan-half circle coverage, angle-sum identities. This is the
+  clean Verus/Lean division and dissolves "how do we state angle error
+  without ℝ" entirely.
+- **E4. Generator trust split.** phys-10 splits: **phys-10a** untrusted
+  profile generator (float allowed OUTSIDE the verified crate, emits exact
+  rational vertices) — unblocks flagship demos immediately, because engine
+  certificates are about whatever polygons exist; **phys-10b** certified
+  profile-to-ideal ε bounds — only needed for the L3 bridge (G6). phys-11/18
+  depend on 10a only.
+- **E5. One snap primitive.** Rotation re-snapping and denominator rounding
+  are the same operation: replace a quantity by a nearby bounded-denominator
+  one, emitting a ledger entry with an exact |delta| bound. One concept, one
+  entry type, uniform in the certificate (C6).
+- **E6. Canonical determinism.** Every iteration order is canonically sorted
+  (bodies by index, pairs lex, rows by construction order). No hash-order
+  iteration anywhere. Exactness + canonical order = bit-identical replays
+  across platforms — free determinism guarantee (answers Q2 affirmatively).
+
 ### D8. Solver honesty
 Convergence of PGS/sequential impulses: not proven — checked (L2).
 Multi-contact restitution can gain energy in exotic configurations: default
@@ -202,6 +237,13 @@ Lean while we finish tactus" answer: yes, this whole layer.
 
 Theorem program, in dependency order:
 
+- **G0 (enclosure anchoring, small but load-bearing).** Over ℝ: arctan
+  alternating partial sums bracket arctan on [0,1]; tan-half-angle
+  parametrization ((1−t²)/(1+t²), 2t/(1+t²)) covers the unit circle with
+  angle 2·arctan t; angle-sum formulas. This is the ONLY place the engine's
+  ledger semantics touch real numbers (E3); everything the Verus side proves
+  is rational arithmetic whose reading G0 fixes. Mathlib has all
+  ingredients; days, not weeks.
 - **G1 (involute basics).** γ(t) = r_b·(cos t + t sin t, sin t − t cos t).
   Prove: ‖γ(t)‖² = r_b²(1+t²); γ'(t) = r_b·t·(cos t, sin t).
 - **G2 (string property).** The normal line to the involute at γ(t) is
@@ -259,8 +301,9 @@ independent of everything else in this plan.
 | phys-07 | revolute (pin) joint + drift certificate; certified rounding pass (D3) | phys-06 |
 | phys-08 | gear joint (ratio constraint, ratio-drift certificate); **demo: gear train + crank** | phys-07 |
 | phys-09 | trace JSON + tiny canvas viewer (unverified glue; maybe steal verus-canvas bits) | phys-06 |
-| phys-10 | involute tooth polygon generator: exec, interval-arithmetic enclosures → exact rational vertices within stated ε of true involute (per-vertex certificate) | phys-02 |
-| phys-11 | **flagship: emergent meshing** — two generated gears, one driven, contact does the rest; certificate: contact chain maintained, empirical ratio within bound of −z₁/z₂ | phys-06,10,16 |
+| phys-10a | untrusted profile generator (involute + cycloid flanks): float tooling allowed outside the verified crate; emits exact rational polygon vertices; engine certificates carry all verified claims (E4) | phys-04 |
+| phys-10b | certified profile bounds: per-vertex enclosure ε to ideal curve (needed only for the L3/G6 bridge, NOT for demos) | phys-10a |
+| phys-11 | **flagship: emergent meshing** — two generated gears, one driven, contact does the rest; certificate: contact chain maintained, empirical ratio within bound of −z₁/z₂ | phys-06,10a,16 |
 | phys-12 | Lean G1–G2 (repo setup + involute basics + string property) | — (parallel) |
 | phys-13 | Lean G3–G4 (transmission lemma, law of gearing) | phys-12 |
 | phys-14 | Lean G5 stretch (contact ratio, undercut) | phys-13 |
@@ -268,12 +311,12 @@ independent of everything else in this plan.
 | phys-16 | non-convex shape unions (convex-piece decomposition; concave/internal contact) — gears are non-convex, so this unblocks ALL emergent cards | phys-04 |
 | phys-17 | transmission-function joint (D6): rational piecewise f(φ), drift certificate; demos: elliptical-as-constraint, Geneva dwell, one-way ratchet joint | phys-08 |
 | phys-18 | pin/lantern gear generator: pins are exact circles (zero approximation), certified cycloidal mating flank; emergent clockwork demo — candidate FIRST emergent demo, cheaper than involute | phys-06,16 |
-| phys-19 | non-circular pitch pairs (rational conic/Bézier centrodes) + conjugate flank generator (envelope method, certified pointwise); emergent elliptical gears | phys-10,16 |
-| phys-20 | internal/ring gear contact + planetary train demo | phys-10,16 |
+| phys-19 | non-circular pitch pairs (rational conic/Bézier centrodes) + conjugate flank generator (envelope method, certified pointwise); emergent elliptical gears | phys-10a,16 |
+| phys-20 | internal/ring gear contact + planetary train demo | phys-10a,16 |
 | phys-21 | mechanism demo pack: ratchet+pawl, mutilated gear, Geneva pin-slot, **escapement (the ticking verified clock)** | phys-16,17 |
 | phys-22 | prismatic (slider) joint + spring/damper force elements; energy ledger extended with exact elastic potential | phys-07 |
 | phys-23 | cam-as-constraint via D6 coupling joint (angle→slide): rise-dwell-return motion laws, rack & pinion; drift certificate | phys-17,22 |
-| phys-24 | cam profile generator: motion law → profile for knife-edge / roller / flat-face followers (offset + envelope, certified); generation-time pressure-angle & undercut checks; arc/tangent cams exact | phys-10,22 |
+| phys-24 | cam profile generator: motion law → profile for knife-edge / roller / flat-face followers (offset + envelope, certified); generation-time pressure-angle & undercut checks; arc/tangent cams exact | phys-10a,22 |
 | phys-25 | emergent cam demos: force-closed roller follower (follower-jump physics, conditional certificate per D8), form-closed groove cam, constant-breadth pair, conjugate pair; four-bar linkage bonus demo | phys-16,24 |
 
 Suggested first arc: phys-01 → 02 → 03 (a verified free-flight world with the
