@@ -1,8 +1,9 @@
 # DESIGN: Formalized 2D Physics Engine with Working Gears
 
-Status: plan v1.1, 2026-07-24 (Fable + Danielle) — v1.1 adds weird-gear
-generalization (D6/D7, phys-16..21, Lean G7/G8)
-Board: phys-00 .. phys-21 (below)
+Status: plan v1.2, 2026-07-24 (Fable + Danielle) — v1.1 adds weird-gear
+generalization (D6/D7, phys-16..21, Lean G7/G8); v1.2 adds cams
+(D6/D7 extended, D8 follower-jump honesty, phys-22..25, Lean G9)
+Board: phys-00 .. phys-25 (below)
 
 ## 1. Vision
 
@@ -121,17 +122,23 @@ verus-mandelbrot perturbation + bigint arithmetic.)
   −z₁/z₂ within a bound. This is the flagship demo and the novel artifact:
   I know of no verified-simulation demonstration of emergent gearing.
 
-### D6. Transmission functions, not ratios (weird-gear generalization)
-The constraint-level gear joint (D5) generalizes from a constant ratio to a
-**transmission function**: φ₂ = f(φ₁) with i(φ) = f'(φ) given as a rational
-piecewise function (piecewise-polynomial / rational spline, exact-evaluable).
-- constant i        → ordinary gears
-- periodic varying i → elliptical / oval / square / nautilus gears
-- piecewise with dwell (i = 0 spans) → Geneva drives, mutilated gears,
-  intermittent motion
+### D6. Coupling joints: transmission functions over any coordinates
+The constraint-level gear joint (D5) generalizes twice. First, from a constant
+ratio to a **transmission function**: q₂ = f(q₁) with i = f' given as a
+rational piecewise function (piecewise-polynomial / rational spline,
+exact-evaluable). Second, from angles to **any pair of generalized
+coordinates** — revolute angle or prismatic slide position:
+- angle→angle, constant i        → ordinary gears
+- angle→angle, periodic varying i → elliptical / oval / square / nautilus
+- angle→angle, dwell spans (i = 0) → Geneva drives, mutilated gears
+- angle→slide, linear f          → rack and pinion
+- angle→slide, programmed rise-dwell-return f → **cams as constraints**
+  (any motion law: uniform, parabolic, 3-4-5 polynomial exactly; SHM /
+  cycloidal laws via certified enclosure like D2)
 - inequality coupling (one-way) → ratchets, freewheels, overrunning clutches
-One joint type + one certificate (|φ₂ − f(φ₁)| ≤ tol, exact check since f is
-rational) covers the entire constraint-level weird-gear zoo.
+One joint type + one certificate (|q₂ − f(q₁)| ≤ tol, exact since f is
+rational) covers the constraint-level zoo of gears AND cams. Requires the
+prismatic joint primitive (phys-22).
 
 ### D7. Generalized profile pipeline (emergent weird gears)
 The emergent path factors into: **pitch-curve pair → conjugate tooth profile →
@@ -154,9 +161,21 @@ pieces — so weirdness lives entirely in the generator:
 - Ratchet-and-pawl, mutilated gears, Geneva pin-and-slot, escapements: no new
   theory at all — they are contact mechanisms the solver handles for free once
   non-convex unions work. They're demo cards, not tech cards.
-Explicitly deferred: 3D-only types (helical, bevel, worm, hypoid) and
-flexible drives (belts, chains) — the latter need distance-constraint tech,
-noted as a future extension, not smuggled in.
+- **Cams, emergent** (phys-24/25): same pipeline, different synthesis input —
+  a displacement law s(θ) instead of a mating gear. Profile = envelope/offset
+  construction per follower type (knife-edge: pitch curve directly; roller:
+  inner offset by roller radius; flat-face: envelope of face lines), then the
+  same certified polygonalization. Pressure-angle and undercut checks
+  (ρ ≥ r_roller; flat-face ρ = r_b + s + s'' > 0) run at generation time.
+  Exactness sweet spot: circular-arc / tangent cams — profiles built from
+  lines and arcs, the cam-world analogue of lantern gears. Closure both ways:
+  force-closed (spring, phys-22) and form-closed (groove/track cams,
+  constant-breadth pairs, conjugate cam pairs — non-convex unions again).
+- Linkages (four-bar, slider-crank, Peaucellier…) come **free** with
+  revolute + prismatic joints — noted as demo material, zero new tech.
+Explicitly deferred: 3D-only types (helical, bevel, worm, hypoid; barrel and
+face cams) and flexible drives (belts, chains) — the latter need
+distance-constraint tech, noted as a future extension, not smuggled in.
 
 ### D8. Solver honesty
 Convergence of PGS/sequential impulses: not proven — checked (L2).
@@ -165,6 +184,14 @@ demos use e = 0 (perfectly inelastic contacts, which is also what real
 gearboxes are); the energy ledger *monitors* rather than proves, and any
 violation rejects the step. State plainly in docs what is proven vs checked
 vs monitored. (Transparency = faithfulness.)
+
+Cam-specific honesty: a **force-closed** cam only tracks its motion law while
+the required contact force stays ≥ 0 — at speed, real followers *jump*, and
+the engine models that truthfully (the contact simply opens; unilateral
+contacts never pull). So tracking certificates are claimed unconditionally
+only for form-closed cams and for the constraint-level joint; for force-closed
+emergent cams the certificate is conditional ("tracks while contact force
+≥ 0") and follower jump is a *correct physical outcome*, not an error.
 
 ## 4. The Lean side (the part that can start today)
 
@@ -206,6 +233,13 @@ Theorem program, in dependency order:
   G4's involute law becomes the constant-i special case. The moving-pitch-
   point statement is the true crown of the Lean program; do G4 concretely
   first, then generalize.
+- **G9 (cam theory).** For a flat-faced follower, the cam profile is the
+  envelope of the follower face lines; its radius of curvature is
+  ρ(θ) = r_b + s(θ) + s''(θ), and the profile is valid (no cusp/undercut)
+  iff ρ > 0 everywhere. Companion: the roller-follower pressure-angle
+  formula tan α = s'/(r_b + s) (radial translating case) and the undercut
+  condition ρ_pitch ≥ r_roller. Self-contained plane-curve/envelope work,
+  independent of G3–G8; a good mathlib envelope-machinery warmup for G8.
 
 Effort feel: G1–G2 are a pleasant week-scale warmup; G3–G4 the real project
 (order weeks, mathlib-fluency dependent); G5+ open-ended. All of it is
@@ -237,6 +271,10 @@ independent of everything else in this plan.
 | phys-19 | non-circular pitch pairs (rational conic/Bézier centrodes) + conjugate flank generator (envelope method, certified pointwise); emergent elliptical gears | phys-10,16 |
 | phys-20 | internal/ring gear contact + planetary train demo | phys-10,16 |
 | phys-21 | mechanism demo pack: ratchet+pawl, mutilated gear, Geneva pin-slot, **escapement (the ticking verified clock)** | phys-16,17 |
+| phys-22 | prismatic (slider) joint + spring/damper force elements; energy ledger extended with exact elastic potential | phys-07 |
+| phys-23 | cam-as-constraint via D6 coupling joint (angle→slide): rise-dwell-return motion laws, rack & pinion; drift certificate | phys-17,22 |
+| phys-24 | cam profile generator: motion law → profile for knife-edge / roller / flat-face followers (offset + envelope, certified); generation-time pressure-angle & undercut checks; arc/tangent cams exact | phys-10,22 |
+| phys-25 | emergent cam demos: force-closed roller follower (follower-jump physics, conditional certificate per D8), form-closed groove cam, constant-breadth pair, conjugate pair; four-bar linkage bonus demo | phys-16,24 |
 
 Suggested first arc: phys-01 → 02 → 03 (a verified free-flight world with the
 rotation story solved is already a milestone), with phys-12 as the Lean-side
