@@ -1,7 +1,8 @@
 # DESIGN: Formalized 2D Physics Engine with Working Gears
 
-Status: plan v1, 2026-07-24 (Fable + Danielle)
-Board: phys-00 .. phys-15 (below)
+Status: plan v1.1, 2026-07-24 (Fable + Danielle) — v1.1 adds weird-gear
+generalization (D6/D7, phys-16..21, Lean G7/G8)
+Board: phys-00 .. phys-21 (below)
 
 ## 1. Vision
 
@@ -120,7 +121,44 @@ verus-mandelbrot perturbation + bigint arithmetic.)
   −z₁/z₂ within a bound. This is the flagship demo and the novel artifact:
   I know of no verified-simulation demonstration of emergent gearing.
 
-### D6. Solver honesty
+### D6. Transmission functions, not ratios (weird-gear generalization)
+The constraint-level gear joint (D5) generalizes from a constant ratio to a
+**transmission function**: φ₂ = f(φ₁) with i(φ) = f'(φ) given as a rational
+piecewise function (piecewise-polynomial / rational spline, exact-evaluable).
+- constant i        → ordinary gears
+- periodic varying i → elliptical / oval / square / nautilus gears
+- piecewise with dwell (i = 0 spans) → Geneva drives, mutilated gears,
+  intermittent motion
+- inequality coupling (one-way) → ratchets, freewheels, overrunning clutches
+One joint type + one certificate (|φ₂ − f(φ₁)| ≤ tol, exact check since f is
+rational) covers the entire constraint-level weird-gear zoo.
+
+### D7. Generalized profile pipeline (emergent weird gears)
+The emergent path factors into: **pitch-curve pair → conjugate tooth profile →
+certified polygonalization → contact engine**. The contact engine (phys-04/06)
+is shape-agnostic — a gear is just a non-convex union of convex rational
+pieces — so weirdness lives entirely in the generator:
+- **Non-circular pitch pairs**: rolling centrodes r₁(φ)+r₂(φ) = d with the
+  no-slip rolling condition; realize any smooth periodic i(φ). Closure needs a
+  rationality condition on ∫ i dφ (see Lean G7). Use rational-parametrized
+  pitch curves (conics / rational Béziers) to stay in exact land.
+- **Conjugate flanks**: generated as envelopes of the mating profile under
+  relative rolling motion (Camus / Euler–Savary). Numerically approximated,
+  then *certified pointwise* like the involute (phys-10's machinery, reused).
+- **Pin / lantern gears** (cycloidal clockwork): the pin wheel's teeth are
+  literal circles — **exactly rational, zero approximation** — only the mating
+  cycloidal flank needs certified polygonalization. Likely the *cheapest*
+  emergent demo, possibly ahead of involute.
+- **Internal / ring gears**: concave contact — handled since gears are already
+  non-convex unions; enables planetary trains.
+- Ratchet-and-pawl, mutilated gears, Geneva pin-and-slot, escapements: no new
+  theory at all — they are contact mechanisms the solver handles for free once
+  non-convex unions work. They're demo cards, not tech cards.
+Explicitly deferred: 3D-only types (helical, bevel, worm, hypoid) and
+flexible drives (belts, chains) — the latter need distance-constraint tech,
+noted as a future extension, not smuggled in.
+
+### D8. Solver honesty
 Convergence of PGS/sequential impulses: not proven — checked (L2).
 Multi-contact restitution can gain energy in exotic configurations: default
 demos use e = 0 (perfectly inelastic contacts, which is also what real
@@ -157,6 +195,17 @@ Theorem program, in dependency order:
 - **G6 (bridge, far-future).** Polygonal ε-approximation of involute ⇒ ratio
   deviation O(ε) bound — the theorem that would connect L3 to L1's emergent
   demo. Research-grade; explicitly not on any critical path.
+- **G7 (non-circular closure).** Rolling-centrode pair for a smooth periodic
+  transmission function closes into two closed curves iff the total turning
+  over one period satisfies a rationality condition (∮ i dφ commensurate with
+  2π). Concrete instance: closure for the elliptical pair. This is the
+  theorem that says *which* weird gears can exist as closed wheels.
+- **G8 (generalized law of gearing — Willis).** Profiles are conjugate for
+  transmission function f iff every contact normal passes through the
+  *instantaneous* pitch point (dividing the center line in ratio i(φ₁)).
+  G4's involute law becomes the constant-i special case. The moving-pitch-
+  point statement is the true crown of the Lean program; do G4 concretely
+  first, then generalize.
 
 Effort feel: G1–G2 are a pleasant week-scale warmup; G3–G4 the real project
 (order weeks, mathlib-fluency dependent); G5+ open-ended. All of it is
@@ -177,15 +226,24 @@ independent of everything else in this plan.
 | phys-08 | gear joint (ratio constraint, ratio-drift certificate); **demo: gear train + crank** | phys-07 |
 | phys-09 | trace JSON + tiny canvas viewer (unverified glue; maybe steal verus-canvas bits) | phys-06 |
 | phys-10 | involute tooth polygon generator: exec, interval-arithmetic enclosures → exact rational vertices within stated ε of true involute (per-vertex certificate) | phys-02 |
-| phys-11 | **flagship: emergent meshing** — two generated gears, one driven, contact does the rest; certificate: contact chain maintained, empirical ratio within bound of −z₁/z₂ | phys-06,10 |
+| phys-11 | **flagship: emergent meshing** — two generated gears, one driven, contact does the rest; certificate: contact chain maintained, empirical ratio within bound of −z₁/z₂ | phys-06,10,16 |
 | phys-12 | Lean G1–G2 (repo setup + involute basics + string property) | — (parallel) |
 | phys-13 | Lean G3–G4 (transmission lemma, law of gearing) | phys-12 |
 | phys-14 | Lean G5 stretch (contact ratio, undercut) | phys-13 |
 | phys-15 | bridges: engine as tactus crate once B6/user-traits mature; Lean G6 approximation theorem | far-future |
+| phys-16 | non-convex shape unions (convex-piece decomposition; concave/internal contact) — gears are non-convex, so this unblocks ALL emergent cards | phys-04 |
+| phys-17 | transmission-function joint (D6): rational piecewise f(φ), drift certificate; demos: elliptical-as-constraint, Geneva dwell, one-way ratchet joint | phys-08 |
+| phys-18 | pin/lantern gear generator: pins are exact circles (zero approximation), certified cycloidal mating flank; emergent clockwork demo — candidate FIRST emergent demo, cheaper than involute | phys-06,16 |
+| phys-19 | non-circular pitch pairs (rational conic/Bézier centrodes) + conjugate flank generator (envelope method, certified pointwise); emergent elliptical gears | phys-10,16 |
+| phys-20 | internal/ring gear contact + planetary train demo | phys-10,16 |
+| phys-21 | mechanism demo pack: ratchet+pawl, mutilated gear, Geneva pin-slot, **escapement (the ticking verified clock)** | phys-16,17 |
 
 Suggested first arc: phys-01 → 02 → 03 (a verified free-flight world with the
 rotation story solved is already a milestone), with phys-12 as the Lean-side
-palate cleanser whenever the mood is more mathlib than Verus.
+palate cleanser whenever the mood is more mathlib than Verus. First emergent
+demo: consider phys-18 (lantern gears) before phys-11 (involute) — exact pins
+mean less approximation machinery on the critical path, and clockwork charisma
+arrives sooner.
 
 ## 6. Risks / open questions
 
