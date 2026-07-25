@@ -71,3 +71,12 @@ pub proof fn lemma_zero_nonneg()
 }
 
 } // verus!
+
+// phys-02 design note (supersedes earlier real-valued probes): real-valued
+// by(nonlinear_arith) diverges Z3 in this toolchain — both the division
+// probe and the pure-polynomial compose-identity probe hung (>15 min).
+// Strategy instead: eqv_spec goals unfold to INTEGER cross-multiplication
+// polynomial identities (see Rational::eqv_spec/add_spec/mul_spec), which
+// by(nonlinear_arith) on int handles. Bridge from trait ops (canonicalized)
+// to raw *_spec forms via Rational::lemma_canonical_exists + the
+// lemma_eqv_*_congruence lemmas in verus-rational.

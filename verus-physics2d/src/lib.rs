@@ -18,3 +18,6 @@ pub mod body;
 
 #[cfg(verus_keep_ghost)]
 pub mod world;
+
+#[cfg(verus_keep_ghost)]
+pub mod proofs;
