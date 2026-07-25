@@ -1,0 +1,25 @@
+finalists: [755, 22387, 87049, 364115, 396256]
+
+=== canon 22387 ===
+  no torus <=64 @2M [1450s]
+  verdict: periodic (index 72) [2305s]
+
+=== canon 396256 ===
+  no torus <=64 @2M [1793s]
+  no torus 65..128 @1M [45692s]
+  box (7, 7, 7): UNSAT [407s]
+  verdict: empty7 (index None) [46099s]
+
+=== canon 364115 ===
+  no torus <=64 @2M [2045s]
+  no torus 65..128 @1M [51306s]
+  box (7, 7, 7): UNSAT [743s]
+  verdict: empty7 (index None) [52049s]
+
+=== canon 87049 ===
+  no torus <=64 @2M [2389s]
+  no torus 65..128 @1M [58682s]
+  box (7, 7, 7): UNSAT [104s]
+  verdict: empty7 (index None) [58786s]
+finalists: []
+finalists: [755]
