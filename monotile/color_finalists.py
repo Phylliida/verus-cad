@@ -82,9 +82,15 @@ def do_one(arg):
 def main():
     canonical = json.load(open("color3d_canonical.json"))["canonical"]
     surv = []
+    FINAL = {"periodic", "empty3", "empty4", "empty5", "empty6", "empty7"}
+    resolved = set()
     for line in open("classify_color.jsonl"):
         r = json.loads(line)
-        if r["verdict"] == "DEEP-SURVIVOR":
+        if r["verdict"] in FINAL:
+            resolved.add(r["i"])
+    for line in open("classify_color.jsonl"):
+        r = json.loads(line)
+        if r["verdict"] == "DEEP-SURVIVOR" and r["i"] not in resolved:
             surv.append(r["i"])
     surv = sorted(set(surv))
     print(f"finalists: {surv}", flush=True)

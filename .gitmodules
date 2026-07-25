@@ -207,3 +207,6 @@
 [submodule "tactus-algebra"]
 	path = tactus-algebra
 	url = https://github.com/Phylliida/tactus-algebra.git
+[submodule "lean-nonlinear-arith"]
+	path = lean-nonlinear-arith
+	url = https://github.com/Phylliida/lean-nonlinear-arith.git
