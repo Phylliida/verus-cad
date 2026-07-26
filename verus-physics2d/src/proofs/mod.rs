@@ -12,3 +12,6 @@ pub mod angle_ledger;
 
 #[cfg(verus_keep_ghost)]
 pub mod momentum;
+
+#[cfg(verus_keep_ghost)]
+pub mod shape;

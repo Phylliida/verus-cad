@@ -33,3 +33,9 @@ pub mod momentum;
 
 #[cfg(verus_keep_ghost)]
 pub mod scenes;
+
+#[cfg(verus_keep_ghost)]
+pub mod shape;
+
+#[cfg(verus_keep_ghost)]
+pub mod narrowphase;
