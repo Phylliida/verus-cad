@@ -12,7 +12,7 @@ use verus_rational::Rational;
 use crate::angle_ledger::{angle_enclosure, arctan_sum, arctan_term, t_in_unit_interval, two_x};
 use crate::proofs::rpow::{
     ipow, lemma_ipow_add, lemma_ipow_congruence, lemma_ipow_double, lemma_ipow_le,
-    lemma_ipow_nonneg, lemma_ipow_pos, lemma_rpow_num_denom, rpow,
+    lemma_ipow_nonneg, lemma_ipow_pos, lemma_ipow_zero_base, lemma_rpow_num_denom, rpow,
 };
 
 verus! {
@@ -150,6 +150,67 @@ pub proof fn lemma_arctan_term_decreasing(t: Rational, j: nat)
         && (n * n * nn) * (dp * m) <= (nn * (dd * dd)) * (dp * (m + 2)))
         ==> tj1.num * tj.denom() <= tj.num * tj1.denom()) by (nonlinear_arith);
     assert(tj1.le_spec(tj));
+}
+
+/// t.num == 0 (t ≡ 0) ⇒ term_j(t) ≡ 0.
+pub proof fn lemma_arctan_term_zero(t: Rational, j: nat)
+    requires
+        t.num == 0,
+    ensures
+        arctan_term(t, j).eqv_spec(Rational::from_int_spec(0)),
+{
+    let z = Rational::from_int_spec(0);
+    lemma_arctan_term_num_denom(t, j);
+    lemma_ipow_congruence(t.num, 0, 2 * j + 1);
+    lemma_ipow_zero_base(2 * j + 1);
+    let term = arctan_term(t, j);
+    Rational::lemma_denom_positive(term);
+    assert(term.num == 0);
+    assert(term.eqv_spec(z) == (term.num * z.denom() == z.num * term.denom()));
+    assert(z.num == 0);
+    assert(z.denom() == 1);
+}
+
+/// 0 ≤ t ≤ 1 ⇒ term_j(t) ≤ 1/(2j+1) (uniform term bound).
+pub proof fn lemma_arctan_term_bound(t: Rational, j: nat)
+    requires
+        t_in_unit_interval(t),
+    ensures
+        arctan_term(t, j).le_spec(Rational::from_frac_spec(1, (2 * j + 1) as int)),
+{
+    let zero = Rational::from_int_spec(0);
+    let one = Rational::from_int_spec(1);
+    let ghost n = t.num;
+    let ghost dd = t.denom();
+    let ghost m = (2 * j + 1) as int;
+    Rational::lemma_denom_positive(t);
+    assert(zero.le_spec(t) == (zero.num * t.denom() <= t.num * zero.denom()));
+    assert(zero.num == 0);
+    assert(zero.denom() == 1);
+    assert(t.le_spec(one) == (t.num * one.denom() <= one.num * t.denom()));
+    assert(one.num == 1);
+    assert(one.denom() == 1);
+    assert(zero.num * t.denom() <= t.num * zero.denom());
+    assert(t.num * one.denom() <= one.num * t.denom());
+    assert((zero.num * t.denom() <= t.num * zero.denom() && zero.num == 0 && zero.denom() == 1)
+        ==> t.num >= 0) by (nonlinear_arith);
+    vstd::arithmetic::mul::lemma_mul_basics(t.num);
+    vstd::arithmetic::mul::lemma_mul_basics(t.denom());
+    assert(0 <= n && n <= dd);
+
+    lemma_arctan_term_num_denom(t, j);
+    lemma_ipow_le(n, dd, 2 * j + 1);
+    lemma_ipow_pos(dd, 2 * j + 1);
+    let term = arctan_term(t, j);
+    let bound = Rational::from_frac_spec(1, m);
+    // bound: num == 1, denom() == m (m ≥ 1)
+    assert(bound.num == 1);
+    assert(bound.denom() == m);
+    assert(term.le_spec(bound) == (term.num * bound.denom() <= bound.num * term.denom()));
+    assert((ipow(n, 2 * j + 1) <= ipow(dd, 2 * j + 1) && m >= 1
+        && term.num == ipow(n, 2 * j + 1) && term.denom() == ipow(dd, 2 * j + 1) * m
+        && bound.num == 1 && bound.denom() == m)
+        ==> term.num * bound.denom() <= bound.num * term.denom()) by (nonlinear_arith);
 }
 
 // ── sum steps ────────────────────────────────────────────────────────

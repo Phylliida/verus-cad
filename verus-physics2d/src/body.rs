@@ -70,6 +70,29 @@ impl Body {
         }
         Body { pos, rot, vel, omega, inv_mass, inv_inertia }
     }
+
+    /// Deep copy (BigInt witnesses aren't Copy).
+    pub fn copy_body(&self) -> (out: Self)
+        requires
+            self.wf_spec(),
+        ensures
+            out.wf_spec(),
+            out.pos.model@ == self.pos.model@,
+            out.rot.c@ == self.rot.c@,
+            out.rot.s@ == self.rot.s@,
+            out.vel.model@ == self.vel.model@,
+            out.omega@ == self.omega@,
+            out.inv_mass@ == self.inv_mass@,
+            out.inv_inertia@ == self.inv_inertia@,
+    {
+        let pos = crate::types::copy_svec2(&self.pos);
+        let rot = self.rot.copy();
+        let vel = crate::types::copy_svec2(&self.vel);
+        let omega = verus_rational::runtime_rational::copy_rational(&self.omega);
+        let inv_mass = verus_rational::runtime_rational::copy_rational(&self.inv_mass);
+        let inv_inertia = verus_rational::runtime_rational::copy_rational(&self.inv_inertia);
+        Body { pos, rot, vel, omega, inv_mass, inv_inertia }
+    }
 }
 
 } // verus!

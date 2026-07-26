@@ -85,9 +85,26 @@ impl RotQ {
         RotQ { c, s }
     }
 
-    /// The inverse rotation: (c, −s).
-    pub fn inverse(&self) -> (out: RotQ)
+    /// Deep copy (BigInt witnesses aren't Copy).
+    pub fn copy(&self) -> (out: RotQ)
         requires
+            self.wf_spec(),
+        ensures
+            out.wf_spec(),
+            out.c@ == self.c@,
+            out.s@ == self.s@,
+    {
+        let c = copy_rational(&self.c);
+        let s = copy_rational(&self.s);
+        proof {
+            lemma_unit_norm_raw(self.c@, self.s@);
+            lemma_unit_norm_raw(c@, s@);
+        }
+        RotQ { c, s }
+    }
+
+    /// The inverse rotation: (c, −s).
+    pub fn inverse(&self) -> (out: RotQ)    requires
             self.wf_spec(),
         ensures
             out.wf_spec(),

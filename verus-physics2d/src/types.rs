@@ -39,6 +39,14 @@ pub open spec fn q_mul(a: Rational, b: Rational) -> Rational {
     <Rational as Ring>::mul(a, b)
 }
 
+pub open spec fn q_sub(a: Rational, b: Rational) -> Rational {
+    <Rational as AdditiveGroup>::sub(a, b)
+}
+
+pub open spec fn q_neg(a: Rational) -> Rational {
+    <Rational as AdditiveGroup>::neg(a)
+}
+
 pub open spec fn q_eqv(a: Rational, b: Rational) -> bool {
     <Rational as Equivalence>::eqv(a, b)
 }
@@ -54,6 +62,19 @@ pub open spec fn q_lt(a: Rational, b: Rational) -> bool {
 /// x ≥ 0 at the spec level (OrderedRing order on Rational).
 pub open spec fn q_nonneg(x: Rational) -> bool {
     q_le(q_zero(), x)
+}
+
+/// Deep copy of an SVec2 (BigInt witnesses aren't Copy).
+pub fn copy_svec2(v: &SVec2) -> (out: SVec2)
+    requires
+        v.wf_spec(),
+    ensures
+        out.wf_spec(),
+        out.model@ == v.model@,
+{
+    let x = verus_rational::runtime_rational::copy_rational(&v.x);
+    let y = verus_rational::runtime_rational::copy_rational(&v.y);
+    RuntimeVec2::new(x, y)
 }
 
 /// x > 0 at the spec level.
