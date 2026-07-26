@@ -22,8 +22,10 @@ use crate::types::{q_add, q_eqv, q_mul, q_one, q_zero, Scalar, SVec2};
 
 verus! {
 
-/// c² + s² ≡ 1, stated with the Ring trait ops so it composes directly
-/// with RuntimeRational exec ensures (which produce trait-op models).
+/// c² + s² ≡ 1, stated with the Ring trait ops (historical: keeps wf_spec
+/// independent of Rational internals). NOTE: RuntimeRational exec ensures
+/// produce RAW *_spec models, not trait-op models — proofs/rational_raw.rs
+/// bridges the two forms (lemma_unit_norm_raw) wherever they meet.
 pub open spec fn unit_norm(c: Rational, s: Rational) -> bool {
     q_eqv(q_add(q_mul(c, c), q_mul(s, s)), q_one())
 }
