@@ -3,3 +3,9 @@
 
 #[cfg(verus_keep_ghost)]
 pub mod rational_raw;
+
+#[cfg(verus_keep_ghost)]
+pub mod rpow;
+
+#[cfg(verus_keep_ghost)]
+pub mod angle_ledger;
