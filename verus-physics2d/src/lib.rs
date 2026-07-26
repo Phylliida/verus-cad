@@ -21,3 +21,6 @@ pub mod world;
 
 #[cfg(verus_keep_ghost)]
 pub mod proofs;
+
+#[cfg(verus_keep_ghost)]
+pub mod angle_ledger;
