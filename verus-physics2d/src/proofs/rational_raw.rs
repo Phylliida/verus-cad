@@ -29,10 +29,177 @@ use vstd::prelude::*;
 
 use verus_rational::Rational;
 
+use crate::angle_ledger::two_x;
 use crate::rotq::unit_norm;
-use crate::types::{q_add, q_eqv, q_mul, q_one};
+use crate::types::{q_add, q_eqv, q_mul, q_neg, q_one, q_sub};
 
 verus! {
+
+/// q_mul by a zero-equivalent is ≡ 0 (canonical + raw chain, packaged).
+pub proof fn lemma_q_mul_zero_right_raw(a: Rational, z: Rational)
+    requires
+        z.eqv_spec(Rational::from_int_spec(0)),
+    ensures
+        q_eqv(q_mul(a, z), Rational::from_int_spec(0)),
+{
+    let zero = Rational::from_int_spec(0);
+    lemma_q_mul_raw(a, z);
+    Rational::lemma_eqv_reflexive(a);
+    Rational::lemma_eqv_mul_congruence(a, a, z, zero);
+    Rational::lemma_mul_zero(a);
+    Rational::lemma_eqv_transitive(a.mul_spec(z), a.mul_spec(zero), zero);
+    Rational::lemma_eqv_transitive(q_mul(a, z), a.mul_spec(z), zero);
+}
+
+/// q_add of a zero-equivalent on the right is identity (packaged).
+pub proof fn lemma_q_add_zero_right_raw(x: Rational, z: Rational)
+    requires
+        z.eqv_spec(Rational::from_int_spec(0)),
+    ensures
+        q_eqv(q_add(x, z), x),
+{
+    let zero = Rational::from_int_spec(0);
+    lemma_q_add_raw(x, z);
+    Rational::lemma_eqv_reflexive(x);
+    Rational::lemma_eqv_add_congruence(x, x, z, zero);
+    lemma_raw_add_zero_right(x);
+    Rational::lemma_eqv_transitive(q_add(x, z), x.add_spec(z), x.add_spec(zero));
+    Rational::lemma_eqv_transitive(q_add(x, z), x.add_spec(zero), x);
+}
+
+// ════════════════════════════════════════════════════════════════════
+// trait-op -> raw bridges (one-liners via canonical_exists)
+// ════════════════════════════════════════════════════════════════════
+
+pub proof fn lemma_q_add_raw(a: Rational, b: Rational)
+    ensures
+        q_eqv(q_add(a, b), a.add_spec(b)),
+{
+    Rational::lemma_canonical_exists(a.add_spec(b));
+}
+
+pub proof fn lemma_q_mul_raw(a: Rational, b: Rational)
+    ensures
+        q_eqv(q_mul(a, b), a.mul_spec(b)),
+{
+    Rational::lemma_canonical_exists(a.mul_spec(b));
+}
+
+pub proof fn lemma_q_sub_raw(a: Rational, b: Rational)
+    ensures
+        q_eqv(q_sub(a, b), a.sub_spec(b)),
+{
+    Rational::lemma_canonical_exists(a.sub_spec(b));
+}
+
+pub proof fn lemma_q_neg_raw(a: Rational)
+    ensures
+        q_eqv(q_neg(a), a.neg_spec()),
+{
+    Rational::lemma_canonical_exists(a.neg_spec());
+}
+
+/// raw: 0·x ≡ 0
+pub proof fn lemma_raw_mul_zero_left(x: Rational)
+    ensures
+        Rational::from_int_spec(0).mul_spec(x).eqv_spec(Rational::from_int_spec(0)),
+{
+    let z = Rational::from_int_spec(0);
+    let p = z.mul_spec(x);
+    Rational::lemma_mul_denom_product_int(z, x);
+    assert(z.num == 0);
+    assert(z.denom() == 1);
+    assert(p.num == z.num * x.num);
+    assert(p.eqv_spec(z) == (p.num * z.denom() == z.num * p.denom()));
+}
+
+/// raw: x + 0 ≡ x
+pub proof fn lemma_raw_add_zero_right(x: Rational)
+    ensures
+        x.add_spec(Rational::from_int_spec(0)).eqv_spec(x),
+{
+    let z = Rational::from_int_spec(0);
+    let s = x.add_spec(z);
+    Rational::lemma_add_denom_product_int(x, z);
+    Rational::lemma_denom_positive(x);
+    assert(z.num == 0);
+    assert(z.denom() == 1);
+    assert(s.num == x.num * z.denom() + z.num * x.denom());
+    assert(s.denom() == x.denom() * z.denom());
+    assert(s.eqv_spec(x) == (s.num * x.denom() == x.num * s.denom()));
+    vstd::arithmetic::mul::lemma_mul_basics(x.num);
+    vstd::arithmetic::mul::lemma_mul_basics(x.denom());
+}
+
+/// raw: congruence of abs nonneg — |x| ≥ 0
+pub proof fn lemma_raw_abs_nonneg(x: Rational)
+    ensures
+        Rational::from_int_spec(0).le_spec(x.abs_spec()),
+{
+    let z = Rational::from_int_spec(0);
+    let a = x.abs_spec();
+    assert(z.num == 0);
+    assert(z.denom() == 1);
+    assert(z.le_spec(a) == (z.num * a.denom() <= a.num * z.denom()));
+    if x.num >= 0 {
+        assert(a == x);
+    } else {
+        assert(a == x.neg_spec());
+        assert(a.num == -x.num);
+    }
+}
+
+/// raw: 0 ≤ x ⇒ 0 ≤ 2·x
+pub proof fn lemma_raw_two_nonneg(x: Rational)
+    requires
+        Rational::from_int_spec(0).le_spec(x),
+    ensures
+        Rational::from_int_spec(0).le_spec(two_x(x)),
+{
+    let z = Rational::from_int_spec(0);
+    let two = Rational::from_int_spec(2);
+    let tx = two_x(x);
+    Rational::lemma_mul_denom_product_int(two, x);
+    assert(z.num == 0);
+    assert(z.denom() == 1);
+    assert(two.num == 2);
+    assert(two.denom() == 1);
+    assert(tx.num == two.num * x.num);
+    assert(z.le_spec(x) == (z.num * x.denom() <= x.num * z.denom()));
+    assert(z.le_spec(tx) == (z.num * tx.denom() <= tx.num * z.denom()));
+    assert((z.num * x.denom() <= x.num * z.denom() && z.num == 0 && z.denom() == 1)
+        ==> x.num >= 0) by (nonlinear_arith);
+    assert((x.num >= 0 && tx.num == two.num * x.num && two.num == 2 && z.num == 0)
+        ==> z.num * tx.denom() <= tx.num * z.denom()) by (nonlinear_arith);
+}
+
+/// raw: 0 ≤ a ∧ 0 ≤ b ⇒ 0 ≤ a + b
+pub proof fn lemma_raw_add_nonneg(a: Rational, b: Rational)
+    requires
+        Rational::from_int_spec(0).le_spec(a),
+        Rational::from_int_spec(0).le_spec(b),
+    ensures
+        Rational::from_int_spec(0).le_spec(a.add_spec(b)),
+{
+    Rational::lemma_le_add_monotone(Rational::from_int_spec(0), a, b);
+    // 0 + b ≤ a + b; 0 + b ≡ b
+    let z = Rational::from_int_spec(0);
+    let s = z.add_spec(b);
+    Rational::lemma_add_denom_product_int(z, b);
+    Rational::lemma_denom_positive(b);
+    assert(z.num == 0);
+    assert(z.denom() == 1);
+    assert(s.num == z.num * b.denom() + b.num * z.denom());
+    assert(s.denom() == z.denom() * b.denom());
+    assert(s.eqv_spec(b) == (s.num * b.denom() == b.num * s.denom()));
+    vstd::arithmetic::mul::lemma_mul_basics(b.num);
+    vstd::arithmetic::mul::lemma_mul_basics(b.denom());
+    assert((b.denom() >= 1 && s.num == b.num && s.denom() == b.denom())
+        ==> s.num * b.denom() == b.num * s.denom()) by (nonlinear_arith);
+    Rational::lemma_eqv_implies_le(b, s);
+    Rational::lemma_eqv_symmetric(s, b);
+    Rational::lemma_le_transitive(z, s, a.add_spec(b));
+}
 
 // ════════════════════════════════════════════════════════════════════
 // int-only NLA micro-lemmas (R3/R4: minimal context, small identities)
@@ -178,7 +345,7 @@ pub proof fn lemma_unit_norm_raw(c: Rational, s: Rational)
 // raw unit-norm lemmas
 // ════════════════════════════════════════════════════════════════════
 
-/// 1·1 + 0·0 ≡ 1, raw form. (R5: closed goals first, no extra facts.)
+/// 1·1 + 0·0 ≡ 1, raw form. (Robust form: implication combination, R3.)
 pub proof fn lemma_unit_norm_raw_one_zero()
     ensures
         unit_norm_raw(Rational::from_int_spec(1), Rational::from_int_spec(0)),
@@ -188,7 +355,20 @@ pub proof fn lemma_unit_norm_raw_one_zero()
     let m1 = one.mul_spec(one);
     let m2 = zero.mul_spec(zero);
     let s = m1.add_spec(m2);
+    Rational::lemma_add_denom_product_int(m1, m2);
+    assert(m1.num == 1);
+    assert(m2.num == 0);
+    assert((m1.denom_nat() as int) == 1);
+    assert((m2.denom_nat() as int) == 1);
+    assert(m1.denom() == 1);
+    assert(m2.denom() == 1);
+    assert(s.num == m1.num * (m2.denom_nat() as int) + m2.num * (m1.denom_nat() as int));
+    assert((m1.num == 1 && m2.num == 0
+        && (m1.denom_nat() as int) == 1 && (m2.denom_nat() as int) == 1
+        && s.num == m1.num * (m2.denom_nat() as int) + m2.num * (m1.denom_nat() as int))
+        ==> s.num == 1) by (nonlinear_arith);
     assert(s.num == 1);
+    assert(s.denom() == m1.denom() * m2.denom());
     assert(s.denom() == 1);
     assert(s.eqv_spec(one));
     assert(unit_norm_raw(one, zero));

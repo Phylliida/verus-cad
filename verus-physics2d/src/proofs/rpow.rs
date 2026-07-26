@@ -126,6 +126,22 @@ pub proof fn lemma_ipow_congruence(x: int, y: int, p: nat)
     }
 }
 
+/// 0^p == 0 for p > 0.
+pub proof fn lemma_ipow_zero_base(p: nat)
+    requires
+        p > 0,
+    ensures
+        ipow(0, p) == 0,
+    decreases p
+{
+    if p > 1 {
+        lemma_ipow_zero_base((p - 1) as nat);
+        assert(ipow(0, p) == 0 * ipow(0, (p - 1) as nat));
+    } else {
+        assert(ipow(0, 1) == 0) by { reveal_with_fuel(ipow, 2); }
+    }
+}
+
 // ── rpow <-> ipow connection ─────────────────────────────────────────
 
 /// rpow(t, p).num == ipow(t.num, p) and rpow(t, p).denom() == ipow(t.denom(), p).
