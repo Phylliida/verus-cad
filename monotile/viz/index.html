@@ -305,7 +305,7 @@ scene.add(new THREE.AxesHelper(3));
 
 // placed cubes: key "x,y,z" -> {group, rot}
 const placed = new Map();
-let ghost = null, ghostRot = 0, targetCell = null;
+let ghost = null, ghostRot = 0, targetCell = null, sourceCell = null;
 
 function faceGeometry(f) {
   // K*K quads slightly above face f, vertex colors from DEC
@@ -412,6 +412,7 @@ function refreshAllColors() {
 /* ================= placement logic ================= */
 
 function placementOK(x, y, z, rot) {
+  if (placed.has(`${x},${y},${z}`)) return false;
   // check all placed neighbors of the candidate cell
   for (const ax of AXES) {
     for (const d of [1, -1]) {
@@ -492,6 +493,7 @@ center.addEventListener("mousedown", e => {
   const f = hits[0].object.userData.face;
   const n = FACE_NORMAL[f];
   targetCell = [p.pos[0] + n[0], p.pos[1] + n[1], p.pos[2] + n[2]];
+  sourceCell = p.pos.slice();
   ghostRot = 0;
   refreshGhost();
 });
@@ -528,10 +530,11 @@ function doPlace() {
   if (!targetCell) return;
   if (!placementOK(...targetCell, ghostRot)) return;
   addCube(...targetCell, ghostRot);
-  const nxt = targetCell.slice();
-  cancelGhost();
-  // chain: keep target on the placed cube's other side for fast laying
-  targetCell = nxt;
+  // chain: advance outward in the same direction (minecraft spam-click)
+  const dir = [targetCell[0] - sourceCell[0], targetCell[1] - sourceCell[1],
+               targetCell[2] - sourceCell[2]];
+  targetCell = [targetCell[0] + dir[0], targetCell[1] + dir[1],
+                targetCell[2] + dir[2]];
   refreshGhost();
 }
 
