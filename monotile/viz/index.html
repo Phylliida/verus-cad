@@ -381,6 +381,7 @@ function addCube(x, y, z, rot) {
   g.position.set(x, y, z);
   g.userData.key = key;
   g.userData.pos = [x, y, z];
+  g.userData.rot = rot;
   scene.add(g);
   placed.set(key, { group: g, rot, pos: [x, y, z] });
   updatePatch();
@@ -403,6 +404,7 @@ function refreshAllColors() {
     g.position.set(...pos);
     g.userData.key = key;
     g.userData.pos = pos.slice();
+    g.userData.rot = rot;
     scene.add(g);
     p.group = g;
   }
@@ -462,7 +464,7 @@ function pickCubeFace() {
   while (g && !g.userData.key) g = g.parent;
   if (!g) return null;
   return { key: g.userData.key, pos: g.userData.pos,
-           face: m.userData.face };
+           face: m.userData.face, rot: g.userData.rot };
 }
 
 center.addEventListener("contextmenu", e => e.preventDefault());
@@ -476,9 +478,9 @@ center.addEventListener("mousemove", e => {
   hoverKey = null;
   if (h) {
     hoverKey = h.key;
-    const n = FACE_NORMAL[h.face];
+    const n = matVec(ROTS[h.rot], FACE_NORMAL[h.face]);
     document.getElementById("hud").textContent =
-      `cube (${h.pos}) face ${h.face} — click to place neighbor`;
+      `cube (${h.pos}) face ${h.face} → (${n}) — click to place neighbor`;
     if (!targetCell)
       document.getElementById("targetStat").textContent =
         `target: (${h.pos[0] + n[0]}, ${h.pos[1] + n[1]}, ${h.pos[2] + n[2]})` +
@@ -502,7 +504,7 @@ window.addEventListener("mouseup", e => {
   mouse.y = -((e.clientY - r.top) / r.height) * 2 + 1;
   const h = pickCubeFace();
   if (!h) return;
-  const n = FACE_NORMAL[h.face];
+  const n = matVec(ROTS[h.rot], FACE_NORMAL[h.face]);
   targetCell = [h.pos[0] + n[0], h.pos[1] + n[1], h.pos[2] + n[2]];
   sourceCell = h.pos.slice();
   ghostRot = 0;
