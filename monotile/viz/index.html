@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Wang Cube Lab — 3D colored monotile tiler</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #101418; color: #dde;
+    font: 13px/1.4 system-ui, sans-serif; overflow: hidden; }
+  #app { display: grid; grid-template-columns: 300px 1fr 220px; height: 100%; }
+  #left { background: #161b21; padding: 8px; overflow-y: auto; }
+  #center { position: relative; }
+  #right { background: #161b21; padding: 8px; overflow-y: auto; }
+  canvas { display: block; }
+  .facegrid { display: inline-grid; gap: 1px; background: #333;
+    margin: 4px 10px 10px 0; padding: 2px; border: 1px solid #444; }
+  .facegrid .lbl { grid-column: 1 / -1; color: #9ab; font-size: 11px; }
+  .cell { width: 16px; height: 16px; cursor: pointer; }
+  .cell:hover { outline: 1px solid #fff; }
+  button, select, input { background: #232a33; color: #dde;
+    border: 1px solid #3a4654; border-radius: 4px; padding: 3px 7px; }
+  button:hover { background: #2e3844; }
+  button:disabled { opacity: 0.35; cursor: default; }
+  .rot { width: 30px; height: 24px; margin: 1px; font-size: 11px; }
+  .rot.ok { border-color: #4a4; }
+  .rot.no { opacity: 0.25; }
+  .rot.sel { background: #2c4a2c; border-color: #6f6; }
+  .row { margin: 6px 0; }
+  .stat { color: #9ab; font-size: 12px; white-space: pre-wrap; }
+  #hud { position: absolute; left: 10px; top: 8px; color: #9ab;
+    font-size: 12px; pointer-events: none; text-shadow: 0 1px 2px #000; }
+  h3 { margin: 6px 0 4px; font-size: 12px; color: #8ab; }
+  .warn { color: #f88; }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="left">
+    <div class="row">
+      <b>Wang Cube Lab</b>
+    </div>
+    <div class="row">
+      preset <select id="preset"></select>
+      <button id="loadPreset">load</button>
+    </div>
+    <div class="row">
+      rule <select id="rule">
+        <option value="eq">equal color (Wang)</option>
+        <option value="ne">bump/dent complement</option>
+      </select>
+    </div>
+    <div class="row">
+      K <select id="selK">1 2 3 4 5 6</select>
+      colors <select id="selT">2 3 4 5 6 7 8</select>
+      <button id="randomize">randomize</button>
+    </div>
+    <div class="row stat" id="profileStat"></div>
+    <div id="faces"></div>
+    <div class="row stat">
+      click a cell to cycle its color
+      (right-click cycles back)
+    </div>
+  </div>
+  <div id="center"><div id="hud"></div></div>
+  <div id="right">
+    <h3>placement</h3>
+    <div class="row stat" id="targetStat">click a cube face in 3D to
+      choose where the next cube goes</div>
+    <div class="row" id="rotPanel"></div>
+    <div class="row">
+      <button id="placeBtn" disabled>place (Enter)</button>
+      <button id="cancelBtn" disabled>cancel (Esc)</button>
+    </div>
+    <h3>patch</h3>
+    <div class="row stat" id="patchStat"></div>
+    <div class="row">
+      <button id="deleteBtn">delete cube (Del)</button>
+      <button id="clearBtn">clear all</button>
+    </div>
+    <h3>fill plane</h3>
+    <div class="row">
+      z <input id="fillZ" value="0" size="2" style="width:3em">
+      N <input id="fillN" value="4" size="2" style="width:3em">
+      rot <input id="fillRot" value="0" size="2" style="width:3em">
+      <button id="fillBtn">fill N×N</button>
+    </div>
+    <h3>period check</h3>
+    <div class="row">
+      (<input id="px" value="4" size="1" style="width:2.4em">,
+       <input id="py" value="0" size="1" style="width:2.4em">,
+       <input id="pz" value="0" size="1" style="width:2.4em">)
+      <button id="periodBtn">check</button>
+    </div>
+    <div class="row stat" id="periodStat"></div>
+    <h3>camera</h3>
+    <div class="row stat">drag: orbit · wheel: zoom ·
+      shift/right-drag: pan</div>
+  </div>
+</div>
+<script src="three.min.js"></script>
+<script src="data.js"></script>
+<script>
+"use strict";
+/* ================= geometry (arena2 conventions) ================= */
+
+const AXES = [0, 1, 2];
+let K = 4, T = 2;
+
+function tang(K) {
+  const t = [];
+  for (let i = -(K - 1); i < K; i += 2) t.push(i);
+  return t;
+}
+
+// surface points in arena2 order: axis-major, +K first, a-major, b-minor
+function surfacePoints(K) {
+  const t = tang(K), pts = [];
+  for (const ax of AXES) {
+    for (const s of [K, -K]) {
+      const rest = AXES.filter(a => a !== ax);
+      for (const a of t) for (const b of t) {
+        const p = [0, 0, 0];
+        p[ax] = s; p[rest[0]] = a; p[rest[1]] = b;
+        pts.push(p);
+      }
+    }
+  }
+  return pts;
+}
+
+// the 24 rotations, arena2 order
+function rotationGroup() {
+  const perms = [[0,1,2],[0,2,1],[1,0,2],[1,2,0],[2,0,1],[2,1,0]];
+  const out = [];
+  for (const perm of perms) {
+    for (const s1 of [1, -1]) for (const s2 of [1, -1]) for (const s3 of [1, -1]) {
+      const signs = [s1, s2, s3];
+      const M = [[0,0,0],[0,0,0],[0,0,0]];
+      let det = 1;
+      for (let i = 0; i < 3; i++) M[i][perm[i]] = signs[i];
+      // determinant of a signed permutation
+      const inv = (perm[0] > perm[1]) + (perm[0] > perm[2]) + (perm[1] > perm[2]);
+      det = ((inv % 2) ? -1 : 1) * s1 * s2 * s3;
+      if (det === 1) out.push(M);
+    }
+  }
+  return out;
+}
+const ROTS = rotationGroup();
+
+function matVec(M, p) {
+  return [M[0][0]*p[0] + M[0][1]*p[1] + M[0][2]*p[2],
+          M[1][0]*p[0] + M[1][1]*p[1] + M[1][2]*p[2],
+          M[2][0]*p[0] + M[2][1]*p[1] + M[2][2]*p[2]];
+}
+
+let PTS = surfacePoints(K);
+let PT_INDEX = new Map(PTS.map((p, i) => [p.join(","), i]));
+let PERMINV = [];
+
+function rebuildGeometry() {
+  PTS = surfacePoints(K);
+  PT_INDEX = new Map(PTS.map((p, i) => [p.join(","), i]));
+  PERMINV = ROTS.map(M => {
+    const inv = new Array(PTS.length);
+    for (let i = 0; i < PTS.length; i++) {
+      inv[PT_INDEX.get(matVec(M, PTS[i]).join(","))] = i;
+    }
+    return inv;
+  });
+}
+rebuildGeometry();
+
+// interface pairs per axis (arena2's IFACE_PAIRS)
+function ifacePairs(ax) {
+  const t = tang(K), rest = AXES.filter(a => a !== ax), out = [];
+  for (const a of t) for (const b of t) {
+    const pA = [0,0,0], pB = [0,0,0];
+    pA[ax] = K; pB[ax] = -K;
+    pA[rest[0]] = a; pB[rest[0]] = a;
+    pA[rest[1]] = b; pB[rest[1]] = b;
+    out.push([PT_INDEX.get(pA.join(",")), PT_INDEX.get(pB.join(","))]);
+  }
+  return out;
+}
+
+// face number (0..5) and (u,v) of a point index
+function faceOfPoint(i) {
+  const per = K * K, f = Math.floor(i / per);
+  return { face: f, cell: i % per };
+}
+
+const FACE_NORMAL = [[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]];
+const AXIS_FACE = [[0, 1], [2, 3], [4, 5]];  // +ax, -ax faces
+
+/* ================= decoration ================= */
+
+let DEC = null;   // {faces: [[c...] x6], K, T, name}
+
+function newDec(k, t, fill) {
+  K = k; T = t;
+  rebuildGeometry();
+  const faces = [];
+  for (let f = 0; f < 6; f++) faces.push(new Array(K * K).fill(fill));
+  DEC = { faces, K, T, name: "custom" };
+}
+
+function loadPreset(i) {
+  if (i >= 0 && PRESETS[i]) {
+    const p = PRESETS[i];
+    K = p.K; T = p.T;
+    rebuildGeometry();
+    DEC = { faces: p.faces.map(f => f.slice()), K, T, name: p.name };
+  } else {
+    newDec(K, T, 0);
+  }
+  refreshEditor();
+  refreshAllColors();
+  updateProfile();
+}
+
+function ruleOK(a, b) {
+  const rule = document.getElementById("rule").value;
+  return rule === "eq" ? a === b : a !== b;
+}
+
+// color shown at world point j by a placed cube with rotation o
+function shownColor(o, j) {
+  return DEC.faces[faceOfPoint(PERMINV[o][j]).face][faceOfPoint(PERMINV[o][j]).cell];
+}
+
+/* ================= profile ================= */
+
+function tauApply(tau, u, v) {
+  const [sw, s1, s2] = tau;
+  const [u2, v2] = sw ? [v, u] : [u, v];
+  return [s1 * u2, s2 * v2];
+}
+
+function computeProfile() {
+  const t = tang(K), held = [];
+  for (let i = 0; i < EQUATIONS.length; i++) {
+    const { g, h, tau } = EQUATIONS[i];
+    let ok = true;
+    for (const u of t) for (const v of t) {
+      const c1 = ((u + K - 1) / 2) * K + (v + K - 1) / 2;
+      const [u3, v3] = tauApply(tau, u, v);
+      const c2 = ((u3 + K - 1) / 2) * K + (v3 + K - 1) / 2;
+      if (!ruleOK(DEC.faces[g][c1], DEC.faces[h][c2])) { ok = false; break; }
+    }
+    if (ok) held.push(i);
+  }
+  return held;
+}
+
+function updateProfile() {
+  const held = computeProfile();
+  document.getElementById("profileStat").textContent =
+    `decoration: ${DEC.name}\nK=${K}, ${T} colors\nprofile: ${held.length} / 84 equations held`;
+}
+
+/* ================= editor ================= */
+
+const PALETTE = ["#335", "#e33", "#3c3", "#ec3", "#c6e", "#3cc", "#f93", "#a7a"];
+
+function refreshEditor() {
+  const host = document.getElementById("faces");
+  host.innerHTML = "";
+  const names = ["+x", "-x", "+y", "-y", "+z", "-z"];
+  for (let f = 0; f < 6; f++) {
+    const g = document.createElement("div");
+    g.className = "facegrid";
+    g.style.gridTemplateColumns = `repeat(${K}, 16px)`;
+    g.innerHTML = `<div class="lbl">face ${f} (${names[f]})</div>`;
+    for (let c = 0; c < K * K; c++) {
+      const d = document.createElement("div");
+      d.className = "cell";
+      d.style.background = PALETTE[DEC.faces[f][c] % PALETTE.length];
+      d.onmousedown = (e) => {
+        e.preventDefault();
+        const delta = e.button === 2 ? -1 : 1;
+        DEC.faces[f][c] = (DEC.faces[f][c] + delta + T) % T;
+        d.style.background = PALETTE[DEC.faces[f][c] % PALETTE.length];
+        updateProfile();
+        refreshAllColors();
+      };
+      g.appendChild(d);
+    }
+    host.appendChild(g);
+  }
+}
+
+/* ================= 3D scene ================= */
+
+const center = document.getElementById("center");
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x101418);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(window.devicePixelRatio);
+center.appendChild(renderer.domElement);
+const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 2000);
+
+const grid = new THREE.GridHelper(20, 20, 0x334, 0x223);
+scene.add(grid);
+scene.add(new THREE.AxesHelper(3));
+
+// placed cubes: key "x,y,z" -> {group, rot}
+const placed = new Map();
+let ghost = null, ghostRot = 0, targetCell = null;
+
+function faceGeometry(f) {
+  // K*K quads slightly above face f, vertex colors from DEC
+  const geo = new THREE.BufferGeometry();
+  const verts = [], cols = [], idx = [];
+  const t = tang(K), n = FACE_NORMAL[f];
+  const perp = AXES.filter(a => FACE_NORMAL[f][a] === 0);
+  const s = FACE_NORMAL[f][AXES.find(a => FACE_NORMAL[f][a] !== 0)];
+  let vi = 0;
+  for (let ci = 0; ci < K * K; ci++) {
+    const a = t[Math.floor(ci / K)], b = t[ci % K];
+    const c0 = [0, 0, 0], u1 = [0, 0, 0], u2 = [0, 0, 0];
+    const axn = AXES.find(q => n[q] !== 0);
+    c0[axn] = n[axn] * 0.51;
+    const r0 = AXES.filter(q => q !== axn);
+    c0[r0[0]] = a / K; c0[r0[1]] = b / K;
+    u1[r0[0]] = 2 / K; u2[r0[1]] = 2 / K;
+    const corners = [
+      c0, c0.map((x, q) => x + u1[q]),
+      c0.map((x, q) => x + u1[q] + u2[q]), c0.map((x, q) => x + u2[q]),
+    ];
+    const col = new THREE.Color(PALETTE[DEC.faces[f][ci] % PALETTE.length]);
+    for (const c of corners) { verts.push(...c); cols.push(col.r, col.g, col.b); }
+    idx.push(vi, vi + 1, vi + 2, vi, vi + 2, vi + 3);
+    vi += 4;
+  }
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(verts, 3));
+  geo.setAttribute("color", new THREE.Float32BufferAttribute(cols, 3));
+  geo.setIndex(idx);
+  geo.computeVertexNormals();
+  return geo;
+}
+
+const faceMat = new THREE.MeshBasicMaterial({ vertexColors: true,
+  side: THREE.DoubleSide });
+const bodyMat = new THREE.MeshBasicMaterial({ color: 0x1a2028 });
+const edgeMat = new THREE.LineBasicMaterial({ color: 0x556 });
+
+function makeCube(rot, isGhost) {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), bodyMat);
+  g.add(body);
+  g.add(new THREE.LineSegments(
+    new THREE.EdgesGeometry(new THREE.BoxGeometry(1.002, 1.002, 1.002)),
+    edgeMat));
+  for (let f = 0; f < 6; f++) {
+    const m = new THREE.Mesh(faceGeometry(f), faceMat);
+    m.userData.face = f;
+    g.add(m);
+  }
+  const M = new THREE.Matrix4();
+  M.set(ROTS[rot][0][0], ROTS[rot][0][1], ROTS[rot][0][2], 0,
+        ROTS[rot][1][0], ROTS[rot][1][1], ROTS[rot][1][2], 0,
+        ROTS[rot][2][0], ROTS[rot][2][1], ROTS[rot][2][2], 0,
+        0, 0, 0, 1);
+  g.setRotationFromMatrix(M);
+  if (isGhost) {
+    g.traverse(o => {
+      if (o.material) {
+        o.material = o.material.clone();
+        o.material.transparent = true;
+        o.material.opacity = 0.55;
+      }
+    });
+  }
+  return g;
+}
+
+function addCube(x, y, z, rot) {
+  const key = `${x},${y},${z}`;
+  if (placed.has(key)) return false;
+  const g = makeCube(rot, false);
+  g.position.set(x, y, z);
+  g.userData.key = key;
+  g.userData.pos = [x, y, z];
+  scene.add(g);
+  placed.set(key, { group: g, rot, pos: [x, y, z] });
+  updatePatch();
+  return true;
+}
+
+function removeCube(key) {
+  const p = placed.get(key);
+  if (!p) return;
+  scene.remove(p.group);
+  placed.delete(key);
+  updatePatch();
+}
+
+function refreshAllColors() {
+  for (const [key, p] of placed) {
+    const rot = p.rot, pos = p.pos.slice();
+    scene.remove(p.group);
+    const g = makeCube(rot, false);
+    g.position.set(...pos);
+    g.userData.key = key;
+    g.userData.pos = pos.slice();
+    scene.add(g);
+    p.group = g;
+  }
+  updatePatch();
+}
+
+/* ================= placement logic ================= */
+
+function placementOK(x, y, z, rot) {
+  // check all placed neighbors of the candidate cell
+  for (const ax of AXES) {
+    for (const d of [1, -1]) {
+      const n = [x, y, z]; n[ax] += d;
+      const nb = placed.get(n.join(","));
+      if (!nb) continue;
+      if (!pairOK([x, y, z], rot, nb.pos, nb.rot, ax, d)) return false;
+    }
+  }
+  return true;
+}
+
+function pairOK(posA, rotA, posB, rotB, ax, d) {
+  // cube A at posA and B at posB = posA + d*e_ax
+  const pairs = ifacePairs(ax);
+  const [fA, fB] = d === 1 ? [pairs.map(p => p[0]), pairs.map(p => p[1])]
+                           : [pairs.map(p => p[1]), pairs.map(p => p[0])];
+  for (let i = 0; i < fA.length; i++) {
+    if (!ruleOK(shownColor(rotA, fA[i]), shownColor(rotB, fB[i])))
+      return false;
+  }
+  return true;
+}
+
+function allowedRots(x, y, z) {
+  const ok = [];
+  for (let o = 0; o < 24; o++) if (placementOK(x, y, z, o)) ok.push(o);
+  return ok;
+}
+
+/* ================= interaction ================= */
+
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+let hoverKey = null;
+
+center.addEventListener("contextmenu", e => e.preventDefault());
+center.addEventListener("mousemove", e => {
+  const r = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+  mouse.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+  if (cam.drag) return;
+  raycaster.setFromCamera(mouse, camera);
+  const meshes = [];
+  for (const [, p] of placed) p.group.traverse(o => {
+    if (o.userData.face !== undefined) meshes.push(o);
+  });
+  const hits = raycaster.intersectObjects(meshes, false);
+  document.getElementById("hud").textContent = "";
+  hoverKey = null;
+  if (hits.length) {
+    const m = hits[0].object;
+    let g = m;
+    while (g && !g.userData.key) g = g.parent;
+    const f = m.userData.face;
+    if (g) {
+      hoverKey = g.userData.key;
+      const pos = g.userData.pos, n = FACE_NORMAL[f];
+      document.getElementById("hud").textContent =
+        `cube (${pos}) face ${f} — click to place neighbor`;
+      if (!targetCell)
+        document.getElementById("targetStat").textContent =
+          `target: (${pos[0] + n[0]}, ${pos[1] + n[1]}, ${pos[2] + n[2]})` +
+          " — click to select";
+    }
+  }
+});
+
+center.addEventListener("mousedown", e => {
+  if (e.button !== 0 || e.shiftKey) return;
+  if (!hoverKey) return;
+  const p = placed.get(hoverKey);
+  raycaster.setFromCamera(mouse, camera);
+  const meshes = [];
+  p.group.traverse(o => { if (o.userData.face !== undefined) meshes.push(o); });
+  const hits = raycaster.intersectObjects(meshes, false);
+  if (!hits.length) return;
+  const f = hits[0].object.userData.face;
+  const n = FACE_NORMAL[f];
+  targetCell = [p.pos[0] + n[0], p.pos[1] + n[1], p.pos[2] + n[2]];
+  ghostRot = 0;
+  refreshGhost();
+});
+
+function refreshGhost() {
+  if (ghost) { scene.remove(ghost); ghost = null; }
+  if (!targetCell) return;
+  const allowed = allowedRots(...targetCell);
+  if (allowed.length && !allowed.includes(ghostRot)) ghostRot = allowed[0];
+  ghost = makeCube(ghostRot, true);
+  ghost.position.set(...targetCell);
+  scene.add(ghost);
+  document.getElementById("targetStat").textContent =
+    `target: (${targetCell}) — ${allowed.length} of 24 rotations fit`;
+  document.getElementById("placeBtn").disabled = !allowed.length;
+  document.getElementById("cancelBtn").disabled = false;
+  const panel = document.getElementById("rotPanel");
+  panel.innerHTML = "";
+  for (let o = 0; o < 24; o++) {
+    const b = document.createElement("button");
+    b.className = "rot " + (allowed.includes(o) ? "ok" : "no") +
+      (o === ghostRot ? " sel" : "");
+    b.textContent = o;
+    b.onclick = () => {
+      if (!allowed.includes(o)) return;
+      ghostRot = o;
+      refreshGhost();
+    };
+    panel.appendChild(b);
+  }
+}
+
+function doPlace() {
+  if (!targetCell) return;
+  if (!placementOK(...targetCell, ghostRot)) return;
+  addCube(...targetCell, ghostRot);
+  const nxt = targetCell.slice();
+  cancelGhost();
+  // chain: keep target on the placed cube's other side for fast laying
+  targetCell = nxt;
+  refreshGhost();
+}
+
+function cancelGhost() {
+  targetCell = null;
+  if (ghost) { scene.remove(ghost); ghost = null; }
+  document.getElementById("placeBtn").disabled = true;
+  document.getElementById("cancelBtn").disabled = true;
+  document.getElementById("targetStat").textContent =
+    "click a cube face in 3D to choose where the next cube goes";
+  document.getElementById("rotPanel").innerHTML = "";
+}
+
+document.getElementById("placeBtn").onclick = doPlace;
+document.getElementById("cancelBtn").onclick = cancelGhost;
+document.getElementById("deleteBtn").onclick = () => {
+  if (hoverKey) removeCube(hoverKey);
+};
+document.getElementById("clearBtn").onclick = () => {
+  for (const k of [...placed.keys()]) removeCube(k);
+  cancelGhost();
+};
+
+document.getElementById("fillBtn").onclick = () => {
+  const z = +document.getElementById("fillZ").value;
+  const N = Math.min(12, Math.max(1, +document.getElementById("fillN").value));
+  const rot = Math.min(23, Math.max(0, +document.getElementById("fillRot").value));
+  let n = 0;
+  for (let x = 0; x < N; x++) for (let y = 0; y < N; y++) {
+    if (placementOK(x, y, z, rot) && !placed.has(`${x},${y},${z}`)) {
+      addCube(x, y, z, rot); n++;
+    }
+  }
+  updatePatch();
+  document.getElementById("patchStat").textContent += `\nfilled ${n} cubes`;
+};
+
+document.getElementById("periodBtn").onclick = () => {
+  const v = [+document.getElementById("px").value,
+             +document.getElementById("py").value,
+             +document.getElementById("pz").value];
+  let viol = 0, checked = 0;
+  for (const [key, p] of placed) {
+    const q = [p.pos[0] + v[0], p.pos[1] + v[1], p.pos[2] + v[2]];
+    const qk = q.join(",");
+    if (placed.has(qk)) {
+      checked++;
+      if (placed.get(qk).rot !== p.rot) viol++;
+    }
+  }
+  document.getElementById("periodStat").textContent =
+    `v = (${v}): ${checked} identified pairs, ${viol} mismatched rotations` +
+    (viol === 0 && checked > 0 ? " — v-invariant so far ✓" : "");
+};
+
+function updatePatch() {
+  let viol = 0;
+  for (const [key, p] of placed) {
+    for (const ax of AXES) {
+      const n = [p.pos[0], p.pos[1], p.pos[2]]; n[ax] += 1;
+      const nb = placed.get(n.join(","));
+      if (nb && !pairOK(p.pos, p.rot, nb.pos, nb.rot, ax, 1)) viol++;
+    }
+  }
+  document.getElementById("patchStat").textContent =
+    `${placed.size} cubes placed · ${viol} matching violations` +
+    (viol ? " ⚠" : " ✓");
+  document.getElementById("patchStat").className =
+    "row stat" + (viol ? " warn" : "");
+}
+
+window.addEventListener("keydown", e => {
+  if (e.key === "Enter") doPlace();
+  else if (e.key === "Escape") cancelGhost();
+  else if (e.key === "Delete" || e.key === "Backspace") {
+    if (hoverKey) removeCube(hoverKey);
+  } else if (e.key === "[" || e.key === "]") {
+    if (!targetCell) return;
+    const allowed = allowedRots(...targetCell);
+    if (!allowed.length) return;
+    const i = allowed.indexOf(ghostRot);
+    ghostRot = allowed[(i + (e.key === "]" ? 1 : allowed.length - 1))
+      % allowed.length];
+    refreshGhost();
+  }
+});
+
+/* ================= camera ================= */
+
+const cam = { theta: 0.8, phi: 1.0, radius: 8, target: new THREE.Vector3(1, 0, 0),
+  drag: null };
+function applyCam() {
+  const sp = Math.sin(cam.phi), cp = Math.cos(cam.phi);
+  camera.position.set(
+    cam.target.x + cam.radius * sp * Math.cos(cam.theta),
+    cam.target.y + cam.radius * cp,
+    cam.target.z + cam.radius * sp * Math.sin(cam.theta));
+  camera.lookAt(cam.target);
+}
+center.addEventListener("mousedown", e => {
+  cam.drag = { x: e.clientX, y: e.clientY, pan: e.shiftKey || e.button === 2,
+    button: e.button };
+});
+window.addEventListener("mousemove", e => {
+  if (!cam.drag) return;
+  const dx = e.clientX - cam.drag.x, dy = e.clientY - cam.drag.y;
+  cam.drag.x = e.clientX; cam.drag.y = e.clientY;
+  if (cam.drag.pan) {
+    const s = cam.radius * 0.0016;
+    const fwd = new THREE.Vector3().subVectors(cam.target, camera.position).normalize();
+    const right = new THREE.Vector3().crossVectors(fwd, camera.up).normalize();
+    const up = new THREE.Vector3().crossVectors(right, fwd).normalize();
+    cam.target.addScaledVector(right, -dx * s).addScaledVector(up, dy * s);
+  } else {
+    cam.theta -= dx * 0.005;
+    cam.phi = Math.min(3.1, Math.max(0.05, cam.phi - dy * 0.005));
+  }
+  applyCam();
+});
+window.addEventListener("mouseup", () => { cam.drag = null; });
+center.addEventListener("wheel", e => {
+  e.preventDefault();
+  cam.radius *= e.deltaY > 0 ? 1.1 : 1 / 1.1;
+  cam.radius = Math.min(500, Math.max(1.5, cam.radius));
+  applyCam();
+}, { passive: false });
+
+/* ================= boot ================= */
+
+function resize() {
+  const w = center.clientWidth, h = center.clientHeight;
+  renderer.setSize(w, h);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+window.addEventListener("resize", resize);
+
+const presetSel = document.getElementById("preset");
+for (let i = 0; i < PRESETS.length; i++) {
+  const o = document.createElement("option");
+  o.value = i; o.textContent = PRESETS[i].name;
+  presetSel.appendChild(o);
+}
+{
+  const o = document.createElement("option");
+  o.value = -1; o.textContent = "blank / random";
+  presetSel.appendChild(o);
+  presetSel.value = PRESETS.length ? 0 : -1;
+}
+document.getElementById("loadPreset").onclick = () => loadPreset(+presetSel.value);
+document.getElementById("randomize").onclick = () => {
+  K = +document.getElementById("selK").value;
+  T = +document.getElementById("selT").value;
+  newDec(K, T, 0);
+  for (let f = 0; f < 6; f++)
+    for (let c = 0; c < K * K; c++)
+      DEC.faces[f][c] = Math.floor(Math.random() * T);
+  DEC.name = "random";
+  refreshEditor(); updateProfile(); refreshAllColors();
+};
+document.getElementById("rule").onchange = () => { updateProfile(); updatePatch(); };
+document.getElementById("selK").value = K;
+document.getElementById("selT").value = T;
+
+loadPreset(PRESETS.length ? 0 : -1);
+addCube(0, 0, 0, 0);
+applyCam();
+resize();
+renderer.setAnimationLoop(() => renderer.render(scene, camera));
+</script>
+</body>
+</html>
