@@ -449,51 +449,50 @@ const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 let hoverKey = null;
 
-center.addEventListener("contextmenu", e => e.preventDefault());
-center.addEventListener("mousemove", e => {
-  const r = renderer.domElement.getBoundingClientRect();
-  mouse.x = ((e.clientX - r.left) / r.width) * 2 - 1;
-  mouse.y = -((e.clientY - r.top) / r.height) * 2 + 1;
-  if (cam.drag) return;
+function pickCubeFace() {
   raycaster.setFromCamera(mouse, camera);
   const meshes = [];
   for (const [, p] of placed) p.group.traverse(o => {
     if (o.userData.face !== undefined) meshes.push(o);
   });
   const hits = raycaster.intersectObjects(meshes, false);
+  if (!hits.length) return null;
+  const m = hits[0].object;
+  let g = m;
+  while (g && !g.userData.key) g = g.parent;
+  if (!g) return null;
+  return { key: g.userData.key, pos: g.userData.pos,
+           face: m.userData.face };
+}
+
+center.addEventListener("contextmenu", e => e.preventDefault());
+center.addEventListener("mousemove", e => {
+  const r = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+  mouse.y = -((e.clientY - r.top) / r.height) * 2 + 1;
+  if (cam.drag) return;
+  const h = pickCubeFace();
   document.getElementById("hud").textContent = "";
   hoverKey = null;
-  if (hits.length) {
-    const m = hits[0].object;
-    let g = m;
-    while (g && !g.userData.key) g = g.parent;
-    const f = m.userData.face;
-    if (g) {
-      hoverKey = g.userData.key;
-      const pos = g.userData.pos, n = FACE_NORMAL[f];
-      document.getElementById("hud").textContent =
-        `cube (${pos}) face ${f} — click to place neighbor`;
-      if (!targetCell)
-        document.getElementById("targetStat").textContent =
-          `target: (${pos[0] + n[0]}, ${pos[1] + n[1]}, ${pos[2] + n[2]})` +
-          " — click to select";
-    }
+  if (h) {
+    hoverKey = h.key;
+    const n = FACE_NORMAL[h.face];
+    document.getElementById("hud").textContent =
+      `cube (${h.pos}) face ${h.face} — click to place neighbor`;
+    if (!targetCell)
+      document.getElementById("targetStat").textContent =
+        `target: (${h.pos[0] + n[0]}, ${h.pos[1] + n[1]}, ${h.pos[2] + n[2]})` +
+        " — click to select";
   }
 });
 
 center.addEventListener("mousedown", e => {
   if (e.button !== 0 || e.shiftKey) return;
-  if (!hoverKey) return;
-  const p = placed.get(hoverKey);
-  raycaster.setFromCamera(mouse, camera);
-  const meshes = [];
-  p.group.traverse(o => { if (o.userData.face !== undefined) meshes.push(o); });
-  const hits = raycaster.intersectObjects(meshes, false);
-  if (!hits.length) return;
-  const f = hits[0].object.userData.face;
-  const n = FACE_NORMAL[f];
-  targetCell = [p.pos[0] + n[0], p.pos[1] + n[1], p.pos[2] + n[2]];
-  sourceCell = p.pos.slice();
+  const h = pickCubeFace();
+  if (!h) return;
+  const n = FACE_NORMAL[h.face];
+  targetCell = [h.pos[0] + n[0], h.pos[1] + n[1], h.pos[2] + n[2]];
+  sourceCell = h.pos.slice();
   ghostRot = 0;
   refreshGhost();
 });
