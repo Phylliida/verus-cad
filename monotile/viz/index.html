@@ -305,7 +305,8 @@ scene.add(new THREE.AxesHelper(3));
 
 // placed cubes: key "x,y,z" -> {group, rot}
 const placed = new Map();
-let ghost = null, ghostRot = 0, targetCell = null, sourceCell = null;
+let ghost = null, ghostRot = 0, targetCell = null, sourceCell = null,
+    chainDir = null;
 
 function faceGeometry(f) {
   // K*K quads slightly above face f, vertex colors from DEC
@@ -507,6 +508,7 @@ window.addEventListener("mouseup", e => {
   const n = matVec(ROTS[h.rot], FACE_NORMAL[h.face]);
   targetCell = [h.pos[0] + n[0], h.pos[1] + n[1], h.pos[2] + n[2]];
   sourceCell = h.pos.slice();
+  chainDir = n.slice();
   ghostRot = 0;
   refreshGhost();
 });
@@ -544,10 +546,8 @@ function doPlace() {
   if (!placementOK(...targetCell, ghostRot)) return;
   addCube(...targetCell, ghostRot);
   // chain: advance outward in the same direction (minecraft spam-click)
-  const dir = [targetCell[0] - sourceCell[0], targetCell[1] - sourceCell[1],
-               targetCell[2] - sourceCell[2]];
-  targetCell = [targetCell[0] + dir[0], targetCell[1] + dir[1],
-                targetCell[2] + dir[2]];
+  targetCell = [targetCell[0] + chainDir[0], targetCell[1] + chainDir[1],
+                targetCell[2] + chainDir[2]];
   refreshGhost();
 }
 
