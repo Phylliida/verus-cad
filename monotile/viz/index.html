@@ -486,8 +486,20 @@ center.addEventListener("mousemove", e => {
   }
 });
 
+let clickCand = null;
 center.addEventListener("mousedown", e => {
   if (e.button !== 0 || e.shiftKey) return;
+  clickCand = { x: e.clientX, y: e.clientY };
+});
+window.addEventListener("mouseup", e => {
+  if (!clickCand) return;
+  const moved = Math.abs(e.clientX - clickCand.x) +
+                Math.abs(e.clientY - clickCand.y);
+  clickCand = null;
+  if (moved > 5) return;  // it was a camera orbit, not a click
+  const r = renderer.domElement.getBoundingClientRect();
+  mouse.x = ((e.clientX - r.left) / r.width) * 2 - 1;
+  mouse.y = -((e.clientY - r.top) / r.height) * 2 + 1;
   const h = pickCubeFace();
   if (!h) return;
   const n = FACE_NORMAL[h.face];
