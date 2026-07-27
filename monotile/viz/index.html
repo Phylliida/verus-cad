@@ -321,8 +321,8 @@ function faceGeometry(f) {
     const axn = AXES.find(q => n[q] !== 0);
     c0[axn] = n[axn] * 0.51;
     const r0 = AXES.filter(q => q !== axn);
-    c0[r0[0]] = a / K; c0[r0[1]] = b / K;
-    u1[r0[0]] = 2 / K; u2[r0[1]] = 2 / K;
+    c0[r0[0]] = a / (2 * K); c0[r0[1]] = b / (2 * K);
+    u1[r0[0]] = 1 / K; u2[r0[1]] = 1 / K;
     const corners = [
       c0, c0.map((x, q) => x + u1[q]),
       c0.map((x, q) => x + u1[q] + u2[q]), c0.map((x, q) => x + u2[q]),
