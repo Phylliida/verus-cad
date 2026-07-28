@@ -904,4 +904,49 @@ pub proof fn lemma_angle_enclosure_signed_width(t: Rational, k: nat)
     }
 }
 
+/// |term_j(t)| ≤ 1/(2j+1) on the full symmetric range [−1, 1] (uniform
+/// term bound, signed — the mirror of lemma_arctan_term_bound).
+pub proof fn lemma_arctan_term_abs_bound(t: Rational, j: nat)
+    requires
+        t_in_symmetric_unit_interval(t),
+    ensures
+        arctan_term(t, j).abs_spec().le_spec(
+            Rational::from_frac_spec(1, (2 * j + 1) as int)),
+{
+    lemma_symmetric_abs_unit_interval(t);
+    let z = Rational::from_int_spec(0);
+    assert(z.num == 0);
+    assert(z.denom() == 1);
+    assert(z.le_spec(t) == (z.num * t.denom() <= t.num * z.denom()));
+    let term = arctan_term(t, j);
+    if z.le_spec(t) {
+        assert((z.num == 0 && z.denom() == 1 && z.num * t.denom() <= t.num * z.denom())
+            ==> t.num >= 0) by (nonlinear_arith);
+        assert(t.abs_spec() == t);
+        lemma_arctan_term_nonneg(t, j);
+        lemma_arctan_term_bound(t, j);
+        assert(z.le_spec(term) == (z.num * term.denom() <= term.num * z.denom()));
+        assert((z.num == 0 && z.denom() == 1 && z.num * term.denom() <= term.num * z.denom())
+            ==> term.num >= 0) by (nonlinear_arith);
+        assert(term.abs_spec() == term);
+    } else {
+        assert((z.num == 0 && z.denom() == 1
+            && !(z.num * t.denom() <= t.num * z.denom()))
+            ==> t.num < 0) by (nonlinear_arith);
+        assert(t.abs_spec() == t.neg_spec());
+        let u = t.neg_spec();
+        lemma_arctan_term_neg(t, j);
+        lemma_arctan_term_bound(u, j);
+        // term(t).num < 0 ⇒ |term(t)| == −term(t) == term(u)
+        lemma_arctan_term_num_denom(t, j);
+        lemma_ipow_neg_odd(-t.num, 2 * j + 1);
+        lemma_ipow_pos(-t.num, 2 * j + 1);
+        assert(term.num == ipow(t.num, 2 * j + 1));
+        assert(term.num == -ipow(-t.num, 2 * j + 1));
+        assert(term.num < 0);
+        assert(term.abs_spec() == term.neg_spec());
+        assert(term.neg_spec() == arctan_term(u, j));
+    }
+}
+
 } // verus!

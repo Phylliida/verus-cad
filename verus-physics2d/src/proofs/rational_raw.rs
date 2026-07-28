@@ -131,6 +131,60 @@ pub proof fn lemma_raw_add_zero_right(x: Rational)
     vstd::arithmetic::mul::lemma_mul_basics(x.denom());
 }
 
+/// raw: (−a)·b == −(a·b) (structural).
+pub proof fn lemma_raw_neg_mul_left(a: Rational, b: Rational)
+    ensures
+        a.neg_spec().mul_spec(b) == a.mul_spec(b).neg_spec(),
+{
+    Rational::lemma_mul_denom_product_int(a.neg_spec(), b);
+    Rational::lemma_mul_denom_product_int(a, b);
+    let lhs = a.neg_spec().mul_spec(b);
+    let rhs = a.mul_spec(b).neg_spec();
+    assert(a.neg_spec().num == -a.num);
+    assert(a.neg_spec().denom() == a.denom());
+    assert(lhs.num == a.neg_spec().num * b.num);
+    assert(rhs.num == -(a.num * b.num));
+    assert((lhs.num == a.neg_spec().num * b.num && a.neg_spec().num == -a.num
+        && rhs.num == -(a.num * b.num))
+        ==> lhs.num == rhs.num) by (nonlinear_arith);
+    assert(lhs.denom() == rhs.denom());
+    assert(lhs.den == rhs.den);
+    assert(lhs == rhs);
+}
+
+/// raw: a·(−b) == −(a·b) (structural).
+pub proof fn lemma_raw_neg_mul_right(a: Rational, b: Rational)
+    ensures
+        a.mul_spec(b.neg_spec()) == a.mul_spec(b).neg_spec(),
+{
+    Rational::lemma_mul_denom_product_int(a, b.neg_spec());
+    Rational::lemma_mul_denom_product_int(a, b);
+    let lhs = a.mul_spec(b.neg_spec());
+    let rhs = a.mul_spec(b).neg_spec();
+    assert(b.neg_spec().num == -b.num);
+    assert(b.neg_spec().denom() == b.denom());
+    assert(lhs.num == a.num * b.neg_spec().num);
+    assert(rhs.num == -(a.num * b.num));
+    assert((lhs.num == a.num * b.neg_spec().num && b.neg_spec().num == -b.num
+        && rhs.num == -(a.num * b.num))
+        ==> lhs.num == rhs.num) by (nonlinear_arith);
+    assert(lhs.denom() == rhs.denom());
+    assert(lhs.den == rhs.den);
+    assert(lhs == rhs);
+}
+
+/// raw: (−a)·(−b) == a·b (structural).
+pub proof fn lemma_raw_neg_mul_neg(a: Rational, b: Rational)
+    ensures
+        a.neg_spec().mul_spec(b.neg_spec()) == a.mul_spec(b),
+{
+    lemma_raw_neg_mul_left(a, b.neg_spec());
+    lemma_raw_neg_mul_right(a, b);
+    Rational::lemma_neg_involution(a.mul_spec(b));
+    assert(a.neg_spec().mul_spec(b.neg_spec()) == a.mul_spec(b.neg_spec()).neg_spec());
+    assert(a.mul_spec(b.neg_spec()).neg_spec() == a.mul_spec(b).neg_spec().neg_spec());
+}
+
 /// raw: congruence of abs nonneg — |x| ≥ 0
 pub proof fn lemma_raw_abs_nonneg(x: Rational)
     ensures

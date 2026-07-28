@@ -12,11 +12,13 @@ use verus_linalg::vec2::Vec2;
 use verus_linalg::vec2::ops::scale;
 use verus_rational::{Rational, RuntimeRational};
 
-use crate::angle_ledger::{arctan_term, arctan_term_exec, t_in_unit_interval, two_x};
+use crate::angle_ledger::{
+    arctan_term, arctan_term_exec, t_in_symmetric_unit_interval, t_in_unit_interval, two_x,
+};
 use crate::body::Body;
 use crate::proofs::rational_raw::{
     compose_c, compose_s, lemma_raw_add_nonneg, lemma_raw_add_zero_right, lemma_raw_abs_nonneg,
-    lemma_raw_two_nonneg,
+    lemma_raw_neg_mul_left, lemma_raw_neg_mul_neg, lemma_raw_neg_mul_right, lemma_raw_two_nonneg,
 };
 use crate::proofs::rpow::{ipow, lemma_ipow_congruence, lemma_ipow_zero_base};
 use crate::rotq::RotQ;
@@ -215,6 +217,102 @@ pub proof fn lemma_series_unit_interval(h: Rational)
     assert(t.le_spec(Rational::from_int_spec(1)));
 }
 
+/// The untrusted chooser is odd: series(−h) == −series(h) (structural).
+pub proof fn lemma_series_model_neg(h: Rational)
+    ensures
+        tan_half_series_model(h.neg_spec()) == tan_half_series_model(h).neg_spec(),
+{
+    let nh = h.neg_spec();
+    let third = Rational::from_frac_spec(1, 3);
+    let f115 = Rational::from_frac_spec(1, 15);
+    let two = Rational::from_int_spec(2);
+    let h2 = h.mul_spec(h);
+    let h3 = h2.mul_spec(h);
+    let h4 = h3.mul_spec(h);
+    let h5 = h4.mul_spec(h);
+    let t1 = h3.mul_spec(third);
+    let t2 = two.mul_spec(h5).mul_spec(f115);
+    let s1 = h.add_spec(t1);
+    // model unfolds (exact body form)
+    assert(tan_half_series_model(h) == s1.add_spec(t2));
+    assert(tan_half_series_model(nh) == nh.add_spec(
+        nh.mul_spec(nh).mul_spec(nh).mul_spec(third),
+    ).add_spec(
+        two.mul_spec(nh.mul_spec(nh).mul_spec(nh).mul_spec(nh).mul_spec(nh))
+            .mul_spec(f115),
+    ));
+    // power mirrors: nh² == h², nh³ == −h³, nh⁴ == h⁴, nh⁵ == −h⁵
+    lemma_raw_neg_mul_neg(h, h);
+    lemma_raw_neg_mul_right(h2, h);
+    lemma_raw_neg_mul_neg(h3, h);
+    lemma_raw_neg_mul_right(h4, h);
+    assert(nh.mul_spec(nh) == h2);
+    assert(nh.mul_spec(nh).mul_spec(nh) == h3.neg_spec());
+    assert(nh.mul_spec(nh).mul_spec(nh).mul_spec(nh) == h4);
+    assert(nh.mul_spec(nh).mul_spec(nh).mul_spec(nh).mul_spec(nh) == h5.neg_spec());
+    // term mirrors
+    lemma_raw_neg_mul_left(h3, third);
+    lemma_raw_neg_mul_right(two, h5);
+    lemma_raw_neg_mul_left(two.mul_spec(h5), f115);
+    assert(nh.mul_spec(nh).mul_spec(nh).mul_spec(third) == t1.neg_spec());
+    assert(two.mul_spec(h5.neg_spec()) == two.mul_spec(h5).neg_spec());
+    assert(two.mul_spec(h5.neg_spec()).mul_spec(f115) == t2.neg_spec());
+    // sum mirrors
+    Rational::lemma_neg_add(h, t1);
+    Rational::lemma_neg_add(s1, t2);
+    assert(nh.add_spec(t1.neg_spec()) == s1.neg_spec());
+    assert(tan_half_series_model(nh) == s1.neg_spec().add_spec(t2.neg_spec()));
+    assert(tan_half_series_model(nh) == s1.add_spec(t2).neg_spec());
+}
+
+/// −1/2 ≤ h ≤ 0 ⇒ the untrusted series lands in [−1, 1] (odd mirror of
+/// lemma_series_unit_interval — discharges the Some-guarantee for
+/// negative spin).
+pub proof fn lemma_series_neg_unit_interval(h: Rational)
+    requires
+        Rational::from_frac_spec(-1, 2).le_spec(h),
+        h.le_spec(Rational::from_int_spec(0)),
+    ensures
+        t_in_symmetric_unit_interval(tan_half_series_model(h)),
+{
+    let nh = h.neg_spec();
+    let z = Rational::from_int_spec(0);
+    let half = Rational::from_frac_spec(1, 2);
+    let mhalf = Rational::from_frac_spec(-1, 2);
+    let one = Rational::from_int_spec(1);
+    let mone = Rational::from_int_spec(-1);
+    // 0 ≤ −h ≤ 1/2
+    Rational::lemma_neg_reverses_le(mhalf, h);
+    Rational::lemma_neg_reverses_le(h, z);
+    assert(mhalf.num == -1);
+    assert(mhalf.denom() == 2);
+    assert(half.num == 1);
+    assert(half.denom() == 2);
+    assert(mhalf.neg_spec() == half);
+    assert(z.neg_spec() == z);
+    assert(z.le_spec(nh));
+    assert(nh.le_spec(half));
+    // series(−h) ∈ [0,1] and series(h) == −series(−h)
+    lemma_series_unit_interval(nh);
+    lemma_series_model_neg(h);
+    Rational::lemma_neg_reverses_le(z, tan_half_series_model(nh));
+    Rational::lemma_neg_reverses_le(tan_half_series_model(nh), one);
+    Rational::lemma_neg_involution(tan_half_series_model(nh));
+    assert(one.num == 1);
+    assert(one.denom() == 1);
+    assert(mone.num == -1);
+    assert(mone.denom() == 1);
+    assert(one.neg_spec() == mone);
+    assert(tan_half_series_model(nh).neg_spec() == tan_half_series_model(h));
+    assert(mone.le_spec(tan_half_series_model(h)));
+    assert(tan_half_series_model(h).le_spec(z));
+    assert(z.le_spec(one) == (z.num * one.denom() <= one.num * z.denom()));
+    assert(z.num == 0);
+    assert(z.denom() == 1);
+    assert(z.le_spec(one));
+    Rational::lemma_le_transitive(tan_half_series_model(h), z, one);
+}
+
 /// t ≡ 0 ⇒ the ledger increment is ≡ 0.
 pub proof fn lemma_ledger_increment_zero(t: Rational, series_k: nat)
     requires
@@ -246,14 +344,16 @@ pub proof fn lemma_ledger_increment_zero(t: Rational, series_k: nat)
 
 /// Free-flight step: gravity to velocities, symplectic position update,
 /// tan-half rotation compose, ledger accumulation. None = angle reject.
+/// Accept range is the full symmetric interval |t| ≤ 1 (SPEC §3); the
+/// signed enclosure mirror (proofs/angle_ledger.rs) covers negative t.
 pub fn step_free_flight(w: &World) -> (out: Option<(World, Vec<Scalar>)>)
     requires
         w.wf_spec(),
     ensures
         // the step only rejects when some body's tan-half parameter
-        // escapes [0, 1] (SPEC §3 phase-1 restriction)
+        // escapes [−1, 1] (SPEC §3 phase-1 restriction)
         (forall|i: int|
-            0 <= i < w.bodies@.len() ==> t_in_unit_interval(
+            0 <= i < w.bodies@.len() ==> t_in_symmetric_unit_interval(
                 tan_half_series_model(half_angle_model(
                     #[trigger] w.bodies@[i].omega@, w.dt@))))
             ==> out is Some,
@@ -269,7 +369,7 @@ pub fn step_free_flight(w: &World) -> (out: Option<(World, Vec<Scalar>)>)
                 0 <= i < w.bodies@.len() ==> {
                     let ti = #[trigger] r.1@[i];
                     &&& ti.wf_spec()
-                    &&& t_in_unit_interval(ti@)
+                    &&& t_in_symmetric_unit_interval(ti@)
                     &&& body_step_rel(
                         w.bodies@[i], r.0.bodies@[i], w.gravity.model@, w.dt@, ti@)
                     &&& r.0.angle_err@[i]@.eqv_spec(
@@ -292,7 +392,7 @@ pub fn step_free_flight(w: &World) -> (out: Option<(World, Vec<Scalar>)>)
                 0 <= j < i as int ==> {
                     let tj = #[trigger] ts@[j];
                     &&& tj.wf_spec()
-                    &&& t_in_unit_interval(tj@)
+                    &&& t_in_symmetric_unit_interval(tj@)
                     &&& new_bodies@[j].wf_spec()
                     &&& body_step_rel(
                         w.bodies@[j], new_bodies@[j], w.gravity.model@, w.dt@, tj@)
@@ -329,8 +429,8 @@ pub fn step_free_flight(w: &World) -> (out: Option<(World, Vec<Scalar>)>)
                 Rational::lemma_eqv_symmetric(old_e.add_spec(z), old_e);
                 Rational::lemma_eqv_transitive(old_e.add_spec(inc), old_e.add_spec(z), old_e);
                 Rational::lemma_eqv_symmetric(old_e.add_spec(inc), old_e);
-                // t_in_unit_interval(0)
-                assert(z.le_spec(t2@));
+                // t_in_symmetric_unit_interval(0): −1 ≤ 0 ≤ 1
+                assert(Rational::from_int_spec(-1).le_spec(t2@));
                 assert(t2@.le_spec(Rational::from_int_spec(1)));
             }
             new_bodies.push(b2);
@@ -349,11 +449,12 @@ pub fn step_free_flight(w: &World) -> (out: Option<(World, Vec<Scalar>)>)
             let half = h.div(&two);
             let t = RotQ::tan_half_series(&half);
             let one = RuntimeRational::from_int(1);
-            let t_ok = zero.le(&t) && t.le(&one);
+            let minus_one = RuntimeRational::from_int(-1);
+            let t_ok = minus_one.le(&t) && t.le(&one);
             if !t_ok {
                 proof {
-                    // reject witness: this body's t is outside [0, 1]
-                    assert(!t_in_unit_interval(t@));
+                    // reject witness: this body's t is outside [−1, 1]
+                    assert(!t_in_symmetric_unit_interval(t@));
                     assert(t@ == tan_half_series_model(half_angle_model(
                         w.bodies@[i as int].omega@, w.dt@)));
                 }
@@ -446,7 +547,7 @@ pub fn step_free_flight(w: &World) -> (out: Option<(World, Vec<Scalar>)>)
             0 <= i < w.bodies@.len() implies {
                 let ti = #[trigger] ts@[i];
                 &&& ti.wf_spec()
-                &&& t_in_unit_interval(ti@)
+                &&& t_in_symmetric_unit_interval(ti@)
                 &&& body_step_rel(w.bodies@[i], w2.bodies@[i], w.gravity.model@, w.dt@, ti@)
                 &&& w2.angle_err@[i]@.eqv_spec(
                     w.angle_err@[i]@.add_spec(ledger_increment(ti@, w.series_k as nat)))
@@ -454,7 +555,7 @@ pub fn step_free_flight(w: &World) -> (out: Option<(World, Vec<Scalar>)>)
         by {
             let ti = ts@[i];
             assert(ti.wf_spec());
-            assert(t_in_unit_interval(ti@));
+            assert(t_in_symmetric_unit_interval(ti@));
             assert(body_step_rel(w.bodies@[i], w2.bodies@[i], w.gravity.model@, w.dt@, ti@));
             assert(w2.angle_err@[i]@.eqv_spec(
                 w.angle_err@[i]@.add_spec(ledger_increment(ti@, w.series_k as nat))));
