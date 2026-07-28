@@ -29,10 +29,14 @@ Deviations from the text below, which amend it:
 - **A4. §3 angle ledger.** Implemented as `arctan_term/arctan_sum/
   angle_enclosure` + exec evaluators; lemmas proved: exact endpoints,
   width formula hi−lo ≡ 2·term_{k+1}, term-decreasing, odd/even
-  monotonicity, enclosure nesting. Signed bracket (t < 0) is OPEN
-  (series is odd; mirror argument expected) — required by the phys-06
-  certificate, and `lemma_series_unit_interval` (0 ≤ h ≤ 1/2 ⟹ t ∈ [0,1])
-  discharges the §3 phase-1 restriction constructively.
+  monotonicity, enclosure nesting. **Signed bracket RESOLVED**
+  (2026-07-28, a0ae4c9 + 7c73aed): the series is odd — term/sum/enclosure
+  negation lemmas are structural equalities, the negative-t endpoints come
+  out swapped, `angle_enclosure_signed` is ordered on the full [−1, 1]
+  with uniform width 2·|term_{k+1}|, and `step_free_flight` now accepts
+  |t| ≤ 1 (scene S2-mirror, ω = −3, green). `lemma_series_unit_interval`
+  (0 ≤ h ≤ 1/2) and its mirror `lemma_series_neg_unit_interval`
+  (−1/2 ≤ h ≤ 0) discharge the §3 phase-1 restriction constructively.
 - **A5. §4 shapes.** ConvexPoly uses the GLOBAL convexity invariant
   (DESIGN E7) with a runtime-checked constructor instead of the
   consecutive-turn invariant + construction lemmas. Own raw predicates

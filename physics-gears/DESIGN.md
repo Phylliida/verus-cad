@@ -52,10 +52,14 @@ Deviations from v1.3 text (they amend SPEC where they conflict):
   integer cross-multiplication discipline (SPEC addendum A1).
 - **World carries the ledger.** World has `series_k` and per-body
   `angle_err` fields (SPEC §1's `ledger: Ledger` made concrete).
-- **Signed-enclosure debt.** The arctan bracket lemmas cover 0 ≤ t ≤ 1;
-  the ledger records 2·|term| for negative t as well, but a signed
-  enclosure-ordering lemma is not yet proved. The certificate (phys-06,
-  C6) needs it; the series is odd so it should be a mirror argument.
+- **Signed-enclosure debt — RESOLVED (2026-07-28).** The arctan bracket
+  lemmas now cover the full [−1, 1]: the series is odd, and the mirror is
+  structural (term/sum/enclosure negation are `==`, not just `≡`), so the
+  negative-t endpoints come out swapped. `angle_enclosure_signed` restores
+  a uniform ordered enclosure with uniform width 2·|term_{k+1}|
+  (`lemma_angle_enclosure_signed_ordered/_width`, `lemma_arctan_term_abs_bound`).
+  `step_free_flight` accepts |t| ≤ 1 (scene S2-mirror, ω = −3, green).
+  This was the last phys-06 blocker on the ledger side (C6).
 
 Proof-engineering addendum (recorded in workspace AGENTS.md and
 proofs/rational_raw.rs header): the NLA discipline R1–R5, ghost-let
