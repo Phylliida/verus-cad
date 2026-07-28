@@ -524,11 +524,17 @@ forall|i: int| 0 <= i < s.len() ==> #[trigger] s[i] > 0
   tiny int-only micro-lemma with a minimal context.
 - **Identities beyond ~2-3 atoms rlimit nlsat** (e.g. the 4-var Lagrange
   identity in one step). Decompose into binomial/sq-mul/prod4 micro-steps.
+- **Ghost `let` bindings are OPAQUE to `by(nonlinear_arith)`** — the NLA
+  query does not include the binding. Restate the definition as an
+  antecedent of the assert, or the goal silently loses the variable's
+  meaning.
 - **Z3 auto-unfolds open spec fns only ~1 level.** Stage deep spec-fn chains
   node-by-node with explicit asserts in the EXACT body form (e.g.
-  `x.denom_nat() as int`, not `x.denom()`), and make modus-ponens
-  antecedents verbatim lemma-call postconditions, not derived chains.
-- Closed (fully concrete) goals: state them FIRST, before intermediate
+  `x.denom_nat() as int`, NOT `x.denom()` — the add_spec/sub_spec bodies
+  use `denom_nat()`; mixing the two forms breaks modus-ponens matching),
+  and make modus-ponens antecedents verbatim lemma-call postconditions,
+  not derived chains.
+- **Closed (fully concrete) goals**: state them FIRST, before intermediate
   fact asserts — extra facts can poison the simplifier's reduction.
 
 ### Loop vs Recursion

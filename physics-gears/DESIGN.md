@@ -1,11 +1,67 @@
 # DESIGN: Formalized 2D Physics Engine with Working Gears
 
-Status: plan v1.3, 2026-07-24 (Fable + Danielle) — v1.1 adds weird-gear
+Status: plan v1.4, 2026-07-25 (Fable + Danielle) — v1.1 adds weird-gear
 generalization (D6/D7, phys-16..21, Lean G7/G8); v1.2 adds cams
 (D6/D7 extended, D8 follower-jump honesty, phys-22..25, Lean G9);
 v1.3 adds elegance revisions E1..E6 (§3.5) + SPEC-phase1.md (precise
-implementation spec for phys-01..06 & 22) + Lean G0 + phys-10 split
+implementation spec for phys-01..06 & 22) + Lean G0 + phys-10 split;
+v1.4: phys-01..04 LANDED (see "Implementation status" below) — board
+updated, deviations recorded (E7 global convexity, raw predicates,
+signed-enclosure debt).
 Board: phys-00 .. phys-25 (below)
+
+## Implementation status (v1.4, 2026-07-25)
+
+Landed in `verus-physics2d` (full crate green at 239 verified / 0 errors):
+
+- **phys-01** (07b3f14): crate skeleton — Scalar/SVec2 aliases, RotQ with
+  unit-norm invariant + identity, Body wf + static/dynamic ctors, World.
+- **phys-02** (a31597b, 4bc8c6d): RotQ apply/compose/inverse/from_tan_half
+  with invariant proofs via INTEGER cross-multiplication (no reals — real
+  NLA diverges Z3 in this toolchain); arctan angle ledger with exact
+  endpoints, width formula, term-decreasing, odd/even bracket monotonicity,
+  enclosure nesting; exact exec evaluators.
+- **phys-03** (401e3fe): free-flight symplectic Euler (pure step fn with
+  reject-on-|t|>1 and a Some-guarantee contract), E2 ledger accumulation
+  2·|term_{k+1}(t)| per body per step, exact zero-gravity conservation of
+  total linear AND angular momentum (the cross(pos+v·dt, v) telescope),
+  scenes S1 (1000-step momentum) and S2 (240-step spin ledger) proven
+  statically.
+- **phys-04** (f8ad2d5): ConvexPoly with the GLOBAL convexity invariant
+  (E7 below) + nlsat-style checked constructor; SAT classifier whose
+  Separated verdict proves the witness axis strictly separates both vertex
+  sets (min-attainment + dot = −orient, which is fully structural on
+  Rational); Touching proves no-axis-separates and carries the max-sep
+  reference feature; scene S3 (k-family of square pairs incl. touching/
+  vertex-vertex/parallel-edge, classification proven equal to known
+  answers).
+
+Deviations from v1.3 text (they amend SPEC where they conflict):
+
+- **E7. Global convexity invariant.** ConvexPoly's invariant is the global
+  form — every vertex on the inner side of every edge (orient ≥ 0, strict
+  for non-endpoints) — not the local consecutive-turn form of SPEC §4.
+  Construction is nlsat-style: producers are untrusted, a checked
+  constructor verifies the invariant at runtime. The local→global
+  convexity lemma (consecutive positive turns suffice) is deferred; the
+  global check is the construction-time authority.
+- **Raw predicates.** shape.rs defines its own raw-form orient/edge_normal/
+  axis_sep/min_sep instead of reusing verus-geometry's Point2/orient2d:
+  the geometry crate's trait-op predicates on its own types cost more in
+  conversion glue than they save. All polygon algebra runs on the
+  integer cross-multiplication discipline (SPEC addendum A1).
+- **World carries the ledger.** World has `series_k` and per-body
+  `angle_err` fields (SPEC §1's `ledger: Ledger` made concrete).
+- **Signed-enclosure debt.** The arctan bracket lemmas cover 0 ≤ t ≤ 1;
+  the ledger records 2·|term| for negative t as well, but a signed
+  enclosure-ordering lemma is not yet proved. The certificate (phys-06,
+  C6) needs it; the series is odd so it should be a mirror argument.
+
+Proof-engineering addendum (recorded in workspace AGENTS.md and
+proofs/rational_raw.rs header): the NLA discipline R1–R5, ghost-let
+opacity to `by(nonlinear_arith)`, and exact body-form
+(`x.denom_nat() as int`) unfold staging. All of phase 1 was verified
+under this discipline.
 
 ## 1. Vision
 
@@ -292,12 +348,12 @@ independent of everything else in this plan.
 | Card | Deliverable | Depends |
 |---|---|---|
 | phys-00 | this DESIGN | — |
-| phys-01 | crate `verus-physics2d` skeleton: `Body{pos: Vec2<Rational>, rot: RotQ, vel, omega, inv_mass, inv_inertia}`, `World`, fixed-dt step loop | — |
-| phys-02 | `RotQ`: rational unit-circle type; verified invariant c²+s²=1, exact compose/inverse; `snap(angle_enclosure, k)` with certified 2⁻ᵏ error (uses verus-interval-arithmetic) | phys-01 |
-| phys-03 | free-flight symplectic Euler; **proved:** exact conservation of linear & angular momentum for closed systems | phys-02 |
-| phys-04 | convex rational polygons; SAT contact detection; **proved:** classification correctness with witness (axis or feature pair) | phys-01 |
-| phys-05 | single-contact impulse; **proved:** momentum exchange exact, restitution inequality post-state | phys-03,04 |
-| phys-06 | sequential-impulse multi-contact loop + **proven certificate checker** (non-penetration, ledgers); reject-and-retry stepping | phys-05 |
+| phys-01 ✅ | crate `verus-physics2d` skeleton: `Body{pos: Vec2<Rational>, rot: RotQ, vel, omega, inv_mass, inv_inertia}`, `World`, fixed-dt step loop | — |
+| phys-02 ✅ | `RotQ`: rational unit-circle type; verified invariant c²+s²=1, exact compose/inverse; `snap(angle_enclosure, k)` with certified 2⁻ᵏ error (uses verus-interval-arithmetic) | phys-01 |
+| phys-03 ✅ | free-flight symplectic Euler; **proved:** exact conservation of linear & angular momentum for closed systems | phys-02 |
+| phys-04 ✅ | convex rational polygons; SAT contact detection; **proved:** classification correctness with witness (axis or feature pair) | phys-01 |
+| phys-05 | single-contact impulse; **proved:** momentum exchange exact, restitution inequality post-state; includes the SPEC §4 leftovers (world-space transforms, fan-area + positivity, centroid/inertia, AABBs) | phys-03,04 |
+| phys-06 | sequential-impulse multi-contact loop + **proven certificate checker** (non-penetration, ledgers); reject-and-retry stepping; needs the signed-enclosure lemma (v1.4 debt) | phys-05 |
 | phys-07 | revolute (pin) joint + drift certificate; certified rounding pass (D3) | phys-06 |
 | phys-08 | gear joint (ratio constraint, ratio-drift certificate); **demo: gear train + crank** | phys-07 |
 | phys-09 | trace JSON + tiny canvas viewer (unverified glue; maybe steal verus-canvas bits) | phys-06 |
@@ -319,12 +375,15 @@ independent of everything else in this plan.
 | phys-24 | cam profile generator: motion law → profile for knife-edge / roller / flat-face followers (offset + envelope, certified); generation-time pressure-angle & undercut checks; arc/tangent cams exact | phys-10a,22 |
 | phys-25 | emergent cam demos: force-closed roller follower (follower-jump physics, conditional certificate per D8), form-closed groove cam, constant-breadth pair, conjugate pair; four-bar linkage bonus demo | phys-16,24 |
 
-Suggested first arc: phys-01 → 02 → 03 (a verified free-flight world with the
-rotation story solved is already a milestone), with phys-12 as the Lean-side
-palate cleanser whenever the mood is more mathlib than Verus. First emergent
-demo: consider phys-18 (lantern gears) before phys-11 (involute) — exact pins
-mean less approximation machinery on the critical path, and clockwork charisma
-arrives sooner.
+Suggested first arc: phys-01 → 02 → 03 ✅ (done, with phys-04 landed right
+after). Next arc: phys-05 (single-contact impulse + SPEC §4 leftovers:
+world-space transforms, fan-area + positivity, centroid/inertia, AABBs)
+→ phys-06 (row solver + certificate checker, with the signed-enclosure
+lemma). phys-12 (Lean G1–G2) remains the Lean-side palate cleanser
+whenever the mood is more mathlib than Verus. First emergent demo:
+consider phys-18 (lantern gears) before phys-11 (involute) — exact pins
+mean less approximation machinery on the critical path, and clockwork
+charisma arrives sooner.
 
 ## 6. Risks / open questions
 
