@@ -16,7 +16,12 @@ use verus_linalg::vec2::Vec2;
 use verus_rational::{Rational, RuntimeRational};
 
 use crate::narrowphase::{sat_classify, SatResult};
-use crate::shape::{convex_poly_inv, orient, ConvexPoly};
+use crate::shape::{convex_poly_inv, orient, vadd, vcross2, ConvexPoly};
+use crate::massprops::{
+    centroid_exec, centroid_num, centroid_num_chain, centroid_spec, chain_cross_sum, cross_sum,
+    inertia0_exec, inertia0_spec, inertia_edge_term, inertia_num, inertia_num_chain,
+    poly_area2_exec, vdot, vscale, vzero,
+};
 use crate::angle_ledger::{arctan_term, t_in_symmetric_unit_interval, two_x};
 use crate::body::Body;
 use crate::momentum::{ang_mom, ang_mom_exec, lin_mom_x, lin_mom_y, lin_mom_exec};
@@ -514,6 +519,361 @@ pub fn scene_s2_neg() -> (out: bool)
     proof {
         assert(w.angle_err@[0]@.le_spec(
             Rational::from_int_spec(240).mul_spec(Rational::from_frac_spec(2, 19))));
+        assert(ok == true);
+    }
+    ok
+}
+
+/// M1 helpers: closed evaluation of the unit square's mass properties.
+/// Split per-quantity (R5: closed goals in minimal contexts). All closed
+/// arithmetic is made STRUCTURAL via the *_closed_int micro-lemmas (Z3
+/// does not chain nested spec-fn unfolds to a struct equality on its own).
+
+/// Closed from_int point constructor (tiny spec ctor; avoids struct
+/// literals in asserts — workspace pitfall list).
+pub open spec fn iv2(x: int, y: int) -> Vec2<Rational> {
+    Vec2 { x: Rational::from_int_spec(x), y: Rational::from_int_spec(y) }
+}
+
+/// closed: from_int(a) · from_int(b) == from_int(a·b) (structural).
+proof fn lemma_raw_mul_closed_int(a: int, b: int)
+    ensures
+        Rational::from_int_spec(a).mul_spec(Rational::from_int_spec(b))
+            == Rational::from_int_spec(a * b),
+{
+    let x = Rational::from_int_spec(a);
+    let y = Rational::from_int_spec(b);
+    assert(x.num == a && x.den == 0);
+    assert(y.num == b && y.den == 0);
+    assert(x.mul_spec(y).num == a * b);
+    assert(x.mul_spec(y).den == 0);
+}
+
+/// closed: from_int(a) + from_int(b) == from_int(a+b) (structural).
+proof fn lemma_raw_add_closed_int(a: int, b: int)
+    ensures
+        Rational::from_int_spec(a).add_spec(Rational::from_int_spec(b))
+            == Rational::from_int_spec(a + b),
+{
+    let x = Rational::from_int_spec(a);
+    let y = Rational::from_int_spec(b);
+    assert(x.num == a && x.den == 0 && x.denom_nat() == 1);
+    assert(y.num == b && y.den == 0 && y.denom_nat() == 1);
+    assert(x.add_spec(y).num == a * (y.denom_nat() as int) + b * (x.denom_nat() as int));
+    assert(x.add_spec(y).den == x.den * y.den + x.den + y.den);
+    assert(x.add_spec(y).num == a + b);
+    assert(x.add_spec(y).den == 0);
+}
+
+/// closed: from_int(a) − from_int(b) == from_int(a−b) (structural).
+proof fn lemma_raw_sub_closed_int(a: int, b: int)
+    ensures
+        Rational::from_int_spec(a).sub_spec(Rational::from_int_spec(b))
+            == Rational::from_int_spec(a - b),
+{
+    let x = Rational::from_int_spec(a);
+    let y = Rational::from_int_spec(b);
+    assert(x.num == a && x.den == 0 && x.denom_nat() == 1);
+    assert(y.num == b && y.den == 0 && y.denom_nat() == 1);
+    assert(y.neg_spec().num == -b && y.neg_spec().den == 0 && y.neg_spec().denom_nat() == 1);
+    assert(x.sub_spec(y).num == a * (y.neg_spec().denom_nat() as int)
+        + (-b) * (x.denom_nat() as int));
+    assert(x.sub_spec(y).den == x.den * y.neg_spec().den + x.den + y.neg_spec().den);
+    assert((x.sub_spec(y).num == a * (y.neg_spec().denom_nat() as int)
+            + (-b) * (x.denom_nat() as int)
+        && x.denom_nat() == 1 && y.neg_spec().denom_nat() == 1)
+        ==> x.sub_spec(y).num == a - b) by (nonlinear_arith);
+    assert(x.sub_spec(y).den == 0);
+}
+
+/// closed: from_frac(1,d) · from_int(m) == from_frac(m,d) (structural).
+proof fn lemma_raw_mul_frac_int(m: int, d: int)
+    requires
+        d > 0,
+    ensures
+        Rational::from_frac_spec(1, d).mul_spec(Rational::from_int_spec(m))
+            == Rational::from_frac_spec(m, d),
+{
+    let x = Rational::from_frac_spec(1, d);
+    let y = Rational::from_int_spec(m);
+    assert(x.num == 1 && x.den == (d - 1) as nat);
+    assert(y.num == m && y.den == 0);
+    assert(x.mul_spec(y).num == m);
+    assert(x.mul_spec(y).den == x.den * y.den + x.den + y.den);
+    assert(x.mul_spec(y).den == (d - 1) as nat);
+}
+
+/// closed: from_int(m) · from_frac(1,d) == from_frac(m,d) (structural).
+proof fn lemma_raw_mul_int_frac(m: int, d: int)
+    requires
+        d > 0,
+    ensures
+        Rational::from_int_spec(m).mul_spec(Rational::from_frac_spec(1, d))
+            == Rational::from_frac_spec(m, d),
+{
+    let x = Rational::from_int_spec(m);
+    let y = Rational::from_frac_spec(1, d);
+    assert(x.num == m && x.den == 0);
+    assert(y.num == 1 && y.den == (d - 1) as nat);
+    assert(x.mul_spec(y).num == m);
+    assert(x.mul_spec(y).den == x.den * y.den + x.den + y.den);
+    assert(x.mul_spec(y).den == (d - 1) as nat);
+}
+
+/// Unit-square vertex components (shared staging).
+proof fn lemma_m1_verts()
+    ensures
+        square_a()[0] == iv2(0, 0),
+        square_a()[1] == iv2(1, 0),
+        square_a()[2] == iv2(1, 1),
+        square_a()[3] == iv2(0, 1),
+{
+}
+
+/// closed vcross2 on from_int points (structural).
+proof fn lemma_m1_vcross_closed(ax: int, ay: int, bx: int, by: int)
+    ensures
+        vcross2(iv2(ax, ay), iv2(bx, by)) == Rational::from_int_spec(ax * by - ay * bx),
+{
+    lemma_raw_mul_closed_int(ax, by);
+    lemma_raw_mul_closed_int(ay, bx);
+    lemma_raw_sub_closed_int(ax * by, ay * bx);
+    assert(vcross2(iv2(ax, ay), iv2(bx, by)) == Rational::from_int_spec(ax).mul_spec(
+        Rational::from_int_spec(by)).sub_spec(Rational::from_int_spec(ay).mul_spec(
+        Rational::from_int_spec(bx))));
+}
+
+/// closed vadd on from_int points (structural).
+proof fn lemma_m1_vadd_closed(ax: int, ay: int, bx: int, by: int)
+    ensures
+        vadd(iv2(ax, ay), iv2(bx, by)) == iv2(ax + bx, ay + by),
+{
+    lemma_raw_add_closed_int(ax, bx);
+    lemma_raw_add_closed_int(ay, by);
+    assert(vadd(iv2(ax, ay), iv2(bx, by)) == iv2(ax + bx, ay + by));
+}
+
+/// closed vdot on from_int points (structural).
+proof fn lemma_m1_vdot_closed(ax: int, ay: int, bx: int, by: int)
+    ensures
+        vdot(iv2(ax, ay), iv2(bx, by)) == Rational::from_int_spec(ax * bx + ay * by),
+{
+    lemma_raw_mul_closed_int(ax, bx);
+    lemma_raw_mul_closed_int(ay, by);
+    lemma_raw_add_closed_int(ax * bx, ay * by);
+    assert(vdot(iv2(ax, ay), iv2(bx, by)) == Rational::from_int_spec(ax).mul_spec(
+        Rational::from_int_spec(bx)).add_spec(Rational::from_int_spec(ay).mul_spec(
+        Rational::from_int_spec(by))));
+}
+
+/// closed vscale: from_int(c) · iv2(x,y) == iv2(c·x, c·y) (structural).
+proof fn lemma_m1_vscale_closed(c: int, x: int, y: int)
+    ensures
+        vscale(Rational::from_int_spec(c), iv2(x, y)) == iv2(c * x, c * y),
+{
+    lemma_raw_mul_closed_int(c, x);
+    lemma_raw_mul_closed_int(c, y);
+    assert(vscale(Rational::from_int_spec(c), iv2(x, y)) == iv2(c * x, c * y));
+}
+
+/// closed inertia edge term (structural).
+proof fn lemma_m1_inertia_term_closed(ax: int, ay: int, bx: int, by: int)
+    ensures
+        inertia_edge_term(iv2(ax, ay), iv2(bx, by)) == Rational::from_int_spec(
+            (ax * by - ay * bx) * (ax * ax + ay * ay + ax * bx + ay * by + bx * bx + by * by)),
+{
+    lemma_m1_vcross_closed(ax, ay, bx, by);
+    lemma_m1_vdot_closed(ax, ay, ax, ay);
+    lemma_m1_vdot_closed(ax, ay, bx, by);
+    lemma_m1_vdot_closed(bx, by, bx, by);
+    lemma_raw_add_closed_int(ax * ax + ay * ay, ax * bx + ay * by);
+    lemma_raw_add_closed_int(ax * ax + ay * ay + ax * bx + ay * by, bx * bx + by * by);
+    lemma_raw_mul_closed_int(
+        ax * by - ay * bx, ax * ax + ay * ay + ax * bx + ay * by + bx * bx + by * by);
+    assert(inertia_edge_term(iv2(ax, ay), iv2(bx, by)) == vcross2(iv2(ax, ay), iv2(bx, by))
+        .mul_spec(vdot(iv2(ax, ay), iv2(ax, ay)).add_spec(
+            vdot(iv2(ax, ay), iv2(bx, by))).add_spec(vdot(iv2(bx, by), iv2(bx, by)))));
+}
+
+proof fn lemma_m1_area2()
+    ensures
+        cross_sum(square_a()) == Rational::from_int_spec(2),
+{
+    let a = square_a();
+    lemma_m1_verts();
+    lemma_m1_vcross_closed(0, 0, 1, 0);
+    lemma_m1_vcross_closed(1, 0, 1, 1);
+    lemma_m1_vcross_closed(1, 1, 0, 1);
+    lemma_m1_vcross_closed(0, 1, 0, 0);
+    assert(vcross2(a[0], a[1]) == Rational::from_int_spec(0));
+    assert(vcross2(a[1], a[2]) == Rational::from_int_spec(1));
+    assert(vcross2(a[2], a[3]) == Rational::from_int_spec(1));
+    assert(vcross2(a[3], a[0]) == Rational::from_int_spec(0));
+    assert(chain_cross_sum(a, 0) == Rational::from_int_spec(0));
+    assert(chain_cross_sum(a, 1) == chain_cross_sum(a, 0).add_spec(vcross2(a[0], a[1])));
+    assert(chain_cross_sum(a, 2) == chain_cross_sum(a, 1).add_spec(vcross2(a[1], a[2])));
+    assert(chain_cross_sum(a, 3) == chain_cross_sum(a, 2).add_spec(vcross2(a[2], a[3])));
+    lemma_raw_add_closed_int(0, 0);
+    lemma_raw_add_closed_int(0, 1);
+    lemma_raw_add_closed_int(1, 1);
+    assert(chain_cross_sum(a, 1) == Rational::from_int_spec(0));
+    assert(chain_cross_sum(a, 2) == Rational::from_int_spec(1));
+    assert(chain_cross_sum(a, 3) == Rational::from_int_spec(2));
+    assert(cross_sum(a) == chain_cross_sum(a, 3).add_spec(vcross2(a[3], a[0])));
+    lemma_raw_add_closed_int(2, 0);
+    assert(cross_sum(a) == Rational::from_int_spec(2));
+}
+
+proof fn lemma_m1_centroid()
+    ensures
+        centroid_spec(square_a()).x.eqv_spec(Rational::from_frac_spec(1, 2)),
+        centroid_spec(square_a()).y.eqv_spec(Rational::from_frac_spec(1, 2)),
+{
+    let a = square_a();
+    lemma_m1_area2();
+    lemma_m1_verts();
+    // numerator terms: (0,0), (2,1), (1,2), (0,0)
+    lemma_m1_vadd_closed(0, 0, 1, 0);
+    lemma_m1_vadd_closed(1, 0, 1, 1);
+    lemma_m1_vadd_closed(1, 1, 0, 1);
+    lemma_m1_vadd_closed(0, 1, 0, 0);
+    lemma_m1_vcross_closed(0, 0, 1, 0);
+    lemma_m1_vcross_closed(1, 0, 1, 1);
+    lemma_m1_vcross_closed(1, 1, 0, 1);
+    lemma_m1_vcross_closed(0, 1, 0, 0);
+    lemma_m1_vscale_closed(0, 1, 0);
+    lemma_m1_vscale_closed(1, 2, 1);
+    lemma_m1_vscale_closed(1, 1, 2);
+    lemma_m1_vscale_closed(0, 0, 1);
+    assert(vscale(vcross2(a[0], a[1]), vadd(a[0], a[1])) == iv2(0, 0));
+    assert(vscale(vcross2(a[1], a[2]), vadd(a[1], a[2])) == iv2(2, 1));
+    assert(vscale(vcross2(a[2], a[3]), vadd(a[2], a[3])) == iv2(1, 2));
+    assert(vscale(vcross2(a[3], a[0]), vadd(a[3], a[0])) == iv2(0, 0));
+    assert(centroid_num_chain(a, 0) == vzero());
+    assert(vzero() == iv2(0, 0));
+    assert(centroid_num_chain(a, 1) == vadd(centroid_num_chain(a, 0),
+        vscale(vcross2(a[0], a[1]), vadd(a[0], a[1]))));
+    assert(centroid_num_chain(a, 2) == vadd(centroid_num_chain(a, 1),
+        vscale(vcross2(a[1], a[2]), vadd(a[1], a[2]))));
+    assert(centroid_num_chain(a, 3) == vadd(centroid_num_chain(a, 2),
+        vscale(vcross2(a[2], a[3]), vadd(a[2], a[3]))));
+    assert(centroid_num(a) == vadd(centroid_num_chain(a, 3),
+        vscale(vcross2(a[3], a[0]), vadd(a[3], a[0]))));
+    lemma_m1_vadd_closed(0, 0, 0, 0);
+    lemma_m1_vadd_closed(0, 0, 2, 1);
+    lemma_m1_vadd_closed(2, 1, 1, 2);
+    lemma_m1_vadd_closed(3, 3, 0, 0);
+    assert(centroid_num(a) == iv2(3, 3));
+    // (3,3)/6 ≡ (1/2, 1/2)
+    assert(cross_sum(a) == Rational::from_int_spec(2));
+    lemma_raw_mul_closed_int(3, 2);
+    assert(Rational::from_int_spec(3).mul_spec(cross_sum(a)) == Rational::from_int_spec(6));
+    assert(Rational::from_int_spec(6).num == 6);
+    assert(Rational::from_int_spec(6).num > 0);
+    assert(Rational::from_int_spec(6).reciprocal_spec() == Rational::from_frac_spec(1, 6));
+    assert(centroid_spec(a) == vscale(Rational::from_frac_spec(1, 6), centroid_num(a)));
+    lemma_raw_mul_frac_int(3, 6);
+    assert(centroid_spec(a).x == Rational::from_frac_spec(3, 6));
+    assert(centroid_spec(a).y == Rational::from_frac_spec(3, 6));
+    assert(Rational::from_frac_spec(3, 6).num == 3);
+    assert(Rational::from_frac_spec(3, 6).denom() == 6);
+    assert(Rational::from_frac_spec(1, 2).num == 1);
+    assert(Rational::from_frac_spec(1, 2).denom() == 2);
+    assert(Rational::from_frac_spec(3, 6).eqv_spec(Rational::from_frac_spec(1, 2))
+        == (3 * 2 == 1 * 6));
+    assert(Rational::from_frac_spec(3, 6).eqv_spec(Rational::from_frac_spec(1, 2)));
+}
+
+proof fn lemma_m1_inertia()
+    ensures
+        inertia0_spec(square_a()).eqv_spec(Rational::from_frac_spec(2, 3)),
+{
+    let a = square_a();
+    lemma_m1_verts();
+    lemma_m1_inertia_term_closed(0, 0, 1, 0);
+    lemma_m1_inertia_term_closed(1, 0, 1, 1);
+    lemma_m1_inertia_term_closed(1, 1, 0, 1);
+    lemma_m1_inertia_term_closed(0, 1, 0, 0);
+    assert(inertia_edge_term(a[0], a[1]) == Rational::from_int_spec(0));
+    // Z3 does not eagerly evaluate the closed product in the helper's
+    // postcondition — pin it.
+    assert((1 * 1 - 0 * 1) * (1 * 1 + 0 * 0 + 1 * 1 + 0 * 1 + 1 * 1 + 1 * 1) == 4)
+        by (nonlinear_arith);
+    assert(inertia_edge_term(a[1], a[2]) == Rational::from_int_spec(4));
+    assert((1 * 1 - 1 * 0) * (1 * 1 + 1 * 1 + 1 * 0 + 1 * 1 + 0 * 0 + 1 * 1) == 4)
+        by (nonlinear_arith);
+    assert(inertia_edge_term(a[2], a[3]) == Rational::from_int_spec(4));
+    assert(inertia_edge_term(a[3], a[0]) == Rational::from_int_spec(0));
+    assert(inertia_num_chain(a, 0) == Rational::from_int_spec(0));
+    assert(inertia_num_chain(a, 1) == inertia_num_chain(a, 0).add_spec(
+        inertia_edge_term(a[0], a[1])));
+    assert(inertia_num_chain(a, 2) == inertia_num_chain(a, 1).add_spec(
+        inertia_edge_term(a[1], a[2])));
+    assert(inertia_num_chain(a, 3) == inertia_num_chain(a, 2).add_spec(
+        inertia_edge_term(a[2], a[3])));
+    assert(inertia_num(a) == inertia_num_chain(a, 3).add_spec(
+        inertia_edge_term(a[3], a[0])));
+    lemma_raw_add_closed_int(0, 0);
+    lemma_raw_add_closed_int(0, 4);
+    lemma_raw_add_closed_int(4, 4);
+    lemma_raw_add_closed_int(8, 0);
+    assert(inertia_num(a) == Rational::from_int_spec(8));
+    assert(Rational::from_int_spec(12).num == 12);
+    assert(Rational::from_int_spec(12).num > 0);
+    assert(Rational::from_int_spec(12).reciprocal_spec() == Rational::from_frac_spec(1, 12));
+    assert(inertia0_spec(a) == Rational::from_int_spec(8).mul_spec(
+        Rational::from_frac_spec(1, 12)));
+    lemma_raw_mul_int_frac(8, 12);
+    assert(inertia0_spec(a) == Rational::from_frac_spec(8, 12));
+    assert(Rational::from_frac_spec(8, 12).num == 8);
+    assert(Rational::from_frac_spec(8, 12).denom() == 12);
+    assert(Rational::from_frac_spec(2, 3).num == 2);
+    assert(Rational::from_frac_spec(2, 3).denom() == 3);
+    assert(Rational::from_frac_spec(8, 12).eqv_spec(Rational::from_frac_spec(2, 3))
+        == (8 * 3 == 2 * 12));
+    assert(Rational::from_frac_spec(8, 12).eqv_spec(Rational::from_frac_spec(2, 3)));
+}
+
+/// M1 (phys-05a): unit square mass properties, all exact — area2 == 2,
+/// centroid == (1/2, 1/2), inertia about origin == 2/3.
+pub fn scene_m1() -> (out: bool)
+    ensures
+        out == true,
+{
+    let mut va: Vec<SVec2> = Vec::new();
+    va.push(RuntimeVec2::new(RuntimeRational::from_int(0), RuntimeRational::from_int(0)));
+    va.push(RuntimeVec2::new(RuntimeRational::from_int(1), RuntimeRational::from_int(0)));
+    va.push(RuntimeVec2::new(RuntimeRational::from_int(1), RuntimeRational::from_int(1)));
+    va.push(RuntimeVec2::new(RuntimeRational::from_int(0), RuntimeRational::from_int(1)));
+    let pa_opt = ConvexPoly::new_checked(va);
+    proof {
+        lemma_unit_square_convex();
+        assert(pa_opt is Some);
+    }
+    let pa = pa_opt.unwrap();
+    let a2 = poly_area2_exec(&pa);
+    let c = centroid_exec(&pa);
+    let i0 = inertia0_exec(&pa);
+    let two = RuntimeRational::from_int(2);
+    let half = RuntimeRational::from_frac(1, 2);
+    let twothirds = RuntimeRational::from_frac(2, 3);
+    let ok = a2.eq(&two) && c.x.eq(&half) && c.y.eq(&half) && i0.eq(&twothirds);
+    proof {
+        lemma_m1_area2();
+        lemma_m1_centroid();
+        lemma_m1_inertia();
+        let a = square_a();
+        assert(pa.model_verts() == square_a());
+        assert(a2@ == cross_sum(a));
+        assert(c.model@ == centroid_spec(a));
+        assert(i0@ == inertia0_spec(a));
+        assert(a2@.eqv_spec(Rational::from_int_spec(2)));
+        assert(c.model@.x.eqv_spec(Rational::from_frac_spec(1, 2)));
+        assert(c.model@.y.eqv_spec(Rational::from_frac_spec(1, 2)));
+        assert(i0@.eqv_spec(Rational::from_frac_spec(2, 3)));
+        assert(two@ == Rational::from_int_spec(2));
+        assert(half@ == Rational::from_frac_spec(1, 2));
+        assert(twothirds@ == Rational::from_frac_spec(2, 3));
         assert(ok == true);
     }
     ok

@@ -15,3 +15,6 @@ pub mod momentum;
 
 #[cfg(verus_keep_ghost)]
 pub mod shape;
+
+#[cfg(verus_keep_ghost)]
+pub mod massprops;
