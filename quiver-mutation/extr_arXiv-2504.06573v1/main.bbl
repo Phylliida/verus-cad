@@ -1,0 +1,1259 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global}
+    \entry{MR2640929}{article}{}
+      \name{author}{1}{}{%
+        {{hash=b022ee250d05caae6e48d02362d6bf11}{%
+           family={Amiot},
+           familyi={A\bibinitperiod},
+           given={Claire},
+           giveni={C\bibinitperiod}}}%
+      }
+      \strng{namehash}{b022ee250d05caae6e48d02362d6bf11}
+      \strng{fullhash}{b022ee250d05caae6e48d02362d6bf11}
+      \strng{bibnamehash}{b022ee250d05caae6e48d02362d6bf11}
+      \strng{authorbibnamehash}{b022ee250d05caae6e48d02362d6bf11}
+      \strng{authornamehash}{b022ee250d05caae6e48d02362d6bf11}
+      \strng{authorfullhash}{b022ee250d05caae6e48d02362d6bf11}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0373-0956,1777-5310}
+      \field{journaltitle}{Ann. Inst. Fourier (Grenoble)}
+      \field{number}{6}
+      \field{title}{Cluster categories for algebras of global dimension 2 and quivers with potential}
+      \field{volume}{59}
+      \field{year}{2009}
+      \field{pages}{2525\bibrangedash 2590}
+      \range{pages}{66}
+      \verb{doi}
+      \verb 10.5802/aif.2499
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.5802/aif.2499
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.5802/aif.2499
+      \endverb
+    \endentry
+    \entry{AssemShifflerShramchenkoClusterAuts}{article}{}
+      \name{author}{3}{}{%
+        {{hash=f41b388f37389300ba0b3c5218a92f7f}{%
+           family={Assem},
+           familyi={A\bibinitperiod},
+           given={Ibrahim},
+           giveni={I\bibinitperiod}}}%
+        {{hash=0c3529bcc2d828fec04af8363bc9a5fa}{%
+           family={Schiffler},
+           familyi={S\bibinitperiod},
+           given={Ralf},
+           giveni={R\bibinitperiod}}}%
+        {{hash=7598ab3aaa4dcd4ad87482d1931bb4a8}{%
+           family={Shramchenko},
+           familyi={S\bibinitperiod},
+           given={Vasilisa},
+           giveni={V\bibinitperiod}}}%
+      }
+      \strng{namehash}{59acaaf2d4a5870ba9ddd12cc030de5c}
+      \strng{fullhash}{59acaaf2d4a5870ba9ddd12cc030de5c}
+      \strng{bibnamehash}{59acaaf2d4a5870ba9ddd12cc030de5c}
+      \strng{authorbibnamehash}{59acaaf2d4a5870ba9ddd12cc030de5c}
+      \strng{authornamehash}{59acaaf2d4a5870ba9ddd12cc030de5c}
+      \strng{authorfullhash}{59acaaf2d4a5870ba9ddd12cc030de5c}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0024-6115,1460-244X}
+      \field{journaltitle}{Proc. Lond. Math. Soc. (3)}
+      \field{number}{6}
+      \field{title}{Cluster automorphisms}
+      \field{volume}{104}
+      \field{year}{2012}
+      \field{pages}{1271\bibrangedash 1302}
+      \range{pages}{32}
+      \verb{doi}
+      \verb 10.1112/plms/pdr049
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1112/plms/pdr049
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1112/plms/pdr049
+      \endverb
+    \endentry
+    \entry{MR3250044}{article}{}
+      \name{author}{3}{}{%
+        {{hash=0b3b8b8a88b28164f6718ce8f9a9823b}{%
+           family={Brüstle},
+           familyi={B\bibinitperiod},
+           given={Thomas},
+           giveni={T\bibinitperiod}}}%
+        {{hash=26a4363fa3df96fddb9c20df714c9045}{%
+           family={Dupont},
+           familyi={D\bibinitperiod},
+           given={Grégoire},
+           giveni={G\bibinitperiod}}}%
+        {{hash=7f1f98c79cb0d89e2a3ff1f596f234d9}{%
+           family={Pérotin},
+           familyi={P\bibinitperiod},
+           given={Matthieu},
+           giveni={M\bibinitperiod}}}%
+      }
+      \strng{namehash}{072280d3c142a0178e0140d2049a6574}
+      \strng{fullhash}{072280d3c142a0178e0140d2049a6574}
+      \strng{bibnamehash}{072280d3c142a0178e0140d2049a6574}
+      \strng{authorbibnamehash}{072280d3c142a0178e0140d2049a6574}
+      \strng{authornamehash}{072280d3c142a0178e0140d2049a6574}
+      \strng{authorfullhash}{072280d3c142a0178e0140d2049a6574}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1073-7928,1687-0247}
+      \field{journaltitle}{Int. Math. Res. Not. IMRN}
+      \field{number}{16}
+      \field{title}{On maximal green sequences}
+      \field{year}{2014}
+      \field{pages}{4547\bibrangedash 4586}
+      \range{pages}{40}
+      \verb{doi}
+      \verb 10.1093/imrn/rnt075
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1093/imrn/rnt075
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1093/imrn/rnt075
+      \endverb
+    \endentry
+    \entry{MR4108215}{article}{}
+      \name{author}{2}{}{%
+        {{hash=925fe3c2a37eadc46f563ab274e5020a}{%
+           family={Bucher},
+           familyi={B\bibinitperiod},
+           given={Eric},
+           giveni={E\bibinitperiod}}}%
+        {{hash=5b16507f4fbc3624c13f25adce9a5a43}{%
+           family={Machacek},
+           familyi={M\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{2274db41d69b3bec1a01944147b6eb51}
+      \strng{fullhash}{2274db41d69b3bec1a01944147b6eb51}
+      \strng{bibnamehash}{2274db41d69b3bec1a01944147b6eb51}
+      \strng{authorbibnamehash}{2274db41d69b3bec1a01944147b6eb51}
+      \strng{authornamehash}{2274db41d69b3bec1a01944147b6eb51}
+      \strng{authorfullhash}{2274db41d69b3bec1a01944147b6eb51}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1815-0659}
+      \field{journaltitle}{SIGMA Symmetry Integrability Geom. Methods Appl.}
+      \field{title}{Reddening sequences for {B}anff quivers and the class {${\mathcal P}$}}
+      \field{volume}{16}
+      \field{year}{2020}
+      \field{pages}{Paper No. 049\bibrangessep 11}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.3842/SIGMA.2020.049
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.3842/SIGMA.2020.049
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.3842/SIGMA.2020.049
+      \endverb
+    \endentry
+    \entry{MR4183151}{article}{}
+      \name{author}{5}{}{%
+        {{hash=925fe3c2a37eadc46f563ab274e5020a}{%
+           family={Bucher},
+           familyi={B\bibinitperiod},
+           given={Eric},
+           giveni={E\bibinitperiod}}}%
+        {{hash=5b16507f4fbc3624c13f25adce9a5a43}{%
+           family={Machacek},
+           familyi={M\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+        {{hash=9e4c3d99f2d2c21ce069d9e5470ff813}{%
+           family={Runburg},
+           familyi={R\bibinitperiod},
+           given={Evan},
+           giveni={E\bibinitperiod}}}%
+        {{hash=892f61e1dd3191e97a9d3dbfd06f69ea}{%
+           family={Yeck},
+           familyi={Y\bibinitperiod},
+           given={Abe},
+           giveni={A\bibinitperiod}}}%
+        {{hash=8bc908e6d79d74289becb425fdbb9851}{%
+           family={Zewde},
+           familyi={Z\bibinitperiod},
+           given={Ethan},
+           giveni={E\bibinitperiod}}}%
+      }
+      \strng{namehash}{54e917aa8a49a83ac53ba2e261e3418c}
+      \strng{fullhash}{85e37f2fe0ea2546e9928b20ccfcd322}
+      \strng{bibnamehash}{54e917aa8a49a83ac53ba2e261e3418c}
+      \strng{authorbibnamehash}{54e917aa8a49a83ac53ba2e261e3418c}
+      \strng{authornamehash}{54e917aa8a49a83ac53ba2e261e3418c}
+      \strng{authorfullhash}{85e37f2fe0ea2546e9928b20ccfcd322}
+      \field{sortinit}{B}
+      \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1855-3966,1855-3974}
+      \field{journaltitle}{Ars Math. Contemp.}
+      \field{number}{2}
+      \field{title}{Building maximal green sequences via component preserving mutations}
+      \field{volume}{19}
+      \field{year}{2020}
+      \field{pages}{249\bibrangedash 275}
+      \range{pages}{27}
+      \verb{doi}
+      \verb 10.26493/1855-3974.2128.ccf
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.26493/1855-3974.2128.ccf
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.26493/1855-3974.2128.ccf
+      \endverb
+    \endentry
+    \entry{MR4092846}{article}{}
+      \name{author}{3}{}{%
+        {{hash=9337c35112565cd53da87b55a21398cf}{%
+           family={Cao},
+           familyi={C\bibinitperiod},
+           given={Peigen},
+           giveni={P\bibinitperiod}}}%
+        {{hash=088e9d4dece191692fbb1a87611978ba}{%
+           family={Huang},
+           familyi={H\bibinitperiod},
+           given={Min},
+           giveni={M\bibinitperiod}}}%
+        {{hash=68665ecfb5ccb8c5ee836ad68610700a}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Fang},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{8f48bab990d267cd307bcff64385d618}
+      \strng{fullhash}{8f48bab990d267cd307bcff64385d618}
+      \strng{bibnamehash}{8f48bab990d267cd307bcff64385d618}
+      \strng{authorbibnamehash}{8f48bab990d267cd307bcff64385d618}
+      \strng{authornamehash}{8f48bab990d267cd307bcff64385d618}
+      \strng{authorfullhash}{8f48bab990d267cd307bcff64385d618}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0027-7630,2152-6842}
+      \field{journaltitle}{Nagoya Math. J.}
+      \field{title}{A conjecture on {$C$}-matrices of cluster algebras}
+      \field{volume}{238}
+      \field{year}{2020}
+      \field{pages}{37\bibrangedash 46}
+      \range{pages}{10}
+      \verb{doi}
+      \verb 10.1017/nmj.2018.18
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1017/nmj.2018.18
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1017/nmj.2018.18
+      \endverb
+    \endentry
+    \entry{MR4029226}{article}{}
+      \name{author}{2}{}{%
+        {{hash=9337c35112565cd53da87b55a21398cf}{%
+           family={Cao},
+           familyi={C\bibinitperiod},
+           given={Peigen},
+           giveni={P\bibinitperiod}}}%
+        {{hash=68665ecfb5ccb8c5ee836ad68610700a}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Fang},
+           giveni={F\bibinitperiod}}}%
+      }
+      \strng{namehash}{f7b254bf796869d2189c91bfd75d3e76}
+      \strng{fullhash}{f7b254bf796869d2189c91bfd75d3e76}
+      \strng{bibnamehash}{f7b254bf796869d2189c91bfd75d3e76}
+      \strng{authorbibnamehash}{f7b254bf796869d2189c91bfd75d3e76}
+      \strng{authornamehash}{f7b254bf796869d2189c91bfd75d3e76}
+      \strng{authorfullhash}{f7b254bf796869d2189c91bfd75d3e76}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0925-9899,1572-9192}
+      \field{journaltitle}{J. Algebraic Combin.}
+      \field{number}{4}
+      \field{title}{Uniform column sign-coherence and the existence of maximal green sequences}
+      \field{volume}{50}
+      \field{year}{2019}
+      \field{pages}{403\bibrangedash 417}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1007/s10801-018-0861-z
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1007/s10801-018-0861-z
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1007/s10801-018-0861-z
+      \endverb
+    \endentry
+    \entry{MR2629987}{article}{}
+      \name{author}{3}{}{%
+        {{hash=fca84357df9d9260f5ec6e2f768b4adf}{%
+           family={Derksen},
+           familyi={D\bibinitperiod},
+           given={Harm},
+           giveni={H\bibinitperiod}}}%
+        {{hash=83c6fef0d3d7c65e88058cbad22caf44}{%
+           family={Weyman},
+           familyi={W\bibinitperiod},
+           given={Jerzy},
+           giveni={J\bibinitperiod}}}%
+        {{hash=5c5b0848949961762ca4b2b033891999}{%
+           family={Zelevinsky},
+           familyi={Z\bibinitperiod},
+           given={Andrei},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{207fbec51705683f8a8518f0212d3002}
+      \strng{fullhash}{207fbec51705683f8a8518f0212d3002}
+      \strng{bibnamehash}{207fbec51705683f8a8518f0212d3002}
+      \strng{authorbibnamehash}{207fbec51705683f8a8518f0212d3002}
+      \strng{authornamehash}{207fbec51705683f8a8518f0212d3002}
+      \strng{authorfullhash}{207fbec51705683f8a8518f0212d3002}
+      \field{sortinit}{D}
+      \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0894-0347,1088-6834}
+      \field{journaltitle}{J. Amer. Math. Soc.}
+      \field{number}{3}
+      \field{title}{Quivers with potentials and their representations {II}: applications to cluster algebras}
+      \field{volume}{23}
+      \field{year}{2010}
+      \field{pages}{749\bibrangedash 790}
+      \range{pages}{42}
+      \verb{doi}
+      \verb 10.1090/S0894-0347-10-00662-4
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1090/S0894-0347-10-00662-4
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1090/S0894-0347-10-00662-4
+      \endverb
+    \endentry
+    \entry{MR4695532}{article}{}
+      \name{author}{1}{}{%
+        {{hash=863377aa8acf04fa204211985a32a64e}{%
+           family={Ervin},
+           familyi={E\bibinitperiod},
+           given={Tucker\bibnamedelima J.},
+           giveni={T\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{863377aa8acf04fa204211985a32a64e}
+      \strng{fullhash}{863377aa8acf04fa204211985a32a64e}
+      \strng{bibnamehash}{863377aa8acf04fa204211985a32a64e}
+      \strng{authorbibnamehash}{863377aa8acf04fa204211985a32a64e}
+      \strng{authornamehash}{863377aa8acf04fa204211985a32a64e}
+      \strng{authorfullhash}{863377aa8acf04fa204211985a32a64e}
+      \field{extraname}{1}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1077-8926}
+      \field{journaltitle}{Electron. J. Combin.}
+      \field{number}{1}
+      \field{title}{New hereditary and mutation-invariant properties arising from forks}
+      \field{volume}{31}
+      \field{year}{2024}
+      \field{pages}{Paper No. 1.16\bibrangessep 30}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.37236/12167
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.37236/12167
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.37236/12167
+      \endverb
+    \endentry
+    \entry{ervin2024unrestrictedredsizesigncoherence}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=863377aa8acf04fa204211985a32a64e}{%
+           family={Ervin},
+           familyi={E\bibinitperiod},
+           given={Tucker\bibnamedelima J.},
+           giveni={T\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{863377aa8acf04fa204211985a32a64e}
+      \strng{fullhash}{863377aa8acf04fa204211985a32a64e}
+      \strng{bibnamehash}{863377aa8acf04fa204211985a32a64e}
+      \strng{authorbibnamehash}{863377aa8acf04fa204211985a32a64e}
+      \strng{authornamehash}{863377aa8acf04fa204211985a32a64e}
+      \strng{authorfullhash}{863377aa8acf04fa204211985a32a64e}
+      \field{extraname}{2}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{math.CO}
+      \field{eprinttype}{arXiv}
+      \field{title}{Unrestricted Red Size and Sign-Coherence}
+      \field{year}{2024}
+      \verb{eprint}
+      \verb 2401.14958
+      \endverb
+      \verb{urlraw}
+      \verb https://arxiv.org/abs/2401.14958
+      \endverb
+      \verb{url}
+      \verb https://arxiv.org/abs/2401.14958
+      \endverb
+    \endentry
+    \entry{ervin_answering_2024}{article}{}
+      \name{author}{2}{}{%
+        {{hash=863377aa8acf04fa204211985a32a64e}{%
+           family={Ervin},
+           familyi={E\bibinitperiod},
+           given={Tucker\bibnamedelima J.},
+           giveni={T\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=472015dcc00050d054b5f9b95bcc83bc}{%
+           family={Jackson},
+           familyi={J\bibinitperiod},
+           given={Blake},
+           giveni={B\bibinitperiod}}}%
+      }
+      \list{language}{1}{%
+        {en}%
+      }
+      \strng{namehash}{0b5f0aa69f83dbc611f08b4a84feb803}
+      \strng{fullhash}{0b5f0aa69f83dbc611f08b4a84feb803}
+      \strng{bibnamehash}{0b5f0aa69f83dbc611f08b4a84feb803}
+      \strng{authorbibnamehash}{0b5f0aa69f83dbc611f08b4a84feb803}
+      \strng{authornamehash}{0b5f0aa69f83dbc611f08b4a84feb803}
+      \strng{authorfullhash}{0b5f0aa69f83dbc611f08b4a84feb803}
+      \field{sortinit}{E}
+      \field{sortinithash}{8da8a182d344d5b9047633dfc0cc9131}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{2589-5486}
+      \field{journaltitle}{Algebraic Combinatorics}
+      \field{number}{3}
+      \field{title}{Answering two {OPAC} problems involving {Banff} quivers}
+      \field{urlday}{13}
+      \field{urlmonth}{9}
+      \field{urlyear}{2024}
+      \field{volume}{7}
+      \field{year}{2024}
+      \field{urldateera}{ce}
+      \field{pages}{853\bibrangedash 860}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.5802/alco.352
+      \endverb
+    \endentry
+    \entry{FockGoncharovEnsembles}{article}{}
+      \name{author}{2}{}{%
+        {{hash=7dd3646eeeb06f096481e930e1822052}{%
+           family={Fock},
+           familyi={F\bibinitperiod},
+           given={Vladimir\bibnamedelima V.},
+           giveni={V\bibinitperiod\bibinitdelim V\bibinitperiod}}}%
+        {{hash=0517e905a85a331c485674ce1541ab6e}{%
+           family={Goncharov},
+           familyi={G\bibinitperiod},
+           given={Alexander\bibnamedelima B.},
+           giveni={A\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
+      }
+      \strng{namehash}{ac1073e80686f8bf21a8eae492ed0060}
+      \strng{fullhash}{ac1073e80686f8bf21a8eae492ed0060}
+      \strng{bibnamehash}{ac1073e80686f8bf21a8eae492ed0060}
+      \strng{authorbibnamehash}{ac1073e80686f8bf21a8eae492ed0060}
+      \strng{authornamehash}{ac1073e80686f8bf21a8eae492ed0060}
+      \strng{authorfullhash}{ac1073e80686f8bf21a8eae492ed0060}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0012-9593,1873-2151}
+      \field{journaltitle}{Ann. Sci. Éc. Norm. Supér. (4)}
+      \field{number}{6}
+      \field{title}{Cluster ensembles, quantization and the dilogarithm}
+      \field{volume}{42}
+      \field{year}{2009}
+      \field{pages}{865\bibrangedash 930}
+      \range{pages}{66}
+      \verb{doi}
+      \verb 10.24033/asens.2112
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.24033/asens.2112
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.24033/asens.2112
+      \endverb
+    \endentry
+    \entry{fominPrivComs}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=a183f65383a180a1e8ab1a2743c9c612}{%
+           family={Fomin},
+           familyi={F\bibinitperiod},
+           given={Sergey},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{a183f65383a180a1e8ab1a2743c9c612}
+      \strng{fullhash}{a183f65383a180a1e8ab1a2743c9c612}
+      \strng{bibnamehash}{a183f65383a180a1e8ab1a2743c9c612}
+      \strng{authorbibnamehash}{a183f65383a180a1e8ab1a2743c9c612}
+      \strng{authornamehash}{a183f65383a180a1e8ab1a2743c9c612}
+      \strng{authorfullhash}{a183f65383a180a1e8ab1a2743c9c612}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{howpublished}{personal communication}
+      \field{year}{2022}
+      \field{dateera}{ce}
+    \endentry
+    \entry{LMC}{misc}{}
+      \name{author}{2}{}{%
+        {{hash=a183f65383a180a1e8ab1a2743c9c612}{%
+           family={Fomin},
+           familyi={F\bibinitperiod},
+           given={Sergey},
+           giveni={S\bibinitperiod}}}%
+        {{hash=1c7478cbaee16cc6679c9dcd7d000cd0}{%
+           family={Neville},
+           familyi={N\bibinitperiod},
+           given={Scott},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{9cc77e806f7198d9354856764c2c197e}
+      \strng{fullhash}{9cc77e806f7198d9354856764c2c197e}
+      \strng{bibnamehash}{9cc77e806f7198d9354856764c2c197e}
+      \strng{authorbibnamehash}{9cc77e806f7198d9354856764c2c197e}
+      \strng{authornamehash}{9cc77e806f7198d9354856764c2c197e}
+      \strng{authorfullhash}{9cc77e806f7198d9354856764c2c197e}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{math.CO}
+      \field{eprinttype}{arXiv}
+      \field{title}{Long mutation cycles}
+      \field{year}{2023}
+      \verb{eprint}
+      \verb 2304.11505
+      \endverb
+    \endentry
+    \entry{fomin2021introduction}{misc}{}
+      \name{author}{3}{}{%
+        {{hash=a183f65383a180a1e8ab1a2743c9c612}{%
+           family={Fomin},
+           familyi={F\bibinitperiod},
+           given={Sergey},
+           giveni={S\bibinitperiod}}}%
+        {{hash=4dcf50c1e9981405639c728be1ceb7fb}{%
+           family={Williams},
+           familyi={W\bibinitperiod},
+           given={Lauren},
+           giveni={L\bibinitperiod}}}%
+        {{hash=5c5b0848949961762ca4b2b033891999}{%
+           family={Zelevinsky},
+           familyi={Z\bibinitperiod},
+           given={Andrei},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{cf9ccb5dc4f32d963fecf5cf2545903a}
+      \strng{fullhash}{cf9ccb5dc4f32d963fecf5cf2545903a}
+      \strng{bibnamehash}{cf9ccb5dc4f32d963fecf5cf2545903a}
+      \strng{authorbibnamehash}{cf9ccb5dc4f32d963fecf5cf2545903a}
+      \strng{authornamehash}{cf9ccb5dc4f32d963fecf5cf2545903a}
+      \strng{authorfullhash}{cf9ccb5dc4f32d963fecf5cf2545903a}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{eprintclass}{math.CO}
+      \field{eprinttype}{arXiv}
+      \field{title}{Introduction to Cluster Algebras. Chapters 1-3}
+      \field{year}{2021}
+      \verb{eprint}
+      \verb 1608.05735
+      \endverb
+    \endentry
+    \entry{MR1887642}{article}{}
+      \name{author}{2}{}{%
+        {{hash=a183f65383a180a1e8ab1a2743c9c612}{%
+           family={Fomin},
+           familyi={F\bibinitperiod},
+           given={Sergey},
+           giveni={S\bibinitperiod}}}%
+        {{hash=5c5b0848949961762ca4b2b033891999}{%
+           family={Zelevinsky},
+           familyi={Z\bibinitperiod},
+           given={Andrei},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{0a5e50e1402f041c19d73ff0783982c7}
+      \strng{fullhash}{0a5e50e1402f041c19d73ff0783982c7}
+      \strng{bibnamehash}{0a5e50e1402f041c19d73ff0783982c7}
+      \strng{authorbibnamehash}{0a5e50e1402f041c19d73ff0783982c7}
+      \strng{authornamehash}{0a5e50e1402f041c19d73ff0783982c7}
+      \strng{authorfullhash}{0a5e50e1402f041c19d73ff0783982c7}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0894-0347,1088-6834}
+      \field{journaltitle}{J. Amer. Math. Soc.}
+      \field{number}{2}
+      \field{title}{Cluster algebras. {I}. {F}oundations}
+      \field{volume}{15}
+      \field{year}{2002}
+      \field{pages}{497\bibrangedash 529}
+      \range{pages}{33}
+      \verb{doi}
+      \verb 10.1090/S0894-0347-01-00385-X
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1090/S0894-0347-01-00385-X
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1090/S0894-0347-01-00385-X
+      \endverb
+    \endentry
+    \entry{MR3820364}{article}{}
+      \name{author}{2}{}{%
+        {{hash=f54a85f2ba66cfb52c50b39fa9069480}{%
+           family={Ford},
+           familyi={F\bibinitperiod},
+           given={Nicolas},
+           giveni={N\bibinitperiod}}}%
+        {{hash=7930a0fa8b8dc0a00a2b6c277af6072e}{%
+           family={Serhiyenko},
+           familyi={S\bibinitperiod},
+           given={Khrystyna},
+           giveni={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{2928db43c567fb83b5966a7b9cde42ad}
+      \strng{fullhash}{2928db43c567fb83b5966a7b9cde42ad}
+      \strng{bibnamehash}{2928db43c567fb83b5966a7b9cde42ad}
+      \strng{authorbibnamehash}{2928db43c567fb83b5966a7b9cde42ad}
+      \strng{authornamehash}{2928db43c567fb83b5966a7b9cde42ad}
+      \strng{authorfullhash}{2928db43c567fb83b5966a7b9cde42ad}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0097-3165,1096-0899}
+      \field{journaltitle}{J. Combin. Theory Ser. A}
+      \field{title}{Green-to-red sequences for positroids}
+      \field{volume}{159}
+      \field{year}{2018}
+      \field{pages}{164\bibrangedash 182}
+      \range{pages}{19}
+      \verb{doi}
+      \verb 10.1016/j.jcta.2018.06.001
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1016/j.jcta.2018.06.001
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1016/j.jcta.2018.06.001
+      \endverb
+    \endentry
+    \entry{MR2805200}{article}{}
+      \name{author}{2}{}{%
+        {{hash=ea438ed9bdcaa2690a1c241f0637114a}{%
+           family={Fordy},
+           familyi={F\bibinitperiod},
+           given={Allan\bibnamedelima P.},
+           giveni={A\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+        {{hash=1fd3637403578ccd80a12407f0d7c21c}{%
+           family={Marsh},
+           familyi={M\bibinitperiod},
+           given={Robert\bibnamedelima J.},
+           giveni={R\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \strng{namehash}{c95b9bf6fb2f4f4baf3c63b00f83b17a}
+      \strng{fullhash}{c95b9bf6fb2f4f4baf3c63b00f83b17a}
+      \strng{bibnamehash}{c95b9bf6fb2f4f4baf3c63b00f83b17a}
+      \strng{authorbibnamehash}{c95b9bf6fb2f4f4baf3c63b00f83b17a}
+      \strng{authornamehash}{c95b9bf6fb2f4f4baf3c63b00f83b17a}
+      \strng{authorfullhash}{c95b9bf6fb2f4f4baf3c63b00f83b17a}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0925-9899,1572-9192}
+      \field{journaltitle}{J. Algebraic Combin.}
+      \field{number}{1}
+      \field{title}{Cluster mutation-periodic quivers and associated {L}aurent sequences}
+      \field{volume}{34}
+      \field{year}{2011}
+      \field{pages}{19\bibrangedash 66}
+      \range{pages}{48}
+      \verb{doi}
+      \verb 10.1007/s10801-010-0262-4
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1007/s10801-010-0262-4
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1007/s10801-010-0262-4
+      \endverb
+    \endentry
+    \entry{MR3767505}{article}{}
+      \name{author}{3}{}{%
+        {{hash=b8b4240390fd716ed35331b442370612}{%
+           family={Garver},
+           familyi={G\bibinitperiod},
+           given={Alexander},
+           giveni={A\bibinitperiod}}}%
+        {{hash=0e60c698f3d549095b4e86662ca9863d}{%
+           family={McConville},
+           familyi={M\bibinitperiod},
+           given={Thomas},
+           giveni={T\bibinitperiod}}}%
+        {{hash=7930a0fa8b8dc0a00a2b6c277af6072e}{%
+           family={Serhiyenko},
+           familyi={S\bibinitperiod},
+           given={Khrystyna},
+           giveni={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{a2595736847ce66f083e23a3f0428098}
+      \strng{fullhash}{a2595736847ce66f083e23a3f0428098}
+      \strng{bibnamehash}{a2595736847ce66f083e23a3f0428098}
+      \strng{authorbibnamehash}{a2595736847ce66f083e23a3f0428098}
+      \strng{authornamehash}{a2595736847ce66f083e23a3f0428098}
+      \strng{authorfullhash}{a2595736847ce66f083e23a3f0428098}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0196-8858,1090-2074}
+      \field{journaltitle}{Adv. in Appl. Math.}
+      \field{title}{Minimal length maximal green sequences}
+      \field{volume}{96}
+      \field{year}{2018}
+      \field{pages}{76\bibrangedash 138}
+      \range{pages}{63}
+      \verb{doi}
+      \verb 10.1016/j.aam.2017.12.008
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1016/j.aam.2017.12.008
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1016/j.aam.2017.12.008
+      \endverb
+    \endentry
+    \entry{MR3604067}{article}{}
+      \name{author}{2}{}{%
+        {{hash=b8b4240390fd716ed35331b442370612}{%
+           family={Garver},
+           familyi={G\bibinitperiod},
+           given={Alexander},
+           giveni={A\bibinitperiod}}}%
+        {{hash=4ef6f8e2babde6896768ee9bbf5d5664}{%
+           family={Musiker},
+           familyi={M\bibinitperiod},
+           given={Gregg},
+           giveni={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{9a19e7f27caf8494094fb28d1d3a98bf}
+      \strng{fullhash}{9a19e7f27caf8494094fb28d1d3a98bf}
+      \strng{bibnamehash}{9a19e7f27caf8494094fb28d1d3a98bf}
+      \strng{authorbibnamehash}{9a19e7f27caf8494094fb28d1d3a98bf}
+      \strng{authornamehash}{9a19e7f27caf8494094fb28d1d3a98bf}
+      \strng{authorfullhash}{9a19e7f27caf8494094fb28d1d3a98bf}
+      \field{sortinit}{G}
+      \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0925-9899,1572-9192}
+      \field{journaltitle}{J. Algebraic Combin.}
+      \field{number}{2}
+      \field{title}{On maximal green sequences for type {$\mathbb A$} quivers}
+      \field{volume}{45}
+      \field{year}{2017}
+      \field{pages}{553\bibrangedash 599}
+      \range{pages}{47}
+      \verb{doi}
+      \verb 10.1007/s10801-016-0716-4
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1007/s10801-016-0716-4
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1007/s10801-016-0716-4
+      \endverb
+    \endentry
+    \entry{kellerDT}{article}{}
+      \name{author}{1}{}{%
+        {{hash=2b847b7c461a7a54334e6476f1125387}{%
+           family={Keller},
+           familyi={K\bibinitperiod},
+           given={Bernhard},
+           giveni={B\bibinitperiod}}}%
+      }
+      \strng{namehash}{2b847b7c461a7a54334e6476f1125387}
+      \strng{fullhash}{2b847b7c461a7a54334e6476f1125387}
+      \strng{bibnamehash}{2b847b7c461a7a54334e6476f1125387}
+      \strng{authorbibnamehash}{2b847b7c461a7a54334e6476f1125387}
+      \strng{authornamehash}{2b847b7c461a7a54334e6476f1125387}
+      \strng{authorfullhash}{2b847b7c461a7a54334e6476f1125387}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:1709.03143}
+      \field{title}{Quiver mutation and combinatorial DT-invariants}
+      \field{year}{2017}
+    \endentry
+    \entry{KellerGreenSurvey}{incollection}{}
+      \name{author}{2}{}{%
+        {{hash=2b847b7c461a7a54334e6476f1125387}{%
+           family={Keller},
+           familyi={K\bibinitperiod},
+           given={Bernhard},
+           giveni={B\bibinitperiod}}}%
+        {{hash=cbf3860fe7154e0df2f50f5370ed47d3}{%
+           family={Demonet},
+           familyi={D\bibinitperiod},
+           given={Laurent},
+           giveni={L\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Amer. Math. Soc., [Providence], RI}%
+      }
+      \strng{namehash}{a8b1e93d78ab6534c3d00e0645dbd022}
+      \strng{fullhash}{a8b1e93d78ab6534c3d00e0645dbd022}
+      \strng{bibnamehash}{a8b1e93d78ab6534c3d00e0645dbd022}
+      \strng{authorbibnamehash}{a8b1e93d78ab6534c3d00e0645dbd022}
+      \strng{authornamehash}{a8b1e93d78ab6534c3d00e0645dbd022}
+      \strng{authorfullhash}{a8b1e93d78ab6534c3d00e0645dbd022}
+      \field{extraname}{1}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Representation theory and beyond}
+      \field{isbn}{978-1-4704-5131-8}
+      \field{series}{Contemp. Math.}
+      \field{title}{A survey on maximal green sequences}
+      \field{volume}{758}
+      \field{year}{2020}
+      \field{pages}{267\bibrangedash 286}
+      \range{pages}{20}
+      \verb{doi}
+      \verb 10.1090/conm/758/15239
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1090/conm/758/15239
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1090/conm/758/15239
+      \endverb
+    \endentry
+    \entry{MR4186974}{incollection}{}
+      \name{author}{2}{}{%
+        {{hash=2b847b7c461a7a54334e6476f1125387}{%
+           family={Keller},
+           familyi={K\bibinitperiod},
+           given={Bernhard},
+           giveni={B\bibinitperiod}}}%
+        {{hash=cbf3860fe7154e0df2f50f5370ed47d3}{%
+           family={Demonet},
+           familyi={D\bibinitperiod},
+           given={Laurent},
+           giveni={L\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Amer. Math. Soc., [Providence], RI}%
+      }
+      \strng{namehash}{a8b1e93d78ab6534c3d00e0645dbd022}
+      \strng{fullhash}{a8b1e93d78ab6534c3d00e0645dbd022}
+      \strng{bibnamehash}{a8b1e93d78ab6534c3d00e0645dbd022}
+      \strng{authorbibnamehash}{a8b1e93d78ab6534c3d00e0645dbd022}
+      \strng{authornamehash}{a8b1e93d78ab6534c3d00e0645dbd022}
+      \strng{authorfullhash}{a8b1e93d78ab6534c3d00e0645dbd022}
+      \field{extraname}{2}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{Representation theory and beyond}
+      \field{isbn}{978-1-4704-5131-8}
+      \field{series}{Contemp. Math.}
+      \field{title}{A survey on maximal green sequences}
+      \field{volume}{758}
+      \field{year}{2020}
+      \field{pages}{267\bibrangedash 286}
+      \range{pages}{20}
+      \verb{doi}
+      \verb 10.1090/conm/758/15239
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1090/conm/758/15239
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1090/conm/758/15239
+      \endverb
+    \endentry
+    \entry{KontsevichSoibelmanDT}{article}{}
+      \name{author}{2}{}{%
+        {{hash=cf27d9e4bd394efedf47095891bb2927}{%
+           family={Kontsevich},
+           familyi={K\bibinitperiod},
+           given={Maxim},
+           giveni={M\bibinitperiod}}}%
+        {{hash=83af258b6f55caf0e3e412df43bf9507}{%
+           family={Soibelman},
+           familyi={S\bibinitperiod},
+           given={Yan},
+           giveni={Y\bibinitperiod}}}%
+      }
+      \strng{namehash}{c1c486bd6befc1aa424e189638c2a721}
+      \strng{fullhash}{c1c486bd6befc1aa424e189638c2a721}
+      \strng{bibnamehash}{c1c486bd6befc1aa424e189638c2a721}
+      \strng{authorbibnamehash}{c1c486bd6befc1aa424e189638c2a721}
+      \strng{authornamehash}{c1c486bd6befc1aa424e189638c2a721}
+      \strng{authorfullhash}{c1c486bd6befc1aa424e189638c2a721}
+      \field{sortinit}{K}
+      \field{sortinithash}{c02bf6bff1c488450c352b40f5d853ab}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{arXiv preprint arXiv:0811.2435}
+      \field{title}{Stability structures, motivic Donaldson-Thomas invariants and cluster transformations}
+      \field{year}{2008}
+    \endentry
+    \entry{MR4537352}{article}{}
+      \name{author}{3}{}{%
+        {{hash=c6a657051d82bc58b0ed67e88b0e0c9c}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={Kyu-Hwan},
+           giveni={K\bibinithyphendelim H\bibinitperiod}}}%
+        {{hash=68b97661486a4df921d5e28b0d3c7a57}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={Kyungyong},
+           giveni={K\bibinitperiod}}}%
+        {{hash=9e33e855c3e5df63fdd4571ff9cc8fb4}{%
+           family={Mills},
+           familyi={M\bibinitperiod},
+           given={Matthew\bibnamedelima R.},
+           giveni={M\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+      }
+      \strng{namehash}{ab3f080b3aa3f070f87a21a795f31478}
+      \strng{fullhash}{ab3f080b3aa3f070f87a21a795f31478}
+      \strng{bibnamehash}{ab3f080b3aa3f070f87a21a795f31478}
+      \strng{authorbibnamehash}{ab3f080b3aa3f070f87a21a795f31478}
+      \strng{authornamehash}{ab3f080b3aa3f070f87a21a795f31478}
+      \strng{authorfullhash}{ab3f080b3aa3f070f87a21a795f31478}
+      \field{sortinit}{L}
+      \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0025-5874,1432-1823}
+      \field{journaltitle}{Math. Z.}
+      \field{number}{2}
+      \field{title}{Geometric description of {$C$}-vectors and real {L}ösungen}
+      \field{volume}{303}
+      \field{year}{2023}
+      \field{pages}{Paper No. 44\bibrangessep 33}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.1007/s00209-022-03180-8
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1007/s00209-022-03180-8
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1007/s00209-022-03180-8
+      \endverb
+    \endentry
+    \entry{MachacekOvenhouseDynamicalMutation}{article}{}
+      \name{author}{2}{}{%
+        {{hash=5b16507f4fbc3624c13f25adce9a5a43}{%
+           family={Machacek},
+           familyi={M\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+        {{hash=5bb7dceff294eafd821876413b0cf39d}{%
+           family={Ovenhouse},
+           familyi={O\bibinitperiod},
+           given={Nicholas},
+           giveni={N\bibinitperiod}}}%
+      }
+      \strng{namehash}{b10989301ba926af7430d33169d01040}
+      \strng{fullhash}{b10989301ba926af7430d33169d01040}
+      \strng{bibnamehash}{b10989301ba926af7430d33169d01040}
+      \strng{authorbibnamehash}{b10989301ba926af7430d33169d01040}
+      \strng{authornamehash}{b10989301ba926af7430d33169d01040}
+      \strng{authorfullhash}{b10989301ba926af7430d33169d01040}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1058-6458,1944-950X}
+      \field{journaltitle}{Exp. Math.}
+      \field{number}{2}
+      \field{title}{Discrete dynamical systems from real valued mutation}
+      \field{volume}{33}
+      \field{year}{2024}
+      \field{pages}{261\bibrangedash 275}
+      \range{pages}{15}
+      \verb{doi}
+      \verb 10.1080/10586458.2022.2065555
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1080/10586458.2022.2065555
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1080/10586458.2022.2065555
+      \endverb
+    \endentry
+    \entry{MR3452273}{article}{}
+      \name{author}{2}{}{%
+        {{hash=c2580f16c742fd8e825567528d375721}{%
+           family={Marsh},
+           familyi={M\bibinitperiod},
+           given={R.\bibnamedelimi J.},
+           giveni={R\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=768c2ed2346dbbea74104bf331956244}{%
+           family={Scott},
+           familyi={S\bibinitperiod},
+           given={J.\bibnamedelimi S.},
+           giveni={J\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \strng{namehash}{e4d7c9fbe0d0def83caf302a9c881445}
+      \strng{fullhash}{e4d7c9fbe0d0def83caf302a9c881445}
+      \strng{bibnamehash}{e4d7c9fbe0d0def83caf302a9c881445}
+      \strng{authorbibnamehash}{e4d7c9fbe0d0def83caf302a9c881445}
+      \strng{authornamehash}{e4d7c9fbe0d0def83caf302a9c881445}
+      \strng{authorfullhash}{e4d7c9fbe0d0def83caf302a9c881445}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0010-3616,1432-0916}
+      \field{journaltitle}{Comm. Math. Phys.}
+      \field{number}{3}
+      \field{title}{Twists of {P}lücker coordinates as dimer partition functions}
+      \field{volume}{341}
+      \field{year}{2016}
+      \field{pages}{821\bibrangedash 884}
+      \range{pages}{64}
+      \verb{doi}
+      \verb 10.1007/s00220-015-2493-7
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1007/s00220-015-2493-7
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1007/s00220-015-2493-7
+      \endverb
+    \endentry
+    \entry{MR3155783}{book}{}
+      \name{author}{1}{}{%
+        {{hash=1fd3637403578ccd80a12407f0d7c21c}{%
+           family={Marsh},
+           familyi={M\bibinitperiod},
+           given={Robert\bibnamedelima J.},
+           giveni={R\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {European Mathematical Society (EMS), Zürich}%
+      }
+      \strng{namehash}{1fd3637403578ccd80a12407f0d7c21c}
+      \strng{fullhash}{1fd3637403578ccd80a12407f0d7c21c}
+      \strng{bibnamehash}{1fd3637403578ccd80a12407f0d7c21c}
+      \strng{authorbibnamehash}{1fd3637403578ccd80a12407f0d7c21c}
+      \strng{authornamehash}{1fd3637403578ccd80a12407f0d7c21c}
+      \strng{authorfullhash}{1fd3637403578ccd80a12407f0d7c21c}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{978-3-03719-130-9}
+      \field{series}{Zurich Lectures in Advanced Mathematics}
+      \field{title}{Lecture notes on cluster algebras}
+      \field{year}{2013}
+      \field{pages}{ii+117}
+      \range{pages}{-1}
+    \endentry
+    \entry{MR3695872}{article}{}
+      \name{author}{1}{}{%
+        {{hash=9e33e855c3e5df63fdd4571ff9cc8fb4}{%
+           family={Mills},
+           familyi={M\bibinitperiod},
+           given={Matthew\bibnamedelima R.},
+           giveni={M\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+      }
+      \strng{namehash}{9e33e855c3e5df63fdd4571ff9cc8fb4}
+      \strng{fullhash}{9e33e855c3e5df63fdd4571ff9cc8fb4}
+      \strng{bibnamehash}{9e33e855c3e5df63fdd4571ff9cc8fb4}
+      \strng{authorbibnamehash}{9e33e855c3e5df63fdd4571ff9cc8fb4}
+      \strng{authornamehash}{9e33e855c3e5df63fdd4571ff9cc8fb4}
+      \strng{authorfullhash}{9e33e855c3e5df63fdd4571ff9cc8fb4}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0001-8708,1090-2082}
+      \field{journaltitle}{Adv. Math.}
+      \field{title}{Maximal green sequences for quivers of finite mutation type}
+      \field{volume}{319}
+      \field{year}{2017}
+      \field{pages}{182\bibrangedash 210}
+      \range{pages}{29}
+      \verb{doi}
+      \verb 10.1016/j.aim.2017.08.019
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.1016/j.aim.2017.08.019
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1016/j.aim.2017.08.019
+      \endverb
+    \endentry
+    \entry{muller_locally_2013}{article}{}
+      \name{author}{1}{}{%
+        {{hash=2e7bf69d5e2deb9b47eb91ee23227ef3}{%
+           family={Muller},
+           familyi={M\bibinitperiod},
+           given={Greg},
+           giveni={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{2e7bf69d5e2deb9b47eb91ee23227ef3}
+      \strng{fullhash}{2e7bf69d5e2deb9b47eb91ee23227ef3}
+      \strng{bibnamehash}{2e7bf69d5e2deb9b47eb91ee23227ef3}
+      \strng{authorbibnamehash}{2e7bf69d5e2deb9b47eb91ee23227ef3}
+      \strng{authornamehash}{2e7bf69d5e2deb9b47eb91ee23227ef3}
+      \strng{authorfullhash}{2e7bf69d5e2deb9b47eb91ee23227ef3}
+      \field{extraname}{1}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0001-8708}
+      \field{journaltitle}{Advances in Mathematics}
+      \field{number}{1}
+      \field{title}{Locally acyclic cluster algebras}
+      \field{volume}{233}
+      \field{year}{2013}
+      \field{pages}{207\bibrangedash 247}
+      \range{pages}{41}
+      \verb{doi}
+      \verb https://doi.org/10.1016/j.aim.2012.10.002
+      \endverb
+    \endentry
+    \entry{MR3512669}{article}{}
+      \name{author}{1}{}{%
+        {{hash=2e7bf69d5e2deb9b47eb91ee23227ef3}{%
+           family={Muller},
+           familyi={M\bibinitperiod},
+           given={Greg},
+           giveni={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{2e7bf69d5e2deb9b47eb91ee23227ef3}
+      \strng{fullhash}{2e7bf69d5e2deb9b47eb91ee23227ef3}
+      \strng{bibnamehash}{2e7bf69d5e2deb9b47eb91ee23227ef3}
+      \strng{authorbibnamehash}{2e7bf69d5e2deb9b47eb91ee23227ef3}
+      \strng{authornamehash}{2e7bf69d5e2deb9b47eb91ee23227ef3}
+      \strng{authorfullhash}{2e7bf69d5e2deb9b47eb91ee23227ef3}
+      \field{extraname}{2}
+      \field{sortinit}{M}
+      \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1077-8926}
+      \field{journaltitle}{Electron. J. Combin.}
+      \field{number}{2}
+      \field{title}{The existence of a maximal green sequence is not invariant under quiver mutation}
+      \field{volume}{23}
+      \field{year}{2016}
+      \field{pages}{Paper 2.47\bibrangessep 23}
+      \range{pages}{-1}
+      \verb{doi}
+      \verb 10.37236/5412
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.37236/5412
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.37236/5412
+      \endverb
+    \endentry
+    \entry{warkentin2014exchange}{article}{}
+      \name{author}{1}{}{%
+        {{hash=d326cafcf7dfae15fc8c72651553213e}{%
+           family={Warkentin},
+           familyi={W\bibinitperiod},
+           given={Matthias},
+           giveni={M\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Dissertation}%
+      }
+      \strng{namehash}{d326cafcf7dfae15fc8c72651553213e}
+      \strng{fullhash}{d326cafcf7dfae15fc8c72651553213e}
+      \strng{bibnamehash}{d326cafcf7dfae15fc8c72651553213e}
+      \strng{authorbibnamehash}{d326cafcf7dfae15fc8c72651553213e}
+      \strng{authornamehash}{d326cafcf7dfae15fc8c72651553213e}
+      \strng{authorfullhash}{d326cafcf7dfae15fc8c72651553213e}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Exchange graphs via quiver mutation}
+      \field{year}{2014}
+      \field{pages}{103}
+      \range{pages}{1}
+      \verb{urlraw}
+      \verb https://d-nb.info/1214302807/34
+      \endverb
+      \verb{url}
+      \verb https://d-nb.info/1214302807/34
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

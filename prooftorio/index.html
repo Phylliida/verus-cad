@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>prooftorio — lambda cube playground</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>prooftorio <span class="dim">— lambda cube playground</span></h1>
+</header>
+
+<div id="main">
+  <aside>
+    <section id="mode-sec">
+      <h2>mode</h2>
+      <label><input type="radio" name="mode" id="mode-pts" checked>
+        <span>λ-cube checker<br><span class="dim">Church-style — proofs checked against types</span></span>
+      </label>
+      <label><input type="radio" name="mode" id="mode-bckw">
+        <span>BCKW combinators<br><span class="dim">Curry-style — principal types inferred</span></span>
+      </label>
+      <label><input type="radio" name="mode" id="mode-cek">
+        <span>CEK machine<br><span class="dim">environments + closures, no substitution</span></span>
+      </label>
+    </section>
+
+    <section id="axes-sec">
+      <h2>cube axes</h2>
+      <label><input type="checkbox" id="tgl-poly">
+        <span>terms depend on types <span class="rule">(□,⋆)</span><br><span class="dim">polymorphism — System F</span></span>
+      </label>
+      <label><input type="checkbox" id="tgl-typeops">
+        <span>types depend on types <span class="rule">(□,□)</span><br><span class="dim">type operators — Fω</span></span>
+      </label>
+      <label><input type="checkbox" id="tgl-dep">
+        <span>types depend on terms <span class="rule">(⋆,□)</span><br><span class="dim">dependent types — λP</span></span>
+      </label>
+    </section>
+
+    <section id="sys-sec">
+      <h2>system</h2>
+      <div id="sysname">λ→</div>
+      <div id="sysdesc" class="dim"></div>
+    </section>
+
+    <section>
+      <h2>examples</h2>
+      <div id="examples"></div>
+    </section>
+  </aside>
+
+  <section id="editor">
+    <textarea id="src" spellcheck="false" rows="20"></textarea>
+    <div id="btns">
+      <button id="check">check</button>
+      <button id="stepBtn">step</button>
+      <button id="norm">normalize</button>
+      <span id="stepinfo" class="dim"></span>
+    </div>
+    <pre id="out"></pre>
+  </section>
+</div>
+
+<footer>
+  syntax: <code>λx:T. body</code> or <code>\x:T. body</code> · untyped <code>λx. body</code> ·
+  <code>Π(A:⋆). B</code> or <code>forall</code> · <code>A → B</code> · sorts <code>⋆</code> (<code>*</code>) and <code>□</code> (<code>[]</code>) ·
+  defs <code>name : Type := term;</code> / <code>name := term;</code> / <code>axiom N : T;</code> · comments <code>//</code>
+</footer>
+
+<script src="lambda.js"></script>
+<script src="combinators.js"></script>
+<script src="machine.js"></script>
+<script src="examples.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
