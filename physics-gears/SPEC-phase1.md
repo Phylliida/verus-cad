@@ -6,6 +6,53 @@ phase 1. House rules apply: no `external_body`/`assume`/`admit`; no f32/f64
 anywhere in the crate; check early with `verus_check` per module; helpers in
 separate proof files; spec fns in dependency order; commit freely.
 
+## Status addendum (2026-07-25, DESIGN v1.4)
+
+phys-01..04 are LANDED and green (see DESIGN "Implementation status").
+Deviations from the text below, which amend it:
+
+- **A1. NLA discipline.** All Rational algebra is proved by integer
+  cross-multiplication (`eqv_spec` unfolds to int polynomial identities).
+  Real-valued `by(nonlinear_arith)` diverges Z3 here — banned. NLA ignores
+  prior local asserts AND ghost-let definitions: restate hypotheses as
+  implication antecedents, or isolate identities in int-only micro-lemmas.
+  Stage spec-fn chains with explicit one-level unfolds in EXACT body form
+  (`x.denom_nat() as int`, not `x.denom()`). See proofs/rational_raw.rs
+  header (R1–R5) and workspace AGENTS.md.
+- **A2. §1 World.** World carries `series_k: usize` and
+  `angle_err: Vec<Scalar>` (per-body accumulated enclosure width); the
+  `Ledger` of §1 is these two fields. wf: `angle_err.len == bodies.len`,
+  entries nonneg.
+- **A3. §2 RotQ.** `from_tan_half` constructs ((1−t²)/(1+t²), 2t/(1+t²))
+  directly (division-safe since 1+t² ≥ 1, proved). The untrusted chooser
+  is `RotQ::tan_half_series(h)` = h + h³/3 + 2h⁵/15 exactly as §2.
+- **A4. §3 angle ledger.** Implemented as `arctan_term/arctan_sum/
+  angle_enclosure` + exec evaluators; lemmas proved: exact endpoints,
+  width formula hi−lo ≡ 2·term_{k+1}, term-decreasing, odd/even
+  monotonicity, enclosure nesting. Signed bracket (t < 0) is OPEN
+  (series is odd; mirror argument expected) — required by the phys-06
+  certificate, and `lemma_series_unit_interval` (0 ≤ h ≤ 1/2 ⟹ t ∈ [0,1])
+  discharges the §3 phase-1 restriction constructively.
+- **A5. §4 shapes.** ConvexPoly uses the GLOBAL convexity invariant
+  (DESIGN E7) with a runtime-checked constructor instead of the
+  consecutive-turn invariant + construction lemmas. Own raw predicates
+  (not verus-geometry). The §4 leftovers — world-space transforms,
+  fan-area + positivity, centroid/inertia, AABBs — are NOT yet done and
+  move into phys-05 (needed for meaningful inertia in contact scenes).
+- **A6. §5 narrowphase.** Only classification + witnesses is proven
+  (axis_separates for Separated; no_axis_separates for Touching), as
+  scoped. The reference-feature/max-sep feature is recorded; clipping
+  and manifold construction are phys-05 work as planned.
+- **A7. Scenes.** S1/S2/S3 landed as statically-verified exec scenes
+  (`ensures out == true`), stronger than runtime assertions. S4 (phys-05)
+  and S5 (phys-06) remain.
+- **A8. Step contract.** `step_free_flight` returns
+  `Option<(World, Vec<Scalar>)>`: None = angle reject (SPEC's reject-step),
+  and Some is GUARANTEED when every body's tan-half series stays in [0,1]
+  (proved via `lemma_series_unit_interval`). The relational step spec is
+  `body_step_rel`; momentum folds are `lin_mom_x/lin_mom_y/ang_mom` over
+  `Seq<Body>` with statics contributing zero.
+
 ## 0. Crate & module layout
 
 Crate `verus-physics2d`, depending on verus-rational, verus-linalg
