@@ -21,7 +21,7 @@
 // hull() first sidesteps it.
 
 explode    = 1.08;   // <-- cell spacing knob
-hull_scale = 0.99;   // <-- convex-hull core shrink factor
+hull_scale = 0.95;   // <-- convex-hull core shrink factor
 
 G = [-3.98140, -3.83532, -4.23065];
 
@@ -61,9 +61,21 @@ module cellsh() {
     cellh("../pieces_out/all_641-43.stl",  [-6.37500, -1.13542, -3.55208]);
     cellh("../pieces_out/all_642-321.stl", [-5.95833, -2.95833, -6.00000]);
 }
-
-union() {
-    cellsh();
-    // shrunk convex-hull core, scaled about the center of mass G
-    translate(G) scale(hull_scale) translate(-G) hull() cellsh();
-}
+round_r = 0.35;   // <-- edge roundness of the nugget                                                                                                        
+     module core() {                                                                                               
+         translate(G) scale(hull_scale) translate(-G)                                                              
+             {                                                                                         
+                 hull() cellsh();                                                                                  
+                 sphere(r=round_r, $fn=24);                                                                        
+             }                                                                                                     
+     }                                                                                                             
+                                                                    minkowski() {                                               
+     union() {                                                                                                     
+         cellsh();                                                                                                 
+         core();                                                                                                   
+     } 
+     
+             
+                 sphere(r=round_r, $fn=24);
+     
+ }
