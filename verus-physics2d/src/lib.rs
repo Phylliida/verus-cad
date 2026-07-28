@@ -42,3 +42,6 @@ pub mod narrowphase;
 
 #[cfg(verus_keep_ghost)]
 pub mod massprops;
+
+#[cfg(verus_keep_ghost)]
+pub mod broadphase;

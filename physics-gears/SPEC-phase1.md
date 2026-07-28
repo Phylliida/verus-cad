@@ -40,9 +40,17 @@ Deviations from the text below, which amend it:
 - **A5. §4 shapes.** ConvexPoly uses the GLOBAL convexity invariant
   (DESIGN E7) with a runtime-checked constructor instead of the
   consecutive-turn invariant + construction lemmas. Own raw predicates
-  (not verus-geometry). The §4 leftovers — world-space transforms,
-  fan-area + positivity, centroid/inertia, AABBs — are NOT yet done and
-  move into phys-05 (needed for meaningful inertia in contact scenes).
+  (not verus-geometry). The §4 leftovers landed (2026-07-28): exact mass
+  properties (`massprops.rs`: shoelace ≡ fan-sum identity, area2 > 0 via
+  the global invariant, exact centroid/inertia evaluators; scene M1) and
+  world-space transforms + AABBs + broadphase (`broadphase.rs`: exact
+  RotQ-apply transforms, coordinate-fold bounds, disjoint-ranges ⇒
+  pointwise-separation soundness, canonical pair list equal to its spec
+  filter). Deviation: no sort-and-sweep — the O(n²) filter has identical
+  guarantees at phase-1 scene sizes, and C4 re-checks all pairs anyway
+  (D8). Inertia NONnegativity is unproved in general (fan decomposition
+  of the inertia sum is future work); concrete bodies are checked by
+  closed evaluation instead.
 - **A6. §5 narrowphase.** Only classification + witnesses is proven
   (axis_separates for Separated; no_axis_separates for Touching), as
   scoped. The reference-feature/max-sep feature is recorded; clipping

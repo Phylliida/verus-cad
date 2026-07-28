@@ -18,3 +18,6 @@ pub mod shape;
 
 #[cfg(verus_keep_ghost)]
 pub mod massprops;
+
+#[cfg(verus_keep_ghost)]
+pub mod broadphase;
