@@ -9,10 +9,14 @@ use vstd::prelude::*;
 
 use verus_rational::Rational;
 
-use crate::angle_ledger::{angle_enclosure, arctan_sum, arctan_term, t_in_unit_interval, two_x};
+use crate::angle_ledger::{
+    angle_enclosure, angle_enclosure_signed, arctan_sum, arctan_term, t_in_symmetric_unit_interval,
+    t_in_unit_interval, two_x,
+};
 use crate::proofs::rpow::{
     ipow, lemma_ipow_add, lemma_ipow_congruence, lemma_ipow_double, lemma_ipow_le,
-    lemma_ipow_nonneg, lemma_ipow_pos, lemma_ipow_zero_base, lemma_rpow_num_denom, rpow,
+    lemma_ipow_neg_odd, lemma_ipow_nonneg, lemma_ipow_pos, lemma_ipow_zero_base,
+    lemma_rpow_num_denom, rpow,
 };
 
 verus! {
@@ -406,6 +410,16 @@ pub proof fn lemma_arctan_two_step_even(t: Rational, k: nat)
     Rational::lemma_eqv_transitive(
         a1.add_spec(t1), t1.add_spec(a1), arctan_sum(t, k));
     Rational::lemma_eqv_implies_le(a1.add_spec(t1), arctan_sum(t, k));
+    // le_add_monotone gives t2+a1 ≤ t1+a1; bridge add commutativity
+    // explicitly (fragile under module perturbation if left to Z3).
+    assert(a1.add_spec(t2).le_spec(a1.add_spec(t1))) by {
+        Rational::lemma_add_commutative(a1, t2);
+        Rational::lemma_add_commutative(t1, a1);
+        Rational::lemma_eqv_implies_le(a1.add_spec(t2), t2.add_spec(a1));
+        Rational::lemma_eqv_implies_le(t1.add_spec(a1), a1.add_spec(t1));
+        Rational::lemma_le_transitive(a1.add_spec(t2), t2.add_spec(a1), t1.add_spec(a1));
+        Rational::lemma_le_transitive(a1.add_spec(t2), t1.add_spec(a1), a1.add_spec(t1));
+    }
     Rational::lemma_le_transitive(a1.add_spec(t2), a1.add_spec(t1), arctan_sum(t, k));
     assert(arctan_sum(t, (k + 2) as nat).le_spec(arctan_sum(t, k)));
 }
@@ -559,6 +573,334 @@ pub proof fn lemma_angle_enclosure_shrink(t: Rational, k: nat)
         assert(angle_enclosure(t, k).1 == two_x(arctan_sum(t, (k + 1) as nat)));
         assert(angle_enclosure(t, (k + 2) as nat).0 == two_x(arctan_sum(t, (k + 2) as nat)));
         assert(angle_enclosure(t, (k + 2) as nat).1 == two_x(arctan_sum(t, (k + 3) as nat)));
+    }
+}
+
+// ── signed mirror (negative t; the v1.4 debt) ────────────────────────
+//
+// The series is odd: term_j(−t) == −term_j(t) and A_k(−t) == −A_k(t),
+// both STRUCTURAL equalities. Hence the enclosure endpoints for negative
+// t are the negations of the positive-t endpoints, and the parity-picked
+// pair comes out swapped: enc(t,k).1 ≤ enc(t,k).0 for −1 ≤ t ≤ 0. The
+// signed enclosure (angle_enclosure_signed) restores a uniform lo ≤ hi
+// on [−1, 1] with the uniform width 2·|term_{k+1}|.
+
+/// term_j(−t) == −term_j(t) (structural; odd powers flip sign).
+pub proof fn lemma_arctan_term_neg(t: Rational, j: nat)
+    ensures
+        arctan_term(t.neg_spec(), j) == arctan_term(t, j).neg_spec(),
+{
+    lemma_arctan_term_num_denom(t, j);
+    lemma_arctan_term_num_denom(t.neg_spec(), j);
+    lemma_ipow_neg_odd(t.num, 2 * j + 1);
+    let lhs = arctan_term(t.neg_spec(), j);
+    let rhs = arctan_term(t, j).neg_spec();
+    assert(t.neg_spec().num == -t.num);
+    assert(t.neg_spec().denom() == t.denom());
+    assert(lhs.num == ipow(-t.num, 2 * j + 1));
+    assert(rhs.num == -ipow(t.num, 2 * j + 1));
+    assert(lhs.num == rhs.num);
+    assert(lhs.denom() == ipow(t.denom(), 2 * j + 1) * ((2 * j + 1) as int));
+    assert(rhs.denom() == arctan_term(t, j).denom());
+    assert(lhs.denom() == rhs.denom());
+    assert(lhs.den == rhs.den);
+    assert(lhs == rhs);
+}
+
+/// A_k(−t) == −A_k(t) (structural), by induction on k.
+pub proof fn lemma_arctan_sum_neg(t: Rational, k: nat)
+    ensures
+        arctan_sum(t.neg_spec(), k) == arctan_sum(t, k).neg_spec(),
+    decreases k
+{
+    if k == 0 {
+        lemma_arctan_term_neg(t, 0);
+        assert(arctan_sum(t.neg_spec(), 0) == arctan_term(t.neg_spec(), 0));
+        assert(arctan_sum(t, 0).neg_spec() == arctan_term(t, 0).neg_spec());
+    } else if k % 2 == 0 {
+        lemma_arctan_sum_neg(t, (k - 1) as nat);
+        lemma_arctan_term_neg(t, k);
+        lemma_arctan_step_even(t, k);
+        lemma_arctan_step_even(t.neg_spec(), k);
+        Rational::lemma_neg_add(arctan_sum(t, (k - 1) as nat), arctan_term(t, k));
+        let s = arctan_sum(t, (k - 1) as nat);
+        let term = arctan_term(t, k);
+        assert(arctan_sum(t.neg_spec(), k)
+            == arctan_sum(t.neg_spec(), (k - 1) as nat).add_spec(arctan_term(t.neg_spec(), k)));
+        assert(arctan_sum(t.neg_spec(), k) == s.neg_spec().add_spec(term.neg_spec()));
+        assert(arctan_sum(t, k).neg_spec() == s.add_spec(term).neg_spec());
+        assert(s.neg_spec().add_spec(term.neg_spec()) == s.add_spec(term).neg_spec());
+    } else {
+        lemma_arctan_sum_neg(t, (k - 1) as nat);
+        lemma_arctan_term_neg(t, k);
+        lemma_arctan_step_odd(t, k);
+        lemma_arctan_step_odd(t.neg_spec(), k);
+        Rational::lemma_neg_add(arctan_sum(t, (k - 1) as nat), arctan_term(t, k).neg_spec());
+        Rational::lemma_neg_involution(arctan_term(t, k));
+        let s = arctan_sum(t, (k - 1) as nat);
+        let term = arctan_term(t, k);
+        assert(arctan_sum(t.neg_spec(), k)
+            == arctan_sum(t.neg_spec(), (k - 1) as nat).sub_spec(arctan_term(t.neg_spec(), k)));
+        assert(arctan_sum(t.neg_spec(), k) == s.neg_spec().add_spec(term.neg_spec().neg_spec()));
+        assert(arctan_sum(t.neg_spec(), k) == s.neg_spec().add_spec(term));
+        assert(arctan_sum(t, k).neg_spec() == s.sub_spec(term).neg_spec());
+        assert(s.sub_spec(term).neg_spec() == s.add_spec(term.neg_spec()).neg_spec());
+        assert(s.add_spec(term.neg_spec()).neg_spec()
+            == s.neg_spec().add_spec(term.neg_spec().neg_spec()));
+    }
+}
+
+/// 2·(−x) == −(2·x) (structural).
+pub proof fn lemma_two_x_neg(x: Rational)
+    ensures
+        two_x(x.neg_spec()) == two_x(x).neg_spec(),
+{
+    let two = Rational::from_int_spec(2);
+    let lhs = two_x(x.neg_spec());
+    let rhs = two_x(x).neg_spec();
+    Rational::lemma_mul_denom_product_int(two, x.neg_spec());
+    Rational::lemma_mul_denom_product_int(two, x);
+    assert(two.num == 2);
+    assert(two.denom() == 1);
+    assert(x.neg_spec().num == -x.num);
+    assert(x.neg_spec().denom() == x.denom());
+    assert(lhs.num == two.num * x.neg_spec().num);
+    assert(rhs.num == -(two_x(x).num));
+    assert(two_x(x).num == two.num * x.num);
+    assert((lhs.num == two.num * x.neg_spec().num && x.neg_spec().num == -x.num
+        && rhs.num == -(two.num * x.num))
+        ==> lhs.num == rhs.num) by (nonlinear_arith);
+    assert(lhs.denom() == two.denom() * x.neg_spec().denom());
+    assert(rhs.denom() == two_x(x).denom());
+    assert(lhs.denom() == rhs.denom());
+    assert(lhs.den == rhs.den);
+    assert(lhs == rhs);
+}
+
+/// The enclosure endpoints negate with t (structural, both parities).
+pub proof fn lemma_angle_enclosure_neg(t: Rational, k: nat)
+    ensures
+        angle_enclosure(t.neg_spec(), k).0 == angle_enclosure(t, k).0.neg_spec(),
+        angle_enclosure(t.neg_spec(), k).1 == angle_enclosure(t, k).1.neg_spec(),
+{
+    lemma_arctan_sum_neg(t, k);
+    lemma_arctan_sum_neg(t, (k + 1) as nat);
+    lemma_two_x_neg(arctan_sum(t, k));
+    lemma_two_x_neg(arctan_sum(t, (k + 1) as nat));
+    if k % 2 == 0 {
+        assert(angle_enclosure(t.neg_spec(), k).0
+            == two_x(arctan_sum(t.neg_spec(), (k + 1) as nat)));
+        assert(angle_enclosure(t.neg_spec(), k).1 == two_x(arctan_sum(t.neg_spec(), k)));
+        assert(angle_enclosure(t, k).0.neg_spec()
+            == two_x(arctan_sum(t, (k + 1) as nat)).neg_spec());
+        assert(angle_enclosure(t, k).1.neg_spec() == two_x(arctan_sum(t, k)).neg_spec());
+    } else {
+        assert(angle_enclosure(t.neg_spec(), k).0 == two_x(arctan_sum(t.neg_spec(), k)));
+        assert(angle_enclosure(t.neg_spec(), k).1
+            == two_x(arctan_sum(t.neg_spec(), (k + 1) as nat)));
+        assert(angle_enclosure(t, k).0.neg_spec() == two_x(arctan_sum(t, k)).neg_spec());
+        assert(angle_enclosure(t, k).1.neg_spec()
+            == two_x(arctan_sum(t, (k + 1) as nat)).neg_spec());
+    }
+}
+
+/// Signed ordering (the v1.4 debt): −1 ≤ t ≤ 0 ⇒ enc(t,k).1 ≤ enc(t,k).0.
+/// Mirror of lemma_angle_enclosure_ordered via negation of the endpoints.
+pub proof fn lemma_angle_enclosure_ordered_negative(t: Rational, k: nat)
+    requires
+        t_in_unit_interval(t.neg_spec()),
+    ensures
+        angle_enclosure(t, k).1.le_spec(angle_enclosure(t, k).0),
+{
+    lemma_angle_enclosure_ordered(t.neg_spec(), k);
+    lemma_angle_enclosure_neg(t, k);
+    Rational::lemma_neg_reverses_le(
+        angle_enclosure(t, k).0.neg_spec(), angle_enclosure(t, k).1.neg_spec());
+    Rational::lemma_neg_involution(angle_enclosure(t, k).0);
+    Rational::lemma_neg_involution(angle_enclosure(t, k).1);
+}
+
+/// 0 ≤ t ≤ 1 ⇒ −1 ≤ t ≤ 1.
+pub proof fn lemma_unit_implies_symmetric(t: Rational)
+    requires
+        t_in_unit_interval(t),
+    ensures
+        t_in_symmetric_unit_interval(t),
+{
+    let z = Rational::from_int_spec(0);
+    let mo = Rational::from_int_spec(-1);
+    Rational::lemma_denom_positive(t);
+    assert(z.num == 0);
+    assert(z.denom() == 1);
+    assert(mo.num == -1);
+    assert(mo.denom() == 1);
+    assert(z.le_spec(t) == (z.num * t.denom() <= t.num * z.denom()));
+    assert(mo.le_spec(t) == (mo.num * t.denom() <= t.num * mo.denom()));
+    assert((z.num * t.denom() <= t.num * z.denom() && z.num == 0 && z.denom() == 1
+        && mo.num == -1 && mo.denom() == 1 && t.denom() >= 1)
+        ==> mo.num * t.denom() <= t.num * mo.denom()) by (nonlinear_arith);
+}
+
+/// −1 ≤ t ≤ 1 ⇒ |t| ∈ [0, 1].
+pub proof fn lemma_symmetric_abs_unit_interval(t: Rational)
+    requires
+        t_in_symmetric_unit_interval(t),
+    ensures
+        t_in_unit_interval(t.abs_spec()),
+{
+    let z = Rational::from_int_spec(0);
+    let mo = Rational::from_int_spec(-1);
+    let one = Rational::from_int_spec(1);
+    Rational::lemma_denom_positive(t);
+    assert(mo.num == -1);
+    assert(mo.denom() == 1);
+    assert(z.num == 0);
+    assert(z.denom() == 1);
+    assert(one.num == 1);
+    assert(one.denom() == 1);
+    assert(mo.le_spec(t) == (mo.num * t.denom() <= t.num * mo.denom()));
+    assert(t.le_spec(one) == (t.num * one.denom() <= one.num * t.denom()));
+    assert((mo.num * t.denom() <= t.num * mo.denom() && mo.num == -1 && mo.denom() == 1)
+        ==> t.num >= -t.denom()) by (nonlinear_arith);
+    assert((t.num * one.denom() <= one.num * t.denom() && one.num == 1 && one.denom() == 1)
+        ==> t.num <= t.denom()) by (nonlinear_arith);
+    if t.num >= 0 {
+        assert(t.abs_spec() == t);
+        assert(z.le_spec(t) == (z.num * t.denom() <= t.num * z.denom()));
+        assert((z.num == 0 && z.denom() == 1 && t.num >= 0)
+            ==> z.num * t.denom() <= t.num * z.denom()) by (nonlinear_arith);
+    } else {
+        assert(t.abs_spec() == t.neg_spec());
+        let u = t.neg_spec();
+        assert(u.num == -t.num);
+        assert(u.denom() == t.denom());
+        assert(z.le_spec(u) == (z.num * u.denom() <= u.num * z.denom()));
+        assert(u.le_spec(one) == (u.num * one.denom() <= one.num * u.denom()));
+        assert((u.num == -t.num && u.denom() == t.denom() && t.num < 0 && z.num == 0
+            && z.denom() == 1)
+            ==> z.num * u.denom() <= u.num * z.denom()) by (nonlinear_arith);
+        assert((u.num == -t.num && u.denom() == t.denom() && t.num >= -t.denom()
+            && one.num == 1 && one.denom() == 1)
+            ==> u.num * one.denom() <= one.num * u.denom()) by (nonlinear_arith);
+    }
+}
+
+/// The signed enclosure is ordered on the full symmetric range [−1, 1].
+pub proof fn lemma_angle_enclosure_signed_ordered(t: Rational, k: nat)
+    requires
+        t_in_symmetric_unit_interval(t),
+    ensures
+        angle_enclosure_signed(t, k).0.le_spec(angle_enclosure_signed(t, k).1),
+{
+    lemma_symmetric_abs_unit_interval(t);
+    let z = Rational::from_int_spec(0);
+    assert(z.num == 0);
+    assert(z.denom() == 1);
+    assert(z.le_spec(t) == (z.num * t.denom() <= t.num * z.denom()));
+    if z.le_spec(t) {
+        assert(angle_enclosure_signed(t, k) == angle_enclosure(t, k));
+        assert((z.num == 0 && z.denom() == 1 && z.num * t.denom() <= t.num * z.denom())
+            ==> t.num >= 0) by (nonlinear_arith);
+        assert(t.abs_spec() == t);
+        lemma_angle_enclosure_ordered(t, k);
+    } else {
+        assert(angle_enclosure_signed(t, k).0 == angle_enclosure(t, k).1);
+        assert(angle_enclosure_signed(t, k).1 == angle_enclosure(t, k).0);
+        assert((z.num == 0 && z.denom() == 1
+            && !(z.num * t.denom() <= t.num * z.denom()))
+            ==> t.num < 0) by (nonlinear_arith);
+        assert(t.abs_spec() == t.neg_spec());
+        lemma_angle_enclosure_ordered_negative(t, k);
+    }
+}
+
+/// (−a) − (−b) == b − a (structural helper for the width mirror).
+pub proof fn lemma_raw_neg_sub_neg(a: Rational, b: Rational)
+    ensures
+        a.neg_spec().sub_spec(b.neg_spec()) == b.sub_spec(a),
+{
+    Rational::lemma_neg_involution(b);
+    Rational::lemma_neg_add(a, b.neg_spec());
+    Rational::lemma_neg_sub(a, b);
+    assert(a.neg_spec().sub_spec(b.neg_spec())
+        == a.neg_spec().add_spec(b.neg_spec().neg_spec()));
+    assert(a.neg_spec().sub_spec(b.neg_spec()) == a.neg_spec().add_spec(b));
+    assert(a.sub_spec(b).neg_spec() == a.neg_spec().add_spec(b.neg_spec().neg_spec()));
+    assert(a.sub_spec(b).neg_spec() == b.sub_spec(a));
+}
+
+/// Uniform width on [−1, 1]: signed.hi − signed.lo ≡ 2·|term_{k+1}|.
+/// This is what ties the ledger increment (SPEC §3, 2·|term|) to the
+/// signed enclosure width for both signs of t.
+pub proof fn lemma_angle_enclosure_signed_width(t: Rational, k: nat)
+    requires
+        t_in_symmetric_unit_interval(t),
+    ensures
+        angle_enclosure_signed(t, k).1.sub_spec(angle_enclosure_signed(t, k).0)
+            .eqv_spec(two_x(arctan_term(t, (k + 1) as nat).abs_spec())),
+{
+    lemma_symmetric_abs_unit_interval(t);
+    let z = Rational::from_int_spec(0);
+    assert(z.num == 0);
+    assert(z.denom() == 1);
+    assert(z.le_spec(t) == (z.num * t.denom() <= t.num * z.denom()));
+    let term = arctan_term(t, (k + 1) as nat);
+    if z.le_spec(t) {
+        // t ∈ [0,1]: signed == enc, term ≥ 0 so |term| == term
+        assert((z.num == 0 && z.denom() == 1 && z.num * t.denom() <= t.num * z.denom())
+            ==> t.num >= 0) by (nonlinear_arith);
+        assert(angle_enclosure_signed(t, k) == angle_enclosure(t, k));
+        lemma_arctan_term_nonneg(t, (k + 1) as nat);
+        assert(z.le_spec(term) == (z.num * term.denom() <= term.num * z.denom()));
+        assert((z.num == 0 && z.denom() == 1 && z.num * term.denom() <= term.num * z.denom())
+            ==> term.num >= 0) by (nonlinear_arith);
+        assert(term.abs_spec() == term);
+        if k % 2 == 0 {
+            lemma_arctan_width_even(t, k);
+            assert(angle_enclosure_signed(t, k).1 == two_x(arctan_sum(t, k)));
+            assert(angle_enclosure_signed(t, k).0 == two_x(arctan_sum(t, (k + 1) as nat)));
+        } else {
+            lemma_arctan_width_odd(t, k);
+            assert(angle_enclosure_signed(t, k).1 == two_x(arctan_sum(t, (k + 1) as nat)));
+            assert(angle_enclosure_signed(t, k).0 == two_x(arctan_sum(t, k)));
+        }
+    } else {
+        // t < 0: u = −t ∈ [0,1]; enc(t) endpoints are negs of enc(u)
+        assert((z.num == 0 && z.denom() == 1
+            && !(z.num * t.denom() <= t.num * z.denom()))
+            ==> t.num < 0) by (nonlinear_arith);
+        assert(t.abs_spec() == t.neg_spec());
+        let u = t.neg_spec();
+        assert(angle_enclosure_signed(t, k).0 == angle_enclosure(t, k).1);
+        assert(angle_enclosure_signed(t, k).1 == angle_enclosure(t, k).0);
+        lemma_angle_enclosure_neg(t, k);
+        if k % 2 == 0 {
+            lemma_arctan_width_even(u, k);
+        } else {
+            lemma_arctan_width_odd(u, k);
+        }
+        // enc(u).1 − enc(u).0 ≡ 2·term(u) == 2·(−term(t)) == −(2·term(t))
+        lemma_arctan_term_neg(t, (k + 1) as nat);
+        lemma_two_x_neg(term);
+        // |term(t)| == −term(t) since term(t).num < 0 (odd power of negative)
+        lemma_arctan_term_num_denom(t, (k + 1) as nat);
+        lemma_ipow_neg_odd(-t.num, 2 * (k + 1) + 1);
+        lemma_ipow_pos(-t.num, 2 * (k + 1) + 1);
+        assert(term.num == ipow(t.num, 2 * (k + 1) + 1));
+        assert(term.num == -ipow(-t.num, 2 * (k + 1) + 1));
+        assert(term.num < 0);
+        assert(term.abs_spec() == term.neg_spec());
+        // signed.1 − signed.0 == (−enc(u).0) − (−enc(u).1) == enc(u).1 − enc(u).0
+        lemma_raw_neg_sub_neg(angle_enclosure(u, k).0, angle_enclosure(u, k).1);
+        assert(angle_enclosure(t, k).0.sub_spec(angle_enclosure(t, k).1)
+            == angle_enclosure(u, k).0.neg_spec().sub_spec(
+                angle_enclosure(u, k).1.neg_spec()));
+        assert(angle_enclosure_signed(t, k).1.sub_spec(angle_enclosure_signed(t, k).0)
+            == angle_enclosure(u, k).1.sub_spec(angle_enclosure(u, k).0));
+        // rhs: two_x(term.abs) == two_x(term.neg) == two_x(term(u))
+        assert(two_x(term.abs_spec()) == two_x(term.neg_spec()));
+        assert(two_x(term.neg_spec()) == two_x(arctan_term(u, (k + 1) as nat)));
+        Rational::lemma_eqv_reflexive(two_x(arctan_term(u, (k + 1) as nat)));
     }
 }
 

@@ -126,6 +126,41 @@ pub proof fn lemma_ipow_congruence(x: int, y: int, p: nat)
     }
 }
 
+/// p odd ⇒ (−x)^p == −(x^p) — the sign mirror for odd powers.
+pub proof fn lemma_ipow_neg_odd(x: int, p: nat)
+    requires
+        p % 2 == 1,
+    ensures
+        ipow(-x, p) == -ipow(x, p),
+    decreases p
+{
+    if p == 1 {
+        assert(ipow(-x, 1) == -x) by { reveal_with_fuel(ipow, 2); }
+        assert(ipow(x, 1) == x) by { reveal_with_fuel(ipow, 2); }
+    } else {
+        vstd::arithmetic::div_mod::lemma_fundamental_div_mod(p as int, 2);
+        assert(p == 2 * (p / 2) + 1);
+        assert(p >= 3);
+        let q = (p - 2) as nat;
+        assert(q == 2 * ((p / 2) - 1) + 1);
+        vstd::arithmetic::div_mod::lemma_fundamental_div_mod(q as int, 2);
+        assert(q % 2 == 1);
+        lemma_ipow_neg_odd(x, q);
+        lemma_ipow_add(-x, q, 2);
+        lemma_ipow_add(x, q, 2);
+        lemma_ipow_double(-x, 1);
+        lemma_ipow_double(x, 1);
+        lemma_ipow_one(-x);
+        lemma_ipow_one(x);
+        assert((ipow(-x, 2) == ipow(-x, 1) * ipow(-x, 1) && ipow(-x, 1) == -x)
+            ==> ipow(-x, 2) == x * x) by (nonlinear_arith);
+        assert((ipow(-x, q) == -ipow(x, q) && ipow(-x, 2) == x * x && ipow(x, 2) == x * x)
+            ==> (-ipow(x, q)) * (x * x) == -(ipow(x, q) * (x * x))) by (nonlinear_arith);
+        assert(ipow(-x, p) == ipow(-x, q) * ipow(-x, 2));
+        assert(ipow(x, p) == ipow(x, q) * ipow(x, 2));
+    }
+}
+
 /// 0^p == 0 for p > 0.
 pub proof fn lemma_ipow_zero_base(p: nat)
     requires

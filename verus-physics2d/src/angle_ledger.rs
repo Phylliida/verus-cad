@@ -61,6 +61,24 @@ pub open spec fn t_in_unit_interval(t: Rational) -> bool {
     &&& t.le_spec(Rational::from_int_spec(1))
 }
 
+/// t is in [−1, 1] — the full phase-1 symmetric range (SPEC §3 restricts
+/// |ω·dt/2| so that |t| ≤ 1; reject-step otherwise).
+pub open spec fn t_in_symmetric_unit_interval(t: Rational) -> bool {
+    &&& Rational::from_int_spec(-1).le_spec(t)
+    &&& t.le_spec(Rational::from_int_spec(1))
+}
+
+/// The signed enclosure: endpoints ordered lo ≤ hi for the sign of t.
+/// For 0 ≤ t this is angle_enclosure; for t < 0 the endpoints swap
+/// (the series is odd — see the mirror section of proofs/angle_ledger.rs).
+pub open spec fn angle_enclosure_signed(t: Rational, k: nat) -> (Rational, Rational) {
+    if Rational::from_int_spec(0).le_spec(t) {
+        angle_enclosure(t, k)
+    } else {
+        (angle_enclosure(t, k).1, angle_enclosure(t, k).0)
+    }
+}
+
 } // verus!
 
 verus! {
