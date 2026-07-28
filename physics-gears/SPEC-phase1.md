@@ -64,6 +64,29 @@ Deviations from the text below, which amend it:
   (proved via `lemma_series_unit_interval`). The relational step spec is
   `body_step_rel`; momentum folds are `lin_mom_x/lin_mom_y/ang_mom` over
   `Seq<Body>` with statics contributing zero.
+- **A9. Design review (2026-07-28, DESIGN v1.5 / §3.7).** Decisions that
+  amend this SPEC for the remaining phase-1 cards:
+  (a) `StepResult = Ok | Reject(Reason)` replaces `Option` (this SPEC's
+  §1 already said so; the code catches up), and `Body.shape` +
+  `World.joints` land in the SAME phys-05c datatype change — one
+  crate-wide cache invalidation.
+  (b) S4 goes through the certificate: run one single-contact-impulse
+  step, then verify C1–C4 on the produced state — not a static proof
+  through the whole exec chain.
+  (c) C6's ledger entry is the TWO-SOURCE bound (D9): enclosure width +
+  tan-remainder `R·h⁷`; the width alone does NOT bound `|applied −
+  target|`. G0 anchors the tan remainder with a rational constant.
+  (d) Denominator hygiene: `canonicalize()` via checked constructor
+  (value-preserving, no ledger entry) — NOT normalize-on-write.
+  Fixed-point solver core is a phys-06+ evaluation.
+  (e) `calc!` for eqv chains is house style; the q_* bridge pack and the
+  closed-eval `*_closed_int` helpers (currently in scenes.rs) hoist into
+  shared modules.
+  (f) Inertia nonnegativity lands via the fan decomposition before
+  phys-06 (density constructor needs it for wf).
+  (g) `angle_enclosure_signed` is the standard API; the parity-ordered
+  `angle_enclosure` becomes internal.
+  (h) `verus-rational/src/rational/applications.rs.bak` to be deleted.
 
 ## 0. Crate & module layout
 
@@ -306,8 +329,11 @@ C4 (non-penetration): re-run exact SAT on all broadphase pairs of post; every
     radius, rational). NOTE: checker calls narrowphase itself — it does not
     trust the solver's manifolds.
 C5 (joint drift): every joint anchor error ≤ tol_j (exact).
-C6 (ledger): every snap delta within its declared bound; angle enclosure
-    widths ≤ per-step cap; accumulated ledger totals updated correctly.
+C6 (ledger): every snap delta within its declared bound; angle ledger
+    entries ≤ per-step cap, where the entry is the TWO-SOURCE bound
+    (enclosure width + tan-remainder R·h⁷, DESIGN D9 — the width alone
+    does not bound |applied − target|); accumulated ledger totals updated
+    correctly.
 
 The checker is the ONLY thing the engine's headline claims rest on (D8);
 solver and narrowphase can be optimized freely without re-proof, and a

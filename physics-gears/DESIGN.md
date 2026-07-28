@@ -1,18 +1,20 @@
 # DESIGN: Formalized 2D Physics Engine with Working Gears
 
-Status: plan v1.4, 2026-07-25 (Fable + Danielle) — v1.1 adds weird-gear
+Status: plan v1.5, 2026-07-28 (Fable + Danielle) — v1.1 adds weird-gear
 generalization (D6/D7, phys-16..21, Lean G7/G8); v1.2 adds cams
 (D6/D7 extended, D8 follower-jump honesty, phys-22..25, Lean G9);
 v1.3 adds elegance revisions E1..E6 (§3.5) + SPEC-phase1.md (precise
 implementation spec for phys-01..06 & 22) + Lean G0 + phys-10 split;
 v1.4: phys-01..04 LANDED (see "Implementation status" below) — board
-updated, deviations recorded (E7 global convexity, raw predicates,
-signed-enclosure debt).
+updated, deviations recorded (E7 global convexity, raw predicates);
+v1.5: signed-enclosure debt RESOLVED + design-review decisions
+(§3.7: ledger two-source bound D9, canonicalize D10, calc! D11,
+local→global convexity D12; rejected options recorded).
 Board: phys-00 .. phys-25 (below)
 
 ## Implementation status (v1.4, 2026-07-25)
 
-Landed in `verus-physics2d` (full crate green at 239 verified / 0 errors):
+Landed in `verus-physics2d` (full crate green):
 
 - **phys-01** (07b3f14): crate skeleton — Scalar/SVec2 aliases, RotQ with
   unit-norm invariant + identity, Body wf + static/dynamic ctors, World.
@@ -35,6 +37,19 @@ Landed in `verus-physics2d` (full crate green at 239 verified / 0 errors):
   reference feature; scene S3 (k-family of square pairs incl. touching/
   vertex-vertex/parallel-edge, classification proven equal to known
   answers).
+- **Signed enclosure** (a0ae4c9, 7c73aed): the v1.4 debt RESOLVED — the
+  series is odd, mirror equalities are structural, `angle_enclosure_signed`
+  ordered on [−1,1] with uniform width 2·|term|; `step_free_flight`
+  accepts |t| ≤ 1; scene S2-mirror (ω = −3) green.
+- **phys-05a** (26fc8c7): exact mass properties — shoelace ≡ fan-sum
+  identity, area2 > 0 via the global invariant, exact centroid/inertia
+  evaluators; scene M1 (unit square: area2 == 2, centroid == (1/2,1/2),
+  I₀ == 2/3). Inertia nonnegativity deferred (see §3.7c).
+- **phys-05b** (5541b32): world-space transforms (exact RotQ-apply),
+  AABBs with coordinate-fold vertex bounds, disjoint-ranges ⇒
+  pointwise-separation soundness, canonical broadphase pair list ==
+  spec filter. Deviation: O(n²) filter, no sort-and-sweep (identical
+  guarantees at phase-1 sizes; C4 re-checks all pairs anyway).
 
 Deviations from v1.3 text (they amend SPEC where they conflict):
 
@@ -288,6 +303,76 @@ only for form-closed cams and for the constraint-level joint; for force-closed
 emergent cams the certificate is conditional ("tracks while contact force
 ≥ 0") and follower jump is a *correct physical outcome*, not an error.
 
+### §3.7 Design-review decisions (v1.5, 2026-07-28) — OVERRIDE earlier text where they conflict
+
+From a full review after the signed-enclosure + phys-05a/b sessions
+(context: closed-eval discipline and structural-mirror lessons, recorded
+in memory/). Rejected options are recorded with their reasons — do not
+revive them without engaging the reason.
+
+- **D9. The angle ledger is a TWO-SOURCE bound (corrects E2's accounting).**
+  `|applied − target| = |2·arctan(t) − ω·dt|` has two independent parts:
+  the arctan series-truncation (enclosure width, k-tunable) and the tan
+  chooser's own truncation (`tan(h) − series₅(h) ≈ 17h⁷/315`, NOT
+  k-tunable). The width alone does NOT upper-bound the total — near
+  h = 1/2 the tan remainder exceeds the k = 8 width by orders of
+  magnitude, so the old reading ("accumulated width bounds the angle
+  error") was wrong. Resolution: enclose tan first — `[t_lo, t_hi]`
+  around `tan(α/2)` with certified rational remainder `R·h⁷`
+  (R ≈ 1/16 on [0, 1/2]) — then the arctan enclosure of the endpoints
+  contains the target BY CONSTRUCTION (arctan is 1-Lipschitz). The
+  ledger increment becomes enclosure width + R·h⁷, all rational
+  arithmetic on the Verus side. **G0 grows one theorem**: tan Taylor
+  remainder with rational constant. Fallback if the remainder proof
+  balks: demote the ledger to D8's *monitored* category and drop the
+  "within N·ε of ideal" headline.
+- **D10. `canonicalize()` via checked constructor; NOT normalize-on-write.**
+  Denominator blowup in the PGS sweep is a real phys-06 viability risk,
+  but normalize-on-write was rejected: it flips every `out@ == op_spec`
+  ensures to eqv-form and destroys the structural-`==` discipline that
+  makes mirror/closed proofs cheap. Instead: an explicit value-preserving
+  canonicalize op — untrusted reducer proposes `(num', den')`, the
+  constructor CHECKS `num'·den == num·den'` (one exact multiply, no gcd
+  proof — the nlsat pattern), eqv-form seams only at rare explicit call
+  sites (step boundary, optionally between PGS iterations). No ledger
+  entry (value unchanged; snap remains the ledgered, value-CHANGING
+  primitive). **Fixed-point solver core** (global 2^K denominator via
+  verus-fixed-point) recorded as a phys-06+ evaluation, not a
+  prerequisite: adds exact, muls round with E5 ledger entries.
+- **D11. `calc!` for eqv chains; normalized-rational spec ops rejected.**
+  A computable gcd-normalize inside spec `add_spec`/`mul_spec` would make
+  eqv collapse to `==`, but at the cost of a recursive-euclid unfold at
+  EVERY op in EVERY proof plus a verus-rational refactor — rejected.
+  The eqv discipline is right for this toolchain; the ergonomic fix is
+  `calc!`-style eqv chains (already used inside verus-rational) as house
+  style, plus hoisting shared helpers (the q_* bridge pack, closed-eval
+  `*_closed_int` lemmas) into shared modules. Standing spec-design rule:
+  prefer forms whose symmetry laws hold STRUCTURALLY (the sign-blind
+  `den` made the mirror proofs nearly free) — that rule, not
+  normalization, is where the savings are.
+- **D12. Local→global convexity before phys-10a; generators emit
+  turn-signs.** The O(n²) global invariant (E7) stays as the proof-facing
+  form, but construction moves to the O(n) consecutive-turn check once
+  the local→global lemma (consecutive positive turns ⇒ global convexity,
+  a sweep argument) lands — scheduled BEFORE phys-10a makes gear-scale
+  polygons urgent. phys-10a's profile generator additionally EMITS the
+  local-turn signs as a convexity certificate (nlsat pattern for shapes).
+  Fan-positivity as a cheaper invariant was explicitly rejected: it is
+  star-shapedness, strictly weaker than convexity, and SAT is unsound
+  for non-convex inputs.
+- **Also folded in:** (a) `StepResult = Ok | Reject(Reason)` replaces
+  `Option` (SPEC §1 already said this; the code catches up), and
+  `Body.shape` + `World.joints` land in the SAME phys-05c datatype
+  change — one crate-wide cache invalidation, not three. (b) S4 goes
+  through the certificate: run one single-contact-impulse step, verify
+  C1–C4 on the produced state — that IS D8, and it de-risks the phys-06
+  checker early. (c) Inertia nonnegativity via the fan decomposition
+  (same telescoping shape as area; per-triangle dot-sum is a
+  sum-of-squares form) scheduled before phys-06 so the density
+  constructor is principled. (d) `angle_enclosure_signed` becomes the
+  standard API; the parity-ordered `angle_enclosure` becomes internal.
+  (e) `verus-rational/src/rational/applications.rs.bak` to be deleted.
+
 ## 4. The Lean side (the part that can start today)
 
 Independent repo `lean-gears` (pin manifest from lean-flocq per house recipe;
@@ -356,12 +441,12 @@ independent of everything else in this plan.
 | phys-02 ✅ | `RotQ`: rational unit-circle type; verified invariant c²+s²=1, exact compose/inverse; `snap(angle_enclosure, k)` with certified 2⁻ᵏ error (uses verus-interval-arithmetic) | phys-01 |
 | phys-03 ✅ | free-flight symplectic Euler; **proved:** exact conservation of linear & angular momentum for closed systems | phys-02 |
 | phys-04 ✅ | convex rational polygons; SAT contact detection; **proved:** classification correctness with witness (axis or feature pair) | phys-01 |
-| phys-05 | single-contact impulse; **proved:** momentum exchange exact, restitution inequality post-state; includes the SPEC §4 leftovers (world-space transforms, fan-area + positivity, centroid/inertia, AABBs) | phys-03,04 |
-| phys-06 | sequential-impulse multi-contact loop + **proven certificate checker** (non-penetration, ledgers); reject-and-retry stepping; needs the signed-enclosure lemma (v1.4 debt) | phys-05 |
+| phys-05 | single-contact impulse; **proved:** momentum exchange exact, restitution inequality post-state; SPEC §4 leftovers LANDED (05a massprops, 05b transforms/AABBs); remaining: triple datatype change (Body.shape, World.joints, StepResult enum — one invalidation) + S4 through the certificate (§3.7) | phys-03,04 |
+| phys-06 | sequential-impulse multi-contact loop + **proven certificate checker** (non-penetration, ledgers); reject-and-retry stepping; C6 uses the two-source ledger bound (D9); signed-enclosure debt RESOLVED | phys-05 |
 | phys-07 | revolute (pin) joint + drift certificate; certified rounding pass (D3) | phys-06 |
 | phys-08 | gear joint (ratio constraint, ratio-drift certificate); **demo: gear train + crank** | phys-07 |
 | phys-09 | trace JSON + tiny canvas viewer (unverified glue; maybe steal verus-canvas bits) | phys-06 |
-| phys-10a | untrusted profile generator (involute + cycloid flanks): float tooling allowed outside the verified crate; emits exact rational polygon vertices; engine certificates carry all verified claims (E4) | phys-04 |
+| phys-10a | untrusted profile generator (involute + cycloid flanks): float tooling allowed outside the verified crate; emits exact rational polygon vertices AND local-turn signs as a convexity certificate (D12); engine certificates carry all verified claims (E4) | phys-04 |
 | phys-10b | certified profile bounds: per-vertex enclosure ε to ideal curve (needed only for the L3/G6 bridge, NOT for demos) | phys-10a |
 | phys-11 | **flagship: emergent meshing** — two generated gears, one driven, contact does the rest; certificate: contact chain maintained, empirical ratio within bound of −z₁/z₂ | phys-06,10a,16 |
 | phys-12 | Lean G1–G2 (repo setup + involute basics + string property) | — (parallel) |
@@ -380,14 +465,14 @@ independent of everything else in this plan.
 | phys-25 | emergent cam demos: force-closed roller follower (follower-jump physics, conditional certificate per D8), form-closed groove cam, constant-breadth pair, conjugate pair; four-bar linkage bonus demo | phys-16,24 |
 
 Suggested first arc: phys-01 → 02 → 03 ✅ (done, with phys-04 landed right
-after). Next arc: phys-05 (single-contact impulse + SPEC §4 leftovers:
-world-space transforms, fan-area + positivity, centroid/inertia, AABBs)
-→ phys-06 (row solver + certificate checker, with the signed-enclosure
-lemma). phys-12 (Lean G1–G2) remains the Lean-side palate cleanser
-whenever the mood is more mathlib than Verus. First emergent demo:
-consider phys-18 (lantern gears) before phys-11 (involute) — exact pins
-mean less approximation machinery on the critical path, and clockwork
-charisma arrives sooner.
+after). Current arc: phys-05 (05a/05b landed; 05c triple datatype change +
+Row + single-contact impulse, 05d S4 through the certificate) → phys-06
+(row solver + certificate checker; C6 on the two-source ledger bound D9).
+phys-12 (Lean G1–G2) remains the Lean-side palate cleanser whenever the
+mood is more mathlib than Verus — and G0 now also owes the tan-remainder
+theorem (D9). First emergent demo: consider phys-18 (lantern gears)
+before phys-11 (involute) — exact pins mean less approximation machinery
+on the critical path, and clockwork charisma arrives sooner.
 
 ## 6. Risks / open questions
 
