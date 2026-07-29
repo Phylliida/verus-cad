@@ -87,6 +87,21 @@ Deviations from the text below, which amend it:
   (g) `angle_enclosure_signed` is the standard API; the parity-ordered
   `angle_enclosure` becomes internal.
   (h) `verus-rational/src/rational/applications.rs.bak` to be deleted.
+- **A10. phys-05c LANDED (2026-07-28, verus-physics2d standalone repo).**
+  The (a) items are done: `Body.shape: Compound` (new, shape.rs),
+  `World.joints` (joints.rs — datatype only; joint ROWS are phys-07),
+  `StepResult` replaces `Option` in `step_free_flight` (Ok carries the
+  per-body tan-halfs — the future StepCert field). Plus the row layer:
+  `row.rs` (BoundQ/Row, exact eff_mass/row_vel/apply_impulse/
+  contact_row, solve_row_lambda with spec clamp — C2 in-bounds given
+  `bounds_consistent`) and `proofs/row.rs` (15 lemmas): effective-mass
+  sign theory (mEff > 0 for a dynamic endpoint with nonzero linear J
+  block), the PGS workhorse **J·v′ ≡ J·v + λ·mEff** (exact), momentum
+  transfer **m·Δv ≡ λ·j** per dynamic body and contact exchange
+  **ΔP_a + ΔP_b ≡ 0** componentwise, **C3** (fresh row: post v_rel ≥ 0,
+  ≡ 0 when unclamped). Gotcha recorded: `by(nonlinear_arith)` treats
+  spec-fn applications as opaque — state NLA identities on fully-unfolded
+  int terms only (R3 corollary, cf. lemma_raw_neg_sub).
 
 ## 0. Crate & module layout
 
