@@ -85,8 +85,13 @@ Deviations from the text below, which amend it:
   (f) Inertia nonnegativity lands via the fan decomposition before
   phys-06 (density constructor needs it for wf).
   (g) `angle_enclosure_signed` is the standard API; the parity-ordered
-  `angle_enclosure` becomes internal.
+  `angle_enclosure` becomes internal. **LANDED 2026-07-31** (b2a4989):
+  `angle_enclosure_exec` evaluates the signed enclosure over [−1, 1];
+  the parity-ordered spec fn stays pub (open-spec visibility rules) but
+  is documented internal; the four enclosure lemmas are pub(crate).
   (h) `verus-rational/src/rational/applications.rs.bak` to be deleted.
+  **LANDED 2026-07-31** (verus-rational fc5e827, same commit as the
+  normalize zero-branch fix — see memory/exec-feasibility-and-normalize.md).
 - **A10. phys-05c LANDED (2026-07-28, verus-physics2d standalone repo).**
   The (a) items are done: `Body.shape: Compound` (new, shape.rs),
   `World.joints` (joints.rs — datatype only; joint ROWS are phys-07),

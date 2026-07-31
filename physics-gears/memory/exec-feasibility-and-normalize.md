@@ -63,8 +63,10 @@ matters exactly for S5-style scenes (stacked boxes have ω = 0).
 
 Fix: make the zero branch return `from_int(0)` witnesses (0/1). The same
 ensures still hold (wf: 0·1 == 0·1; eqv via lemma_eqv_zero_iff_num_zero;
-normalized via lemma_from_int_is_normalized). Small verus-rational patch,
-do it in the phys-06 pre-work commit.
+normalized via lemma_from_int_is_normalized). **LANDED 2026-07-31** in the
+phys-06 pre-work commit: with it, the S1 step cost is flat (~0.5 ms/step,
+normalize ~0.04 ms/step, `err` pinned at 0/1) — the +0.17 ms/step creep
+is gone.
 
 ## Bench infrastructure (keep)
 
