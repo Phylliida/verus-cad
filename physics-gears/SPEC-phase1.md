@@ -102,6 +102,28 @@ Deviations from the text below, which amend it:
   ≡ 0 when unclamped). Gotcha recorded: `by(nonlinear_arith)` treats
   spec-fn applications as opaque — state NLA identities on fully-unfolded
   int terms only (R3 corollary, cf. lemma_raw_neg_sub).
+- **A11. phys-05d LANDED (2026-07-29) — phys-05 complete, S4 through the
+  certificate.** `certificate.rs`: `check_contact_step` with per-check
+  exact exec fns (`check_c1..check_c4`), ensures **bidirectional**:
+  `ok == contact_checks_pass(...)` — scenes prove `ok == true` from the
+  spec side (the same positive-guarantee shape as step_free_flight's
+  Some-guarantee); `ok ==> contact_step_certified(...)` for soundness.
+  C4: the checker transforms world polys itself, gates them through
+  `ConvexPoly::new_checked`, re-runs `classify_side`, and depth-checks
+  `max(ms_a, ms_b) ≥ −tol_p`. **Spec correction:** the touching disjunct
+  of `c4_single_contact` is an **exists-edge-witness** (∃ edge with
+  min_sep ≥ −tol_p) — the earlier exists-ms form (∃ ms: −tol_p ≤ ms ∧
+  all edges ≤ ms) is VACUOUS (take ms = max(values, −tol_p)); do not
+  revive it. `proofs/world.rs` (17 lemmas): cross bilinearity, vperp
+  identities (structural), rotation linearity, the rotation-cross
+  identity **cross(Ru,Rv) ≡ (c²+s²)·cross(u,v)**, orient and
+  convex_poly_inv world preservation — the C4 workhorse for phys-06.
+  Scene S4: equal-mass side-2 squares (side 2 chosen so every anchor is
+  integral — closed eval stays STRUCTURAL, no frac dens), B at (2,0)
+  v = (−1,0) vs A at rest, shared face: post velocities EXACTLY
+  (−1/2, 0), momentum preserved, certificate accepts. C3 was discharged
+  by the abstract `lemma_solve_row_c3` rather than closed evaluation —
+  the pattern to prefer for future scenes.
 
 ## 0. Crate & module layout
 

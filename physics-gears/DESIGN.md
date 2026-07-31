@@ -59,7 +59,19 @@ Landed in `verus-physics2d` (full crate green):
   mass sign theory, the PGS workhorse J·v′ ≡ J·v + λ·mEff exact,
   momentum transfer m·Δv ≡ λ·j and contact exchange ΔP_a + ΔP_b ≡ 0
   componentwise, C3 restitution (post v_rel ≥ 0, ≡ 0 when unclamped).
-  Remaining for phys-05: 05d — S4 through the certificate (§3.7(b)).
+- **phys-05d**: S4 through the certificate (§3.7(b)) — phys-05 COMPLETE.
+  `certificate.rs`: check_contact_step with per-check exact exec fns
+  (ok == contact_checks_pass bidirectionally): C1 recomputes the impulse
+  application, C2 bounds, C3 post v_rel ≥ −tol_v, C4 self-transforms
+  world polys (new_checked gate), re-runs classify_side, depth-checks.
+  `proofs/world.rs` (17 lemmas): rigid transforms preserve orient (the
+  rotation-cross identity cross(Ru,Rv) ≡ (c²+s²)·cross(u,v)) and global
+  convexity — the phys-06 C4 workhorse. Scene S4: equal-mass side-2
+  squares head-on, e=0 — post velocities EXACTLY (−1/2, 0), certificate
+  accepts. Note: side-2 squares keep every anchor integral so the closed
+  eval stays structural; C3 went through the abstract lemma (no closed
+  eval). Design fix recorded in SPEC A10: the C4 touching disjunct is an
+  exists-edge-witness (the exists-ms form is vacuous).
 
 Deviations from v1.3 text (they amend SPEC where they conflict):
 
@@ -451,7 +463,7 @@ independent of everything else in this plan.
 | phys-02 ✅ | `RotQ`: rational unit-circle type; verified invariant c²+s²=1, exact compose/inverse; `snap(angle_enclosure, k)` with certified 2⁻ᵏ error (uses verus-interval-arithmetic) | phys-01 |
 | phys-03 ✅ | free-flight symplectic Euler; **proved:** exact conservation of linear & angular momentum for closed systems | phys-02 |
 | phys-04 ✅ | convex rational polygons; SAT contact detection; **proved:** classification correctness with witness (axis or feature pair) | phys-01 |
-| phys-05 | single-contact impulse; **proved:** momentum exchange exact, restitution inequality post-state; SPEC §4 leftovers LANDED (05a massprops, 05b transforms/AABBs); 05c LANDED (triple datatype change one invalidation + Row E1 + impulse lemmas: J·v′ ≡ J·v + λ·mEff, ΔP exchange ≡ 0, C3); remaining: 05d S4 through the certificate (§3.7) | phys-03,04 |
+| phys-05 ✅ | single-contact impulse; **proved:** momentum exchange exact, restitution inequality post-state; 05a massprops, 05b transforms/AABBs, 05c Row E1 + impulse lemmas, 05d S4 through the certificate (common velocity exact, C1–C4 accept) | phys-03,04 |
 | phys-06 | sequential-impulse multi-contact loop + **proven certificate checker** (non-penetration, ledgers); reject-and-retry stepping; C6 uses the two-source ledger bound (D9); signed-enclosure debt RESOLVED | phys-05 |
 | phys-07 | revolute (pin) joint + drift certificate; certified rounding pass (D3) | phys-06 |
 | phys-08 | gear joint (ratio constraint, ratio-drift certificate); **demo: gear train + crank** | phys-07 |
@@ -475,9 +487,8 @@ independent of everything else in this plan.
 | phys-25 | emergent cam demos: force-closed roller follower (follower-jump physics, conditional certificate per D8), form-closed groove cam, constant-breadth pair, conjugate pair; four-bar linkage bonus demo | phys-16,24 |
 
 Suggested first arc: phys-01 → 02 → 03 ✅ (done, with phys-04 landed right
-after). Current arc: phys-05 (05a/05b landed; 05c LANDED — triple datatype
-change one invalidation + Row E1 + impulse lemmas; 05d S4 through the
-certificate) → phys-06
+after). phys-05 ✅ (05a massprops, 05b transforms/AABBs, 05c Row E1 +
+impulse lemmas, 05d S4 through the certificate). Current arc: phys-06
 (row solver + certificate checker; C6 on the two-source ledger bound D9).
 phys-12 (Lean G1–G2) remains the Lean-side palate cleanser whenever the
 mood is more mathlib than Verus — and G0 now also owes the tan-remainder
