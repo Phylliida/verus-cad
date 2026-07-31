@@ -18,7 +18,8 @@ phys-06 delivers the complete exact-rational engine step:
   project → snap → certify) as a PURE fn `World -> StepResult`.
 - `StepCert` + the proven checker (`check_step`), the ONLY thing the
   engine's headline claims rest on (D8): ok == the checks pass, and
-  ok ⟹ step_certified (C1–C6).
+  ok ⟹ step_certified (C1–C7, including the exact energy ledger — no
+  tolerance on energy; D13 candidate).
 - Reject-and-retry driver (halve dt on Reject, give up below dt/16).
 - Scene S5: 3-box stack on static ground, gravity, 2000 steps, no
   rejection, final penetration ≤ tol_p, boxes still (SPEC §8).
@@ -199,16 +200,17 @@ for iter in 0..16:                       // fixed count, canonical order
 - canonicalize velocities between iterations (D10, value-preserving) as
   needed for exec feasibility (pre-flight 2 decides).
 
-Note on C3 (spec form is per-row post v_rel ≥ −tol_v): PGS residuals
-after N=16 are exact rationals whose sign is NOT guaranteed ≥ 0 in
-general. tol_v is a scene parameter — S5 should plan on a small
-rational tol_v (e.g. 1/1000) rather than 0; record actuals. (For the
-single-row S4 case exact 0 was provable; multi-row is not exact-zero
-in general — flag in DESIGN if S5 wants tol_v = 0 and can't have it.)
+Note on C3 (spec form is per-row post v_rel ≥ −tol_v): C3 is a cheap
+no-suck guard only — the anti-exploit guarantee is C7 (exact energy
+ledger, §8.1). tol_v = 0 where provable (single-row scenes); small
+rational (e.g. 1/1000) acceptable for multi-row stacks since PGS
+residuals are exact-but-nonzero in general. Optional exact hard cap
+`(v_rel')² ≤ v_rel²` (no overshoot beyond incoming, no sqrt needed) —
+adopt if it doesn't reject legitimate solves.
 
 ## 8. The certificate (the card's core)
 
-### 8.1 step_checks_pass / step_certified (spec fns, C1–C6)
+### 8.1 step_checks_pass / step_certified (spec fns, C1–C7)
 
 Mirror of phys-05d: `check_step` returns `ok == step_checks_pass(pre,
 post, cert)` and `ok ⟹ step_certified(pre, post, cert)`. The two spec
@@ -258,12 +260,48 @@ fns differ only in that checks_pass includes the constructive gates
   arctan; tan remainder ≤ R·h⁷ on [0,1/2]) is Lean G0, which grows the
   tan-remainder theorem (D9). Record the dependency in the ledger
   module docs.
+- **C7 (exact energy ledger — the anti-exploit guarantee; D13 candidate,
+  resolves the tol_v question).** Energy is EXACTLY accounted — no
+  tolerance on energy anywhere:
+  `E = KE + PE`,  `KE(bodies) = Σ_{dynamic i} (1/inv_m_i)·|v_i|²/2
+                                 + (1/inv_I_i)·ω_i²/2`,
+  `PE(bodies, g) = −Σ_{dynamic i} (1/inv_m_i)·dot(g, pos_i)`.
+  The checker folds KE/PE itself (spec folds mirror the momentum folds
+  lin_mom/ang_mom) and requires:
+      E(post) ≤ E(pre) + W_proj + W_snaps + W_drift
+  equivalently **dissipation D = E(pre) + W_proj + W_snaps + W_drift
+  − E(post) ≥ 0, exactly computed**:
+  - `W_proj`: the EXACT PE change from declared position-projection
+    deltas — projection deltas are fully determined by the re-derived
+    contact geometry (§9), so the checker recomputes this term exactly
+    (projection pumping beyond the actual penetration → the position
+    check fails; the energy term is bookkeeping, not a bound).
+  - `W_snaps`: exact energy delta of declared snaps, recomputed from
+    declared deltas (vacuous while snaps == []).
+  - `W_drift`: the symplectic integration drift — symplectic Euler does
+    NOT conserve energy even with exact arithmetic (for constant
+    gravity it over-integrates g·dt²/2 per body per step), but the
+    drift is closed-form and exactly computable per body; it is an
+    accounted term, NOT an error. (For zero gravity, W_drift ≡ 0 and
+    free flight is exactly energy-preserving.)
+  Contacts with e = 0 dissipate, so the honest phase-1 headline is:
+  **dissipation is nonnegative and exactly computed.** Any energy that
+  appears from nowhere (overshoot, phantom rows, projection abuse,
+  snap abuse beyond declared bounds) is a Reject — there is no
+  tolerance for it to hide in. e = 0 also means a perfect stop is
+  maximal dissipation, so D ≥ 0 is achievable by a correct solver.
+  Optional per-contact hard cap (cheap, exact, no sqrt): for each
+  contact row, `(v_rel')² ≤ v_rel²` when v_rel < 0 — no overshoot
+  beyond incoming speed. Fold into C3 if it holds for PGS in practice;
+  if it rejects legitimate multi-row solves, C7 alone suffices.
 
 ### 8.2 Checker structure (mirror 05d exactly)
 
 per-check exec fns with `ok == spec` ensures:
 `check_c1_rows`, `check_c2_rows`, `check_c3_rows`, `check_c4_world`,
-`check_c5_joints`, `check_c6_ledger` (06c), composed in `check_step`.
+`check_c5_joints`, `check_c6_ledger` (06c), `check_c7_energy` (06a:
+KE/PE folds + W_drift; W_proj in 06b; W_snaps in 06c), composed in
+`check_step`.
 Keep each fn ≤ ~80 lines; fold lemmas (impulse sum, all-rows-bounds,
 etc.) in proofs/solver.rs and proofs/cert.rs. Extract proof helpers
 EARLY — the 05d rlimit failure mode was inline proof blocks in exec
@@ -298,19 +336,23 @@ sum ≢ 0 — if both static, skip). Untrusted (C4 guards), wf-only proofs
 ## 11. Increments & acceptance scenes
 
 - **06a** (the big one): datatype batch (§4) + manifold (§6) + PGS (§7)
-  + pipeline steps 1–4 + cert C1–C5 (C6 vacuous: snaps == [], angle
-  check deferred) + scene **S5a**: one side-2 box dropped from height 1
+  + pipeline steps 1–4 + cert C1–C5 + C7 (W_drift only; W_proj/W_snaps
+  vacuous) + scene **S5a**: one side-2 box dropped from height 1
   onto a static ground box, gravity (0,−10), dt = 1/240, ~150 steps:
   every step certifies (ok == true statically), box comes to rest on
-  the ground, penetration ≤ tol_p = 1/1000 throughout. (Without
+  the ground, penetration ≤ tol_p = 1/1000 throughout, dissipation
+  nonnegative and exactly computed. (Without
   projection, steady-state penetration is g·dt²-ish per step — compute
   the exact bound for the scene proof: pen ≡ g·dt² per SPEC's impulse
   model; confirm it's < tol_p, else raise tol_p — record the choice.)
-- **06b**: position projection (§9) + scene **S5b**: 2-box stack,
+- **06b**: position projection (§9) + C7's W_proj (exact re-derived
+  projection work) + scene **S5b**: 2-box stack,
   100 steps, penetration driven back to ≈ 0 by projection.
-- **06c**: canonicalize + snaps + C6 (two-source) + driver reject/retry
+- **06c**: canonicalize + snaps + C6 (two-source) + C7's W_snaps +
+  driver reject/retry
   + scene **S5 (full SPEC §8)**: 3-box stack, 2000 steps, no Reject,
-  final penetration ≤ tol_p, |v| < 1/1000 on all boxes.
+  final penetration ≤ tol_p, |v| < 1/1000 on all boxes,
+  D ≥ 0 exactly every step.
 
 Scene design rules (memory: certificate-design-lessons §5): integral
 anchors (side-2 boxes, integer positions), gravity/dt chosen so h =
@@ -347,13 +389,17 @@ discharge via abstract lemmas before ANY closed eval.
 
 ## 13. Risks & open questions
 
+- ~~**C3 tol for multi-row stacks**~~ **RESOLVED (D13 candidate):** the
+  anti-exploit guarantee does NOT rest on a tolerance. C7 (exact energy
+  ledger, §8.1) accounts every Joule exactly — dissipation is
+  nonnegative and exactly computed; nothing can appear from nowhere.
+  C3 remains a cheap no-suck guard (tol_v = 0 where provable, small
+  rational for stacks). Remaining sub-question: whether the per-contact
+  exact cap `(v_rel')² ≤ v_rel²` holds for PGS in practice — decide by
+  experiment in 06a, C7 suffices either way.
 - **Exec feasibility of S5 (2000 steps)** — exact BigInt arithmetic with
   canonicalize should hold; measure at 06a (pre-flight 2). Fallback:
   canonicalize more aggressively (every PGS iteration).
-- **C3 tol for multi-row stacks** — exact-zero post v_rel is NOT
-  guaranteed by finite PGS; S5 likely needs tol_v = 1/1000. If the
-  DESIGN wants tol_v = 0 as the phase-1 headline, that's a solver-
-  convergence question, not a checker question — flag early.
 - **C6 tightens accept to |h| ≤ 1/2** — scenes must respect it
   (rotation speeds); step rejects faster spins (driver halves dt).
 - **Manifold edge cases** — vertex-vertex contacts produce 1-point
@@ -370,6 +416,6 @@ discharge via abstract lemmas before ANY closed eval.
    cheap).
 2. datatype batch (§4) — one invalidation.
 3. manifold construction + proofs.
-4. PGS + pipeline 1–4 + cert C1–C5 + S5a green.
-5. projection + S5b.
-6. canonicalize + snaps + C6 + driver + S5 full.
+4. PGS + pipeline 1–4 + cert C1–C5 + C7 (W_drift) + S5a green.
+5. projection + C7 W_proj + S5b.
+6. canonicalize + snaps + C6 + C7 W_snaps + driver + S5 full.
