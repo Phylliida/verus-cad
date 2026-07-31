@@ -8,7 +8,7 @@ only allowed partners belong to a proper subset of the other types.
 
 **Lemma (density obstruction).** Suppose face types partition into
 `A` (each type in `A` pairs only with types in `B`) and `B`, with
-`|A| > |B|`. Then no box of side `L > 6|B| / (|A| - |B|)` is tileable,
+`|A| > |B|`. Then no box of side `L > 6 / (|A| - |B|)` is tileable,
 and hence the decoration cannot tile space at all.
 
 *Proof.* Every placed cube presents exactly one face of each type.
@@ -17,8 +17,19 @@ serve at most one adjacency each. In a box of side `L` there are
 `|A| L³` partner-needing incidences and only `|B| L³` partners, so at
 least `(|A| - |B|) L³` type-`A` faces must go unmatched, and unmatched
 faces can only sit on the boundary, which has `6 L²` outward slots.
-Tileable requires `(|A| - |B|) L³ ≤ 6 L²`, i.e.
-`L ≤ 6|B| / (|A| - |B|)`. ∎
+Tileable requires `(|A| - |B|) L³ ≤ 6 L²`, i.e. `(|A| - |B|) L ≤ 6`,
+i.e. `L ≤ 6 / (|A| - |B|)`. ∎
+
+> **Erratum / sharpening (2026-07-31).** This note originally stated the
+> bound as `L ≤ 6|B| / (|A| - |B|)` — a slip in the final division:
+> `(|A| - |B|) L³ ≤ 6 L²` gives `L ≤ 6 / (|A| - |B|)`, with no `|B|`
+> factor. The two agree at `|B| = 1` (canon 755), so every conclusion
+> drawn here stands; the sharper bound only kills more boxes. The sharp
+> form is now machine-proved: `density_obstruction` in
+> `lean-flocq/LeanFlocq/ColorDensity.lean`, with the canon-755 instance
+> in `lean-flocq/LeanFlocq/AnyK3DColorDensity.lean`
+> (`color755_empty`: the relation's orientation SFT on ℤ³ is empty,
+> Lean-checked, no SAT certificate involved).
 
 ## Canon 755
 
@@ -29,7 +40,7 @@ Its relation (computed directly, all three axes):
     face 4 pairs ONLY with faces 3 and 5 (never itself)
     face 5 pairs ONLY with face 4
 
-So `A = {3, 5}`, `B = {4}`: deficit 1, bound `L ≤ 6·1/1 = 6`.
+So `A = {3, 5}`, `B = {4}`: deficit 1, bound `L ≤ 6/1 = 6`.
 
 **canon 755 cannot tile any box of side ≥ 7, hence cannot tile space —
 empty, by pure counting.** No solver required. (The 7³ cube-and-conquer
