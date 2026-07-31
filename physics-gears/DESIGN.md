@@ -464,7 +464,7 @@ independent of everything else in this plan.
 | phys-03 ✅ | free-flight symplectic Euler; **proved:** exact conservation of linear & angular momentum for closed systems | phys-02 |
 | phys-04 ✅ | convex rational polygons; SAT contact detection; **proved:** classification correctness with witness (axis or feature pair) | phys-01 |
 | phys-05 ✅ | single-contact impulse; **proved:** momentum exchange exact, restitution inequality post-state; 05a massprops, 05b transforms/AABBs, 05c Row E1 + impulse lemmas, 05d S4 through the certificate (common velocity exact, C1–C4 accept) | phys-03,04 |
-| phys-06 | sequential-impulse multi-contact loop + **proven certificate checker** (non-penetration, ledgers); reject-and-retry stepping; C6 uses the two-source ledger bound (D9); signed-enclosure debt RESOLVED | phys-05 |
+| phys-06 | sequential-impulse multi-contact loop + **proven certificate checker** (non-penetration, ledgers); reject-and-retry stepping; C6 uses the two-source ledger bound (D9); signed-enclosure debt RESOLVED. **Detailed plan: SPEC-phys06.md** (increments 06a manifold+PGS+cert C1–C5+S5a, 06b projection+S5b, 06c snaps+C6+driver+S5) | phys-05 |
 | phys-07 | revolute (pin) joint + drift certificate; certified rounding pass (D3) | phys-06 |
 | phys-08 | gear joint (ratio constraint, ratio-drift certificate); **demo: gear train + crank** | phys-07 |
 | phys-09 | trace JSON + tiny canvas viewer (unverified glue; maybe steal verus-canvas bits) | phys-06 |
@@ -489,6 +489,8 @@ independent of everything else in this plan.
 Suggested first arc: phys-01 → 02 → 03 ✅ (done, with phys-04 landed right
 after). phys-05 ✅ (05a massprops, 05b transforms/AABBs, 05c Row E1 +
 impulse lemmas, 05d S4 through the certificate). Current arc: phys-06
+(detailed plan in SPEC-phys06.md: 06a manifold + PGS + cert C1–C5 + S5a,
+06b position projection + S5b, 06c snaps + C6 two-source + driver + S5)
 (row solver + certificate checker; C6 on the two-source ledger bound D9).
 phys-12 (Lean G1–G2) remains the Lean-side palate cleanser whenever the
 mood is more mathlib than Verus — and G0 now also owes the tan-remainder
