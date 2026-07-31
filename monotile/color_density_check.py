@@ -48,7 +48,13 @@ for ax in range(3):
 
 
 def deficient(prof):
-    """Largest deficiency bound found, or None."""
+    """Smallest deficiency bound found, or None.
+
+    Sound form (2026-07-31): partners are the symmetrized partner set —
+    an A-face pointing either way across an adjacency must land its
+    partner in P (an earlier row-only version was unsound for
+    non-symmetric relations; the export in color_density_export.py and
+    the Lean checker use this sym form)."""
     held = set(prof)
     pair = [[False] * 6 for _ in range(6)]
     for ax, o1, o2, g, h in TRIPLES:
@@ -60,18 +66,15 @@ def deficient(prof):
             partners = set()
             for g in A:
                 partners |= {h for h in range(6) if pair[g][h]}
+                partners |= {h for h in range(6) if pair[h][g]}
             if not partners:
                 continue  # no adjacencies at all: empty immediately
-            B = partners - set(A)
-            if len(B) < len(A) and len(B) >= 1 and \
-                    all(h in partners for g in A for h in range(6)
-                        if pair[g][h]):
-                # A pairs only into partners; deficient if |A| > |partners|
-                if len(A) > len(partners):
-                    # tileable needs (|A|-|P|)*L <= 6, i.e. L <= 6/(|A|-|P|)
-                    b = 6 // (len(A) - len(partners))
-                    if best is None or b < best:
-                        best = b
+            # A pairs only into partners; deficient if |A| > |partners|
+            if len(A) > len(partners):
+                # tileable needs (|A|-|P|)*L <= 6, i.e. L <= 6/(|A|-|P|)
+                b = 6 // (len(A) - len(partners))
+                if best is None or b < best:
+                    best = b
     return best
 
 

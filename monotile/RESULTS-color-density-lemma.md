@@ -30,6 +30,21 @@ i.e. `L ≤ 6 / (|A| - |B|)`. ∎
 > in `lean-flocq/LeanFlocq/AnyK3DColorDensity.lean`
 > (`color755_empty`: the relation's orientation SFT on ℤ³ is empty,
 > Lean-checked, no SAT certificate involved).
+>
+> **Certificate slimming (2026-07-31).** The density lemma applies
+> census-wide: **176,197 of 414,079** canonical color profiles (42.5%)
+> have a deficient face-type class (symmetrized partner condition —
+> sound for non-symmetric relations), hence an empty SFT by pure
+> counting. Bound histogram (max tileable L): `{1: 957, 2: 7023,
+> 3: 40648, 6: 127569}`; by verdict tier the kills are 176,051 × empty3,
+> 142 × empty5, 3 × empty7, plus canon 755 — i.e. every density-killed
+> profile was independently SAT-verified empty (755 aside), and nearly
+> half of all empty3 verdicts need no SAT at all. Witnesses:
+> `color_density_export.py` → `color_density_kills.json`; kernel
+> verification: `killOk`/`killOk_sound` in
+> `lean-flocq/LeanFlocq/AnyK3DDensityCheck.lean` plus 12 batch
+> `native_decide` chunks (`AnyK3DDensityKills*.lean`) — all 176,197
+> emptiness verdicts kernel-checked.
 
 ## Canon 755
 
