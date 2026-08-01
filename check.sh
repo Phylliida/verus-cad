@@ -92,7 +92,7 @@ if $CACHE; then
 fi
 
 if $RAW; then
-  "$CARGO_VERUS" verify --manifest-path Cargo.toml -p "$CRATE" -- ${MODULE_FLAG}${CACHE_FLAG}--triggers-mode silent
+  "$CARGO_VERUS" verify --manifest-path Cargo.toml -p "$CRATE" --lib -- ${MODULE_FLAG}${CACHE_FLAG}--triggers-mode silent
 else
-  "$CARGO_VERUS" verify --manifest-path Cargo.toml -p "$CRATE" --message-format=json -- ${MODULE_FLAG}${CACHE_FLAG}--triggers-mode silent
+  "$CARGO_VERUS" verify --manifest-path Cargo.toml -p "$CRATE" --lib --message-format=json -- ${MODULE_FLAG}${CACHE_FLAG}--triggers-mode silent
 fi
