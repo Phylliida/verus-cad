@@ -30,19 +30,21 @@ lemma). This document is the roadmap for making that classification
 | canon 755 empty by counting | `AnyK3DColorDensity.lean` | proven |
 | **176,197** empty profiles, batch-verified | `AnyK3DDensityCheck.lean` + 12 chunks | proven |
 | torus checker + soundness | `AnyK3DColorPeriodic.lean` | proven |
-| 41,824 torus witnesses regenerated | `color_periodic_export.py` | running |
+| **41,824** periodic profiles, batch-verified | `AnyK3DColorPeriodicAll.lean` + 5 chunks | proven |
 
-After the periodic batch lands: **218,021 / 414,079 = 52.6%** of the
-census kernel-verified.
+Verified so far: **218,021 / 414,079 = 52.6%** of the census.
 
 ## Remaining work
 
-### R1. Periodic tier batch (in flight, no new proof technology)
+### R1. Periodic tier batch ✅ DONE (2026-08-02)
 
-- Build the 8 data chunks (`AnyK3DColorPeriodicData{j}.lean`) with batch
-  `native_decide`, plus aggregate count theorem.
-- Deliverable: every periodic profile's `PeriodicRelTiles` kernel-verified.
-- Effort: mechanical (mirror of the density batch). ETA: this week.
+- 41,824 torus witnesses regenerated (checkpointed re-solve, 0 failures,
+  avg 34 cells/torus), rectangularized to plain tori, packed into 5
+  chunks; batch `native_decide` + `torusOK_sound` discharge each
+  profile's `PeriodicRelTiles`. `periodic_total : ... = 41824`
+  (`AnyK3DColorPeriodicAll.lean`, lean-flocq `fb613ef`).
+
+After R1: **218,021 / 414,079 = 52.6%** of the census kernel-verified.
 
 ### R2. Empty remainder: 196,058 box-UNSAT profiles
 
