@@ -7,6 +7,7 @@ to re-read. Newest first.
 
 | Date | File | One-liner |
 |---|---|---|
+| 2026-08-03 | [pgs-canonicalize-and-c7-drift.md](pgs-canonicalize-and-c7-drift.md) | canonicalize INSIDE the PGS sweep (50×/iter blowup); C7's negative W_drift rejects honest rest — D ≥ 0 with no allowance is the true D13; S5a numbers incl. tol_p = 1/100 |
 | 2026-07-31 | [exec-feasibility-and-normalize.md](exec-feasibility-and-normalize.md) | unreduced rational adds square RotQ witnesses (4×/step cost); normalize() is proven and cheap — hygiene moves to 06a; normalize's zero branch doesn't reduce |
 | 2026-07-29 | [certificate-design-lessons.md](certificate-design-lessons.md) | vacuous ∃-specs; bidirectional checker ensures; new_checked as convexity gate; abstract lemmas > closed eval; structural scene constants |
 | 2026-07-28 | [module-checks-and-nla-opacity.md](module-checks-and-nla-opacity.md) | module checks trust dependency lemmas (full-crate green is the only green); NLA is spec-fn-opaque; eqv-chain call order |
