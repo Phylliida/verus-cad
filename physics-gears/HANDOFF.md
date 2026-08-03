@@ -32,8 +32,16 @@ ledgers, exact energy accounting) and rejected on any mismatch.
 
 ## Current state
 
-- **phys-01 .. phys-05 COMPLETE.** Full crate green (0 errors;
-  `./check.sh verus-physics2d` from the workspace root).
+- **phys-01 .. phys-05 COMPLETE; phys-06a engine COMPLETE** (manifolds,
+  solver, full C1–C5+C7 certificate, pipeline), exec-validated on the
+  full S5a trajectory (140 steps, all certify). **S5a's static
+  acceptance proof is in flight** — the velocity-bookkeeping piece is
+  ~95% done with 2 remaining errors at the end of pgs_sweep_exec.
+- **READ `verus-physics2d/HANDOFF.md` NEXT** (2026-08-03) — it has the
+  current state, the in-flight uncommitted work with the exact failure
+  point, and this session's design decisions (C7 D13 resolution,
+  PGS-internal canonicalize, tol_p = 1/100).
+- The rest of this file is accurate for phys-01..05 and repo layout.
 - Landed: RotQ + angle ledger (signed enclosures, |t| ≤ 1), free-flight
   step with exact momentum conservation (S1/S2), ConvexPoly global
   convexity + checked constructor (S3), exact mass props (M1), world
