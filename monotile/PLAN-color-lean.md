@@ -51,33 +51,32 @@ After R1: **218,021 / 414,079 = 52.6%** of the census kernel-verified.
 Breakdown: 195,813 at 3³, 241 at 5³, 4 at 6³. (The 3 empty7 verdicts and
 755 are already density-covered.)
 
-Two sub-problems:
+**Decision (2026-08-03, probe): the cake_lpr route.** Measured on a
+typical color 3³ profile (648 vars, 34,911 clauses): CaDiCaL refutes in
+47 ms (214 KB text LRAT); cake_lpr verifies the same cert in **0.093 s**;
+in-Lean `verifyCert` stack-overflows at default stack and runs >17 min
+even with a 4 GB thread stack (consistent with the M5 probe: >10 min for
+one 43 KB cert). In-Lean per-cert checking is ~4 orders of magnitude too
+slow for 196k profiles; the solver stays untrusted, the CakeML-verified
+checker re-checks every cert, and the Lean side takes an axiom matching
+`frontierEmptyFacts`' trust profile.
 
-1. **Encoding correctness (proof).** `CNF-UNSAT(box L, held) → ¬∃ BoxTiling
-   L (pairOf held)`, hence no ℤ³ tiling via the existing `boxTilingOf`
-   restriction. One CNF-satisfiability-to-BoxTiling direction suffices
-   (sat ⇒ tiling); the pattern already exists in the bump/dent track
-   (`AnyK3DEmptyEnc.lean`) and is reusable.
-2. **UNSAT evidence (compute).** Options, in preference order:
-   - **(a) In-Lean verified SAT.** The bump/dent M5 probe showed
-     `Std.Sat verifyCert` too slow at 43 KB-cert frontier scale — but 3³
-     boxes (648 one-hot vars + ~14k clauses) are far smaller. *First task:
-     one timed experiment* — export a 3³ CNF + CaDiCaL LRAT cert, check it
-     in Lean, measure. If ≲ seconds per profile, batch like the density
-     chunks (196k × small certs; chunk by cumulative cert size).
-   - **(b) cake_lpr external.** If (a) is too slow: solver untrusted,
-     CakeML-verified checker re-checks each LRAT, emptiness stated as an
-     axiom with external evidence (same trust profile as
-     `frontierEmptyFacts` today). Faster to land, weaker base.
-   - **(c) More structural kills.** Bounded exploration: are there other
-     arithmetic obstructions (balance-lemma analogues for colors) that
-     shrink the SAT set further? Opportunistic only; (a)/(b) is the
-     systematic answer.
+**Frontier compression (done).** The 196,058 empties reduce to **65,250
+locally-maximal empty masks**; every empty profile has a frontier
+superset, and emptiness transports downward by `tiling_mono` (already
+proven). Certs only for the frontier; the 130,808 subset profiles inherit
+via a `maskLe` batch check (`native_decide`, trivial per pair).
 
-- Effort: (a) probe 1 day; batch 2–3 days if viable. (b) fallback 1–2 days.
-- Risk: cert volume (196k certs, aggregate size) — mitigate by frontier
-  reduction (only maximal-empty profiles need certs; subsets inherit via
-  `tiling_mono`, as in M4's frontier compression).
+**Pipeline (running).** `gen_color_empty_certs.py`: Lean `ExportEmptyCNF`
+(the same encoder whose `empty_sound` is proven) → cadical `--lrat` →
+cake_lpr verify (checkpointed, certs deleted after). ~1.7 s/CNF export,
+~0.15 s solve+verify per mask — hours of wall time, not days.
+
+**Lean side (next).** One axiom `colorFrontierUnsat` over the 65,250
+masks (external evidence: `color_frontier_verified.txt`), discharged to
+`¬∃ IsTiling` via the already-proven `empty_sound`; plus a batch
+`native_decide` theorem: for each of the 130,808 inheritance pairs
+`(m, M)`, `maskLe m M`, closing their emptiness via `tiling_mono`.
 
 ### R3. Census completeness (the M3b analogue — biggest proof chunk)
 
