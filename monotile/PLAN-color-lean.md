@@ -72,11 +72,17 @@ via a `maskLe` batch check (`native_decide`, trivial per pair).
 cake_lpr verify (checkpointed, certs deleted after). ~1.7 s/CNF export,
 ~0.15 s solve+verify per mask — hours of wall time, not days.
 
-**Lean side (next).** One axiom `colorFrontierUnsat` over the 65,250
-masks (external evidence: `color_frontier_verified.txt`), discharged to
-`¬∃ IsTiling` via the already-proven `empty_sound`; plus a batch
-`native_decide` theorem: for each of the 130,808 inheritance pairs
-`(m, M)`, `maskLe m M`, closing their emptiness via `tiling_mono`.
+**Lean side (done 2026-08-03).** `AnyK3DColorEmpty.lean` (lean-flocq
+`716656f`): one TRUST DEBT axiom `colorFrontierUnsat` over the 65,250
+frontier jobs (external evidence: `color_frontier_verified.txt`),
+discharged to `¬∃ IsTiling` via the already-proven `empty_sound`; plus
+`colorEmpty_of_inheritance` closing the 130,808 subset profiles via a
+batch-`native_decide`'d `maskLe` + `tiling_mono`. **All 196,058 box-UNSAT
+profiles are now covered**, at exactly the bump/dent track's trust
+profile. (Implementation note: the data is accessed through an
+`@[irreducible]` index accessor — appended-array literals in unification
+position caused unbounded whnf blowups; batches and native_decide are
+unaffected.)
 
 ### R3. Census completeness (the M3b analogue — biggest proof chunk)
 
@@ -108,10 +114,10 @@ profile is periodic) → PeriodicRelTiles (R1) → PeriodicallyTiles d`
 | tier | profiles | Lean-verified |
 |---|---|---|
 | empty (density) | 176,197 | ✅ done |
-| empty (box UNSAT) | 196,058 | R2 |
-| periodic | 41,824 | R1 (in flight) |
+| empty (box UNSAT) | 196,058 | ✅ done (R2: cake-backed axiom + inheritance) |
+| periodic | 41,824 | ✅ done (R1) |
 | 755 | 1 | ✅ done (density) |
-| **total** | **414,079** | |
+| **total classified** | **414,079** | **414,079 verdicts covered (100%)** |
 
 ### R6. Cross-track payoff
 
@@ -121,8 +127,10 @@ today), putting `no_aperiodic_wang_cube_anyK` fully inside the kernel too.
 
 ## Suggested order
 
-1. **R1** (lands itself; watch the running export).
-2. **R2(a) probe** — one 3³ cert through in-Lean checking, timed. Decides
-   (a) vs (b) for 196k profiles and for R6.
-3. **R3** in parallel (independent; the long pole).
-4. **R4** once R1–R3 exist; **R6** opportunistically after R2(a).
+1. ~~R1~~ ✅, ~~R2~~ ✅ (all 414,079 per-profile verdicts covered as of
+   2026-08-03).
+2. **R3** census completeness (the long pole; independent).
+3. **R4** assembly once R3 exists; **R6** opportunistically (R2's
+   pipeline already mirrors what `frontierEmptyFacts` needs — the same
+   cake_lpr stream could re-evidence it, or the kernel route if a faster
+   in-Lean checker ever lands).
