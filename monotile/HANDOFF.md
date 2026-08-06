@@ -1,9 +1,11 @@
-# monotile HANDOFF (2026-08-03)
+# monotile HANDOFF (2026-08-04)
 
-For whoever picks this up next. The short version: **every verdict of the
-equal-color 3D census is now discharged in Lean** — what remains is the
-*representation theorem* (the census is complete) and the final assembly.
-Read `PLAN-color-lean.md` first; this file is the operational summary.
+For whoever picks this up next. The short version: **the color track is
+COMPLETE** — `no_aperiodic_equal_color_wang_cube` is proven in
+lean-flocq (`AnyK3DColorMain.lean`): every equal-color Wang cube, any
+grid K, any palette T, that tiles ℤ³ admits a fully periodic tiling.
+What remains is only cross-track cleanup (R6). Read
+`PLAN-color-lean.md` first; this file is the operational summary.
 
 ## The two tracks
 
@@ -13,8 +15,10 @@ Read `PLAN-color-lean.md` first; this file is the operational summary.
    See `RESULT.md`, `DESIGN-anyk-lean.md`, `DESIGN-anyk3d-endgame.md`.
 2. **Equal-color Wang cubes (any K, palette ≥ 2)** — the campaign
    classified all **414,079 canonical profiles**: 41,824 periodic,
-   372,254 box-empty, canon 755. No aperiodic einstein exists
-   computationally; the Lean formalization is underway (this handoff).
+   372,254 box-empty, canon 755. **The Lean formalization is now
+   complete** (R1–R4 all done, 2026-08-04): the census completeness
+   (`color_census_complete`) and the assembly
+   (`no_aperiodic_equal_color_wang_cube`) are kernel-checked.
 
 ## Color track — what's DONE (all in lean-flocq unless noted)
 
@@ -25,7 +29,20 @@ Read `PLAN-color-lean.md` first; this file is the operational summary.
 | 176,197 empty profiles (density kills) | batch-verified | `AnyK3DDensityCheck.lean` + 12 `AnyK3DDensityKills*.lean` chunks |
 | 41,824 periodic profiles (torus witnesses) | batch-verified | `AnyK3DColorPeriodic.lean` (`torusOK`/`torusOK_sound`) + 5 `AnyK3DColorPeriodicData*.lean` chunks |
 | 196,058 box-UNSAT profiles | cake-backed axiom + inheritance | `AnyK3DColorEmpty.lean` (+`Check`/`Data`) |
+| **R3** census completeness (any K, any T) | **proven** | `AnyK3DColor{,Gain,Census,CensusCount,Bridge,Part,Complete}.lean` |
+| **R3** coverage: all 9,341,248 census masks have a rotation in the verdict table | **kernel-verified** | `AnyK3DColorVerdictData.lean` + `AnyK3DColorCoverage.lean` + `AnyK3DColorCovBase.lean` + 16 `AnyK3DColorCovChunk*.lean` + `AnyK3DColorCoverageCheck.lean` |
+| **R4** assembly: `no_aperiodic_equal_color_wang_cube` | **proven** | `AnyK3DColorMain.lean` |
 | **414,079 / 414,079 verdicts** | **covered** | |
+
+R3 essentials (details in `PLAN-color-lean.md` §R3): the color census is
+re-enumerated Lean-natively with the 8-element gain group; ALL 10 of its
+subgroups are exact-stabilizer realizable
+(`check_color_subgroups.py`, missing = 0), so there is no feasibility
+filter and completeness holds for ANY K and ANY palette T; the count
+cross-check `census_count_fastC = 9341248` (native_decide, 288 s)
+independently reproduces the Python census. Verdict transport uses the
+bump/dent `permMask`/`tiling_transport`/`periodic_transport_back`
+machinery unchanged (mask-generic).
 
 Key reusable infrastructure (all proven): `relOfHeld`/`IsTiling`/`Tiles`
 (`AnyK3D.lean`), `boxTilingOf` (ℤ³ tiling ⇒ box tiling),
@@ -50,38 +67,6 @@ future sweeps), `empty_sound` (CNF UNSAT ⇒ no ℤ³ tiling,
 
 ## What REMAINS
 
-### R3 — census completeness (the long pole, M3b analogue)
-
-Prove that every equal-color decoration's 84-bit equation profile is
-represented in the 414,079-entry canonical list (up to the 24 rotations).
-Pieces, roughly in dependency order:
-
-1. **Decoration type + compat.** Colors: each face carries a K×K grid of
-   palette-≥2 colors; matching = patterns *identical through the twist*
-   (bump/dent used complement). Define `CDec T K`, `ccompat`, and prove
-   the K-vanishing factorization (compat determined by the 84-bit profile
-   — the color `compat_factors`; mirror `AnyK3D.lean` M1).
-2. **Achievability enumeration verified.** The Python census
-   (`color_census.py`) computed achievable profiles via: the gain group
-   of the 8 grid isometries (+1 signs), its subgroup lattice, set
-   partitions of the 6 faces, and stabilizer feasibility by brute-force
-   pattern search at K = 2,3,4 (palette-independence for T ≥ 2 follows
-   from K=2 feasibility — `countclosures.py`). These objects are small
-   (subgroups of an 8-element group, K≤4 grids) — plausibly all
-   `native_decide`-checkable; the completeness argument needs the same
-   proof shape as bump/dent M3b (`census_complete`), NOT a re-enumeration
-   of 2^84.
-3. **Canonical transport.** Every profile's canonical form is in the
-   list, and empty/periodic verdicts transport under the rotation group
-   (reuse `RotSym`/`relabelO`/`tiling_transport` from the bump/dent
-   track — `AnyK3DTransport.lean`).
-
-### R4 — assembly (days, once R3 exists)
-
-`Tiles d → profile(d) ∈ census (R3) → not empty (Tiling ⇒ SFT nonempty)
-→ periodic tier → PeriodicRelTiles → PeriodicallyTiles d`. Structurally
-identical to `AnyK3DMain.lean`; include the K=0/K=1 edge cases.
-
 ### R6 — cross-track trust debt (opportunistic)
 
 The bump/dent `frontierEmptyFacts` (3,371 cheap masks) already has
@@ -97,6 +82,24 @@ similar.
   data through an `@[irreducible]` index accessor (`frontierJob` pattern)
   — appended-array literals in *unification position* cause unbounded whnf
   blowups; `native_decide`/compiled evaluation is unaffected.
+- **Proof-side rewriting around big data**: even `simp only [Array.mem_def,
+  List.mem_append]` on a membership in an appended data array whnf-evaluates
+  the append chains (deterministic heartbeat timeouts). Use `Array.mem_append`
+  rewrites (structural, no data evaluation), or better: generic split lemmas
+  (`mem_append5`/`mem_append12` pattern) applied via defeq ascription.
+- **Multi-million-scale `native_decide`**: chunk the input list across
+  parallel modules (`AnyK3DColorCovChunk*` pattern: one def per slice in a
+  base module, one tiny chunk module per slice with its own `native_decide`,
+  a decode module bridging `List.mem_iff_getElem` + take/drop). A
+  9.3M-mask check measured ~4.5 h single-module; 16 chunks ≈ ~85 min in
+  4-job batches. NOTE: this machine crashes with >4 parallel lake jobs —
+  batch targets ≤4 per `lake build` invocation (no `-j` flag exists).
+- **Canonicalization gotcha**: `color_orbits.py` canonicalizes by the
+  LEXICOGRAPHIC min of sorted bit-lists, NOT the numeric min of masks
+  (~95% of orbits differ). And subsequence checks are the wrong shape for
+  "9.3M pre-images vs 414k-entry table" (multiplicities) — the working
+  formulation is any-rotation binary-search membership with early exit
+  (`binMem` + `binMemGo_sound`; soundness of "found" needs no sortedness).
 - `set_option ... in` breaks if a `/-- -/` doc comment neighbors it; keep
   them adjacent or use file-level options. Big batches: file-level
   `set_option maxHeartbeats` (0 resets to default 200000, it is NOT
@@ -110,12 +113,12 @@ similar.
 - cadical: `/home/bepis/.elan/toolchains/leanprover--lean4---v4.25.0/bin/cadical`;
   text LRAT needs `--lrat --no-binary`; cake_lpr takes binary.
 - Lean builds: `cd lean-flocq && lake build LeanFlocq.<Module>`; parallel
-  across modules is fine (64 cores here); full cold rebuilds of the batch
-  chunks are ~30 min.
+  across modules is fine **up to 4 jobs** (see above); full cold rebuilds
+  of the batch chunks are ~30 min.
 
 ## File map (color track)
 
-- `monotile/PLAN-color-lean.md` — the roadmap + tier table (R1/R2 done).
+- `monotile/PLAN-color-lean.md` — the roadmap + tier table (R1–R4 done).
 - `monotile/RESULTS-color-density-lemma.md` — the density lemma writeup +
   erratum (sharp bound) + slimming results.
 - `monotile/color_density_export.py` → density kill witnesses
@@ -125,8 +128,19 @@ similar.
 - `monotile/gen_color_empty_certs.py` → frontier CNF + cadical + cake_lpr
   (`color_frontier_verified.txt` evidence).
 - `monotile/color_empty_lean_export.py` → `AnyK3DColorEmptyData.lean`.
+- `monotile/check_color_subgroups.py` — the R3 feasibility probe (all 10
+  subgroups of the 8-element gain group exact-stabilizer realizable).
+- `monotile/color_verdict_export.py` → `AnyK3DColorVerdictData.lean`
+  (unified 414,079-row verdict table, partition-checked).
+- `monotile/check_color_coverage_{sample,full}.py` — external pre-validation
+  of the coverage claim (full: 9,341,248/9,341,248, zero misses).
 - lean-flocq modules (all committed): `ColorDensity`,
   `AnyK3DColorDensity`, `AnyK3DDensityCheck` + 12 `AnyK3DDensityKills*`,
   `AnyK3DColorPeriodic` + 5 `AnyK3DColorPeriodicData*` +
   `AnyK3DColorPeriodicAll`, `AnyK3DDensityKillsAll`, `AnyK3DColorEmpty`,
-  `AnyK3DColorEmptyCheck`, `AnyK3DColorEmptyData`.
+  `AnyK3DColorEmptyCheck`, `AnyK3DColorEmptyData`, `AnyK3DColor`,
+  `AnyK3DColorGain`, `AnyK3DColorCensus` + `AnyK3DColorCensusCount`,
+  `AnyK3DColorBridge`, `AnyK3DColorPart`, `AnyK3DColorComplete`,
+  `AnyK3DColorVerdictData`, `AnyK3DColorCoverage`, `AnyK3DColorCovBase`
+  + 16 `AnyK3DColorCovChunk*`, `AnyK3DColorCoverageCheck`,
+  `AnyK3DColorMain`.
