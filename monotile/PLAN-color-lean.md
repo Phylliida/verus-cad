@@ -181,7 +181,9 @@ today), putting `no_aperiodic_wang_cube_anyK` fully inside the kernel too.
 
 1. ~~R1~~ ✅, ~~R2~~ ✅, ~~R3~~ ✅, ~~R4~~ ✅ — **the color theorem is
    proven** (2026-08-04).
-2. **R6** opportunistically: the bump/dent `frontierEmptyFacts` (3,371
-   cheap masks) stays an axiom unless someone lands a faster in-Lean
-   LRAT checker; the color R2 pipeline (`gen_color_empty_certs.py`) is
-   the template for re-evidencing anything similar.
+2. **R6** ✅ evidence unified (2026-08-06): all bump/dent trust debt
+   (3,371 cheap frontier masks + 387 straggler leaves) re-evidenced
+   through the R2 pipeline (`gen_bumpdent_certs.py` →
+   `bumpdent_frontier_verified.txt`, 0 failures). The axioms themselves
+   stay (in-Lean LRAT checking measured non-viable) unless someone lands
+   a faster in-Lean checker.

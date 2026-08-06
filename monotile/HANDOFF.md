@@ -67,13 +67,21 @@ future sweeps), `empty_sound` (CNF UNSAT ⇒ no ℤ³ tiling,
 
 ## What REMAINS
 
-### R6 — cross-track trust debt (opportunistic)
+### R6 — cross-track trust debt ✅ evidence unified (2026-08-06)
 
-The bump/dent `frontierEmptyFacts` (3,371 cheap masks) already has
-cake_lpr evidence (`verify_cheap.py`); it stays an axiom unless someone
-lands a faster in-Lean LRAT checker. The color R2 pipeline
-(`gen_color_empty_certs.py`) is the template for re-evidencing anything
-similar.
+The bump/dent `frontierEmptyFacts` (3,371 cheap masks) and the 34
+`stragLeafUnsat` axioms (387 cube-and-conquer leaves) stay axioms
+(in-Lean LRAT checking measured non-viable), but ALL of their external
+evidence is now re-generated through the R2 color pipeline at one
+standard (`gen_bumpdent_certs.py`): fresh `ExportEmptyCNF` exports (the
+proven encoder — historical cheap CNFs spot-verified byte-identical,
+11/11; straggler bases re-exported since they matched only up to clause
+order), cadical `--lrat`, cake_lpr re-check, certs deleted after each
+job. Unified ledger: `bumpdent_frontier_verified.txt` — **3,371/3,371
+cheap + 387/387 leaves, 0 failures** (~88 min at 4 workers). The axiom
+comments in `AnyK3DMain.lean`/`AnyK3DStragTrees.lean` cite it. This
+supersedes `cheap_verified.txt` + `strag_verified.txt` (same checker,
+older ad-hoc drivers).
 
 ## Operational notes (learned the hard way this week)
 
@@ -127,6 +135,9 @@ similar.
   (`color_periodic_ckpt.jsonl` checkpoint; `color_periodic_witnesses.json`).
 - `monotile/gen_color_empty_certs.py` → frontier CNF + cadical + cake_lpr
   (`color_frontier_verified.txt` evidence).
+- `monotile/gen_bumpdent_certs.py` → R6 unified bump/dent re-evidence
+  (`bumpdent_frontier_verified.txt`: 3,371 cheap + 387 strag leaves,
+  0 failures).
 - `monotile/color_empty_lean_export.py` → `AnyK3DColorEmptyData.lean`.
 - `monotile/check_color_subgroups.py` — the R3 feasibility probe (all 10
   subgroups of the 8-element gain group exact-stabilizer realizable).
