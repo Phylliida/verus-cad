@@ -1,0 +1,24 @@
+{"i": 0, "verdict": "periodic", "d": [1, 1], "grid": [0], "achiral": true}
+{"i": 3, "verdict": "periodic", "d": [1, 2], "grid": [2, 0], "achiral": true}
+{"i": 9, "verdict": "periodic", "d": [2, 2], "grid": [2, 3, 1, 0], "achiral": true}
+{"i": 6, "verdict": "periodic", "d": [1, 2], "grid": [2, 0], "achiral": true}
+{"i": 1, "verdict": "periodic", "d": [2, 2], "grid": [2, 3, 1, 0], "achiral": true}
+{"i": 8, "verdict": "periodic", "d": [2, 2], "grid": [2, 3, 1, 0], "achiral": true}
+{"i": 10, "verdict": "periodic", "d": [2, 2], "grid": [0, 3, 1, 2], "achiral": true}
+{"i": 2, "verdict": "periodic", "d": [2, 2], "grid": [2, 3, 1, 0], "achiral": true}
+{"i": 7, "verdict": "periodic", "d": [2, 2], "grid": [2, 1, 1, 0], "achiral": true}
+{"i": 15, "verdict": "periodic", "d": [2, 2], "grid": [2, 1, 1, 0], "achiral": true}
+{"i": 16, "verdict": "periodic", "d": [2, 2], "grid": [2, 3, 1, 0], "achiral": true}
+{"i": 18, "verdict": "periodic", "d": [1, 1], "grid": [3], "achiral": true}
+{"i": 14, "verdict": "empty3", "achiral": false}
+{"i": 17, "verdict": "periodic", "d": [2, 2], "grid": [2, 3, 1, 0], "achiral": true}
+{"i": 20, "verdict": "periodic", "d": [1, 2], "grid": [2, 0], "achiral": true}
+{"i": 4, "verdict": "empty3", "achiral": false}
+{"i": 19, "verdict": "periodic", "d": [2, 2], "grid": [2, 3, 1, 0], "achiral": true}
+{"i": 23, "verdict": "periodic", "d": [1, 1], "grid": [3], "achiral": true}
+{"i": 22, "verdict": "periodic", "d": [2, 2], "grid": [2, 3, 1, 0], "achiral": true}
+{"i": 11, "verdict": "empty3", "achiral": false}
+{"i": 21, "verdict": "periodic", "d": [2, 2], "grid": [0, 3, 3, 0], "achiral": true}
+{"i": 12, "verdict": "empty3", "achiral": false}
+{"i": 13, "verdict": "empty3", "achiral": false}
+{"i": 5, "verdict": "empty3", "achiral": false}

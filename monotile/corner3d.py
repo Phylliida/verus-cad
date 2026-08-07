@@ -56,7 +56,9 @@ CKPT = f"corner3d_T{T}_results.jsonl"
 
 # ------------------------------------------------------------- geometry
 
-CORNERS = list(itertools.product((0, 1), repeat=3))  # idx = x + 2y + 4z
+# x-fastest ordering so that list position == cidx (x + 2y + 4z).
+# (itertools.product would give z-fastest — a mirrored numbering.)
+CORNERS = [(x, y, z) for z in (0, 1) for y in (0, 1) for x in (0, 1)]
 
 
 def cidx(e):

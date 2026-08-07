@@ -20,7 +20,23 @@ Checkpoint data (gitignored): `corner3d_T{2,3}_results.jsonl`,
 | corner equal, T=2 | 23 | 21 | 2 (@4³) | 0 |
 | corner equal, T=3 | 333 | 201 | 132 (120 @3³, 12 @4³) | 0 |
 | corner exact1, T=2 | 23 | 1 | 21 | 2 → resolved (density, below) |
-| mixed face+corner, T=2 | 776 | 394 (2 late) | 382 (166 @3³, 180 @4³, 36 @5³) | 0 |
+| mixed face+corner, T=2 | 776 | **432 (2 late)** | **344 (100 @3³, 112 @4³, 132 @5³)** | 0 |
+
+**ERRATUM (2026-08-07).** The original version of this document
+reported the mixed row as 394 periodic / 382 empty. That run had a
+numbering bug: `CORNERS` was in `itertools.product` (z-fastest) order
+while the encoder indexed corner slots with `cidx` (x-fastest), so the
+corner part of each decoration was effectively mirrored (x↔z) while the
+face part was not — not a lattice symmetry of the mixed model, so the
+old mixed campaign classified a different (corners-mirrored) model.
+Fixed by making `CORNERS` x-fastest (position == cidx) and regenerating
+all checkpoints; the table above is the corrected mixed model. The
+corner-only rows are unchanged: mirroring a decoration never changes
+its verdict (lattice reflections map tilings to tilings), so the
+corner-only verdicts were correct even with the swapped numbering.
+The same bug also silently affected nothing else: `edge3d.py` and
+`corner2d.py` use self-consistent numberings (verified: position ==
+index there).
 
 Encoder: Glucose3 CNF, one-hot orientations per cell + one-hot color
 vars per vertex/interface with binary channeling. Tiers per decoration:
@@ -30,11 +46,12 @@ recording (house self-check discipline).
 
 **Every periodic witness found has period ≤ 2 per axis** in the
 corner-only models (T=2: two at (1,1,1), rest ≤ (2,2,2); T=3: all ≤
-(2,2,2)). In the mixed model all but two witnesses are ≤ (2,2,2) except
-a (4,2,4) family (25 decorations) and two at **(2,6,6)** — both have
-tetrahedral corner parts (one even tetrahedron, one odd) plus 3 marked
-faces. This uniformity of tiny periods is the strongest Phase-B signal:
-corner constraints never even forced period 3.
+(2,2,2)). In the mixed model (corrected run): 364 at period ≤ 2, 64 at
+(2,4,4), and two at **(2,6,6)** — both have tetrahedral corner parts
+(one even tetrahedron, one odd) plus 3 marked faces. This uniformity of
+tiny periods was the strongest Phase-B signal — and has now (2026-08-07)
+crystallized into the chirality conjecture; see
+`DESIGN-corner-chirality.md`.
 
 ## The packing-rule collapse (kills the "rule variants" bullet)
 

@@ -15,6 +15,18 @@
 > requirements, witnesses up to (2,2,8) and (6,6,6)) but still not
 > aperiodic at K=1. Edge constraint graph splits into two decoupled
 > FCC parity components — a second structural handle for Phase B.
+>
+> **STATUS 2026-08-07: Phase B has a sharp candidate theorem.**
+> See `DESIGN-corner-chirality.md`. Conjecture: corner decoration
+> tiles ℤ³ ⟺ achiral ⟺ period-(2,2,2) tiling. Empirically exact on
+> all corner data (T=2/T=3, plus the 2D analog at T=2/3/4 with zero
+> mismatches). (2)⟺(3) proven; the 2D analog is FULLY proven
+> (pair-reversal argument); 3D hard direction open with a concrete
+> mechanism candidate (face-dimer exact covers + screw handedness).
+> Also: a corner-numbering bug was found and fixed (x↔z swap between
+> `CORNERS` order and `cidx`); corner-only verdicts were unaffected,
+> the mixed campaign was rerun with corrected numbers (432 periodic /
+> 344 empty) — see erratum in `RESULTS-corner-k1.md`.
 
 **Motivation.** The two face tracks prove: NO face-only decoration of a
 cube — bump/dent or equal-color, any grid K, any palette — is an
