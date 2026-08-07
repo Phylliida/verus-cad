@@ -1,5 +1,13 @@
 # PLAN: corner-marked Wang cubes — the next dial (2026-08-04)
 
+> **STATUS 2026-08-06: Phase 0 COMPLETE — all K=1 models resolved, zero
+> SUSPICIOUS.** See `RESULTS-corner-k1.md`. Corner equal T=2/T=3 and
+> mixed 776 fully classified (periodic or box-empty; every periodic
+> corner witness ≤ 2×2×2). Counting/packing rule variants collapsed in
+> closed form (density lemma + all-identity period-1 witness — they can
+> never force aperiodicity). Next: Phase B (corners provably too weak,
+> all K) is recommended over Phase C; edge-marking probe suggested first.
+
 **Motivation.** The two face tracks prove: NO face-only decoration of a
 cube — bump/dent or equal-color, any grid K, any palette — is an
 aperiodic einstein. A 3D-printable monotile einstein therefore NEEDS a
@@ -61,8 +69,12 @@ decoration space is so small it doesn't matter. These are also the most
 - Sanity checks on the way: the empty decoration tiles (trivial), the
   all-marked decoration tiles, single-marked-corner decoration: tilings
   correspond to "marked vertices come in complete 8-clusters" — a good
-  correctness puzzle for the encoder (no period-2 orientation map
-  exists; find what the solver finds).
+  correctness puzzle for the encoder. (EDIT, 2026-08-06: the earlier
+  parenthetical claimed no period-2 orientation map exists — that was
+  wrong. S = 2Z^3 works: every unit cube has exactly one all-even vertex,
+  so marking that corner gives a period-(2,2,2) tiling with vertices in
+  2Z^3 fully marked and all others unmarked. The probe's encoder test
+  now *requires* the solver to find that torus.)
 
 **Decision point.** If a suspicious/aperiodic decoration appears at
 K=1 → Phase A. If everything is clean periodic/empty and boring → the

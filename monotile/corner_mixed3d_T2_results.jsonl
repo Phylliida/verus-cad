@@ -1,0 +1,776 @@
+{"i": 0, "verdict": "periodic", "d": [1, 1, 1], "grid": [0]}
+{"i": 5, "verdict": "periodic", "d": [1, 1, 2], "grid": [7, 5]}
+{"i": 2, "verdict": "periodic", "d": [1, 2, 2], "grid": [3, 1, 2, 0]}
+{"i": 6, "verdict": "periodic", "d": [2, 2, 2], "grid": [3, 21, 6, 16, 7, 14, 15, 22]}
+{"i": 7, "verdict": "periodic", "d": [2, 2, 2], "grid": [13, 21, 6, 0, 7, 1, 2, 8]}
+{"i": 4, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 14, 15, 22, 13, 21, 20, 12]}
+{"i": 3, "verdict": "periodic", "d": [2, 2, 2], "grid": [22, 14, 14, 23, 12, 20, 21, 13]}
+{"i": 1, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 1, 2, 5, 3, 4, 6, 0]}
+{"i": 9, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 14, 15, 22, 13, 21, 20, 12]}
+{"i": 8, "verdict": "periodic", "d": [2, 2, 2], "grid": [13, 15, 3, 23, 2, 5, 0, 22]}
+{"i": 14, "verdict": "periodic", "d": [1, 2, 2], "grid": [8, 2, 10, 11]}
+{"i": 16, "verdict": "periodic", "d": [1, 2, 2], "grid": [9, 8, 11, 10]}
+{"i": 13, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 14, 15, 22, 13, 21, 20, 12]}
+{"i": 12, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 14, 15, 22, 13, 21, 20, 12]}
+{"i": 15, "verdict": "periodic", "d": [2, 2, 2], "grid": [19, 23, 22, 17, 21, 18, 16, 20]}
+{"i": 22, "verdict": "periodic", "d": [1, 1, 1], "grid": [5]}
+{"i": 17, "verdict": "periodic", "d": [2, 2, 2], "grid": [4, 0, 0, 11, 0, 5, 23, 0]}
+{"i": 23, "verdict": "periodic", "d": [1, 1, 2], "grid": [2, 0]}
+{"i": 18, "verdict": "periodic", "d": [2, 2, 2], "grid": [6, 1, 2, 20, 3, 5, 22, 0]}
+{"i": 19, "verdict": "periodic", "d": [2, 2, 2], "grid": [22, 14, 14, 22, 12, 20, 21, 12]}
+{"i": 26, "verdict": "periodic", "d": [1, 2, 2], "grid": [3, 1, 2, 0]}
+{"i": 27, "verdict": "periodic", "d": [1, 2, 2], "grid": [7, 4, 6, 5]}
+{"i": 20, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 1, 2, 13, 3, 2, 20, 0]}
+{"i": 21, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 1, 2, 22, 3, 4, 20, 0]}
+{"i": 25, "verdict": "periodic", "d": [2, 2, 2], "grid": [15, 5, 7, 14, 6, 12, 13, 4]}
+{"i": 24, "verdict": "periodic", "d": [2, 2, 2], "grid": [7, 14, 15, 5, 13, 4, 6, 12]}
+{"i": 31, "verdict": "periodic", "d": [1, 2, 2], "grid": [6, 5, 7, 4]}
+{"i": 10, "verdict": "empty4"}
+{"i": 35, "verdict": "periodic", "d": [1, 1, 2], "grid": [1, 3]}
+{"i": 11, "verdict": "empty4"}
+{"i": 36, "verdict": "periodic", "d": [2, 2, 2], "grid": [13, 4, 6, 15, 4, 13, 12, 6]}
+{"i": 37, "verdict": "periodic", "d": [2, 2, 2], "grid": [7, 14, 15, 5, 13, 4, 6, 12]}
+{"i": 38, "verdict": "periodic", "d": [2, 2, 2], "grid": [7, 14, 15, 5, 13, 4, 6, 12]}
+{"i": 29, "verdict": "empty4"}
+{"i": 39, "verdict": "periodic", "d": [2, 2, 2], "grid": [7, 14, 15, 5, 13, 4, 6, 12]}
+{"i": 34, "verdict": "empty4"}
+{"i": 32, "verdict": "empty4"}
+{"i": 40, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 14, 21, 6, 22, 7, 20, 12]}
+{"i": 33, "verdict": "empty4"}
+{"i": 44, "verdict": "periodic", "d": [2, 2, 2], "grid": [4, 14, 15, 6, 13, 7, 5, 12]}
+{"i": 46, "verdict": "periodic", "d": [4, 2, 4], "grid": [11, 10, 17, 16, 17, 16, 11, 10, 10, 17, 16, 11, 16, 11, 10, 17, 17, 16, 11, 10, 11, 10, 17, 16, 16, 11, 10, 17, 10, 17, 16, 11]}
+{"i": 42, "verdict": "empty4"}
+{"i": 41, "verdict": "empty4"}
+{"i": 43, "verdict": "empty4"}
+{"i": 45, "verdict": "empty4"}
+{"i": 47, "verdict": "empty4"}
+{"i": 51, "verdict": "periodic", "d": [2, 2, 2], "grid": [6, 12, 13, 7, 12, 5, 4, 13]}
+{"i": 52, "verdict": "periodic", "d": [2, 2, 2], "grid": [5, 15, 14, 7, 12, 6, 4, 13]}
+{"i": 53, "verdict": "periodic", "d": [2, 2, 2], "grid": [6, 12, 13, 4, 15, 5, 7, 14]}
+{"i": 54, "verdict": "periodic", "d": [2, 2, 2], "grid": [7, 14, 15, 5, 13, 4, 6, 12]}
+{"i": 55, "verdict": "periodic", "d": [2, 2, 2], "grid": [15, 6, 4, 14, 5, 12, 13, 7]}
+{"i": 48, "verdict": "empty4"}
+{"i": 56, "verdict": "periodic", "d": [4, 2, 4], "grid": [16, 17, 11, 10, 11, 10, 16, 17, 10, 16, 17, 11, 17, 11, 10, 16, 11, 10, 16, 17, 16, 17, 11, 10, 17, 11, 10, 16, 10, 16, 17, 11]}
+{"i": 49, "verdict": "empty4"}
+{"i": 50, "verdict": "empty4"}
+{"i": 57, "verdict": "empty4"}
+{"i": 58, "verdict": "empty4"}
+{"i": 60, "verdict": "periodic", "d": [4, 2, 4], "grid": [21, 2, 0, 23, 0, 23, 21, 2, 2, 0, 23, 21, 23, 21, 2, 0, 0, 23, 21, 2, 21, 2, 0, 23, 23, 21, 2, 0, 2, 0, 23, 21]}
+{"i": 65, "verdict": "periodic", "d": [1, 2, 2], "grid": [8, 9, 10, 8]}
+{"i": 66, "verdict": "periodic", "d": [2, 2, 2], "grid": [15, 5, 7, 14, 6, 12, 13, 4]}
+{"i": 62, "verdict": "periodic", "d": [4, 2, 4], "grid": [2, 0, 21, 23, 21, 23, 2, 0, 23, 2, 0, 21, 0, 21, 23, 2, 21, 23, 2, 0, 2, 0, 21, 23, 0, 21, 23, 2, 23, 2, 0, 21]}
+{"i": 68, "verdict": "periodic", "d": [1, 2, 2], "grid": [11, 10, 2, 0]}
+{"i": 69, "verdict": "periodic", "d": [1, 2, 1], "grid": [13, 15]}
+{"i": 67, "verdict": "periodic", "d": [2, 2, 2], "grid": [12, 6, 4, 13, 5, 15, 14, 7]}
+{"i": 70, "verdict": "periodic", "d": [2, 2, 2], "grid": [7, 14, 15, 5, 13, 4, 6, 12]}
+{"i": 72, "verdict": "periodic", "d": [1, 2, 2], "grid": [5, 4, 4, 5]}
+{"i": 71, "verdict": "periodic", "d": [2, 2, 2], "grid": [7, 14, 15, 5, 13, 4, 6, 12]}
+{"i": 59, "verdict": "empty4"}
+{"i": 75, "verdict": "periodic", "d": [1, 2, 2], "grid": [7, 4, 6, 5]}
+{"i": 61, "verdict": "empty4"}
+{"i": 76, "verdict": "periodic", "d": [2, 2, 2], "grid": [20, 12, 16, 4, 16, 5, 23, 13]}
+{"i": 77, "verdict": "periodic", "d": [2, 2, 2], "grid": [6, 12, 13, 4, 15, 5, 7, 14]}
+{"i": 78, "verdict": "periodic", "d": [2, 2, 2], "grid": [6, 12, 13, 4, 15, 5, 7, 14]}
+{"i": 79, "verdict": "periodic", "d": [2, 2, 2], "grid": [7, 13, 12, 5, 14, 4, 6, 15]}
+{"i": 63, "verdict": "empty4"}
+{"i": 64, "verdict": "empty4"}
+{"i": 73, "verdict": "empty4"}
+{"i": 74, "verdict": "empty4"}
+{"i": 84, "verdict": "periodic", "d": [2, 2, 2], "grid": [4, 13, 12, 5, 13, 4, 6, 12]}
+{"i": 85, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 20, 21, 22, 22, 21, 20, 23]}
+{"i": 87, "verdict": "periodic", "d": [1, 2, 1], "grid": [12, 14]}
+{"i": 86, "verdict": "periodic", "d": [2, 2, 2], "grid": [7, 14, 15, 5, 13, 4, 6, 12]}
+{"i": 89, "verdict": "periodic", "d": [1, 2, 2], "grid": [6, 5, 7, 4]}
+{"i": 88, "verdict": "periodic", "d": [2, 2, 2], "grid": [15, 5, 7, 14, 6, 12, 13, 4]}
+{"i": 90, "verdict": "periodic", "d": [2, 2, 2], "grid": [15, 6, 7, 13, 6, 12, 13, 4]}
+{"i": 92, "verdict": "periodic", "d": [1, 1, 2], "grid": [11, 3]}
+{"i": 93, "verdict": "periodic", "d": [1, 1, 1], "grid": [16]}
+{"i": 91, "verdict": "periodic", "d": [2, 2, 2], "grid": [15, 5, 7, 14, 6, 12, 13, 4]}
+{"i": 95, "verdict": "periodic", "d": [1, 2, 2], "grid": [3, 1, 2, 0]}
+{"i": 96, "verdict": "periodic", "d": [1, 2, 2], "grid": [7, 4, 6, 5]}
+{"i": 80, "verdict": "empty4"}
+{"i": 94, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 19, 17, 22, 18, 21, 20, 16]}
+{"i": 82, "verdict": "empty4"}
+{"i": 97, "verdict": "empty3"}
+{"i": 99, "verdict": "empty3"}
+{"i": 101, "verdict": "periodic", "d": [1, 1, 2], "grid": [7, 5]}
+{"i": 98, "verdict": "empty3"}
+{"i": 103, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 1, 2, 8, 3, 10, 9, 0]}
+{"i": 102, "verdict": "periodic", "d": [2, 2, 2], "grid": [8, 1, 1, 8, 0, 9, 9, 0]}
+{"i": 104, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 14, 17, 5, 18, 4, 20, 12]}
+{"i": 100, "verdict": "empty3"}
+{"i": 105, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 14, 17, 5, 18, 4, 20, 12]}
+{"i": 106, "verdict": "periodic", "d": [2, 2, 2], "grid": [19, 5, 18, 13, 22, 7, 16, 4]}
+{"i": 109, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 16, 18, 22, 17, 21, 20, 19]}
+{"i": 107, "verdict": "empty3"}
+{"i": 108, "verdict": "empty3"}
+{"i": 111, "verdict": "empty3"}
+{"i": 110, "verdict": "empty4"}
+{"i": 113, "verdict": "empty3"}
+{"i": 112, "verdict": "empty3"}
+{"i": 114, "verdict": "empty3"}
+{"i": 118, "verdict": "periodic", "d": [1, 2, 2], "grid": [3, 1, 10, 0]}
+{"i": 115, "verdict": "empty3"}
+{"i": 120, "verdict": "periodic", "d": [1, 2, 2], "grid": [3, 1, 2, 0]}
+{"i": 121, "verdict": "periodic", "d": [1, 1, 2], "grid": [23, 19]}
+{"i": 119, "verdict": "periodic", "d": [2, 2, 2], "grid": [19, 23, 22, 17, 21, 18, 16, 20]}
+{"i": 122, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 1, 2, 8, 3, 10, 9, 0]}
+{"i": 124, "verdict": "periodic", "d": [1, 2, 2], "grid": [5, 4, 4, 5]}
+{"i": 123, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 1, 2, 8, 3, 10, 9, 0]}
+{"i": 116, "verdict": "empty4"}
+{"i": 117, "verdict": "empty3"}
+{"i": 127, "verdict": "periodic", "d": [1, 2, 2], "grid": [7, 4, 6, 5]}
+{"i": 128, "verdict": "periodic", "d": [2, 2, 2], "grid": [20, 17, 16, 20, 19, 23, 23, 18]}
+{"i": 129, "verdict": "periodic", "d": [2, 2, 2], "grid": [21, 18, 16, 20, 19, 23, 22, 17]}
+{"i": 125, "verdict": "empty3"}
+{"i": 126, "verdict": "empty3"}
+{"i": 132, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 16, 17, 21, 17, 21, 23, 16]}
+{"i": 133, "verdict": "periodic", "d": [2, 2, 2], "grid": [16, 19, 17, 18, 18, 17, 20, 23]}
+{"i": 135, "verdict": "periodic", "d": [1, 1, 1], "grid": [5]}
+{"i": 136, "verdict": "periodic", "d": [1, 2, 2], "grid": [6, 7, 7, 0]}
+{"i": 134, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 19, 17, 22, 18, 21, 20, 16]}
+{"i": 138, "verdict": "periodic", "d": [2, 2, 2], "grid": [19, 10, 9, 17, 11, 18, 16, 8]}
+{"i": 139, "verdict": "periodic", "d": [1, 2, 2], "grid": [3, 1, 2, 0]}
+{"i": 140, "verdict": "periodic", "d": [2, 2, 2], "grid": [18, 11, 8, 16, 10, 19, 17, 9]}
+{"i": 141, "verdict": "periodic", "d": [1, 2, 2], "grid": [7, 4, 6, 5]}
+{"i": 142, "verdict": "periodic", "d": [2, 2, 2], "grid": [22, 14, 14, 22, 13, 20, 20, 13]}
+{"i": 131, "verdict": "empty3"}
+{"i": 130, "verdict": "empty3"}
+{"i": 145, "verdict": "periodic", "d": [2, 2, 2], "grid": [14, 23, 22, 15, 20, 12, 13, 21]}
+{"i": 146, "verdict": "periodic", "d": [1, 2, 2], "grid": [6, 5, 7, 4]}
+{"i": 147, "verdict": "periodic", "d": [2, 2, 2], "grid": [19, 10, 9, 17, 11, 18, 16, 8]}
+{"i": 148, "verdict": "periodic", "d": [1, 2, 2], "grid": [2, 0, 3, 1]}
+{"i": 137, "verdict": "empty3"}
+{"i": 149, "verdict": "periodic", "d": [2, 2, 2], "grid": [18, 11, 8, 16, 10, 19, 17, 9]}
+{"i": 151, "verdict": "periodic", "d": [1, 2, 2], "grid": [5, 6, 1, 3]}
+{"i": 143, "verdict": "empty3"}
+{"i": 144, "verdict": "empty3"}
+{"i": 150, "verdict": "empty3"}
+{"i": 152, "verdict": "empty3"}
+{"i": 153, "verdict": "empty4"}
+{"i": 154, "verdict": "empty3"}
+{"i": 155, "verdict": "empty4"}
+{"i": 156, "verdict": "empty3"}
+{"i": 159, "verdict": "periodic", "d": [2, 2, 2], "grid": [9, 11, 18, 17, 22, 21, 14, 12]}
+{"i": 157, "verdict": "empty3"}
+{"i": 158, "verdict": "empty3"}
+{"i": 160, "verdict": "empty3"}
+{"i": 161, "verdict": "empty4"}
+{"i": 162, "verdict": "empty4"}
+{"i": 163, "verdict": "empty4"}
+{"i": 167, "verdict": "periodic", "d": [2, 1, 2], "grid": [9, 17, 16, 8]}
+{"i": 165, "verdict": "periodic", "d": [4, 2, 4], "grid": [8, 18, 19, 9, 19, 9, 8, 18, 9, 8, 18, 19, 18, 19, 9, 8, 19, 9, 8, 18, 8, 18, 19, 9, 18, 19, 9, 8, 9, 8, 18, 19]}
+{"i": 169, "verdict": "periodic", "d": [2, 2, 2], "grid": [20, 13, 3, 2, 21, 12, 0, 1]}
+{"i": 164, "verdict": "empty4"}
+{"i": 171, "verdict": "periodic", "d": [2, 2, 2], "grid": [10, 19, 17, 9, 18, 11, 8, 16]}
+{"i": 166, "verdict": "empty3"}
+{"i": 168, "verdict": "empty4"}
+{"i": 174, "verdict": "periodic", "d": [2, 2, 2], "grid": [15, 23, 7, 0, 21, 12, 2, 4]}
+{"i": 170, "verdict": "empty4"}
+{"i": 176, "verdict": "periodic", "d": [2, 2, 2], "grid": [15, 23, 7, 0, 21, 12, 2, 4]}
+{"i": 172, "verdict": "empty3"}
+{"i": 178, "verdict": "periodic", "d": [2, 2, 2], "grid": [19, 10, 9, 17, 11, 18, 16, 8]}
+{"i": 173, "verdict": "empty4"}
+{"i": 180, "verdict": "periodic", "d": [2, 2, 2], "grid": [19, 10, 9, 17, 11, 18, 16, 8]}
+{"i": 175, "verdict": "empty4"}
+{"i": 182, "verdict": "periodic", "d": [1, 2, 2], "grid": [0, 2, 3, 1]}
+{"i": 177, "verdict": "empty4"}
+{"i": 179, "verdict": "empty4"}
+{"i": 181, "verdict": "empty4"}
+{"i": 184, "verdict": "periodic", "d": [4, 2, 4], "grid": [23, 21, 2, 0, 2, 0, 23, 21, 21, 2, 0, 23, 0, 23, 21, 2, 2, 0, 23, 21, 23, 21, 2, 0, 0, 23, 21, 2, 21, 2, 0, 23]}
+{"i": 183, "verdict": "empty3"}
+{"i": 187, "verdict": "periodic", "d": [4, 2, 4], "grid": [23, 2, 0, 21, 0, 21, 23, 2, 21, 23, 2, 0, 2, 0, 21, 23, 0, 21, 23, 2, 23, 2, 0, 21, 2, 0, 21, 23, 21, 23, 2, 0]}
+{"i": 185, "verdict": "empty3"}
+{"i": 190, "verdict": "periodic", "d": [1, 2, 2], "grid": [1, 0, 0, 1]}
+{"i": 186, "verdict": "empty4"}
+{"i": 188, "verdict": "empty4"}
+{"i": 193, "verdict": "periodic", "d": [1, 2, 2], "grid": [3, 1, 2, 0]}
+{"i": 194, "verdict": "periodic", "d": [2, 2, 2], "grid": [14, 22, 2, 3, 20, 13, 1, 0]}
+{"i": 189, "verdict": "empty4"}
+{"i": 196, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 18, 16, 8, 19, 10, 9, 17]}
+{"i": 191, "verdict": "empty4"}
+{"i": 192, "verdict": "empty4"}
+{"i": 199, "verdict": "periodic", "d": [2, 2, 2], "grid": [14, 22, 6, 1, 20, 13, 3, 5]}
+{"i": 195, "verdict": "empty4"}
+{"i": 201, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 18, 16, 8, 19, 10, 9, 17]}
+{"i": 197, "verdict": "empty3"}
+{"i": 203, "verdict": "periodic", "d": [2, 2, 2], "grid": [14, 22, 6, 1, 20, 13, 3, 5]}
+{"i": 198, "verdict": "empty4"}
+{"i": 205, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 18, 16, 8, 19, 10, 9, 17]}
+{"i": 200, "verdict": "empty4"}
+{"i": 202, "verdict": "empty4"}
+{"i": 207, "verdict": "periodic", "d": [4, 2, 4], "grid": [7, 4, 15, 12, 15, 12, 7, 4, 4, 15, 12, 7, 12, 7, 4, 15, 15, 12, 7, 4, 7, 4, 15, 12, 12, 7, 4, 15, 4, 15, 12, 7]}
+{"i": 204, "verdict": "empty4"}
+{"i": 206, "verdict": "empty3"}
+{"i": 211, "verdict": "periodic", "d": [1, 2, 2], "grid": [5, 4, 4, 5]}
+{"i": 208, "verdict": "empty3"}
+{"i": 210, "verdict": "periodic", "d": [4, 2, 4], "grid": [12, 15, 7, 4, 7, 4, 12, 15, 4, 12, 15, 7, 15, 7, 4, 12, 7, 4, 12, 15, 12, 15, 7, 4, 15, 7, 4, 12, 4, 12, 15, 7]}
+{"i": 209, "verdict": "empty4"}
+{"i": 212, "verdict": "empty4"}
+{"i": 216, "verdict": "periodic", "d": [1, 2, 2], "grid": [7, 4, 6, 5]}
+{"i": 217, "verdict": "periodic", "d": [2, 1, 2], "grid": [17, 18, 8, 10]}
+{"i": 213, "verdict": "empty4"}
+{"i": 214, "verdict": "empty4"}
+{"i": 220, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 13, 12, 22, 12, 22, 23, 13]}
+{"i": 215, "verdict": "empty4"}
+{"i": 222, "verdict": "periodic", "d": [2, 2, 2], "grid": [6, 1, 13, 20, 3, 5, 22, 14]}
+{"i": 218, "verdict": "empty3"}
+{"i": 221, "verdict": "periodic", "d": [4, 2, 4], "grid": [13, 5, 6, 14, 6, 14, 13, 5, 14, 13, 5, 6, 5, 6, 14, 13, 6, 14, 13, 5, 13, 5, 6, 14, 5, 6, 14, 13, 14, 13, 5, 6]}
+{"i": 224, "verdict": "periodic", "d": [2, 2, 2], "grid": [7, 0, 12, 21, 2, 4, 23, 15]}
+{"i": 219, "verdict": "empty3"}
+{"i": 226, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 14, 15, 22, 12, 20, 21, 13]}
+{"i": 223, "verdict": "periodic", "d": [4, 2, 4], "grid": [3, 22, 20, 1, 20, 1, 3, 22, 1, 3, 22, 20, 22, 20, 1, 3, 20, 1, 3, 22, 3, 22, 20, 1, 22, 20, 1, 3, 1, 3, 22, 20]}
+{"i": 228, "verdict": "periodic", "d": [4, 2, 4], "grid": [9, 19, 18, 8, 18, 8, 9, 19, 8, 9, 19, 18, 19, 18, 8, 9, 18, 8, 9, 19, 9, 19, 18, 8, 19, 18, 8, 9, 8, 9, 19, 18]}
+{"i": 225, "verdict": "empty3"}
+{"i": 227, "verdict": "empty3"}
+{"i": 229, "verdict": "empty3"}
+{"i": 230, "verdict": "empty4"}
+{"i": 234, "verdict": "periodic", "d": [2, 2, 2], "grid": [12, 14, 21, 22, 13, 15, 20, 23]}
+{"i": 231, "verdict": "empty4"}
+{"i": 232, "verdict": "empty4"}
+{"i": 233, "verdict": "empty4"}
+{"i": 236, "verdict": "empty3"}
+{"i": 235, "verdict": "empty3"}
+{"i": 237, "verdict": "empty3"}
+{"i": 238, "verdict": "empty3"}
+{"i": 239, "verdict": "empty3"}
+{"i": 240, "verdict": "empty3"}
+{"i": 244, "verdict": "periodic", "d": [2, 1, 2], "grid": [8, 16, 11, 9]}
+{"i": 241, "verdict": "empty3"}
+{"i": 246, "verdict": "periodic", "d": [2, 2, 2], "grid": [18, 11, 8, 16, 10, 19, 17, 9]}
+{"i": 242, "verdict": "empty3"}
+{"i": 248, "verdict": "periodic", "d": [2, 2, 2], "grid": [18, 11, 8, 16, 10, 19, 17, 9]}
+{"i": 245, "verdict": "periodic", "d": [4, 2, 4], "grid": [6, 13, 14, 5, 14, 5, 6, 13, 13, 14, 5, 6, 5, 6, 13, 14, 14, 5, 6, 13, 6, 13, 14, 5, 5, 6, 13, 14, 13, 14, 5, 6]}
+{"i": 250, "verdict": "periodic", "d": [2, 2, 2], "grid": [19, 10, 8, 16, 11, 18, 17, 9]}
+{"i": 247, "verdict": "periodic", "d": [4, 2, 4], "grid": [20, 22, 1, 3, 1, 3, 20, 22, 22, 1, 3, 20, 3, 20, 22, 1, 1, 3, 20, 22, 20, 22, 1, 3, 3, 20, 22, 1, 22, 1, 3, 20]}
+{"i": 251, "verdict": "periodic", "d": [1, 2, 2], "grid": [6, 5, 7, 4]}
+{"i": 243, "verdict": "empty3"}
+{"i": 249, "verdict": "empty3"}
+{"i": 253, "verdict": "empty3"}
+{"i": 252, "verdict": "empty4"}
+{"i": 256, "verdict": "periodic", "d": [1, 2, 2], "grid": [6, 5, 7, 4]}
+{"i": 258, "verdict": "periodic", "d": [2, 1, 2], "grid": [19, 10, 11, 18]}
+{"i": 259, "verdict": "periodic", "d": [2, 2, 2], "grid": [3, 2, 12, 14, 0, 1, 23, 15]}
+{"i": 254, "verdict": "empty4"}
+{"i": 261, "verdict": "periodic", "d": [2, 2, 2], "grid": [19, 10, 9, 17, 11, 18, 16, 8]}
+{"i": 255, "verdict": "empty3"}
+{"i": 257, "verdict": "empty4"}
+{"i": 260, "verdict": "empty4"}
+{"i": 265, "verdict": "periodic", "d": [1, 2, 2], "grid": [2, 0, 3, 1]}
+{"i": 262, "verdict": "empty3"}
+{"i": 266, "verdict": "periodic", "d": [2, 2, 2], "grid": [5, 3, 13, 15, 1, 0, 22, 14]}
+{"i": 268, "verdict": "periodic", "d": [2, 2, 2], "grid": [18, 11, 8, 16, 10, 19, 17, 9]}
+{"i": 263, "verdict": "empty4"}
+{"i": 264, "verdict": "empty3"}
+{"i": 271, "verdict": "periodic", "d": [1, 2, 2], "grid": [0, 7, 3, 2]}
+{"i": 272, "verdict": "periodic", "d": [1, 1, 2], "grid": [7, 16]}
+{"i": 267, "verdict": "empty4"}
+{"i": 269, "verdict": "empty3"}
+{"i": 275, "verdict": "periodic", "d": [1, 2, 2], "grid": [3, 1, 2, 0]}
+{"i": 270, "verdict": "empty3"}
+{"i": 277, "verdict": "periodic", "d": [1, 2, 2], "grid": [7, 4, 6, 5]}
+{"i": 30, "verdict": "empty5"}
+{"i": 279, "verdict": "empty3"}
+{"i": 28, "verdict": "empty5"}
+{"i": 81, "verdict": "empty5"}
+{"i": 282, "verdict": "periodic", "d": [1, 2, 2], "grid": [6, 5, 7, 4]}
+{"i": 283, "verdict": "empty3"}
+{"i": 284, "verdict": "periodic", "d": [1, 2, 2], "grid": [2, 0, 3, 1]}
+{"i": 285, "verdict": "empty4"}
+{"i": 286, "verdict": "empty4"}
+{"i": 287, "verdict": "periodic", "d": [1, 1, 2], "grid": [7, 4]}
+{"i": 288, "verdict": "periodic", "d": [1, 2, 2], "grid": [20, 22, 23, 21]}
+{"i": 289, "verdict": "empty3"}
+{"i": 83, "verdict": "empty5"}
+{"i": 290, "verdict": "empty3"}
+{"i": 292, "verdict": "empty4"}
+{"i": 278, "verdict": "empty5"}
+{"i": 294, "verdict": "empty4"}
+{"i": 295, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 20, 0, 1, 22, 21, 3, 2]}
+{"i": 273, "verdict": "empty5"}
+{"i": 296, "verdict": "empty4"}
+{"i": 297, "verdict": "empty3"}
+{"i": 276, "verdict": "empty5"}
+{"i": 298, "verdict": "empty4"}
+{"i": 299, "verdict": "empty4"}
+{"i": 274, "verdict": "empty5"}
+{"i": 301, "verdict": "periodic", "d": [4, 2, 4], "grid": [19, 9, 8, 18, 8, 18, 19, 9, 18, 19, 9, 8, 9, 8, 18, 19, 8, 18, 19, 9, 19, 9, 8, 18, 9, 8, 18, 19, 18, 19, 9, 8]}
+{"i": 300, "verdict": "empty4"}
+{"i": 305, "verdict": "periodic", "d": [2, 2, 2], "grid": [20, 23, 3, 2, 21, 22, 0, 1]}
+{"i": 302, "verdict": "empty4"}
+{"i": 303, "verdict": "empty3"}
+{"i": 304, "verdict": "empty3"}
+{"i": 306, "verdict": "empty3"}
+{"i": 307, "verdict": "empty4"}
+{"i": 308, "verdict": "empty4"}
+{"i": 311, "verdict": "empty4"}
+{"i": 312, "verdict": "empty4"}
+{"i": 314, "verdict": "periodic", "d": [4, 2, 4], "grid": [17, 11, 10, 16, 10, 16, 17, 11, 16, 17, 11, 10, 11, 10, 16, 17, 10, 16, 17, 11, 17, 11, 10, 16, 11, 10, 16, 17, 16, 17, 11, 10]}
+{"i": 313, "verdict": "empty4"}
+{"i": 315, "verdict": "empty4"}
+{"i": 317, "verdict": "periodic", "d": [1, 2, 1], "grid": [23, 20]}
+{"i": 316, "verdict": "empty4"}
+{"i": 318, "verdict": "empty4"}
+{"i": 319, "verdict": "empty4"}
+{"i": 320, "verdict": "empty4"}
+{"i": 321, "verdict": "empty3"}
+{"i": 322, "verdict": "empty4"}
+{"i": 323, "verdict": "empty4"}
+{"i": 324, "verdict": "empty4"}
+{"i": 326, "verdict": "periodic", "d": [1, 2, 2], "grid": [1, 0, 0, 1]}
+{"i": 325, "verdict": "empty3"}
+{"i": 327, "verdict": "empty4"}
+{"i": 329, "verdict": "periodic", "d": [1, 2, 2], "grid": [3, 1, 2, 0]}
+{"i": 330, "verdict": "periodic", "d": [1, 2, 2], "grid": [23, 21, 20, 22]}
+{"i": 328, "verdict": "empty4"}
+{"i": 331, "verdict": "empty3"}
+{"i": 332, "verdict": "empty4"}
+{"i": 333, "verdict": "empty4"}
+{"i": 334, "verdict": "empty3"}
+{"i": 336, "verdict": "empty3"}
+{"i": 337, "verdict": "periodic", "d": [4, 2, 4], "grid": [18, 19, 8, 9, 8, 9, 18, 19, 19, 8, 9, 18, 9, 18, 19, 8, 8, 9, 18, 19, 18, 19, 8, 9, 9, 18, 19, 8, 19, 8, 9, 18]}
+{"i": 338, "verdict": "empty3"}
+{"i": 339, "verdict": "empty4"}
+{"i": 340, "verdict": "empty4"}
+{"i": 281, "verdict": "empty5"}
+{"i": 341, "verdict": "empty3"}
+{"i": 343, "verdict": "periodic", "d": [1, 1, 2], "grid": [18, 19]}
+{"i": 280, "verdict": "empty5"}
+{"i": 344, "verdict": "periodic", "d": [4, 2, 4], "grid": [4, 15, 12, 7, 12, 7, 4, 15, 15, 12, 7, 4, 7, 4, 15, 12, 12, 7, 4, 15, 4, 15, 12, 7, 7, 4, 15, 12, 15, 12, 7, 4]}
+{"i": 342, "verdict": "empty3"}
+{"i": 347, "verdict": "periodic", "d": [1, 2, 2], "grid": [5, 4, 4, 5]}
+{"i": 346, "verdict": "periodic", "d": [4, 2, 4], "grid": [4, 12, 15, 7, 15, 7, 4, 12, 7, 4, 12, 15, 12, 15, 7, 4, 15, 7, 4, 12, 4, 12, 15, 7, 12, 15, 7, 4, 7, 4, 12, 15]}
+{"i": 345, "verdict": "empty3"}
+{"i": 348, "verdict": "empty3"}
+{"i": 349, "verdict": "empty4"}
+{"i": 352, "verdict": "periodic", "d": [1, 2, 2], "grid": [7, 4, 6, 5]}
+{"i": 350, "verdict": "empty4"}
+{"i": 351, "verdict": "empty3"}
+{"i": 355, "verdict": "periodic", "d": [1, 2, 2], "grid": [23, 20, 20, 23]}
+{"i": 354, "verdict": "periodic", "d": [4, 2, 4], "grid": [13, 14, 5, 6, 5, 6, 13, 14, 14, 5, 6, 13, 6, 13, 14, 5, 5, 6, 13, 14, 13, 14, 5, 6, 6, 13, 14, 5, 14, 5, 6, 13]}
+{"i": 353, "verdict": "empty4"}
+{"i": 356, "verdict": "empty4"}
+{"i": 359, "verdict": "empty4"}
+{"i": 293, "verdict": "empty5"}
+{"i": 291, "verdict": "empty5"}
+{"i": 361, "verdict": "empty4"}
+{"i": 363, "verdict": "empty4"}
+{"i": 364, "verdict": "empty3"}
+{"i": 365, "verdict": "empty4"}
+{"i": 366, "verdict": "periodic", "d": [1, 2, 2], "grid": [23, 21, 20, 22]}
+{"i": 367, "verdict": "empty3"}
+{"i": 368, "verdict": "empty4"}
+{"i": 357, "verdict": "periodic-late", "d": [2, 6, 6], "grid": [21, 17, 11, 0, 4, 12, 13, 21, 19, 10, 2, 4, 4, 13, 23, 19, 9, 0, 0, 4, 12, 21, 19, 11, 8, 0, 4, 12, 23, 19, 17, 11, 0, 4, 12, 23, 16, 22, 12, 5, 1, 11, 8, 16, 20, 13, 5, 1, 3, 8, 16, 20, 12, 5, 5, 1, 11, 16, 20, 12, 13, 5, 3, 11, 16, 22, 22, 14, 5, 3, 9, 18]}
+{"i": 370, "verdict": "periodic", "d": [2, 2, 2], "grid": [0, 1, 21, 22, 3, 2, 20, 23]}
+{"i": 310, "verdict": "empty5"}
+{"i": 372, "verdict": "empty3"}
+{"i": 309, "verdict": "empty5"}
+{"i": 373, "verdict": "empty3"}
+{"i": 375, "verdict": "periodic", "d": [4, 2, 4], "grid": [10, 11, 16, 17, 16, 17, 10, 11, 11, 16, 17, 10, 17, 10, 11, 16, 16, 17, 10, 11, 10, 11, 16, 17, 17, 10, 11, 16, 11, 16, 17, 10]}
+{"i": 376, "verdict": "empty3"}
+{"i": 377, "verdict": "empty4"}
+{"i": 378, "verdict": "empty4"}
+{"i": 379, "verdict": "empty3"}
+{"i": 380, "verdict": "periodic", "d": [4, 2, 4], "grid": [13, 5, 6, 14, 6, 14, 13, 5, 14, 13, 5, 6, 5, 6, 14, 13, 6, 14, 13, 5, 13, 5, 6, 14, 5, 6, 14, 13, 14, 13, 5, 6]}
+{"i": 335, "verdict": "empty5"}
+{"i": 381, "verdict": "periodic-late", "d": [2, 6, 6], "grid": [14, 7, 0, 9, 1, 4, 5, 0, 9, 3, 4, 12, 0, 10, 1, 6, 12, 5, 11, 1, 4, 14, 5, 0, 1, 6, 13, 7, 2, 10, 4, 14, 5, 0, 9, 1, 9, 1, 6, 12, 7, 2, 1, 6, 12, 5, 0, 9, 4, 13, 5, 0, 9, 1, 12, 7, 2, 11, 3, 4, 5, 2, 10, 1, 6, 13, 0, 11, 3, 4, 14, 5]}
+{"i": 383, "verdict": "empty4"}
+{"i": 384, "verdict": "empty4"}
+{"i": 358, "verdict": "empty5"}
+{"i": 360, "verdict": "empty5"}
+{"i": 387, "verdict": "periodic", "d": [1, 2, 2], "grid": [4, 7, 5, 4]}
+{"i": 362, "verdict": "empty5"}
+{"i": 388, "verdict": "empty3"}
+{"i": 389, "verdict": "empty4"}
+{"i": 390, "verdict": "empty3"}
+{"i": 392, "verdict": "periodic", "d": [1, 2, 2], "grid": [6, 5, 7, 4]}
+{"i": 391, "verdict": "empty4"}
+{"i": 393, "verdict": "empty3"}
+{"i": 395, "verdict": "periodic", "d": [2, 2, 2], "grid": [3, 2, 22, 21, 0, 1, 23, 20]}
+{"i": 394, "verdict": "empty4"}
+{"i": 369, "verdict": "empty5"}
+{"i": 398, "verdict": "periodic", "d": [1, 2, 1], "grid": [22, 23]}
+{"i": 399, "verdict": "empty3"}
+{"i": 400, "verdict": "empty3"}
+{"i": 401, "verdict": "periodic", "d": [1, 2, 2], "grid": [2, 0, 3, 1]}
+{"i": 402, "verdict": "periodic", "d": [1, 2, 2], "grid": [23, 21, 20, 22]}
+{"i": 403, "verdict": "empty3"}
+{"i": 371, "verdict": "empty5"}
+{"i": 405, "verdict": "empty3"}
+{"i": 374, "verdict": "empty5"}
+{"i": 407, "verdict": "periodic", "d": [1, 1, 2], "grid": [4, 5]}
+{"i": 408, "verdict": "periodic", "d": [1, 1, 1], "grid": [12]}
+{"i": 409, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 14, 15, 22, 13, 21, 20, 12]}
+{"i": 410, "verdict": "periodic", "d": [1, 2, 2], "grid": [3, 1, 2, 0]}
+{"i": 411, "verdict": "periodic", "d": [2, 2, 2], "grid": [14, 22, 22, 14, 21, 12, 12, 20]}
+{"i": 412, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 14, 15, 22, 13, 21, 20, 12]}
+{"i": 413, "verdict": "periodic", "d": [1, 1, 2], "grid": [7, 5]}
+{"i": 414, "verdict": "periodic", "d": [1, 2, 2], "grid": [13, 14, 15, 12]}
+{"i": 415, "verdict": "empty3"}
+{"i": 416, "verdict": "empty3"}
+{"i": 417, "verdict": "empty3"}
+{"i": 418, "verdict": "empty3"}
+{"i": 419, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 1, 17, 5, 18, 4, 9, 0]}
+{"i": 420, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 1, 17, 5, 18, 4, 9, 0]}
+{"i": 421, "verdict": "periodic", "d": [2, 2, 2], "grid": [12, 14, 0, 1, 22, 15, 3, 4]}
+{"i": 422, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 14, 15, 22, 13, 21, 20, 12]}
+{"i": 423, "verdict": "empty3"}
+{"i": 424, "verdict": "empty4"}
+{"i": 425, "verdict": "empty3"}
+{"i": 426, "verdict": "empty4"}
+{"i": 427, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 14, 15, 22, 13, 21, 20, 12]}
+{"i": 428, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 14, 15, 22, 13, 21, 20, 12]}
+{"i": 429, "verdict": "periodic", "d": [1, 1, 2], "grid": [13, 14]}
+{"i": 430, "verdict": "empty3"}
+{"i": 431, "verdict": "empty3"}
+{"i": 432, "verdict": "empty3"}
+{"i": 382, "verdict": "empty5"}
+{"i": 433, "verdict": "empty3"}
+{"i": 434, "verdict": "empty3"}
+{"i": 436, "verdict": "periodic", "d": [1, 2, 2], "grid": [8, 9, 10, 8]}
+{"i": 435, "verdict": "empty3"}
+{"i": 437, "verdict": "empty3"}
+{"i": 439, "verdict": "periodic", "d": [1, 2, 2], "grid": [3, 1, 2, 0]}
+{"i": 440, "verdict": "periodic", "d": [1, 2, 2], "grid": [23, 21, 21, 12]}
+{"i": 441, "verdict": "periodic", "d": [2, 2, 2], "grid": [1, 7, 5, 2, 4, 3, 0, 6]}
+{"i": 438, "verdict": "empty3"}
+{"i": 442, "verdict": "periodic", "d": [2, 2, 2], "grid": [9, 19, 16, 8, 15, 20, 23, 15]}
+{"i": 443, "verdict": "periodic", "d": [2, 2, 2], "grid": [21, 12, 13, 20, 15, 23, 22, 14]}
+{"i": 445, "verdict": "periodic", "d": [1, 2, 2], "grid": [13, 21, 15, 12]}
+{"i": 444, "verdict": "periodic", "d": [2, 2, 2], "grid": [22, 14, 14, 22, 12, 20, 21, 12]}
+{"i": 446, "verdict": "empty3"}
+{"i": 447, "verdict": "empty3"}
+{"i": 448, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 9, 10, 18, 13, 15, 20, 12]}
+{"i": 450, "verdict": "periodic", "d": [1, 1, 1], "grid": [5]}
+{"i": 449, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 14, 15, 22, 13, 21, 20, 12]}
+{"i": 451, "verdict": "periodic", "d": [2, 2, 2], "grid": [14, 0, 0, 7, 3, 2, 2, 21]}
+{"i": 385, "verdict": "empty5"}
+{"i": 453, "verdict": "periodic", "d": [2, 2, 2], "grid": [19, 10, 22, 0, 11, 18, 2, 20]}
+{"i": 455, "verdict": "periodic", "d": [2, 2, 2], "grid": [10, 19, 16, 8, 18, 11, 9, 17]}
+{"i": 452, "verdict": "empty3"}
+{"i": 457, "verdict": "periodic", "d": [2, 2, 2], "grid": [22, 0, 14, 4, 2, 20, 7, 13]}
+{"i": 454, "verdict": "empty3"}
+{"i": 458, "verdict": "periodic", "d": [2, 2, 2], "grid": [18, 11, 9, 17, 10, 19, 16, 8]}
+{"i": 459, "verdict": "periodic", "d": [2, 2, 2], "grid": [15, 10, 14, 9, 12, 11, 13, 8]}
+{"i": 456, "verdict": "empty3"}
+{"i": 460, "verdict": "periodic", "d": [2, 2, 2], "grid": [19, 10, 9, 17, 11, 18, 16, 8]}
+{"i": 461, "verdict": "periodic", "d": [2, 2, 2], "grid": [22, 18, 23, 16, 20, 19, 21, 17]}
+{"i": 462, "verdict": "periodic", "d": [2, 2, 2], "grid": [18, 11, 8, 16, 10, 19, 17, 9]}
+{"i": 464, "verdict": "periodic", "d": [2, 2, 2], "grid": [10, 19, 8, 9, 18, 11, 9, 8]}
+{"i": 463, "verdict": "empty4"}
+{"i": 466, "verdict": "empty3"}
+{"i": 465, "verdict": "empty3"}
+{"i": 467, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 3, 8, 6, 22, 21, 11, 12]}
+{"i": 469, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 3, 0, 22, 1, 21, 20, 2]}
+{"i": 471, "verdict": "periodic", "d": [2, 2, 2], "grid": [4, 14, 15, 6, 13, 7, 5, 12]}
+{"i": 468, "verdict": "empty3"}
+{"i": 470, "verdict": "empty3"}
+{"i": 472, "verdict": "empty3"}
+{"i": 475, "verdict": "periodic", "d": [2, 2, 2], "grid": [12, 5, 7, 13, 6, 15, 14, 4]}
+{"i": 476, "verdict": "periodic", "d": [2, 2, 2], "grid": [3, 23, 22, 0, 21, 1, 2, 20]}
+{"i": 473, "verdict": "periodic", "d": [4, 2, 4], "grid": [19, 9, 8, 18, 8, 18, 19, 9, 18, 19, 9, 8, 9, 8, 18, 19, 8, 18, 19, 9, 19, 9, 8, 18, 9, 8, 18, 19, 18, 19, 9, 8]}
+{"i": 478, "verdict": "periodic", "d": [2, 2, 2], "grid": [3, 23, 22, 0, 21, 1, 2, 20]}
+{"i": 479, "verdict": "periodic", "d": [2, 2, 2], "grid": [15, 6, 4, 14, 5, 12, 13, 7]}
+{"i": 480, "verdict": "periodic", "d": [2, 2, 2], "grid": [10, 19, 17, 9, 18, 11, 8, 16]}
+{"i": 474, "verdict": "empty3"}
+{"i": 482, "verdict": "periodic", "d": [2, 2, 2], "grid": [10, 19, 17, 9, 18, 11, 8, 16]}
+{"i": 483, "verdict": "periodic", "d": [2, 2, 2], "grid": [12, 5, 7, 13, 6, 15, 14, 4]}
+{"i": 484, "verdict": "periodic", "d": [2, 2, 2], "grid": [3, 23, 22, 0, 21, 1, 2, 20]}
+{"i": 386, "verdict": "empty5"}
+{"i": 486, "verdict": "periodic", "d": [2, 2, 2], "grid": [3, 23, 22, 0, 21, 1, 2, 20]}
+{"i": 477, "verdict": "empty4"}
+{"i": 487, "verdict": "periodic", "d": [2, 2, 2], "grid": [19, 20, 17, 18, 18, 22, 16, 19]}
+{"i": 481, "verdict": "empty4"}
+{"i": 485, "verdict": "empty4"}
+{"i": 488, "verdict": "empty3"}
+{"i": 492, "verdict": "periodic", "d": [2, 2, 2], "grid": [5, 16, 19, 4, 17, 20, 23, 3]}
+{"i": 490, "verdict": "empty3"}
+{"i": 494, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 18, 2, 20, 19, 10, 22, 0]}
+{"i": 493, "verdict": "periodic", "d": [4, 2, 4], "grid": [12, 15, 4, 7, 4, 7, 12, 15, 15, 4, 7, 12, 7, 12, 15, 4, 4, 7, 12, 15, 12, 15, 4, 7, 7, 12, 15, 4, 15, 4, 7, 12]}
+{"i": 496, "verdict": "periodic", "d": [2, 2, 2], "grid": [10, 19, 16, 8, 18, 11, 9, 17]}
+{"i": 491, "verdict": "empty3"}
+{"i": 497, "verdict": "periodic", "d": [2, 2, 2], "grid": [12, 1, 21, 22, 18, 2, 20, 11]}
+{"i": 498, "verdict": "empty3"}
+{"i": 499, "verdict": "empty3"}
+{"i": 500, "verdict": "periodic", "d": [2, 2, 2], "grid": [22, 4, 1, 0, 23, 20, 2, 18]}
+{"i": 396, "verdict": "empty5"}
+{"i": 501, "verdict": "periodic", "d": [2, 2, 2], "grid": [6, 15, 14, 4, 12, 5, 7, 13]}
+{"i": 503, "verdict": "periodic", "d": [2, 2, 2], "grid": [6, 15, 14, 4, 12, 5, 7, 13]}
+{"i": 504, "verdict": "periodic", "d": [4, 2, 4], "grid": [10, 11, 16, 17, 16, 17, 10, 11, 11, 16, 17, 10, 17, 10, 11, 16, 16, 17, 10, 11, 10, 11, 16, 17, 17, 10, 11, 16, 11, 16, 17, 10]}
+{"i": 505, "verdict": "empty3"}
+{"i": 507, "verdict": "periodic", "d": [2, 2, 2], "grid": [6, 15, 14, 4, 12, 5, 7, 13]}
+{"i": 397, "verdict": "empty5"}
+{"i": 509, "verdict": "periodic", "d": [2, 2, 2], "grid": [22, 0, 3, 23, 2, 20, 21, 1]}
+{"i": 508, "verdict": "empty4"}
+{"i": 511, "verdict": "periodic", "d": [2, 2, 2], "grid": [6, 15, 14, 4, 12, 5, 7, 13]}
+{"i": 510, "verdict": "empty4"}
+{"i": 512, "verdict": "empty4"}
+{"i": 513, "verdict": "periodic", "d": [2, 2, 2], "grid": [17, 4, 23, 0, 22, 3, 19, 20]}
+{"i": 514, "verdict": "empty3"}
+{"i": 515, "verdict": "empty3"}
+{"i": 516, "verdict": "periodic", "d": [2, 2, 2], "grid": [3, 2, 0, 1, 1, 0, 2, 3]}
+{"i": 517, "verdict": "periodic", "d": [2, 2, 2], "grid": [12, 5, 7, 13, 6, 15, 14, 4]}
+{"i": 518, "verdict": "periodic", "d": [2, 2, 2], "grid": [9, 17, 19, 10, 16, 8, 11, 18]}
+{"i": 519, "verdict": "periodic", "d": [2, 2, 2], "grid": [20, 2, 1, 21, 0, 22, 23, 3]}
+{"i": 520, "verdict": "periodic", "d": [2, 2, 2], "grid": [8, 16, 18, 11, 17, 9, 10, 19]}
+{"i": 521, "verdict": "periodic", "d": [2, 2, 2], "grid": [2, 20, 7, 13, 22, 0, 14, 4]}
+{"i": 522, "verdict": "periodic", "d": [2, 2, 2], "grid": [19, 10, 8, 16, 11, 18, 17, 9]}
+{"i": 524, "verdict": "periodic", "d": [4, 2, 4], "grid": [6, 5, 13, 14, 13, 14, 6, 5, 14, 6, 5, 13, 5, 13, 14, 6, 13, 14, 6, 5, 6, 5, 13, 14, 5, 13, 14, 6, 14, 6, 5, 13]}
+{"i": 525, "verdict": "periodic", "d": [2, 2, 2], "grid": [12, 5, 13, 7, 15, 6, 14, 4]}
+{"i": 523, "verdict": "empty3"}
+{"i": 526, "verdict": "empty4"}
+{"i": 404, "verdict": "empty5"}
+{"i": 528, "verdict": "periodic", "d": [2, 2, 2], "grid": [20, 2, 1, 21, 0, 22, 23, 3]}
+{"i": 527, "verdict": "empty3"}
+{"i": 529, "verdict": "periodic", "d": [2, 2, 2], "grid": [6, 15, 14, 4, 12, 5, 7, 13]}
+{"i": 530, "verdict": "periodic", "d": [2, 2, 2], "grid": [15, 10, 14, 9, 12, 11, 13, 8]}
+{"i": 532, "verdict": "periodic", "d": [2, 2, 2], "grid": [8, 16, 18, 11, 17, 9, 10, 19]}
+{"i": 533, "verdict": "periodic", "d": [2, 2, 2], "grid": [12, 5, 7, 13, 6, 15, 14, 4]}
+{"i": 534, "verdict": "periodic", "d": [2, 2, 2], "grid": [5, 3, 7, 0, 6, 1, 4, 2]}
+{"i": 536, "verdict": "periodic", "d": [2, 2, 2], "grid": [19, 13, 22, 0, 17, 12, 23, 3]}
+{"i": 537, "verdict": "periodic", "d": [2, 2, 2], "grid": [15, 6, 4, 14, 5, 12, 13, 7]}
+{"i": 538, "verdict": "periodic", "d": [2, 2, 2], "grid": [19, 10, 9, 17, 11, 18, 16, 8]}
+{"i": 531, "verdict": "empty3"}
+{"i": 535, "verdict": "empty3"}
+{"i": 539, "verdict": "empty3"}
+{"i": 542, "verdict": "periodic", "d": [2, 2, 2], "grid": [5, 12, 13, 7, 15, 6, 4, 14]}
+{"i": 540, "verdict": "empty3"}
+{"i": 544, "verdict": "periodic", "d": [2, 2, 2], "grid": [22, 0, 3, 23, 2, 20, 21, 1]}
+{"i": 406, "verdict": "empty5"}
+{"i": 541, "verdict": "empty3"}
+{"i": 547, "verdict": "periodic", "d": [1, 2, 2], "grid": [21, 23, 20, 22]}
+{"i": 546, "verdict": "periodic", "d": [2, 2, 2], "grid": [12, 11, 7, 0, 7, 0, 0, 23]}
+{"i": 543, "verdict": "empty3"}
+{"i": 550, "verdict": "periodic", "d": [2, 2, 2], "grid": [18, 22, 8, 1, 20, 19, 3, 9]}
+{"i": 551, "verdict": "periodic", "d": [1, 2, 2], "grid": [16, 17, 19, 18]}
+{"i": 545, "verdict": "empty3"}
+{"i": 548, "verdict": "empty3"}
+{"i": 549, "verdict": "empty3"}
+{"i": 554, "verdict": "periodic", "d": [2, 2, 2], "grid": [22, 18, 3, 9, 19, 20, 8, 1]}
+{"i": 556, "verdict": "periodic", "d": [1, 2, 2], "grid": [16, 17, 19, 18]}
+{"i": 552, "verdict": "empty4"}
+{"i": 558, "verdict": "periodic", "d": [2, 1, 2], "grid": [6, 15, 12, 5]}
+{"i": 553, "verdict": "empty3"}
+{"i": 557, "verdict": "empty3"}
+{"i": 555, "verdict": "empty4"}
+{"i": 561, "verdict": "periodic", "d": [1, 2, 2], "grid": [16, 17, 19, 18]}
+{"i": 562, "verdict": "periodic", "d": [2, 2, 2], "grid": [8, 1, 1, 8, 3, 9, 9, 3]}
+{"i": 559, "verdict": "empty4"}
+{"i": 560, "verdict": "empty4"}
+{"i": 566, "verdict": "periodic", "d": [2, 2, 2], "grid": [19, 16, 0, 1, 22, 18, 3, 9]}
+{"i": 563, "verdict": "empty3"}
+{"i": 564, "verdict": "empty3"}
+{"i": 569, "verdict": "periodic", "d": [2, 2, 2], "grid": [4, 14, 15, 6, 13, 7, 5, 12]}
+{"i": 565, "verdict": "empty3"}
+{"i": 567, "verdict": "empty4"}
+{"i": 568, "verdict": "empty3"}
+{"i": 571, "verdict": "periodic", "d": [4, 2, 4], "grid": [18, 19, 9, 8, 9, 8, 18, 19, 8, 18, 19, 9, 19, 9, 8, 18, 9, 8, 18, 19, 18, 19, 9, 8, 19, 9, 8, 18, 8, 18, 19, 9]}
+{"i": 573, "verdict": "periodic", "d": [2, 2, 2], "grid": [20, 19, 3, 2, 21, 17, 0, 1]}
+{"i": 570, "verdict": "empty4"}
+{"i": 576, "verdict": "periodic", "d": [2, 2, 2], "grid": [15, 6, 4, 14, 5, 12, 13, 7]}
+{"i": 577, "verdict": "periodic", "d": [4, 2, 4], "grid": [16, 17, 11, 10, 11, 10, 16, 17, 10, 16, 17, 11, 17, 11, 10, 16, 11, 10, 16, 17, 16, 17, 11, 10, 17, 11, 10, 16, 10, 16, 17, 11]}
+{"i": 572, "verdict": "empty3"}
+{"i": 574, "verdict": "empty4"}
+{"i": 580, "verdict": "periodic", "d": [2, 1, 2], "grid": [5, 4, 7, 6]}
+{"i": 575, "verdict": "empty3"}
+{"i": 579, "verdict": "empty3"}
+{"i": 578, "verdict": "empty4"}
+{"i": 581, "verdict": "empty3"}
+{"i": 582, "verdict": "empty3"}
+{"i": 584, "verdict": "periodic", "d": [2, 2, 2], "grid": [1, 11, 8, 2, 9, 0, 3, 10]}
+{"i": 585, "verdict": "periodic", "d": [2, 2, 2], "grid": [21, 7, 16, 15, 20, 5, 18, 14]}
+{"i": 587, "verdict": "periodic", "d": [1, 2, 2], "grid": [23, 21, 20, 22]}
+{"i": 588, "verdict": "periodic", "d": [2, 2, 2], "grid": [14, 4, 6, 15, 7, 13, 12, 5]}
+{"i": 583, "verdict": "empty3"}
+{"i": 586, "verdict": "empty3"}
+{"i": 592, "verdict": "periodic", "d": [2, 2, 2], "grid": [18, 22, 8, 1, 20, 19, 3, 9]}
+{"i": 590, "verdict": "empty3"}
+{"i": 589, "verdict": "empty4"}
+{"i": 594, "verdict": "periodic", "d": [4, 2, 4], "grid": [9, 18, 19, 8, 19, 8, 9, 18, 18, 19, 8, 9, 8, 9, 18, 19, 19, 8, 9, 18, 9, 18, 19, 8, 8, 9, 18, 19, 18, 19, 8, 9]}
+{"i": 596, "verdict": "periodic", "d": [2, 2, 2], "grid": [18, 22, 8, 1, 20, 19, 3, 9]}
+{"i": 591, "verdict": "empty4"}
+{"i": 593, "verdict": "empty4"}
+{"i": 599, "verdict": "periodic", "d": [1, 2, 2], "grid": [16, 17, 19, 18]}
+{"i": 595, "verdict": "empty4"}
+{"i": 600, "verdict": "periodic", "d": [2, 2, 2], "grid": [13, 7, 5, 12, 4, 14, 15, 6]}
+{"i": 597, "verdict": "empty4"}
+{"i": 598, "verdict": "empty4"}
+{"i": 604, "verdict": "periodic", "d": [1, 2, 2], "grid": [20, 22, 18, 19]}
+{"i": 602, "verdict": "empty3"}
+{"i": 601, "verdict": "empty4"}
+{"i": 605, "verdict": "periodic", "d": [4, 2, 4], "grid": [14, 6, 5, 13, 5, 13, 14, 6, 13, 14, 6, 5, 6, 5, 13, 14, 5, 13, 14, 6, 14, 6, 5, 13, 6, 5, 13, 14, 13, 14, 6, 5]}
+{"i": 608, "verdict": "periodic", "d": [2, 2, 2], "grid": [14, 4, 6, 15, 7, 13, 12, 5]}
+{"i": 609, "verdict": "periodic", "d": [1, 2, 2], "grid": [19, 18, 16, 17]}
+{"i": 603, "verdict": "empty3"}
+{"i": 606, "verdict": "empty3"}
+{"i": 612, "verdict": "periodic", "d": [2, 2, 2], "grid": [14, 4, 6, 15, 7, 13, 12, 5]}
+{"i": 607, "verdict": "empty4"}
+{"i": 614, "verdict": "periodic", "d": [1, 2, 2], "grid": [18, 19, 17, 16]}
+{"i": 610, "verdict": "empty4"}
+{"i": 611, "verdict": "empty3"}
+{"i": 616, "verdict": "periodic", "d": [2, 2, 2], "grid": [17, 21, 11, 2, 23, 16, 0, 10]}
+{"i": 613, "verdict": "empty4"}
+{"i": 615, "verdict": "empty4"}
+{"i": 620, "verdict": "periodic", "d": [2, 2, 2], "grid": [7, 13, 12, 5, 14, 4, 6, 15]}
+{"i": 621, "verdict": "periodic", "d": [1, 2, 2], "grid": [22, 21, 21, 22]}
+{"i": 618, "verdict": "periodic", "d": [4, 2, 4], "grid": [1, 3, 20, 22, 20, 22, 1, 3, 3, 20, 22, 1, 22, 1, 3, 20, 20, 22, 1, 3, 1, 3, 20, 22, 22, 1, 3, 20, 3, 20, 22, 1]}
+{"i": 617, "verdict": "empty4"}
+{"i": 624, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 18, 17, 20, 17, 20, 23, 18]}
+{"i": 619, "verdict": "empty4"}
+{"i": 623, "verdict": "empty3"}
+{"i": 622, "verdict": "empty4"}
+{"i": 625, "verdict": "periodic", "d": [4, 2, 4], "grid": [12, 15, 4, 7, 4, 7, 12, 15, 15, 4, 7, 12, 7, 12, 15, 4, 4, 7, 12, 15, 12, 15, 4, 7, 7, 12, 15, 4, 15, 4, 7, 12]}
+{"i": 628, "verdict": "periodic", "d": [2, 2, 2], "grid": [10, 0, 17, 21, 2, 11, 23, 16]}
+{"i": 627, "verdict": "periodic", "d": [4, 2, 4], "grid": [0, 2, 21, 23, 21, 23, 0, 2, 2, 21, 23, 0, 23, 0, 2, 21, 21, 23, 0, 2, 0, 2, 21, 23, 23, 0, 2, 21, 2, 21, 23, 0]}
+{"i": 626, "verdict": "empty3"}
+{"i": 632, "verdict": "periodic", "d": [2, 2, 2], "grid": [17, 21, 11, 2, 23, 16, 0, 10]}
+{"i": 629, "verdict": "empty4"}
+{"i": 630, "verdict": "empty4"}
+{"i": 631, "verdict": "empty4"}
+{"i": 636, "verdict": "periodic", "d": [2, 2, 2], "grid": [7, 13, 12, 5, 14, 4, 6, 15]}
+{"i": 633, "verdict": "empty4"}
+{"i": 638, "verdict": "periodic", "d": [1, 2, 2], "grid": [23, 21, 20, 22]}
+{"i": 634, "verdict": "empty4"}
+{"i": 640, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 2, 17, 21, 0, 10, 23, 16]}
+{"i": 635, "verdict": "empty3"}
+{"i": 639, "verdict": "periodic", "d": [4, 2, 4], "grid": [16, 17, 10, 11, 10, 11, 16, 17, 17, 10, 11, 16, 11, 16, 17, 10, 10, 11, 16, 17, 16, 17, 10, 11, 11, 16, 17, 10, 17, 10, 11, 16]}
+{"i": 637, "verdict": "empty4"}
+{"i": 644, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 16, 17, 21, 17, 21, 23, 16]}
+{"i": 645, "verdict": "periodic", "d": [2, 2, 2], "grid": [0, 1, 21, 22, 3, 2, 20, 23]}
+{"i": 641, "verdict": "empty4"}
+{"i": 642, "verdict": "empty4"}
+{"i": 643, "verdict": "empty3"}
+{"i": 649, "verdict": "periodic", "d": [2, 1, 2], "grid": [14, 4, 7, 6]}
+{"i": 646, "verdict": "empty3"}
+{"i": 647, "verdict": "empty3"}
+{"i": 648, "verdict": "empty3"}
+{"i": 653, "verdict": "periodic", "d": [2, 2, 2], "grid": [6, 15, 14, 4, 12, 5, 7, 13]}
+{"i": 650, "verdict": "empty3"}
+{"i": 652, "verdict": "periodic", "d": [4, 2, 4], "grid": [0, 21, 23, 2, 23, 2, 0, 21, 2, 0, 21, 23, 21, 23, 2, 0, 23, 2, 0, 21, 0, 21, 23, 2, 21, 23, 2, 0, 2, 0, 21, 23]}
+{"i": 651, "verdict": "empty4"}
+{"i": 657, "verdict": "periodic", "d": [2, 2, 2], "grid": [6, 15, 14, 4, 12, 5, 7, 13]}
+{"i": 658, "verdict": "periodic", "d": [1, 2, 2], "grid": [22, 20, 23, 21]}
+{"i": 655, "verdict": "periodic", "d": [4, 2, 4], "grid": [22, 3, 1, 20, 1, 20, 22, 3, 20, 22, 3, 1, 3, 1, 20, 22, 1, 20, 22, 3, 22, 3, 1, 20, 3, 1, 20, 22, 20, 22, 3, 1]}
+{"i": 654, "verdict": "empty3"}
+{"i": 661, "verdict": "periodic", "d": [2, 1, 2], "grid": [14, 4, 7, 13]}
+{"i": 656, "verdict": "empty4"}
+{"i": 659, "verdict": "empty4"}
+{"i": 660, "verdict": "empty4"}
+{"i": 665, "verdict": "periodic", "d": [2, 2, 2], "grid": [17, 21, 23, 16, 20, 19, 18, 22]}
+{"i": 662, "verdict": "empty3"}
+{"i": 663, "verdict": "empty3"}
+{"i": 668, "verdict": "periodic", "d": [2, 2, 2], "grid": [9, 3, 19, 16, 1, 0, 22, 18]}
+{"i": 664, "verdict": "empty3"}
+{"i": 670, "verdict": "periodic", "d": [1, 2, 2], "grid": [20, 22, 23, 21]}
+{"i": 666, "verdict": "empty3"}
+{"i": 672, "verdict": "periodic", "d": [2, 2, 2], "grid": [2, 11, 23, 16, 10, 0, 17, 21]}
+{"i": 667, "verdict": "empty4"}
+{"i": 669, "verdict": "empty3"}
+{"i": 675, "verdict": "periodic", "d": [2, 2, 2], "grid": [10, 0, 16, 19, 2, 3, 21, 17]}
+{"i": 671, "verdict": "empty4"}
+{"i": 673, "verdict": "empty3"}
+{"i": 678, "verdict": "periodic", "d": [1, 2, 2], "grid": [22, 20, 21, 23]}
+{"i": 679, "verdict": "periodic", "d": [2, 2, 2], "grid": [10, 0, 16, 23, 2, 11, 21, 17]}
+{"i": 674, "verdict": "empty4"}
+{"i": 676, "verdict": "empty3"}
+{"i": 682, "verdict": "periodic", "d": [1, 2, 2], "grid": [22, 16, 21, 19]}
+{"i": 683, "verdict": "periodic", "d": [1, 1, 2], "grid": [20, 14]}
+{"i": 684, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 19, 17, 8, 18, 10, 9, 16]}
+{"i": 685, "verdict": "periodic", "d": [1, 2, 2], "grid": [10, 11, 8, 9]}
+{"i": 686, "verdict": "periodic", "d": [2, 2, 2], "grid": [18, 11, 9, 17, 10, 18, 16, 8]}
+{"i": 677, "verdict": "empty4"}
+{"i": 688, "verdict": "periodic", "d": [1, 2, 1], "grid": [10, 17]}
+{"i": 687, "verdict": "periodic", "d": [2, 2, 2], "grid": [18, 10, 9, 16, 11, 19, 17, 8]}
+{"i": 689, "verdict": "periodic", "d": [2, 2, 2], "grid": [17, 8, 11, 19, 9, 16, 18, 10]}
+{"i": 690, "verdict": "periodic", "d": [1, 2, 2], "grid": [13, 14, 15, 12]}
+{"i": 680, "verdict": "empty3"}
+{"i": 681, "verdict": "empty3"}
+{"i": 692, "verdict": "empty4"}
+{"i": 695, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 19, 17, 8, 18, 10, 9, 16]}
+{"i": 694, "verdict": "empty4"}
+{"i": 696, "verdict": "periodic", "d": [2, 2, 2], "grid": [19, 11, 8, 17, 10, 18, 16, 9]}
+{"i": 697, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 20, 15, 13, 22, 21, 14, 12]}
+{"i": 698, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 19, 17, 8, 18, 10, 9, 16]}
+{"i": 699, "verdict": "empty4"}
+{"i": 700, "verdict": "empty4"}
+{"i": 701, "verdict": "empty4"}
+{"i": 703, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 19, 17, 8, 18, 10, 9, 16]}
+{"i": 702, "verdict": "empty4"}
+{"i": 705, "verdict": "periodic", "d": [1, 2, 2], "grid": [8, 9, 10, 11]}
+{"i": 704, "verdict": "periodic", "d": [2, 2, 2], "grid": [19, 11, 8, 17, 10, 18, 16, 9]}
+{"i": 707, "verdict": "empty4"}
+{"i": 706, "verdict": "empty4"}
+{"i": 708, "verdict": "periodic", "d": [1, 1, 2], "grid": [13, 14]}
+{"i": 710, "verdict": "empty4"}
+{"i": 709, "verdict": "empty4"}
+{"i": 711, "verdict": "periodic", "d": [4, 2, 4], "grid": [1, 20, 22, 3, 22, 3, 1, 20, 3, 1, 20, 22, 20, 22, 3, 1, 22, 3, 1, 20, 1, 20, 22, 3, 20, 22, 3, 1, 3, 1, 20, 22]}
+{"i": 712, "verdict": "empty4"}
+{"i": 713, "verdict": "empty4"}
+{"i": 714, "verdict": "periodic", "d": [4, 2, 4], "grid": [21, 23, 2, 0, 2, 0, 21, 23, 0, 21, 23, 2, 23, 2, 0, 21, 2, 0, 21, 23, 21, 23, 2, 0, 23, 2, 0, 21, 0, 21, 23, 2]}
+{"i": 715, "verdict": "empty4"}
+{"i": 717, "verdict": "periodic", "d": [1, 2, 2], "grid": [10, 11, 8, 9]}
+{"i": 716, "verdict": "empty4"}
+{"i": 718, "verdict": "empty4"}
+{"i": 719, "verdict": "empty4"}
+{"i": 720, "verdict": "periodic", "d": [1, 2, 2], "grid": [8, 9, 10, 11]}
+{"i": 721, "verdict": "periodic", "d": [2, 2, 2], "grid": [16, 9, 11, 18, 9, 16, 18, 11]}
+{"i": 722, "verdict": "periodic", "d": [2, 2, 2], "grid": [17, 8, 11, 19, 9, 16, 18, 10]}
+{"i": 723, "verdict": "periodic", "d": [2, 2, 2], "grid": [17, 9, 10, 19, 8, 16, 18, 11]}
+{"i": 724, "verdict": "periodic", "d": [4, 2, 4], "grid": [22, 1, 3, 20, 3, 20, 22, 1, 1, 3, 20, 22, 20, 22, 1, 3, 3, 20, 22, 1, 22, 1, 3, 20, 20, 22, 1, 3, 1, 3, 20, 22]}
+{"i": 726, "verdict": "periodic", "d": [1, 2, 2], "grid": [13, 14, 21, 22]}
+{"i": 725, "verdict": "periodic", "d": [4, 2, 4], "grid": [6, 13, 14, 5, 14, 5, 6, 13, 13, 14, 5, 6, 5, 6, 13, 14, 14, 5, 6, 13, 6, 13, 14, 5, 5, 6, 13, 14, 13, 14, 5, 6]}
+{"i": 727, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 19, 17, 8, 18, 10, 9, 16]}
+{"i": 728, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 16, 16, 10, 15, 20, 23, 12]}
+{"i": 729, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 18, 16, 8, 19, 10, 9, 17]}
+{"i": 730, "verdict": "periodic", "d": [2, 2, 2], "grid": [10, 19, 16, 8, 18, 10, 8, 17]}
+{"i": 731, "verdict": "periodic", "d": [2, 2, 2], "grid": [17, 8, 11, 19, 9, 16, 18, 10]}
+{"i": 732, "verdict": "periodic", "d": [2, 2, 2], "grid": [17, 8, 11, 19, 9, 16, 18, 10]}
+{"i": 733, "verdict": "empty4"}
+{"i": 734, "verdict": "empty4"}
+{"i": 735, "verdict": "empty4"}
+{"i": 737, "verdict": "periodic", "d": [2, 2, 2], "grid": [17, 8, 11, 19, 9, 16, 18, 10]}
+{"i": 736, "verdict": "empty4"}
+{"i": 738, "verdict": "periodic", "d": [1, 2, 2], "grid": [23, 21, 15, 12]}
+{"i": 739, "verdict": "periodic", "d": [2, 2, 2], "grid": [16, 9, 10, 18, 8, 17, 19, 11]}
+{"i": 740, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 19, 17, 8, 18, 10, 9, 16]}
+{"i": 741, "verdict": "empty4"}
+{"i": 743, "verdict": "empty4"}
+{"i": 489, "verdict": "empty5"}
+{"i": 745, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 20, 15, 13, 22, 21, 20, 23]}
+{"i": 746, "verdict": "periodic", "d": [2, 2, 2], "grid": [11, 19, 17, 8, 18, 10, 9, 16]}
+{"i": 747, "verdict": "periodic", "d": [1, 2, 1], "grid": [17, 11]}
+{"i": 748, "verdict": "periodic", "d": [2, 2, 2], "grid": [9, 16, 18, 10, 17, 8, 11, 19]}
+{"i": 749, "verdict": "periodic", "d": [1, 2, 2], "grid": [8, 9, 10, 11]}
+{"i": 750, "verdict": "periodic", "d": [2, 2, 2], "grid": [17, 9, 10, 18, 9, 17, 18, 11]}
+{"i": 751, "verdict": "periodic", "d": [2, 2, 2], "grid": [17, 8, 11, 19, 9, 16, 18, 10]}
+{"i": 752, "verdict": "periodic", "d": [1, 1, 2], "grid": [21, 23]}
+{"i": 753, "verdict": "periodic", "d": [1, 1, 1], "grid": [5]}
+{"i": 754, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 14, 2, 5, 3, 4, 6, 0]}
+{"i": 755, "verdict": "periodic", "d": [1, 2, 2], "grid": [3, 1, 2, 0]}
+{"i": 756, "verdict": "periodic", "d": [2, 2, 2], "grid": [22, 15, 14, 23, 12, 21, 21, 13]}
+{"i": 757, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 14, 15, 22, 13, 21, 20, 12]}
+{"i": 758, "verdict": "periodic", "d": [1, 1, 2], "grid": [7, 5]}
+{"i": 759, "verdict": "periodic", "d": [2, 2, 2], "grid": [6, 12, 3, 21, 2, 8, 23, 14]}
+{"i": 760, "verdict": "periodic", "d": [2, 2, 2], "grid": [6, 12, 3, 21, 15, 8, 23, 14]}
+{"i": 761, "verdict": "periodic", "d": [2, 2, 2], "grid": [17, 15, 20, 4, 19, 11, 0, 10]}
+{"i": 762, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 14, 15, 22, 13, 21, 20, 12]}
+{"i": 495, "verdict": "empty5"}
+{"i": 502, "verdict": "empty5"}
+{"i": 763, "verdict": "empty4"}
+{"i": 765, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 14, 15, 22, 13, 21, 20, 12]}
+{"i": 766, "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 14, 15, 22, 13, 21, 20, 12]}
+{"i": 767, "verdict": "periodic", "d": [1, 2, 2], "grid": [9, 3, 3, 10]}
+{"i": 769, "verdict": "periodic", "d": [1, 2, 2], "grid": [2, 0, 11, 10]}
+{"i": 764, "verdict": "empty4"}
+{"i": 768, "verdict": "periodic", "d": [2, 2, 2], "grid": [19, 23, 22, 17, 21, 18, 16, 20]}
+{"i": 770, "verdict": "periodic", "d": [2, 2, 2], "grid": [6, 14, 12, 22, 0, 9, 8, 16]}
+{"i": 771, "verdict": "periodic", "d": [2, 2, 2], "grid": [18, 11, 4, 13, 5, 19, 0, 22]}
+{"i": 772, "verdict": "periodic", "d": [2, 2, 2], "grid": [1, 7, 4, 2, 4, 2, 0, 6]}
+{"i": 775, "verdict": "periodic", "d": [1, 1, 1], "grid": [5]}
+{"i": 773, "verdict": "periodic", "d": [2, 2, 2], "grid": [21, 3, 7, 14, 6, 7, 18, 15]}
+{"i": 774, "verdict": "periodic", "d": [2, 2, 2], "grid": [21, 13, 12, 6, 1, 7, 5, 17]}
+{"i": 506, "verdict": "empty5"}
+{"i": 693, "verdict": "empty5"}
+{"i": 691, "verdict": "empty5"}
+{"i": 742, "verdict": "empty5"}
+{"i": 744, "verdict": "empty5"}
