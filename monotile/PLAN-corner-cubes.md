@@ -7,6 +7,14 @@
 > closed form (density lemma + all-identity period-1 witness — they can
 > never force aperiodicity). Next: Phase B (corners provably too weak,
 > all K) is recommended over Phase C; edge-marking probe suggested first.
+>
+> **STATUS 2026-08-06 (later): edge probe COMPLETE — open question 2
+> answered.** See `RESULTS-edge-k1.md`. 218 (T=2) + 13 (exact1 m=3) +
+> 22,815 (T=3) decorations, all periodic or box-empty, zero SUSPICIOUS.
+> Edges are strictly stronger than corners (genuine period-3
+> requirements, witnesses up to (2,2,8) and (6,6,6)) but still not
+> aperiodic at K=1. Edge constraint graph splits into two decoupled
+> FCC parity components — a second structural handle for Phase B.
 
 **Motivation.** The two face tracks prove: NO face-only decoration of a
 cube — bump/dent or equal-color, any grid K, any palette — is an

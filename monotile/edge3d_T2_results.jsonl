@@ -1,0 +1,231 @@
+{"i": 0, "rule": "equal", "verdict": "periodic", "d": [1, 1, 1], "grid": [0]}
+{"i": 5, "rule": "equal", "verdict": "periodic", "d": [1, 1, 1], "grid": [16]}
+{"i": 2, "rule": "equal", "verdict": "periodic", "d": [1, 1, 2], "grid": [22, 21]}
+{"i": 4, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [23, 18, 17, 20]}
+{"i": 7, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [15, 12, 14, 13]}
+{"i": 3, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [23, 17, 22, 20]}
+{"i": 1, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [19, 18, 17, 20]}
+{"i": 6, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 13, 15, 20, 22, 12, 14, 21]}
+{"i": 8, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [13, 14, 12, 15, 12, 15, 23, 21, 12, 15, 13, 14, 13, 14, 12, 15]}
+{"i": 16, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [13, 14, 12, 15]}
+{"i": 12, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [23, 21, 13, 14, 13, 14, 23, 15, 13, 14, 12, 15, 12, 15, 13, 14]}
+{"i": 11, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [23, 21, 22, 20, 22, 20, 23, 21, 22, 20, 23, 21, 23, 21, 22, 20]}
+{"i": 19, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [12, 15, 13, 14]}
+{"i": 20, "rule": "equal", "verdict": "periodic", "d": [1, 1, 2], "grid": [23, 20]}
+{"i": 21, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [21, 23, 22, 20]}
+{"i": 15, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [23, 21, 22, 20, 22, 20, 23, 21, 22, 20, 23, 21, 23, 21, 22, 20]}
+{"i": 22, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [20, 22, 22, 20]}
+{"i": 24, "rule": "equal", "verdict": "periodic", "d": [1, 1, 2], "grid": [23, 14]}
+{"i": 23, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [23, 21, 22, 20]}
+{"i": 26, "rule": "equal", "verdict": "periodic", "d": [1, 1, 2], "grid": [22, 21]}
+{"i": 25, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [23, 21, 22, 20]}
+{"i": 27, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [6, 1, 1, 6]}
+{"i": 17, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [14, 12, 22, 21, 15, 13, 23, 20, 15, 13, 23, 20, 14, 12, 22, 21]}
+{"i": 18, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [13, 22, 21, 15, 12, 23, 20, 14, 12, 23, 20, 14, 13, 22, 21, 15]}
+{"i": 28, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [12, 23, 13, 22, 13, 21, 15, 23, 14, 21, 12, 20, 12, 20, 13, 21]}
+{"i": 32, "rule": "equal", "verdict": "periodic", "d": [1, 1, 2], "grid": [8, 10]}
+{"i": 33, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 22, 15, 14, 14, 15, 22, 12]}
+{"i": 30, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [13, 23, 12, 22, 12, 21, 14, 23, 15, 21, 13, 20, 13, 20, 12, 21]}
+{"i": 10, "rule": "equal", "verdict": "periodic-late", "d": [2, 2, 8], "grid": [13, 22, 20, 14, 12, 23, 21, 15, 12, 23, 21, 15, 13, 22, 20, 14, 12, 23, 21, 15, 13, 22, 20, 14, 13, 22, 20, 14, 12, 23, 21, 15]}
+{"i": 36, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [14, 15, 13, 12]}
+{"i": 9, "rule": "equal", "verdict": "periodic-late", "d": [2, 2, 8], "grid": [20, 15, 13, 23, 21, 14, 12, 22, 21, 14, 12, 22, 20, 15, 13, 23, 21, 14, 12, 22, 20, 15, 13, 23, 20, 15, 13, 23, 21, 14, 12, 22]}
+{"i": 14, "rule": "equal", "verdict": "periodic-late", "d": [2, 2, 8], "grid": [20, 14, 12, 23, 21, 15, 13, 22, 21, 15, 13, 22, 20, 14, 12, 23, 21, 15, 13, 22, 20, 14, 12, 23, 20, 14, 12, 23, 21, 15, 13, 22]}
+{"i": 13, "rule": "equal", "verdict": "periodic-late", "d": [2, 2, 8], "grid": [12, 22, 20, 15, 13, 23, 21, 14, 13, 23, 21, 14, 12, 22, 20, 15, 13, 23, 21, 14, 12, 22, 20, 15, 12, 22, 20, 15, 13, 23, 21, 14]}
+{"i": 40, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [9, 8, 10, 11]}
+{"i": 41, "rule": "equal", "verdict": "periodic", "d": [1, 1, 1], "grid": [12]}
+{"i": 37, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [15, 20, 23, 13, 22, 12, 14, 21]}
+{"i": 42, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [3, 23, 6, 17, 4, 1, 0, 22]}
+{"i": 39, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [23, 20, 13, 21, 13, 15, 12, 14, 13, 15, 12, 14, 12, 14, 13, 21]}
+{"i": 29, "rule": "equal", "verdict": "periodic-late", "d": [2, 2, 8], "grid": [15, 20, 23, 13, 14, 21, 22, 12, 14, 21, 22, 12, 15, 20, 23, 13, 14, 21, 22, 12, 15, 20, 23, 13, 15, 20, 23, 13, 14, 21, 22, 12]}
+{"i": 38, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [23, 15, 12, 21, 12, 21, 23, 15, 12, 14, 13, 15, 13, 15, 12, 14]}
+{"i": 47, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [18, 23, 20, 17, 21, 19, 16, 22]}
+{"i": 48, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [18, 23, 20, 17, 21, 19, 16, 22]}
+{"i": 31, "rule": "equal", "verdict": "periodic-late", "d": [2, 2, 8], "grid": [14, 20, 23, 12, 15, 21, 22, 13, 15, 21, 22, 13, 14, 20, 23, 12, 15, 21, 22, 13, 14, 20, 23, 12, 14, 20, 23, 12, 15, 21, 22, 13]}
+{"i": 49, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [18, 23, 1, 10, 21, 19, 11, 3]}
+{"i": 50, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [18, 23, 20, 17, 21, 19, 16, 22]}
+{"i": 34, "rule": "equal", "verdict": "periodic-late", "d": [2, 2, 8], "grid": [15, 20, 23, 13, 14, 21, 22, 12, 14, 21, 22, 12, 15, 20, 23, 13, 14, 21, 22, 12, 15, 20, 23, 13, 15, 20, 23, 13, 14, 21, 22, 12]}
+{"i": 35, "rule": "equal", "verdict": "periodic-late", "d": [2, 2, 8], "grid": [14, 20, 23, 12, 15, 21, 22, 13, 15, 21, 22, 13, 14, 20, 23, 12, 15, 21, 22, 13, 14, 20, 23, 12, 14, 20, 23, 12, 15, 21, 22, 13]}
+{"i": 43, "rule": "equal", "verdict": "empty3"}
+{"i": 44, "rule": "equal", "verdict": "empty3"}
+{"i": 55, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [18, 23, 20, 17, 21, 19, 16, 22]}
+{"i": 56, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [20, 23, 23, 20, 16, 19, 19, 16]}
+{"i": 45, "rule": "equal", "verdict": "empty3"}
+{"i": 46, "rule": "equal", "verdict": "empty3"}
+{"i": 52, "rule": "equal", "verdict": "empty3"}
+{"i": 51, "rule": "equal", "verdict": "empty4"}
+{"i": 53, "rule": "equal", "verdict": "empty4"}
+{"i": 54, "rule": "equal", "verdict": "empty3"}
+{"i": 61, "rule": "equal", "verdict": "periodic", "d": [3, 3, 3], "grid": [9, 4, 23, 23, 2, 4, 4, 23, 9, 23, 2, 12, 4, 19, 2, 2, 4, 19, 4, 19, 2, 2, 4, 19, 19, 9, 4]}
+{"i": 57, "rule": "equal", "verdict": "empty3"}
+{"i": 59, "rule": "equal", "verdict": "empty3"}
+{"i": 58, "rule": "equal", "verdict": "empty4"}
+{"i": 60, "rule": "equal", "verdict": "empty3"}
+{"i": 67, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [15, 13, 23, 20, 22, 21, 14, 12]}
+{"i": 65, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [2, 11, 10, 0, 10, 0, 2, 11, 10, 0, 2, 3, 2, 3, 1, 0]}
+{"i": 62, "rule": "equal", "verdict": "empty3"}
+{"i": 63, "rule": "equal", "verdict": "empty3"}
+{"i": 64, "rule": "equal", "verdict": "empty3"}
+{"i": 66, "rule": "equal", "verdict": "empty3"}
+{"i": 68, "rule": "equal", "verdict": "empty3"}
+{"i": 69, "rule": "equal", "verdict": "empty3"}
+{"i": 70, "rule": "equal", "verdict": "empty3"}
+{"i": 71, "rule": "equal", "verdict": "empty3"}
+{"i": 79, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [1, 4, 2, 0]}
+{"i": 72, "rule": "equal", "verdict": "empty3"}
+{"i": 73, "rule": "equal", "verdict": "empty3"}
+{"i": 74, "rule": "equal", "verdict": "empty3"}
+{"i": 83, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [7, 4, 5, 6]}
+{"i": 75, "rule": "equal", "verdict": "empty3"}
+{"i": 76, "rule": "equal", "verdict": "empty3"}
+{"i": 78, "rule": "equal", "verdict": "empty3"}
+{"i": 87, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [7, 4, 5, 6]}
+{"i": 80, "rule": "equal", "verdict": "empty3"}
+{"i": 81, "rule": "equal", "verdict": "empty3"}
+{"i": 90, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 13, 15, 20, 14, 21, 22, 12]}
+{"i": 82, "rule": "equal", "verdict": "empty3"}
+{"i": 84, "rule": "equal", "verdict": "empty3"}
+{"i": 85, "rule": "equal", "verdict": "empty3"}
+{"i": 86, "rule": "equal", "verdict": "empty3"}
+{"i": 89, "rule": "equal", "verdict": "empty3"}
+{"i": 88, "rule": "equal", "verdict": "empty4"}
+{"i": 92, "rule": "equal", "verdict": "empty3"}
+{"i": 91, "rule": "equal", "verdict": "empty4"}
+{"i": 93, "rule": "equal", "verdict": "empty3"}
+{"i": 94, "rule": "equal", "verdict": "empty3"}
+{"i": 101, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 13, 15, 20, 14, 21, 22, 12]}
+{"i": 95, "rule": "equal", "verdict": "empty4"}
+{"i": 96, "rule": "equal", "verdict": "empty3"}
+{"i": 98, "rule": "equal", "verdict": "empty3"}
+{"i": 77, "rule": "equal", "verdict": "periodic-late", "d": [2, 2, 8], "grid": [0, 8, 9, 2, 3, 11, 10, 1, 3, 11, 10, 1, 0, 8, 9, 2, 3, 11, 10, 1, 0, 8, 9, 2, 0, 8, 9, 2, 3, 11, 10, 1]}
+{"i": 99, "rule": "equal", "verdict": "empty3"}
+{"i": 100, "rule": "equal", "verdict": "empty4"}
+{"i": 106, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [3, 1, 0, 2, 0, 2, 3, 1, 0, 2, 3, 1, 3, 1, 0, 2]}
+{"i": 103, "rule": "equal", "verdict": "empty3"}
+{"i": 102, "rule": "equal", "verdict": "empty3"}
+{"i": 104, "rule": "equal", "verdict": "empty3"}
+{"i": 109, "rule": "equal", "verdict": "periodic", "d": [3, 3, 3], "grid": [0, 16, 7, 16, 7, 0, 7, 11, 16, 16, 7, 0, 7, 0, 23, 0, 16, 7, 7, 0, 16, 0, 16, 7, 16, 7, 0]}
+{"i": 112, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [8, 1, 11, 2, 0, 2, 8, 9, 0, 2, 3, 1, 8, 1, 11, 2]}
+{"i": 105, "rule": "equal", "verdict": "empty3"}
+{"i": 107, "rule": "equal", "verdict": "empty3"}
+{"i": 108, "rule": "equal", "verdict": "empty3"}
+{"i": 110, "rule": "equal", "verdict": "empty3"}
+{"i": 111, "rule": "equal", "verdict": "empty3"}
+{"i": 114, "rule": "equal", "verdict": "empty3"}
+{"i": 113, "rule": "equal", "verdict": "empty3"}
+{"i": 116, "rule": "equal", "verdict": "empty3"}
+{"i": 122, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [6, 5, 3, 1]}
+{"i": 115, "rule": "equal", "verdict": "empty4"}
+{"i": 97, "rule": "equal", "verdict": "periodic-late", "d": [2, 2, 8], "grid": [8, 9, 1, 0, 11, 10, 2, 3, 11, 10, 2, 3, 8, 9, 1, 0, 11, 10, 2, 3, 8, 9, 1, 0, 8, 9, 1, 0, 11, 10, 2, 3]}
+{"i": 125, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [6, 5, 4, 7]}
+{"i": 117, "rule": "equal", "verdict": "empty3"}
+{"i": 118, "rule": "equal", "verdict": "empty3"}
+{"i": 128, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [23, 13, 15, 20, 14, 21, 22, 12]}
+{"i": 120, "rule": "equal", "verdict": "empty3"}
+{"i": 121, "rule": "equal", "verdict": "empty3"}
+{"i": 130, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [2, 0, 8, 9, 1, 3, 11, 10, 1, 3, 11, 10, 2, 0, 8, 9]}
+{"i": 123, "rule": "equal", "verdict": "empty3"}
+{"i": 124, "rule": "equal", "verdict": "empty3"}
+{"i": 126, "rule": "equal", "verdict": "empty3"}
+{"i": 127, "rule": "equal", "verdict": "empty3"}
+{"i": 129, "rule": "equal", "verdict": "empty3"}
+{"i": 131, "rule": "equal", "verdict": "empty3"}
+{"i": 137, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [2, 3, 1, 0, 1, 0, 2, 3, 1, 0, 2, 3, 2, 3, 1, 0]}
+{"i": 133, "rule": "equal", "verdict": "empty3"}
+{"i": 132, "rule": "equal", "verdict": "empty3"}
+{"i": 139, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [10, 2, 0, 11, 9, 1, 3, 8, 9, 1, 3, 8, 10, 2, 0, 11]}
+{"i": 140, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [6, 5, 3, 1]}
+{"i": 141, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [20, 23, 21, 22]}
+{"i": 143, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [18, 23, 16, 22]}
+{"i": 142, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [18, 23, 16, 22]}
+{"i": 144, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [18, 23, 16, 22]}
+{"i": 146, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [21, 23, 20, 22]}
+{"i": 147, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [18, 23, 16, 22]}
+{"i": 145, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [21, 23, 20, 22]}
+{"i": 135, "rule": "equal", "verdict": "empty3"}
+{"i": 136, "rule": "equal", "verdict": "empty3"}
+{"i": 148, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [18, 23, 16, 22]}
+{"i": 149, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [8, 4, 11, 20, 9, 7, 4, 22]}
+{"i": 154, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [10, 7, 9, 5, 11, 4, 7, 22]}
+{"i": 150, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [23, 13, 21, 15, 22, 15, 20, 13, 21, 12, 23, 14, 20, 14, 22, 12]}
+{"i": 152, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [21, 13, 23, 15, 20, 15, 22, 13, 23, 12, 21, 14, 22, 14, 20, 12]}
+{"i": 157, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [6, 5, 4, 7]}
+{"i": 158, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [13, 9, 9, 15, 12, 8, 8, 14]}
+{"i": 138, "rule": "equal", "verdict": "empty3"}
+{"i": 159, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [2, 11, 3, 8, 3, 10, 2, 9, 3, 10, 2, 9, 2, 11, 3, 8]}
+{"i": 153, "rule": "equal", "verdict": "empty3"}
+{"i": 119, "rule": "equal", "verdict": "periodic-late", "d": [2, 2, 8], "grid": [10, 1, 0, 8, 9, 2, 3, 11, 9, 2, 3, 11, 10, 1, 0, 8, 9, 2, 3, 11, 10, 1, 0, 8, 10, 1, 0, 8, 9, 2, 3, 11]}
+{"i": 151, "rule": "equal", "verdict": "empty3"}
+{"i": 164, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [13, 11, 9, 15, 14, 10, 8, 12]}
+{"i": 155, "rule": "equal", "verdict": "empty3"}
+{"i": 156, "rule": "equal", "verdict": "empty3"}
+{"i": 163, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [8, 0, 11, 1, 9, 1, 8, 0, 9, 1, 8, 0, 8, 0, 11, 3]}
+{"i": 160, "rule": "equal", "verdict": "empty3"}
+{"i": 161, "rule": "equal", "verdict": "empty3"}
+{"i": 162, "rule": "equal", "verdict": "empty3"}
+{"i": 165, "rule": "equal", "verdict": "empty3"}
+{"i": 166, "rule": "equal", "verdict": "empty3"}
+{"i": 168, "rule": "equal", "verdict": "empty3"}
+{"i": 167, "rule": "equal", "verdict": "empty3"}
+{"i": 173, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [3, 11, 0, 8, 2, 10, 1, 9, 2, 10, 1, 9, 3, 11, 0, 8]}
+{"i": 169, "rule": "equal", "verdict": "empty4"}
+{"i": 134, "rule": "equal", "verdict": "periodic-late", "d": [2, 2, 8], "grid": [0, 11, 10, 2, 3, 8, 9, 1, 3, 8, 9, 1, 0, 11, 10, 2, 3, 8, 9, 1, 0, 11, 10, 2, 0, 11, 10, 2, 3, 8, 9, 1]}
+{"i": 170, "rule": "equal", "verdict": "empty3"}
+{"i": 177, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [11, 0, 10, 1, 10, 1, 9, 2, 8, 3, 9, 0, 9, 0, 8, 1]}
+{"i": 171, "rule": "equal", "verdict": "empty3"}
+{"i": 175, "rule": "equal", "verdict": "empty3"}
+{"i": 174, "rule": "equal", "verdict": "empty3"}
+{"i": 176, "rule": "equal", "verdict": "empty3"}
+{"i": 178, "rule": "equal", "verdict": "empty3"}
+{"i": 179, "rule": "equal", "verdict": "empty3"}
+{"i": 186, "rule": "equal", "verdict": "periodic", "d": [1, 1, 2], "grid": [18, 5]}
+{"i": 187, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [20, 21, 21, 20]}
+{"i": 188, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [23, 21, 22, 20]}
+{"i": 189, "rule": "equal", "verdict": "periodic", "d": [1, 1, 2], "grid": [17, 5]}
+{"i": 190, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [23, 21, 22, 20]}
+{"i": 191, "rule": "equal", "verdict": "periodic", "d": [1, 1, 2], "grid": [4, 5]}
+{"i": 192, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [12, 8, 21, 20, 20, 4, 3, 23]}
+{"i": 180, "rule": "equal", "verdict": "empty3"}
+{"i": 193, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [3, 11, 9, 2, 10, 1, 0, 8]}
+{"i": 194, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [9, 13, 8, 0, 0, 4, 2, 7]}
+{"i": 181, "rule": "equal", "verdict": "empty3"}
+{"i": 197, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [14, 13, 13, 6, 7, 4, 4, 7]}
+{"i": 198, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [3, 7, 6, 2, 4, 1, 0, 5]}
+{"i": 183, "rule": "equal", "verdict": "empty3"}
+{"i": 199, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [2, 7, 6, 3, 4, 0, 1, 5]}
+{"i": 182, "rule": "equal", "verdict": "empty4"}
+{"i": 184, "rule": "equal", "verdict": "empty3"}
+{"i": 200, "rule": "equal", "verdict": "periodic", "d": [3, 3, 3], "grid": [1, 10, 15, 20, 1, 10, 16, 20, 1, 20, 1, 10, 10, 20, 1, 7, 10, 20, 10, 20, 1, 1, 10, 20, 15, 1, 10]}
+{"i": 203, "rule": "equal", "verdict": "periodic", "d": [3, 3, 3], "grid": [1, 18, 12, 12, 1, 9, 18, 12, 1, 18, 12, 1, 1, 9, 22, 22, 7, 9, 12, 1, 18, 9, 12, 7, 7, 9, 22]}
+{"i": 196, "rule": "equal", "verdict": "empty3"}
+{"i": 206, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [5, 1, 0, 5]}
+{"i": 195, "rule": "equal", "verdict": "empty3"}
+{"i": 207, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [3, 23, 6, 2, 4, 1, 0, 8]}
+{"i": 201, "rule": "equal", "verdict": "empty4"}
+{"i": 210, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [0, 8, 17, 20, 9, 2, 22, 16]}
+{"i": 211, "rule": "equal", "verdict": "periodic", "d": [2, 2, 2], "grid": [7, 13, 15, 6, 14, 4, 5, 12]}
+{"i": 172, "rule": "equal", "verdict": "periodic-late", "d": [2, 2, 8], "grid": [3, 1, 10, 8, 0, 2, 9, 11, 0, 2, 9, 11, 3, 1, 10, 8, 0, 2, 9, 11, 3, 1, 10, 8, 3, 1, 10, 8, 0, 2, 9, 11]}
+{"i": 204, "rule": "equal", "verdict": "empty4"}
+{"i": 208, "rule": "equal", "verdict": "empty3"}
+{"i": 209, "rule": "equal", "verdict": "empty3"}
+{"i": 216, "rule": "equal", "verdict": "periodic", "d": [1, 2, 2], "grid": [5, 6, 7, 4]}
+{"i": 217, "rule": "equal", "verdict": "periodic", "d": [1, 1, 1], "grid": [5]}
+{"i": 213, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [2, 0, 1, 11, 1, 3, 9, 0, 1, 3, 9, 0, 2, 0, 10, 11]}
+{"i": 1, "rule": "exact1", "verdict": "periodic", "d": [1, 1, 2], "grid": [7, 18]}
+{"i": 2, "rule": "exact1", "verdict": "periodic", "d": [1, 2, 2], "grid": [14, 9, 9, 14]}
+{"i": 3, "rule": "exact1", "verdict": "periodic", "d": [1, 1, 2], "grid": [7, 18]}
+{"i": 4, "rule": "exact1", "verdict": "periodic", "d": [1, 1, 2], "grid": [7, 18]}
+{"i": 5, "rule": "exact1", "verdict": "periodic", "d": [1, 2, 2], "grid": [9, 13, 14, 8]}
+{"i": 6, "rule": "exact1", "verdict": "periodic", "d": [1, 1, 2], "grid": [7, 18]}
+{"i": 7, "rule": "exact1", "verdict": "periodic", "d": [1, 1, 1], "grid": [7]}
+{"i": 8, "rule": "exact1", "verdict": "periodic", "d": [1, 1, 1], "grid": [2]}
+{"i": 9, "rule": "exact1", "verdict": "periodic", "d": [1, 1, 1], "grid": [13]}
+{"i": 10, "rule": "exact1", "verdict": "periodic", "d": [1, 1, 1], "grid": [23]}
+{"i": 11, "rule": "exact1", "verdict": "periodic", "d": [1, 1, 1], "grid": [0]}
+{"i": 12, "rule": "exact1", "verdict": "periodic", "d": [1, 1, 1], "grid": [2]}
+{"i": 215, "rule": "equal", "verdict": "periodic", "d": [2, 2, 4], "grid": [2, 11, 1, 3, 1, 3, 10, 11, 1, 8, 2, 0, 10, 11, 9, 3]}
+{"i": 0, "rule": "exact1", "verdict": "periodic", "d": [2, 3, 3], "grid": [21, 11, 12, 6, 0, 21, 14, 21, 3, 19, 5, 2, 1, 19, 7, 2, 4, 19]}
+{"i": 212, "rule": "equal", "verdict": "empty3"}
+{"i": 214, "rule": "equal", "verdict": "empty3"}
+{"i": 185, "rule": "equal", "verdict": "periodic-late", "d": [2, 2, 8], "grid": [2, 0, 8, 10, 1, 3, 11, 9, 1, 3, 11, 9, 2, 0, 8, 10, 1, 3, 11, 9, 2, 0, 8, 10, 2, 0, 8, 10, 1, 3, 11, 9]}
+{"i": 202, "rule": "equal", "verdict": "periodic-late", "d": [2, 2, 8], "grid": [2, 9, 11, 3, 1, 10, 8, 0, 1, 10, 8, 0, 2, 9, 11, 3, 1, 10, 8, 0, 2, 9, 11, 3, 2, 9, 11, 3, 1, 10, 8, 0]}
+{"i": 205, "rule": "equal", "verdict": "periodic-late", "d": [2, 2, 8], "grid": [1, 9, 11, 0, 2, 10, 8, 3, 2, 10, 8, 3, 1, 9, 11, 0, 2, 10, 8, 3, 1, 9, 11, 0, 1, 9, 11, 0, 2, 10, 8, 3]}
