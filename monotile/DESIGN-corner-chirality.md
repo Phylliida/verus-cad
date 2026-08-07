@@ -152,17 +152,16 @@ the obstruction needs at least one full period of room.
 
 Ordered by risk/reward:
 
-1. **2D theorem, end-to-end** (days; self-contained; validates the whole
-   approach). New module family `Corner2D*`: vertex colorings, square
-   patterns, `IsTiling`, mirror/rotation group C4/D4 (fin 4 tuples),
-   the necklace lemma by `decide`-scale finite case analysis (length-4
-   sequences over an arbitrary finite palette — state via `Fin 4 → α`
-   with the reversal-closure hypothesis; the case analysis is
-   case-splitting on equality patterns), the pair-reversal argument
-   (infinite part: from IsTiling to reversal-closure — clean, no
-   compactness needed since every pair occurs in every square), and the
-   period-2 construction. No external evidence needed — fully
-   kernel-checkable. Target: `corner2d_tileable_iff_achiral`.
+1. **2D theorem, end-to-end** ✅ **DONE (2026-08-07)** —
+   `lean-flocq/LeanFlocq/Corner2D.lean`, ~260 lines, single module:
+   `corner2d_tileable_iff_achiral` and
+   `corner2d_tileable_iff_period2` (tileable ⟺ achiral ⟺ period-(2,2)
+   witness), for decorations `Fin 4 → α` over an arbitrary `DecidableEq`
+   palette. The necklace lemma reduces via `normPat` (first-occurrence
+   equality patterns) to `necklaceFin`, a kernel `decide` over all 256
+   `Fin 4 → Fin 4` patterns. Trust base: **propext, Classical.choice,
+   Quot.sound only** (verified by `#print axioms`) — no native_decide,
+   no external evidence, strictly cleaner than the face tracks.
 2. **3D easy half** (`corner3d_achiral_periodic`): achiral ⟺ period-2
    witness ⟹ tileable. The rotation/mirror action on corners as
    `Fin 8` permutations (export the 24×8 table + reflection), the
