@@ -91,30 +91,58 @@ face-necklace family is reversal-closed — but for T=2 every 4-cycle is
 achiral, so this yields nothing, while chiral T=2 decorations are empty.
 The 3D obstruction lives deeper than faces.)
 
-## 3D hard direction — analysis so far (mechanism candidate)
+## 3D hard direction — the mechanism, caught in the act (2026-08-07)
 
 Worked example: the T=2 chiral pair #10/#11 (the two empty decorations):
-4 marks forming a 3-edge path between antipodal corners; equivalently an
-edge of the even tetrahedron + an edge of the odd tetrahedron in a
-fixed (right- or left-handed) screw arrangement.
+4 marks = an edge of the even tetrahedron + an edge of the odd
+tetrahedron. Verified facts (`corner3d_dimer.py`):
 
-For such decorations the constraint reduces exactly to a **face-dimer
-problem**: mark a lattice face E (resp. O) if its even-parity (odd)
-diagonal corners are marked. Consistency forces:
-- each cube has exactly one E-face and one O-face, and they are adjacent
-  (opposite-face choices give parallel diagonals = degenerate screw);
-- E/O-marking is consistent across the two cubes sharing a face;
-- the screw handedness of the (E-diagonal, O-diagonal) pair at each cube
-  must equal the decoration's chirality.
-E-faces form an exact cover (each cube incident to exactly one E-face);
-likewise O. Explicit covers (e.g., E = x-normal faces at even x,
-O = y-normal faces at even y) yield handedness alternating with cube
-parity — never constant. **Conjectured mechanism:** for any E/O exact
-covers, the screw handedness cannot be constant over ℤ³ (a
-dimer/height-function type invariant forces both signs), so chiral
-decorations admit no tiling. General T/chiral decorations need the
-general form of this argument — the current analysis is specific to
-the 4-mark path decorations.
+- A #10-type pattern is **determined by its (E-face, O-face) ordered
+  pair** (the even marks are the even diagonal of the E-face, the odd
+  marks the odd diagonal of the O-face), and the rotation orbit covers
+  exactly **12 of the 24 adjacent ordered face pairs**, one decoration
+  per pair. The class invariant is purely the **cyclic orientation of
+  the axis pair**: (x,y), (y,z), (z,x) = #10's class; (y,x), (z,y),
+  (x,z) = #11's. (An earlier "screw handedness" attempt with
+  lexicographically-directed diagonals was NOT rotation-invariant —
+  wrong concept, superseded by the axis-cyclic class.)
+- **The parity flip — the actual obstruction.** The decoration's local
+  E-part sits on local-even corner positions. For an even cube these
+  land on absolute-even vertices, but for an odd cube the local-even
+  positions land on absolute-ODD vertices: the local class constraint
+  becomes, in absolute terms, "(even-mark-face axis, odd-mark-face
+  axis) positive" at even cubes but NEGATIVE at odd cubes. Explicit
+  witness of the failure mode: X = {x = even} faces, Y = {y = even}
+  faces satisfies every vertex-glue constraint and puts every even cube
+  in the #10 class — but every odd cube in the #11 class. A chiral
+  tiling would need the axis-class to alternate with cube parity.
+- **Rigidity is FALSE**: "2-per-tetrahedron" vertex subsets of the FCC
+  lattice are abundant (3000+ solutions on the (4,4,4) torus, mostly
+  non-layered) — the even side alone has huge freedom; the obstruction
+  needs the coupling.
+
+**Reduced model (exact for #10/#11).** Per cube c: an E-face and an
+O-face, adjacent, with axis class positive iff c even (for #10). Global
+consistency: face-marking is shared across adjacent cubes (follows from
+vertex glue), and at every vertex the faces through it sum to 0 or 4
+(all 8 incident cubes mark it or none). Axis-level propagation along
+dimers is deterministic: following the alternating E/O-dimer path from
+an even cube cycles (x,y)→(x,z)→(y,z)→(y,x)→(z,x)→(z,y)→(x,y) with
+period 6 — consistent, so the final contradiction must come from the
+vertex glue and/or the side (±) choices. THIS is the remaining proof
+obligation: show the reduced model is UNSAT (empirically: matches #10's
+profile pending the glue encoding — box 3³ SAT / 4³ UNSAT expected).
+
+**Why this should generalize to all chiral d:** chirality ⟹ Stab(d) ⊆ A4
+(an odd-diagonal-permutation symmetry makes d achiral), so every cube in
+a tiling has a well-defined tet-parity bit ε_c (which diagonal coset
+its orientation lies in), and the same absolute-parity flip applies to
+the ε-propagation: the local chirality class becomes an alternating
+absolute constraint. The case work is in how the decoration's E/O
+patterns interact with the glue; the #10 class is the cleanest instance.
+General chiral decorations (T≥3, e.g. tet parts with 3–4 distinct
+colors) need the same treatment per "chirality type" — or a uniform
+invariant subsuming them.
 
 Small-scale data point: chiral #10/#11 are UNSAT on every torus up to
 (3,3,3) (all 27 shapes probed) and box-UNSAT at 4³; box 3³ is SAT, so
