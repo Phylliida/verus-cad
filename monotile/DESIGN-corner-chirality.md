@@ -129,9 +129,34 @@ vertex glue), and at every vertex the faces through it sum to 0 or 4
 dimers is deterministic: following the alternating E/O-dimer path from
 an even cube cycles (x,y)→(x,z)→(y,z)→(y,x)→(z,x)→(z,y)→(x,y) with
 period 6 — consistent, so the final contradiction must come from the
-vertex glue and/or the side (±) choices. THIS is the remaining proof
-obligation: show the reduced model is UNSAT (empirically: matches #10's
-profile pending the glue encoding — box 3³ SAT / 4³ UNSAT expected).
+vertex glue and/or the side (±) choices.
+
+**SOLVED for #10/#11 (2026-08-07): the one-edge obstruction.** The
+reduced model is now encoded exactly (`corner3d_dimer.py` part 3: 12
+ordered (A-face, B-face) pairs per cube, class ±1 by cube parity,
+vertex glue as all-equal chains) — it reproduces #10's full verdict
+profile against the orientation encoding (box 3³ SAT, 4×4×3 UNSAT,
+small tori UNSAT, every shape MATCH). Transfer-graph analysis on
+cylinders (`corner3d_transfer.py`) localizes the contradiction, and an
+assumption-based UNSAT core + greedy deletion
+(`corner3d_core_hunt.py`) shrinks it to **four cubes: the ones around
+a single lattice edge**. Precisely: the 4 cubes around any lattice
+edge, with mark agreement at every vertex shared by ≥ 2 of them (the
+4-wise central vertex at each end of the edge, plus 4 pairwise
+edge vertices per end plane), admit NO assignment of their 12 allowed
+face pairs — brute-force verified over all 12⁴ = 20736 assignments for
+both layer parities (`corner3d_edge.py`, zero survivors; solver-free).
+Any #10 tiling of ℤ³ would restrict to such a 4-cube system around
+every lattice edge (vertex glue implies the agreements), so #10 and
+#11 cannot tile ℤ³. ∎ (modulo the reduction, which is exact and
+cross-checked). The obstruction is distributed: no single agreement is
+individually essential; dropping the central 4-wise agreement leaves
+84 near-misses, which can make the central marks constant on either
+end plane separately (24+24) but never both at once — the two ends of
+the edge cannot simultaneously close. Remaining work: a human/Lean
+proof of the 4-cube UNSAT (12⁴ case analysis, very `decide`-friendly),
+and the formal reduction (pattern → (A,B) pair + class by parity —
+the stabilizer/orbit group theory).
 
 **Why this should generalize to all chiral d:** chirality ⟹ Stab(d) ⊆ A4
 (an odd-diagonal-permutation symmetry makes d achiral), so every cube in
@@ -162,16 +187,25 @@ Ordered by risk/reward:
    `Fin 4 → Fin 4` patterns. Trust base: **propext, Classical.choice,
    Quot.sound only** (verified by `#print axioms`) — no native_decide,
    no external evidence, strictly cleaner than the face tracks.
-2. **3D easy half** (`corner3d_achiral_periodic`): achiral ⟺ period-2
-   witness ⟹ tileable. The rotation/mirror action on corners as
-   `Fin 8` permutations (export the 24×8 table + reflection), the
-   τ_c/parity argument, the explicit witness ℓ(v) = d(v mod 2), and the
-   K=1 census cross-check (333 canonicals, achiral count 201 by
-   native_decide — matches the Python census).
-3. **3D hard half** (`corner3d_tileable_achiral`): blocked on the math
-   (mechanism above). If the dimer-cover argument generalizes, its
-   formalization is a finite-per-cube case analysis + a global invariant
-   — the global part is the risk.
+2. **3D easy half** (`corner3d_achiral_periodic`): ✅ **DONE
+   (2026-08-07)** — `lean-flocq/LeanFlocq/Corner3D.lean` (commit
+   a4c14ed): achiral ⟺ period-(2,2,2) witness ⟹ tileable, for
+   decorations `Fin 8 → α` over an arbitrary type. Rotation/mirror as
+   exported `Fin 8` permutation tables + composition table (kernel
+   `decide`); witness ℓ(v) = d(v mod 2); the τ_c parity argument via
+   `xorTab_cases`; kernel checks that #10/#11 are chiral mirror
+   partners; census cross-check (23/21, 333/201) by `native_decide`
+   (outside the trust base). Trust base: propext, Classical.choice,
+   Quot.sound only.
+3. **3D hard half** (`corner3d_tileable_achiral`): the math for #10/#11
+   is now DONE modulo formalization (the one-edge obstruction, above).
+   Lean path: (a) formalize the 4-cube edge system over `Fin` types and
+   prove its UNSAT by `decide` (12⁴ assignments — cheap); (b) the
+   reduction lemma: any tiling restricts to the edge system (needs the
+   orbit/stabilizer group theory: a cube's pattern determines its
+   (A,B) pair with class sign by cube parity); (c) generalize from
+   #10/#11 to all chiral d (per chirality type, or a uniform
+   invariant).
 4. **Any-K corner theorem** (the plan's original Phase B statement):
    revisit after K=1. The K×K×K-octant model with C3 twists has the
    gain structure; whether "tileable ⟹ achiral-through-twists" holds is
