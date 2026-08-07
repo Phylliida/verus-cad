@@ -197,15 +197,20 @@ Ordered by risk/reward:
    partners; census cross-check (23/21, 333/201) by `native_decide`
    (outside the trust base). Trust base: propext, Classical.choice,
    Quot.sound only.
-3. **3D hard half** (`corner3d_tileable_achiral`): the math for #10/#11
-   is now DONE modulo formalization (the one-edge obstruction, above).
-   Lean path: (a) formalize the 4-cube edge system over `Fin` types and
-   prove its UNSAT by `decide` (12⁴ assignments — cheap); (b) the
-   reduction lemma: any tiling restricts to the edge system (needs the
-   orbit/stabilizer group theory: a cube's pattern determines its
-   (A,B) pair with class sign by cube parity); (c) generalize from
-   #10/#11 to all chiral d (per chirality type, or a uniform
-   invariant).
+3. **3D hard half** (`corner3d_tileable_achiral`): **SOLVED at T=2 and
+   fully kernel-verified (2026-08-07)**. `Corner3DEdge.lean`:
+   `edge_unsat` — the 4-cube one-edge system has no solution (kernel
+   `decide`, 2×12⁴ cases, axioms [propext]). `Corner3DDec10.lean`:
+   `dec10_not_tileable` (the reduction: extraction `rotToPair_spec` +
+   shared-vertex geometry `edgeCons_geom`, both `decide`);
+   rotation/mirror transport (`isTiling_of_comp_rot/mirror`, exported
+   affine-map tables); `dec11_not_tileable`; `chiral_T2_cases` (the
+   only chiral T=2 decorations are the #10/#11 orbits, `decide` over
+   all 256); and the assembly **`corner3d_T2_iff : (∃ ℓ, IsTiling d ℓ)
+   ↔ Achiral d`** — the full 3D corner chirality theorem at T=2, both
+   directions, axioms [propext, Classical.choice, Quot.sound] only.
+   Remaining: (a) T ≥ 3 — 66 chiral pairs; per-type edge obstructions
+   or a uniform invariant (research); (b) K=2 probe.
 4. **Any-K corner theorem** (the plan's original Phase B statement):
    revisit after K=1. The K×K×K-octant model with C3 twists has the
    gain structure; whether "tileable ⟹ achiral-through-twists" holds is

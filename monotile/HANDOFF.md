@@ -35,6 +35,9 @@ first (it is current); this file is the operational summary.
 | Reduced dimer model for #10/#11, EXACT | verified vs orientation encoding, all shapes MATCH | `corner3d_dimer.py` part 3 (commit 161bf40) |
 | Transfer-graph localization (4×4 dies at L=3; 3×4/4×3 at L=4) | verified, cross-checked | `corner3d_transfer.py` (commit 94747be) |
 | **The one-edge obstruction**: 4 cubes around one lattice edge, UNSAT | SAT-core + brute force (12⁴, 0 survivors, both parities, all 3 edge orientations) | `corner3d_core_hunt.py`, `corner3d_edge.py` (commit 94747be) |
+| **Kernel certificate of the edge UNSAT** | **in Lean, `decide`, axioms [propext]** | lean-flocq `Corner3DEdge.lean` (commit 3ff52b6) |
+| **Reduction: #10/#11 don't tile ℤ³** | **in Lean, kernel-clean** | lean-flocq `Corner3DDec10.lean` (commit 87cdf47) |
+| **THE T=2 THEOREM: tileable ⟺ achiral, both directions** | **in Lean, kernel-clean** | `corner3d_T2_iff`, `Corner3DDec10.lean` (commit b4b9df2) |
 
 Trust base so far: the Lean files use only propext / Classical.choice /
 Quot.sound (verified by `#print axioms`; `native_decide` only in the
@@ -79,40 +82,12 @@ Corrections to earlier beliefs (now documented in the scripts):
 
 ## What REMAINS (in priority order)
 
-### N1. Lean: kernel-certify the edge-system UNSAT — LOW RISK, DO FIRST
+### N1/N2 — DONE (2026-08-07, same day as the handoff)
 
-Formalize the 4-cube edge system over `Fin` types in a new
-`lean-flocq/LeanFlocq/Corner3DEdge.lean` (import Corner3D for the
-tables) and prove UNSAT by `decide`. Shape: cubes `Fin 4`, pairs
-`Fin 12` per cube (an exported table of the 12 (A,B) pairs per parity,
-matching `PAIRS` in `corner3d_transfer.py`), marks as a function
-`Fin 4 → Fin 12 → Fin 8 → Fin 2`, agreements as a finite list of
-equalities. Statement: `∀ a : Fin 4 → Fin 12, ¬ edgeConsistent a` —
-12⁴ = 20736 cases × 10 equalities: kernel `decide` should eat this in
-seconds-to-minutes (if the ∀-over-functions instance is slow, rephrase
-as 4 nested `Fin 12` quantifiers, or use the certificate-table trick
-from `rotCompTab`). This converts the central finite fact to the kernel
-trust base — no native_decide needed.
-
-### N2. Lean: the reduction lemma (#10 hard direction) — MEDIUM
-
-Prove: any tiling of ℤ³ by a rotation of #10 restricts to an edge
-system around every lattice edge, contradicting N1. Pieces (all
-group-theoretic, all finite-checkable):
-- A cube pattern ∈ orbit(#10) determines its (A-face, B-face) pair
-  (orbit-stabilizer: Stab(#10) has order 2, and the pair map is
-  injective on the orbit — `decide` over 24 rotations).
-- The pair's axis-cyclic class sign = +1 at even cubes, −1 at odd cubes
-  (the parity flip: for odd cubes local E/O swap — needs the tet-parity
-  analysis of the 24 rotations; finite tables again).
-- Vertex glue (8-wise all-equal from `IsTiling`) implies the 10
-  agreements.
-- Transport: tileability is rotation-invariant, so WLOG the decoration
-  is #10 itself.
-Combined with N1: `corner3d_tileable_achiral` for T=2 (the 21 achiral
-tile by Corner3D; the 2 chiral are empty). Assembly for all
-`d : Fin 8 → Fin 2`: chiral ⟹ in orbit of #10 or #11 is a `decide`
-over the 256 decorations.
+The edge-system kernel certificate (`Corner3DEdge.edge_unsat`) and the
+full reduction + assembly (`Corner3DDec10.corner3d_T2_iff`) are
+committed. **The T=2 3D corner chirality theorem is closed.** What
+remains is T ≥ 3 and K > 1.
 
 ### N3. Generalize to all chiral d (T ≥ 3) — RESEARCH, THE REAL PRIZE
 
@@ -127,7 +102,10 @@ run the transfer/core pipeline (`corner3d_transfer.py` +
 Cylinder / core-hunt machinery is decoration-agnostic given PAIRS), and
 see whether a small core appears. If cores exist per type: the full
 K=1 3D theorem becomes "easy half (done) + finite family of edge-type
-lemmas", each kernel-certified à la N1/N2.
+lemmas", each kernel-certified by the now-proven N1/N2 pattern
+(edge_unsat-style `decide` + rotToPair-style extraction + transport —
+all reusable verbatim; the `chiral_T2_cases` analog at T=3 is a
+`decide` over 3⁸ = 6561 decorations).
 
 ### N4. K=2 probe — CHEAP, worth doing before N3 hardens beliefs
 
