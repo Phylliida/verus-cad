@@ -102,12 +102,23 @@ the 222 achiral). The full K=1 theorem at any T now reduces to:
    machinery — IsTiling gives an orientation per cube and shared
    vertices agree because ℓ is a function. Straightforward adaptation
    of `dec10_not_tileable`'s assembly.
-2. **132 finite certificates** (T=3): 102 edge-4 cores (n⁴, the
-   `edge_unsat` pattern — n = orbit size ≤ 24), 6 tetrahedral-4 cores,
-   24 genuine 6-cube cores (24⁶ too big for kernel `decide` directly —
-   use pattern projection: patterns agreeing on all shared vertices are
-   interchangeable, collapsing n; or `native_decide` as an explicitly
-   declared trust step like the color track's batch checks).
+2. **132 finite certificates** (T=3): 102 edge-4 cores, 6 tetrahedral-4
+   cores, 24 genuine 6-cube cores (exhaustive: no ≤5-subset UNSAT).
+   The generic vehicle is now PROVEN: `Corner3DCore.not_tileable_of_core`
+   (commit fdb66c1, kernel-clean) — per certificate only `tab` +
+   `hcover` + `hunsat` vary; `consEdge`/`consEdge_geom` are shared.
+   **Feasibility data** (2026-08-07 probe): of the 102 edge-killed
+   types, 18 have orbit size 12 → 12⁴×20 kernel `decide` ≈ the #10
+   certificate (~4 min each, feasible now); 84 have orbit 24 with
+   22–24 distinct projected signatures (projection onto the 6
+   constraint-relevant corners barely collapses anything) → 24⁴×20 ≈
+   48 min kernel each ≈ 17 h wall at 4 jobs. Options for the 84: (a)
+   `native_decide` per type (compiled, seconds) with the trust profile
+   declared like the color track's batch checks — the T=2 theorem stays
+   kernel-pure, T=3 becomes kernel+native; (b) find further core math
+   shrinking the effective per-cube state; (c) mixed: 18 kernel-pure
+   now, rest native. The 30 vertex-core types: 6-cube cores (24⁶)
+   are native_decide-only regardless.
 3. **Chirality classification** at T=3: `decide` over 3⁸ = 6561
    decorations (the `chiral_T2_cases` analog).
 4. Transport: already proven (`isTiling_of_comp_rot/mirror`).
