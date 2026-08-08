@@ -209,8 +209,36 @@ Ordered by risk/reward:
    all 256); and the assembly **`corner3d_T2_iff : (∃ ℓ, IsTiling d ℓ)
    ↔ Achiral d`** — the full 3D corner chirality theorem at T=2, both
    directions, axioms [propext, Classical.choice, Quot.sound] only.
-   Remaining: (a) T ≥ 3 — 66 chiral pairs; per-type edge obstructions
-   or a uniform invariant (research); (b) K=2 probe.
+3b. **THE ONE-VERTEX THEOREM (2026-08-07, empirical — the uniform
+   form).** The one-vertex system — the 8 cubes around a single lattice
+   vertex, each showing any rotation of d, colors agreeing at all
+   shared vertices — is UNSAT **exactly** for the chiral decorations:
+
+   * T=2: 21 achiral SAT / 2 chiral UNSAT; T=3: 201 achiral SAT / 132
+     chiral UNSAT — zero false positives either way
+     (`corner3d_edgeprobe.py`, `corner3d_vertexprobe.py`, commit
+     36b1084; the encoding is validated by the achiral side: any tiling
+     restricts to such a patch, so an achiral UNSAT would be a bug).
+   * The weaker one-edge system (4 cubes around an edge, one layer)
+     kills 102 of the 132 chiral T=3 types; the vertex system kills all.
+   * Minimal cores of the 30 edge-surviving types: 6 tetrahedral-4
+     (alternating cubes around the vertex), 24 genuinely 6-cube
+     (exhaustive: no ≤5-subset UNSAT).
+   * **This reduces the full K=1 theorem at any T to: one GENERIC
+     reduction lemma** (vertex-system UNSAT ⟹ ¬tileable — provable ONCE
+     for all d: IsTiling gives an orientation per cube, and shared
+     vertices agree since ℓ is a function; NO per-type dimer machinery
+     needed), **a finite certificate per chiral canonical, the
+     chirality classification** (`decide` over T^8), **and the already
+     proven transport.** Uniform conjecture: for every T, chiral ⟺
+     one-vertex-UNSAT. Lean certificate sizes: edge/tetrahedral-4 cores
+     n⁴ (the `edge_unsat` pattern), 6-cube cores 24⁶ — needs the
+     pattern-projection optimization (patterns agreeing on all shared
+     vertices are interchangeable, collapsing n) or `native_decide`.
+
+   Remaining: (a) T=3 assembly (generic reduction lemma + 132
+   certificates); (b) prove/disprove the uniform conjecture for all T;
+   (c) K=2 probe.
 4. **Any-K corner theorem** (the plan's original Phase B statement):
    revisit after K=1. The K×K×K-octant model with C3 twists has the
    gain structure; whether "tileable ⟹ achiral-through-twists" holds is

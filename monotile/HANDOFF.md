@@ -89,23 +89,32 @@ full reduction + assembly (`Corner3DDec10.corner3d_T2_iff`) are
 committed. **The T=2 3D corner chirality theorem is closed.** What
 remains is T ≥ 3 and K > 1.
 
-### N3. Generalize to all chiral d (T ≥ 3) — RESEARCH, THE REAL PRIZE
+### N3. Generalize to all chiral d (T ≥ 3) — BREAKTHROUGH (2026-08-07)
 
-T=3 has 66 chiral pairs (132 empties). The design doc's sketch:
-chirality ⟹ Stab(d) ⊆ A4, so every cube has a tet-parity bit ε_c and
-the same absolute parity flip applies to ε-propagation. Open question:
-does every chiral type admit an edge-level finite obstruction, or a
-uniform invariant? First move: pick the simplest chiral T=3 canonicals
-(by mark count), build their reduced models à la `corner3d_dimer.py`,
-run the transfer/core pipeline (`corner3d_transfer.py` +
-`corner3d_core_hunt.py` are written to be reusable — the SliceSolver /
-Cylinder / core-hunt machinery is decoration-agnostic given PAIRS), and
-see whether a small core appears. If cores exist per type: the full
-K=1 3D theorem becomes "easy half (done) + finite family of edge-type
-lemmas", each kernel-certified by the now-proven N1/N2 pattern
-(edge_unsat-style `decide` + rotToPair-style extraction + transport —
-all reusable verbatim; the `chiral_T2_cases` analog at T=3 is a
-`decide` over 3⁸ = 6561 decorations).
+**The one-vertex system is a complete chirality detector at T=2 and
+T=3** (commit 36b1084): the 8 cubes around one lattice vertex, any
+rotation of d each, colors agreeing at shared vertices — UNSAT exactly
+for the chiral canonicals (2/2 and 132/132, zero false positives among
+the 222 achiral). The full K=1 theorem at any T now reduces to:
+
+1. **One GENERIC reduction lemma in Lean** (decoration-independent):
+   `VertexSystemUnsat d → ¬ ∃ ℓ, IsTiling d ℓ`. No per-type dimer
+   machinery — IsTiling gives an orientation per cube and shared
+   vertices agree because ℓ is a function. Straightforward adaptation
+   of `dec10_not_tileable`'s assembly.
+2. **132 finite certificates** (T=3): 102 edge-4 cores (n⁴, the
+   `edge_unsat` pattern — n = orbit size ≤ 24), 6 tetrahedral-4 cores,
+   24 genuine 6-cube cores (24⁶ too big for kernel `decide` directly —
+   use pattern projection: patterns agreeing on all shared vertices are
+   interchangeable, collapsing n; or `native_decide` as an explicitly
+   declared trust step like the color track's batch checks).
+3. **Chirality classification** at T=3: `decide` over 3⁸ = 6561
+   decorations (the `chiral_T2_cases` analog).
+4. Transport: already proven (`isTiling_of_comp_rot/mirror`).
+
+The uniform conjecture (any T: chiral ⟺ one-vertex-UNSAT) is now the
+headline open problem — if true, the K=1 corner chirality theorem is
+one generic lemma + finite checks for every T.
 
 ### N4. K=2 probe — CHEAP, worth doing before N3 hardens beliefs
 
